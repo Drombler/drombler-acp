@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.richclientplatform</groupId>
+        <artifactId>richclientplatform-parent</artifactId>
+        <version>0.1-SNAPSHOT</version>
+        <relativePath>richclientplatform-parent</relativePath>
+    </parent>
+    <artifactId>richclientplatform-all</artifactId>
+    <packaging>pom</packaging>
+    
+    <name>Rich Client Platform - All</name>
+    <inceptionYear>2012</inceptionYear>
+    
+    <modules>
+        <module>richclientplatform-parent</module>
+        <module>richclientplatform-action</module>
+        <module>richclientplatform-docking</module>
+        <module>richclientplatform-core-standard-action</module>
+        <module>richclientplatform-startup-main</module>
+    </modules>
+</project>

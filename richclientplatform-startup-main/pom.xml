@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.richclientplatform</groupId>
+        <artifactId>richclientplatform-parent</artifactId>
+        <version>0.1-SNAPSHOT</version>
+        <relativePath>../richclientplatform-parent</relativePath>
+    </parent>
+    <artifactId>richclientplatform-startup-main</artifactId>
+    <packaging>bundle</packaging>
+
+    <name>Rich Client Platform - Startup - Main</name>
+    <inceptionYear>2012</inceptionYear>
+    
+     <properties>
+        <dependency.felix-framework.version>4.0.2</dependency.felix-framework.version>
+    </properties>
+
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>maven-bundle-plugin</artifactId>
+                <extensions>true</extensions>
+                <configuration>
+                    <instructions>
+                        <_donotcopy>(CVS|.svn|config.properties)</_donotcopy>
+                        <Main-Class>org.richclientplatform.startup.main.Main</Main-Class>
+<!--                        <Bundle-SymbolicName>org.apache.felix.main</Bundle-SymbolicName>
+                        <Bundle-Name>Apache Felix</Bundle-Name>
+                        <Bundle-Description>OSGi R4 framework.</Bundle-Description>
+                        <Bundle-Vendor>The Apache Software Foundation</Bundle-Vendor>-->
+                        <Embed-Dependency>*;artifactId=org.apache.felix.framework;inline=true</Embed-Dependency>
+                        <Private-Package>org.richclientplatform.startup.main.*</Private-Package>
+                        <Export-Package>!org.osgi.service.log, !org.osgi.service.obr,org.osgi.*</Export-Package>
+                        <Import-Package>!*</Import-Package>
+                    </instructions>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+
+    
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.felix</groupId>
+            <artifactId>org.apache.felix.framework</artifactId>
+            <version>${dependency.felix-framework.version}</version>
+        </dependency>
+    </dependencies>
+</project>
