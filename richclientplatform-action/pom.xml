@@ -48,7 +48,7 @@
         <dependency>
             <groupId>org.richclientplatform</groupId>
             <artifactId>richclientplatform-core-application</artifactId>
-            <version>0.1-SNAPSHOT</version>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>commons-lang</groupId>

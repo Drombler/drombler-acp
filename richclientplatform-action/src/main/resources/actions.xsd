@@ -6,7 +6,7 @@
     <element name="actions">
         <complexType>
             <sequence>
-                <element name="action" type="tns:ActionType" maxOccurs="unbounded" minOccurs="0" />
+                <element name="action" type="tns:ActionType" minOccurs="0" maxOccurs="unbounded" />
             </sequence>
         </complexType>
     </element>

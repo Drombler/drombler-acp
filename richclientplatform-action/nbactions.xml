@@ -39,4 +39,5 @@
             <activatedProfile>run-on-felix</activatedProfile>
         </activatedProfiles>
     </action>
+    
 </actions>

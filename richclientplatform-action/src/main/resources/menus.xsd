@@ -6,11 +6,19 @@
     <element name="menus">
         <complexType>
             <sequence>
-                <element name="menus" type="tns:MenuType" maxOccurs="unbounded" minOccurs="0" />
+                <element name="menu" type="tns:MenuType" minOccurs="0" maxOccurs="unbounded" />
             </sequence>
         </complexType>
     </element>
 
+    <element name="menuEntries">
+        <complexType>
+            <sequence>
+                <element name="menuEntry" type="tns:MenuEntryType" minOccurs="0" maxOccurs="unbounded" />
+            </sequence>
+        </complexType>
+    </element>
+    
     <complexType name="MenuType">
         <sequence>
             <element name="displayName" type="string" />
@@ -18,6 +26,14 @@
             <element name="position" type="int"/>
         </sequence>
         <attribute name="id" type="string" use="required"/>
+    </complexType>
+    
+    <complexType name="MenuEntryType">
+        <sequence>
+            <element name="path" type="string"/>
+            <element name="position" type="int"/>
+        </sequence>
+        <attribute name="actionId" type="string" use="required"/>
     </complexType>
     
 </schema>
