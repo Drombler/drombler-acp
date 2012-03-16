@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.richclientplatform.org/schema/menus" 
+        xmlns:tns="http://www.richclientplatform.org/schema/menus" elementFormDefault="qualified" 
+        version="${project.version}">
+
+    <element name="menus">
+        <complexType>
+            <sequence>
+                <element name="menus" type="tns:MenuType" maxOccurs="unbounded" minOccurs="0" />
+            </sequence>
+        </complexType>
+    </element>
+
+    <complexType name="MenuType">
+        <sequence>
+            <element name="displayName" type="string" />
+            <element name="path" type="string"/>
+            <element name="position" type="int"/>
+        </sequence>
+        <attribute name="id" type="string" use="required"/>
+    </complexType>
+    
+</schema>

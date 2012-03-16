@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.richclientplatform</groupId>
+        <artifactId>richclientplatform-parent</artifactId>
+        <version>0.1-SNAPSHOT</version>
+        <relativePath>../richclientplatform-parent</relativePath>
+    </parent>
+    <artifactId>richclientplatform-core-application</artifactId>
+    <packaging>bundle</packaging>
+
+    <name>Rich Client Platform - Core - Application</name>
+    <inceptionYear>2012</inceptionYear>
+    <properties>
+<!--  Doesn't work!?  Error: javac: invalid flag: -Xlint:all -proc:none -->
+<!--        <java.compiler.compilerArgument>-Xlint:all -proc:none</java.compiler.compilerArgument>-->
+        <java.compiler.compilerArgument>-proc:none</java.compiler.compilerArgument>
+    </properties>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>maven-bundle-plugin</artifactId>
+                <extensions>true</extensions>
+            </plugin>
+            <plugin>
+                <groupId>org.jvnet.jaxb2.maven2</groupId>
+                <artifactId>maven-jaxb2-plugin</artifactId>
+                <version>0.8.1</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <generatePackage>org.richclientplatform.core.application.jaxb</generatePackage>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+    <dependencies>
+        <dependency>
+            <groupId>commons-lang</groupId>
+            <artifactId>commons-lang</artifactId>
+            <version>2.6</version>
+        </dependency>
+    </dependencies>
+</project>

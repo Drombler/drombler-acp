@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.richclientplatform.org/schema/actions" 
+        xmlns:tns="http://www.richclientplatform.org/schema/actions" elementFormDefault="qualified" 
+        version="${project.version}">
+
+    <element name="actions">
+        <complexType>
+            <sequence>
+                <element name="action" type="tns:ActionType" maxOccurs="unbounded" minOccurs="0" />
+            </sequence>
+        </complexType>
+    </element>
+
+    <complexType name="ActionType">
+        <sequence>
+            <element name="displayName" type="string" />
+            <element name="acceleratorKey" type="string" minOccurs="0" />
+            <element name="listenerClass" type="string"/>
+        </sequence>
+        <attribute name="id" type="string" use="required"/>
+        <attribute name="category" type="string" use="required"/>
+    </complexType>
+</schema>

@@ -27,6 +27,8 @@ import org.osgi.framework.launch.FrameworkFactory;
  */
 public class Main {
 
+    public static final String JAVAFX_VERSION_PROPERTY = "jfx.specification.version";
+    public static final String JAVAFX_VERSION_2_1_0 = "2.1.0";
     public static final String USER_DIR_PROPERTY = "platform.userdir";
     /**
      * Switch for specifying bundle directory.
@@ -280,7 +282,7 @@ public class Main {
         if (cacheDir != null) {
             userConfigProps.setProperty(Constants.FRAMEWORK_STORAGE, cacheDir);
         }
-        
+
         registerShutdownHook(userConfigProps);
 
         try {
@@ -346,6 +348,10 @@ public class Main {
 
         for (String propertyName : props.stringPropertyNames()) {
             System.setProperty(propertyName, Util.substVars(props.getProperty(propertyName), propertyName, null, null));
+        }
+        
+        if (System.getProperty(JAVAFX_VERSION_PROPERTY) == null){
+            System.setProperty(JAVAFX_VERSION_PROPERTY, JAVAFX_VERSION_2_1_0);
         }
     }
 

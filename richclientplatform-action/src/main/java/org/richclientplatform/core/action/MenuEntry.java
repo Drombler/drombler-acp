@@ -17,13 +17,11 @@ import java.lang.annotation.Target;
 @Documented
 @Retention(RetentionPolicy.SOURCE)
 @Target(ElementType.TYPE)
-public @interface Action {
+public @interface MenuEntry {
 
-    String id();
-    
-    String category();
-    
-    String displayName();
+    String actionId();
 
-    String acceleratorKey() default "";
+    String path();
+
+    int position();
 }

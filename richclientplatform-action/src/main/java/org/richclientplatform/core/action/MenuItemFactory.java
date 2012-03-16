@@ -8,7 +8,6 @@ package org.richclientplatform.core.action;
  *
  * @author puce
  */
-public @interface Menus {
-
-    Menu[] value();
+class MenuItemFactory {
+    
 }

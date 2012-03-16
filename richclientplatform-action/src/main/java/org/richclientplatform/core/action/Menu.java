@@ -15,11 +15,15 @@ import java.lang.annotation.Target;
  * @author puce
  */
 @Documented
-@Retention(RetentionPolicy.RUNTIME)
+@Retention(RetentionPolicy.SOURCE)
 @Target(ElementType.PACKAGE)
 public @interface Menu {
+
     String id();
-    String key();
+
+    String displayName();
+
+    String path() default "";
+
     int position();
-    String mnemonicKey();
 }

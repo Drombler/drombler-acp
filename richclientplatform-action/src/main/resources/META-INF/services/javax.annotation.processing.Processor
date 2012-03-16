@@ -1,0 +1,2 @@
+org.richclientplatform.core.action.impl.ActionAnnotationProcessor
+org.richclientplatform.core.action.impl.MenuAnnotationProcessor

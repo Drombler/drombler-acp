@@ -19,7 +19,7 @@ import java.lang.annotation.Target;
 @Target(ElementType.TYPE)
 public @interface Docking {
 
-    String area();
+    String areaId();
     
     int position();
 
