@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jxb:bindings version="1.0"
+              xmlns:jxb="http://java.sun.com/xml/ns/jaxb"
+              xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <jxb:bindings schemaLocation="application.xsd" node="/xs:schema">
+        <jxb:bindings  node="//xs:element[@name='application']">
+            <jxb:class name="ApplicationType"/>
+        </jxb:bindings> 
+    </jxb:bindings>
+</jxb:bindings>

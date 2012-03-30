@@ -11,13 +11,13 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- *
+ * Not supported yet
  * @author puce
  */
 @Documented
 @Retention(RetentionPolicy.SOURCE)
 @Target(ElementType.TYPE)
-public @interface MenuEntry {
+public @interface CheckMenuEntry {
 
     String actionId() default "";
 

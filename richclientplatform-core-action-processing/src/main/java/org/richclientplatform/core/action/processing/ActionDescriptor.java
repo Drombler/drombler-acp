@@ -2,8 +2,9 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.projectx.contactcenter.desktop.action.processing;
+package org.richclientplatform.core.action.processing;
 
+import java.util.Collections;
 import java.util.Locale;
 import java.util.ResourceBundle;
 import org.apache.commons.lang.StringUtils;
@@ -15,11 +16,12 @@ import org.richclientplatform.core.action.jaxb.ActionType;
  * @author puce
  */
 public class ActionDescriptor {
+    public static String ID_KEY = "id";
 
     private String id;
     private String displayName;
     private String acceleratorKey;
-    private Class<?> listenerClass;
+    private Object listener;
 
     /**
      * @return the id
@@ -49,7 +51,6 @@ public class ActionDescriptor {
         this.displayName = displayName;
     }
 
-
     /**
      * @return the acceleratorKey
      */
@@ -64,42 +65,30 @@ public class ActionDescriptor {
         this.acceleratorKey = acceleratorKey;
     }
 
+
+    public Object getListener() {
+        return listener;
+    }
+    
     /**
-     * @return the listenerClass
+     * @param listener the listener to set
      */
-    public Class<?> getListenerClass() {
-        return listenerClass;
+    public void setListener(Object listener) {
+        this.listener = listener;
     }
 
-    /**
-     * @param listenerClass the listenerClass to set
-     */
-    public void setListenerClass(Class<?> listenerClass) {
-        this.listenerClass = listenerClass;
-    }
-
-    public static ActionDescriptor createActionDescriptor(ActionType actionType, Bundle bundle) throws ClassNotFoundException {
+    public static ActionDescriptor createActionDescriptor(ActionType actionType, Bundle bundle) throws ClassNotFoundException, InstantiationException, IllegalAccessException {
 
         ActionDescriptor actionDescriptor = new ActionDescriptor();
         Class<?> actionListenerClass = getClass(actionType.getListenerClass(), bundle);
         actionDescriptor.setId(StringUtils.stripToNull(actionType.getId()));
-        actionDescriptor.setDisplayName(getResourceString(actionListenerClass, actionType.getDisplayName()));
-        actionDescriptor.setAcceleratorKey(getResourceString(actionListenerClass, actionType.getAcceleratorKey()));
-        actionDescriptor.setListenerClass(actionListenerClass);
+        actionDescriptor.setDisplayName(Resources.getResourceString(actionListenerClass, actionType.getDisplayName()));
+        actionDescriptor.setAcceleratorKey(Resources.getResourceString(actionListenerClass, actionType.getAcceleratorKey()));
+        actionDescriptor.setListener(actionListenerClass.newInstance());
         return actionDescriptor;
     }
 
-    private static String getResourceString(Class<?> type, String resourceKey) {
-        String strippedResourceKey = StringUtils.stripToNull(resourceKey);
-        if (strippedResourceKey != null && strippedResourceKey.startsWith("#")) {
-            strippedResourceKey = strippedResourceKey.substring(1);
-            ResourceBundle rb = ResourceBundle.getBundle(type.getPackage().getName() + ".Bundle", Locale.getDefault(), type.getClassLoader());
-//            if (rb.containsKey(resourceKey)) {
-            return rb.getString(strippedResourceKey);
-//            }
-        }
-        return resourceKey;
-    }
+
 
     private static Class<?> getClass(String listenerClass, Bundle bundle) throws ClassNotFoundException {
         return bundle.loadClass(StringUtils.stripToNull(listenerClass));

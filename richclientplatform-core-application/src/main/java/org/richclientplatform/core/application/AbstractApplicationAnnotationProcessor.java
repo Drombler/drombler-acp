@@ -24,7 +24,8 @@ import javax.tools.StandardLocation;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
-import org.richclientplatform.core.application.jaxb.Application;
+import org.richclientplatform.core.application.jaxb.ApplicationType;
+import org.richclientplatform.core.application.jaxb.ExtensionsType;
 
 /**
  *
@@ -33,7 +34,7 @@ import org.richclientplatform.core.application.jaxb.Application;
 public abstract class AbstractApplicationAnnotationProcessor extends AbstractProcessor {
 
     private static final String APPLICATION_XML_RELATIVE_NAME = "META-INF/platform/application.xml";
-    private static final List<Class<?>> JAXB_ROOT_CLASSES = new ArrayList<Class<?>>(Arrays.asList(Application.class));
+    private static final List<Class<?>> JAXB_ROOT_CLASSES = new ArrayList<Class<?>>(Arrays.asList(ApplicationType.class));
     private static final List<Object> EXTENSION_CONFIGURATIONS = new ArrayList<>();
     private static final List<Object> ORIGINATING_ELEMENTS = new ArrayList<>();
     private static FileObject APPLICATION_FILE_OBJECT = null;
@@ -61,7 +62,6 @@ public abstract class AbstractApplicationAnnotationProcessor extends AbstractPro
 //                // The Javadoc says an IOException should be thrown, if the file does not exist, but it isn't thrown currently. 
 //                //Bug which might be fixed in a future Java version?
 //            }
-        boolean deleted = false;
         if (APPLICATION_FILE_OBJECT == null) {
             try {
                 APPLICATION_FILE_OBJECT = filer.createResource(
@@ -72,8 +72,10 @@ public abstract class AbstractApplicationAnnotationProcessor extends AbstractPro
                         new Class[JAXB_ROOT_CLASSES.size()]));
                 Marshaller marshaller = jaxbContext.createMarshaller();
                 marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-                Application application = new Application();
-                application.getAny().addAll(EXTENSION_CONFIGURATIONS);
+                ApplicationType application = new ApplicationType();
+                ExtensionsType extensions = new ExtensionsType();
+                extensions.getAny().addAll(EXTENSION_CONFIGURATIONS);
+                application.setExtensions(extensions);
                 try (Writer writer = APPLICATION_FILE_OBJECT.openWriter()) {
                     marshaller.marshal(application, writer);
                 }
@@ -98,12 +100,12 @@ public abstract class AbstractApplicationAnnotationProcessor extends AbstractPro
         }
     }
 
-    protected static void addJAXBRootClasses(Class<?>... jaxbRootClasses) {
-        JAXB_ROOT_CLASSES.addAll(Arrays.asList(jaxbRootClasses));
+    protected static void addJAXBRootClasses(Class<?> jaxbRootClasses) {
+        JAXB_ROOT_CLASSES.add(jaxbRootClasses);
     }
 
-    protected static void addExtensionConfigurations(Object... extensionConfigurations) {
-        EXTENSION_CONFIGURATIONS.addAll(Arrays.asList(extensionConfigurations));
+    protected static void addExtensionConfigurations(Object extensionConfigurations) {
+        EXTENSION_CONFIGURATIONS.add(extensionConfigurations);
     }
 
     protected static void addOriginatingElements(Element... originatingElements) {

@@ -4,13 +4,18 @@
  */
 package org.richclientplatform.core.action.impl;
 
+import java.awt.Desktop;
+import java.util.Comparator;
 import java.util.Set;
 import javax.annotation.processing.*;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
 import org.apache.commons.lang.StringUtils;
+import org.richclientplatform.core.action.Action;
 import org.richclientplatform.core.action.Menu;
+import org.richclientplatform.core.action.MenuEntry;
 import org.richclientplatform.core.action.Menus;
+import org.richclientplatform.core.action.jaxb.MenuEntryType;
 import org.richclientplatform.core.action.jaxb.MenuType;
 import org.richclientplatform.core.action.jaxb.MenusType;
 import org.richclientplatform.core.application.AbstractApplicationAnnotationProcessor;
@@ -19,7 +24,8 @@ import org.richclientplatform.core.application.AbstractApplicationAnnotationProc
  *
  * @author puce
  */
-@SupportedAnnotationTypes({"org.richclientplatform.core.action.Menus", "org.richclientplatform.core.action.Menu"})
+@SupportedAnnotationTypes({"org.richclientplatform.core.action.Menus", "org.richclientplatform.core.action.Menu",
+    "org.richclientplatform.core.action.MenuEntry"})
 public class MenuAnnotationProcessor extends AbstractApplicationAnnotationProcessor {
 
     private MenusType menus;
@@ -42,23 +48,50 @@ public class MenuAnnotationProcessor extends AbstractApplicationAnnotationProces
             }
         }
 
+        for (Element element : roundEnv.getElementsAnnotatedWith(MenuEntry.class)) {
+            MenuEntry menuEntryAnnotation = element.getAnnotation(MenuEntry.class);
+            if (menuEntryAnnotation != null) {
+                Action actionAnnotation = element.getAnnotation(Action.class);
+                registerMenuEntry(menuEntryAnnotation, actionAnnotation, element);
+            }
+        }
+
 
         return false;
     }
 
     private void registerMenu(Menu menuAnnotation, Element element) {
-        if (menus == null) {
-            menus = new MenusType();
-            addExtensionConfigurations(menus);
-            addJAXBRootClasses(MenusType.class);
-        }
-        addOriginatingElements(element); // TODO: needed?
+        init(element);
 
         MenuType menu = new MenuType();
         menu.setId(StringUtils.stripToNull(menuAnnotation.id()));
         menu.setDisplayName(StringUtils.stripToNull(menuAnnotation.displayName()));
         menu.setPosition(menuAnnotation.position());
         menu.setPath(StringUtils.stripToNull(menuAnnotation.path()));
+        menu.setPackage(element.asType().toString());
         menus.getMenu().add(menu);
+    }
+
+    private void init(Element element) {
+        if (menus == null) {
+            menus = new MenusType();
+            addExtensionConfigurations(menus);
+            addJAXBRootClasses(MenusType.class);
+        }
+        addOriginatingElements(element); // TODO: needed?
+    }
+
+    private void registerMenuEntry(MenuEntry menuEntryAnnotation, Action actionAnnotation, Element element) {
+        init(element);
+
+        MenuEntryType menuEntry = new MenuEntryType();
+        String actionId = StringUtils.stripToNull(menuEntryAnnotation.actionId());
+        if (actionId == null && actionAnnotation != null) {
+            actionId = StringUtils.stripToNull(actionAnnotation.id());
+        }
+        menuEntry.setActionId(actionId);
+        menuEntry.setPosition(menuEntryAnnotation.position());
+        menuEntry.setPath(StringUtils.stripToNull(menuEntryAnnotation.path()));
+        menus.getMenuEntry().add(menuEntry);
     }
 }
