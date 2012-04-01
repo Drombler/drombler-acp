@@ -25,5 +25,7 @@ public @interface Action {
     
     String displayName();
 
-    String acceleratorKey() default "";
+    String accelerator() default "";
+    
+    String icon() default "";
 }

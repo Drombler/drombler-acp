@@ -16,11 +16,12 @@ import org.richclientplatform.core.action.jaxb.ActionType;
  * @author puce
  */
 public class ActionDescriptor {
-    public static String ID_KEY = "id";
 
+    public static String ID_KEY = "id";
     private String id;
     private String displayName;
-    private String acceleratorKey;
+    private String accelerator;
+    private String icon;
     private Object listener;
 
     /**
@@ -54,22 +55,35 @@ public class ActionDescriptor {
     /**
      * @return the acceleratorKey
      */
-    public String getAcceleratorKey() {
-        return acceleratorKey;
+    public String getAccelerator() {
+        return accelerator;
     }
 
     /**
      * @param acceleratorKey the acceleratorKey to set
      */
-    public void setAcceleratorKey(String acceleratorKey) {
-        this.acceleratorKey = acceleratorKey;
+    public void setAccelerator(String acceleratorKey) {
+        this.accelerator = acceleratorKey;
     }
 
+    /**
+     * @return the icon
+     */
+    public String getIcon() {
+        return icon;
+    }
+
+    /**
+     * @param icon the icon to set
+     */
+    public void setIcon(String icon) {
+        this.icon = icon;
+    }
 
     public Object getListener() {
         return listener;
     }
-    
+
     /**
      * @param listener the listener to set
      */
@@ -83,12 +97,11 @@ public class ActionDescriptor {
         Class<?> actionListenerClass = getClass(actionType.getListenerClass(), bundle);
         actionDescriptor.setId(StringUtils.stripToNull(actionType.getId()));
         actionDescriptor.setDisplayName(Resources.getResourceString(actionListenerClass, actionType.getDisplayName()));
-        actionDescriptor.setAcceleratorKey(Resources.getResourceString(actionListenerClass, actionType.getAcceleratorKey()));
+        actionDescriptor.setAccelerator(Resources.getResourceString(actionListenerClass, actionType.getAccelerator()));
+        actionDescriptor.setIcon(StringUtils.stripToNull(actionType.getIcon()));
         actionDescriptor.setListener(actionListenerClass.newInstance());
         return actionDescriptor;
     }
-
-
 
     private static Class<?> getClass(String listenerClass, Bundle bundle) throws ClassNotFoundException {
         return bundle.loadClass(StringUtils.stripToNull(listenerClass));

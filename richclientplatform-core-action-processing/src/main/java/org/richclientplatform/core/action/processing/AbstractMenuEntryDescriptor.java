@@ -5,6 +5,7 @@
 package org.richclientplatform.core.action.processing;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -13,12 +14,22 @@ import java.util.List;
  */
 public abstract class AbstractMenuEntryDescriptor {
 
+    private static final String PATH_DELIMITER = "/";
     private final List<String> path;
     private final int position;
 
     protected AbstractMenuEntryDescriptor(String path, int position) {
-        this.path = Arrays.asList(path.split("/"));
+        this.path = splitPath(path);
         this.position = position;
+    }
+
+    private List<String> splitPath(String path) {
+        path = path.replaceFirst("^" + PATH_DELIMITER + "*", "");
+        if (!path.equals("")) {
+            return Arrays.asList(path.split("/"));
+        } else {
+            return Collections.emptyList();
+        }
     }
 
     /**

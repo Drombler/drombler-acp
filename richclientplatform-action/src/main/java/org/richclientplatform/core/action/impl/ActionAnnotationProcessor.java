@@ -41,7 +41,8 @@ public class ActionAnnotationProcessor extends AbstractApplicationAnnotationProc
                     action.setId(StringUtils.stripToNull(actionAnnotation.id()));
                     action.setCategory(StringUtils.stripToNull(actionAnnotation.category()));
                     action.setDisplayName(StringUtils.stripToNull(actionAnnotation.displayName()));
-                    action.setAcceleratorKey(StringUtils.stripToNull(actionAnnotation.acceleratorKey()));
+                    action.setAccelerator(StringUtils.stripToNull(actionAnnotation.accelerator()));
+                    action.setIcon(StringUtils.stripToNull(actionAnnotation.icon()));
                     action.setListenerClass(element.asType().toString());
                     actions.getAction().add(action);
                 }

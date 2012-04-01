@@ -23,7 +23,7 @@ public class ActionsMap {
     public ActionDescriptor getAction(String actionId, BundleContext context) {
         try {
             Collection<ServiceReference<ActionDescriptor>> serviceReferences = context.getServiceReferences(
-                    ActionDescriptor.class, "(" + ActionDescriptor.ID_KEY + "=" + actionId);
+                    ActionDescriptor.class, "(" + ActionDescriptor.ID_KEY + "=" + actionId + ")");
             if (!serviceReferences.isEmpty()) {
                 return context.getService(serviceReferences.iterator().next());
             }

@@ -14,7 +14,8 @@
     <complexType name="ActionType">
         <sequence>
             <element name="displayName" type="string" />
-            <element name="acceleratorKey" type="string" minOccurs="0" />
+            <element name="accelerator" type="string" minOccurs="0" />
+            <element name="icon" type="string" minOccurs="0" />
             <element name="listenerClass" type="string"/>
         </sequence>
         <attribute name="id" type="string" use="required"/>

@@ -28,9 +28,9 @@
    
     <dependencies>
         <dependency>
-            <groupId>org.apache.felix</groupId>
-            <artifactId>org.osgi.core</artifactId>
-            <scope>provided</scope>
+            <groupId>org.richclientplatform</groupId>
+            <artifactId>richclientplatform-core-action</artifactId>
+            <version>0.1-SNAPSHOT</version>
         </dependency>
     </dependencies>
 </project>
