@@ -10,6 +10,7 @@ import java.util.ResourceBundle;
 import org.apache.commons.lang.StringUtils;
 import org.osgi.framework.Bundle;
 import org.richclientplatform.core.action.jaxb.ActionType;
+import org.richclientplatform.core.util.Resources;
 
 /**
  *
@@ -94,7 +95,7 @@ public class ActionDescriptor {
     public static ActionDescriptor createActionDescriptor(ActionType actionType, Bundle bundle) throws ClassNotFoundException, InstantiationException, IllegalAccessException {
 
         ActionDescriptor actionDescriptor = new ActionDescriptor();
-        Class<?> actionListenerClass = getClass(actionType.getListenerClass(), bundle);
+        Class<?> actionListenerClass = bundle.loadClass(StringUtils.stripToNull(actionType.getListenerClass()));
         actionDescriptor.setId(StringUtils.stripToNull(actionType.getId()));
         actionDescriptor.setDisplayName(Resources.getResourceString(actionListenerClass, actionType.getDisplayName()));
         actionDescriptor.setAccelerator(Resources.getResourceString(actionListenerClass, actionType.getAccelerator()));
@@ -103,7 +104,5 @@ public class ActionDescriptor {
         return actionDescriptor;
     }
 
-    private static Class<?> getClass(String listenerClass, Bundle bundle) throws ClassNotFoundException {
-        return bundle.loadClass(StringUtils.stripToNull(listenerClass));
-    }
+
 }

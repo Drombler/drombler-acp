@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.richclientplatform.core.action.processing;
+package org.richclientplatform.core.util;
 
 import java.io.IOException;
 import java.net.URL;

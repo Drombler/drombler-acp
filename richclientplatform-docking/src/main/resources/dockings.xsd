@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.richclientplatform.org/schema/dockings" 
+        xmlns:tns="http://www.richclientplatform.org/schema/dockings" elementFormDefault="qualified" 
+        version="${project.version}">
+
+    <element name="dockings">
+        <complexType>
+            <sequence>
+                <element name="docking" type="tns:DockingType" minOccurs="0" maxOccurs="unbounded" />
+            </sequence>
+        </complexType>
+    </element>
+
+    <complexType name="DockingType">
+        <sequence>
+            <element name="areaId" type="string" />
+            <element name="position" type="int" />
+<!--            <element name="singleton" type="boolean" />-->
+            <element name="displayName" type="string" />
+            <element name="accelerator" type="string" minOccurs="0"/>
+            <element name="icon" type="string" minOccurs="0" />
+            <element name="state" type="tns:DockingStateType" />
+            <element name="dockableClass" type="string"/>
+            <element name="menuEntry" type="tns:WindowMenuEntryType"/>
+        </sequence>
+        <attribute name="id" type="string" use="required"/>
+    </complexType>
+    
+    <simpleType name="DockingStateType">
+        <restriction base="string">
+            <enumeration value="DOCKED"/>
+            <enumeration value="FLOATING"/>
+            <enumeration value="MINIMIZED"/>
+            <enumeration value="MAXIMIZED"/>
+            <enumeration value="HIDDEN"/>
+        </restriction>
+    </simpleType>
+    
+    <complexType name="WindowMenuEntryType">
+        <sequence>
+            <element name="path" type="string"/>
+            <element name="position" type="int"/>
+        </sequence>
+    </complexType>
+</schema>

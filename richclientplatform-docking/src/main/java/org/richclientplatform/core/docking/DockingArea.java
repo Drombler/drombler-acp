@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.richclientplatform.core.action;
+package org.richclientplatform.core.docking;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
@@ -17,7 +17,8 @@ import java.lang.annotation.Target;
 @Documented
 @Retention(RetentionPolicy.SOURCE)
 @Target(ElementType.PACKAGE)
-public @interface Menus {
+public @interface DockingArea {
 
-    Menu[] value();
+    String id();
+    DockingAreaKind kind() default DockingAreaKind.VIEW;
 }

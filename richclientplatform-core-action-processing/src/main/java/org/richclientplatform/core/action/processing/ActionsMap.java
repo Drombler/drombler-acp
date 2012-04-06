@@ -5,8 +5,6 @@
 package org.richclientplatform.core.action.processing;
 
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.osgi.framework.BundleContext;

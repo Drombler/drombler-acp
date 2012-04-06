@@ -2,10 +2,9 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.richclientplatform.core.action;
+package org.richclientplatform.core.docking;
 
 import java.lang.annotation.Documented;
-import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
@@ -16,8 +15,10 @@ import java.lang.annotation.Target;
  */
 @Documented
 @Retention(RetentionPolicy.SOURCE)
-@Target(ElementType.PACKAGE)
-public @interface Menus {
+@Target({})
+public @interface WindowMenuEntry {
 
-    Menu[] value();
+    String path();
+
+    int position();
 }

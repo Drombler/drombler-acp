@@ -15,15 +15,23 @@ import java.lang.annotation.Target;
  * @author puce
  */
 @Documented
-@Retention(RetentionPolicy.RUNTIME)
+@Retention(RetentionPolicy.SOURCE)
 @Target(ElementType.TYPE)
 public @interface Docking {
 
+//    String id();
     String areaId();
-    
+
     int position();
 
-    boolean singleton() default true;
+//    boolean singleton() default true;
+    String displayName();
+
+    String accelerator() default "";
+
+    String icon() default "";
 
     DockingState state() default DockingState.DOCKED;
+
+    WindowMenuEntry menuEntry();
 }

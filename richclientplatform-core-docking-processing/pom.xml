@@ -7,11 +7,12 @@
         <version>0.1-SNAPSHOT</version>
         <relativePath>../richclientplatform-parent</relativePath>
     </parent>
-    <artifactId>richclientplatform-core-action-processing</artifactId>
+    <artifactId>richclientplatform-core-docking-processing</artifactId>
     <packaging>bundle</packaging>
 
-    <name>Rich Client Platform - Core - Action - Processing</name>
+    <name>Rich Client Platform - Core - Docking - Processing</name>
     <inceptionYear>2012</inceptionYear>
+
 
     <build>
         <plugins>
@@ -34,8 +35,7 @@
             </plugin>
         </plugins>
     </build>
-
-  
+   
     <dependencies>
         <dependency>
             <groupId>org.richclientplatform</groupId>
@@ -45,12 +45,17 @@
         </dependency>
         <dependency>
             <groupId>org.richclientplatform</groupId>
-            <artifactId>richclientplatform-core-util</artifactId>
+            <artifactId>richclientplatform-core-docking</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>org.richclientplatform</groupId>
             <artifactId>richclientplatform-core-action</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.richclientplatform</groupId>
+            <artifactId>richclientplatform-core-util</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
@@ -70,4 +75,5 @@
             <scope>runtime</scope>
         </dependency>
     </dependencies>
+   
 </project>

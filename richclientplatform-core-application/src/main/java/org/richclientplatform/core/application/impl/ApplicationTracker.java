@@ -8,8 +8,11 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.xml.bind.JAXBContext;
@@ -31,7 +34,6 @@ import org.richclientplatform.core.application.ExtensionPoint;
 import org.richclientplatform.core.application.jaxb.ApplicationType;
 import org.richclientplatform.core.application.jaxb.ExtensionsType;
 
-
 /**
  *
  * @author puce
@@ -42,8 +44,11 @@ cardinality = ReferenceCardinality.OPTIONAL_MULTIPLE, policy = ReferencePolicy.D
 public class ApplicationTracker {
 
     private BundleTracker<ApplicationType> bundleTracker;
+    private final Set<Class<?>> jaxbRootClassesSet = new HashSet<Class<?>>(Arrays.asList(ApplicationType.class));
     private Class[] jaxbRootClasses = new Class[]{ApplicationType.class};
     private final Map<Long, List<ServiceRegistration<?>>> serviceRegistrations = new HashMap<>();
+    // TODO: thread-safe? memory leak?
+    private final Set<Bundle> unresolvedExtensions = new LinkedHashSet<>();
 //    private final ServiceTracker<ExtensionPoint, ExtensionPoint> serviceTracker;
 //    private final Map<Class<?>, ExtensionPoint<?>> applicationExtensionHandlers = new HashMap<>();
 
@@ -60,27 +65,7 @@ public class ApplicationTracker {
 
                     @Override
                     public ApplicationType addingBundle(Bundle bundle, BundleEvent event) {
-                        URL actionsURL = bundle.getEntry("META-INF/platform/application.xml");
-                        if (actionsURL != null) {
-                            try {
-                                JAXBContext jaxbContext = JAXBContext.newInstance(jaxbRootClasses);
-                                Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
-                                ApplicationType application = (ApplicationType) unmarshaller.unmarshal(actionsURL);
-                                registerExtensions(bundle, application.getExtensions());
-//                                List<ActionDescriptor> actionDescriptors = new ArrayList<>(actions.getAction().size());
-//                                for (ActionType actionType : actions.getAction()) {
-//                                    ActionDescriptor actionDescriptor = ActionDescriptor.createActionDescriptor(
-//                                            actionType, bundle);
-//                                    actionDescriptors.add(actionDescriptor);
-//                                }
-//                                actionTrackerListener.addingExtension(bundle, event, actionDescriptors);
-                                return application;
-                            } catch (JAXBException ex) {
-                                // TODO: ???
-                                Logger.getLogger(ApplicationTracker.class.getName()).log(Level.SEVERE, null, ex);
-                            }
-                        }
-                        return null;
+                        return registerExtensions(bundle);
                     }
 
                     @Override
@@ -101,6 +86,50 @@ public class ApplicationTracker {
         bundleTracker.close();
     }
 
+    private ApplicationType registerExtensions(Bundle bundle) {
+        URL actionsURL = bundle.getEntry("META-INF/platform/application.xml");
+        if (actionsURL != null) {
+            try {
+                JAXBContext jaxbContext = JAXBContext.newInstance(jaxbRootClasses);
+                Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
+                ApplicationType application = (ApplicationType) unmarshaller.unmarshal(actionsURL);
+                if (loadedExtensionsSuccessfully(application.getExtensions())) {
+                    if (unresolvedExtensions.contains(bundle)) {
+                        unresolvedExtensions.remove(bundle);
+                    }
+                    registerExtensions(bundle, application.getExtensions());
+                    return application;
+                } else {
+                    if (!unresolvedExtensions.contains(bundle)) {
+                        unresolvedExtensions.add(bundle);
+                    }
+                }
+//                List<ActionDescriptor> actionDescriptors = new ArrayList<>(actions.getAction().size());
+//                for (ActionType actionType : actions.getAction()) {
+//                    ActionDescriptor actionDescriptor = ActionDescriptor.createActionDescriptor(
+//                            actionType, bundle);
+//                    actionDescriptors.add(actionDescriptor);
+//                }
+//                actionTrackerListener.addingExtension(bundle, event, actionDescriptors);
+            } catch (JAXBException ex) {
+                // TODO: ???
+                Logger.getLogger(ApplicationTracker.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return null;
+    }
+
+    private boolean loadedExtensionsSuccessfully(ExtensionsType extensions) {
+        boolean successfullyLoaded = true;
+        for (Object extension : extensions.getAny()) {
+            if (!jaxbRootClassesSet.contains(extension.getClass())) {
+                successfullyLoaded = false;
+                break;
+            }
+        }
+        return successfullyLoaded;
+    }
+
     private void registerExtensions(Bundle bundle, ExtensionsType extensions) {
         List<ServiceRegistration<?>> registrations = new ArrayList<>(extensions.getAny().size());
         for (Object extension : extensions.getAny()) {
@@ -116,6 +145,9 @@ public class ApplicationTracker {
             for (ServiceRegistration<?> serviceRegistration : serviceRegistrations.remove(bundle.getBundleId())) {
                 serviceRegistration.unregister();
             }
+        }
+        if (unresolvedExtensions.contains(bundle)) {
+            unresolvedExtensions.remove(bundle);
         }
     }
 
@@ -155,15 +187,20 @@ public class ApplicationTracker {
 ////        serviceTracker.close();
 //    }
     public void bindExtensionPoint(ExtensionPoint<?> extensionPoint) {
-        List<Class> classes = new ArrayList<>(Arrays.asList(jaxbRootClasses));
-        classes.add(extensionPoint.getJAXBRootClass());
-        jaxbRootClasses = classes.toArray(new Class[classes.size()]);
+        jaxbRootClassesSet.add(extensionPoint.getJAXBRootClass());
+        jaxbRootClasses = new ArrayList<>(jaxbRootClassesSet).toArray(new Class[jaxbRootClassesSet.size()]);
+        if (!unresolvedExtensions.isEmpty()) {
+            // avoid concurrent modification // TODO: needed here?
+            List<Bundle> extensionBundles = new ArrayList<>(unresolvedExtensions);
+            for (Bundle extensionBundle : extensionBundles) {
+                registerExtensions(extensionBundle);
+            }
+        }
     }
 
     public void unbindExtensionPoint(ExtensionPoint<?> extensionPoint) {
-        List<Class> classes = new ArrayList<>(Arrays.asList(jaxbRootClasses));
-        classes.remove(extensionPoint.getJAXBRootClass());
-        jaxbRootClasses = classes.toArray(new Class[classes.size()]);
+        jaxbRootClassesSet.remove(extensionPoint.getJAXBRootClass());
+        jaxbRootClasses = new ArrayList<>(jaxbRootClassesSet).toArray(new Class[jaxbRootClassesSet.size()]);
 //        unregisterExtensions
     }
 //    private void hanldeAddingExtensions(Bundle bundle, BundleEvent event, ExtensionsType extensions) {

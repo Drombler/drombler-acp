@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jxb:bindings version="1.0"
+              xmlns:jxb="http://java.sun.com/xml/ns/jaxb"
+              xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <jxb:bindings schemaLocation="dockings.xsd" node="/xs:schema">
+        <jxb:bindings  node="//xs:element[@name='dockings']">
+            <jxb:class name="DockingsType"/>
+        </jxb:bindings> 
+    </jxb:bindings>
+    <jxb:bindings schemaLocation="dockingAreas.xsd" node="/xs:schema">
+        <jxb:bindings  node="//xs:element[@name='dockingAreas']">
+            <jxb:class name="DockingAreasType"/>
+        </jxb:bindings> 
+<!--        <jxb:bindings node="//xs:simpleType[@name='DockingAreaKindType']"> 
+            <jxb:class implClass="org.richclientplatform.core.docking.jaxb.DockingAreaKind" />
+        </jxb:bindings>-->
+<!--        <globalBindings>
+            <javaType name="org.richclientplatform.core.docking.DockingAreaKind" xmlType="DockingAreaKindType"
+                      parseMethod="org.richclientplatform.core.docking.DockingAreaKind.valueOf"
+                      printMethod="org.richclientplatform.core.docking.DockingAreaKind.toString" />
+        </globalBindings>-->
+    </jxb:bindings>
+</jxb:bindings>

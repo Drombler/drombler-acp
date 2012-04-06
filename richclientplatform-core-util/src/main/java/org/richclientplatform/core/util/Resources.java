@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.richclientplatform.core.action.processing;
+package org.richclientplatform.core.util;
 
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -15,15 +15,22 @@ import org.osgi.framework.Bundle;
  */
 public class Resources {
 
+    private static final String PROPERTIES_FILE_BASE_NAME = "Bundle";
+
     private Resources() {
+    }
+
+    public static ResourceBundle getResourceBundle(Class<?> type) {
+        return getResourceBundle(type.getPackage().getName(), type.getClassLoader());
+    }
+
+    public static ResourceBundle getResourceBundle(String aPackage, ClassLoader classLoader) {
+        return ResourceBundle.getBundle(aPackage + "." + PROPERTIES_FILE_BASE_NAME, Locale.getDefault(),
+                classLoader);
     }
 
     public static String getResourceString(Class<?> type, String resourceKey) {
         return getResourceString(type.getPackage().getName(), resourceKey, type.getClassLoader());
-    }
-
-    public static ResourceBundle getResourceBundle(String aPackage, ClassLoader classLoader) {
-        return ResourceBundle.getBundle(aPackage + ".Bundle", Locale.getDefault(), classLoader);
     }
 
     public static String getResourceString(String aPackage, String resourceKey, Bundle bundle) {
