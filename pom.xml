@@ -15,12 +15,12 @@
     
     <modules>
         <module>richclientplatform-parent</module>
-        <module>richclientplatform-action</module>
+        <module>richclientplatform-core-action</module>
         <module>richclientplatform-docking</module>
         <module>richclientplatform-core-standard-action</module>
         <module>richclientplatform-startup-main</module>
         <module>javafx-2.1.0</module>
-        <module>richclientplatform-core-action-processing</module>
+        <module>richclientplatform-core-action-spi</module>
         <module>richclientplatform-core-application</module>
         <module>richclientplatform-core-docking-processing</module>
         <module>richclientplatform-core-util</module>
