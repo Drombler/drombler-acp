@@ -18,6 +18,7 @@ import org.osgi.framework.ServiceReference;
 import org.richclientplatform.core.action.processing.ActionDescriptor;
 import org.richclientplatform.core.action.jaxb.ActionsType;
 import org.richclientplatform.core.action.jaxb.ActionType;
+import org.richclientplatform.core.action.processing.ActionFactory;
 
 /**
  *
@@ -28,16 +29,16 @@ import org.richclientplatform.core.action.jaxb.ActionType;
 cardinality = ReferenceCardinality.OPTIONAL_MULTIPLE, policy = ReferencePolicy.DYNAMIC)
 public class ActionsHandler {
 
+    @Reference
+    private ActionFactory<?> actionFactory;
+
     protected void bindActionsType(ServiceReference<ActionsType> serviceReference) {
         Bundle bundle = serviceReference.getBundle();
         BundleContext context = bundle.getBundleContext();
         ActionsType actionsType = context.getService(serviceReference);
-        for (ActionType action : actionsType.getAction()) {
+        for (ActionType actionType : actionsType.getAction()) {
             try {
-                ActionDescriptor actionDescriptor = ActionDescriptor.createActionDescriptor(action, bundle);
-                Dictionary<String, String> properties = new Hashtable<>(1);
-                properties.put(ActionDescriptor.ID_KEY, actionDescriptor.getId());
-                context.registerService(ActionDescriptor.class, actionDescriptor, properties);
+                registerAction(actionType, actionFactory, bundle, context);
             } catch (ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
                 Logger.getLogger(ActionsHandler.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -45,7 +46,24 @@ public class ActionsHandler {
 
     }
 
+    private <T> void registerAction(ActionType actionType, ActionFactory<T> actionFactory, Bundle bundle, BundleContext context)
+            throws ClassNotFoundException, InstantiationException, IllegalAccessException {
+        ActionDescriptor actionDescriptor = ActionDescriptor.createActionDescriptor(actionType, bundle);
+        T action = actionFactory.createAction(actionDescriptor);
+        Dictionary<String, String> properties = new Hashtable<>(1);
+        properties.put(ActionDescriptor.ID_KEY, actionDescriptor.getId());
+        context.registerService(actionFactory.getActionClass(), action, properties);
+    }
+
     protected void unbindActionsType(ActionsType actionsType) {
         // TODO
+    }
+
+    protected void bindActionFactory(ActionFactory<?> actionFactory) {
+        this.actionFactory = actionFactory;
+    }
+
+    protected void unbindActionFactory(ActionFactory<?> actionFactory) {
+        this.actionFactory = null;
     }
 }

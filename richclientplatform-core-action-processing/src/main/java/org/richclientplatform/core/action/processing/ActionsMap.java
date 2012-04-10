@@ -18,10 +18,10 @@ import org.osgi.framework.ServiceReference;
 public class ActionsMap {
 
 //    private final Map<String, ActionDescriptor> actionDescriptors = new HashMap<>();
-    public ActionDescriptor getAction(String actionId, BundleContext context) {
+    public <T> T getAction(String actionId, Class<T> actionClass, BundleContext context) {
         try {
-            Collection<ServiceReference<ActionDescriptor>> serviceReferences = context.getServiceReferences(
-                    ActionDescriptor.class, "(" + ActionDescriptor.ID_KEY + "=" + actionId + ")");
+            Collection<ServiceReference<T>> serviceReferences = context.getServiceReferences(
+                    actionClass, "(" + ActionDescriptor.ID_KEY + "=" + actionId + ")");
             if (!serviceReferences.isEmpty()) {
                 return context.getService(serviceReferences.iterator().next());
             }

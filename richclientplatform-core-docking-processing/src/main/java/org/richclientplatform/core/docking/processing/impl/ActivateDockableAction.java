@@ -4,14 +4,14 @@
  */
 package org.richclientplatform.core.docking.processing.impl;
 
-import org.richclientplatform.core.action.ActionListener;
+import org.richclientplatform.core.action.AbstractActionListener;
 import org.richclientplatform.core.docking.Dockable;
 
 /**
  *
  * @author puce
  */
-public class ActivateDockableAction implements ActionListener<Object> {
+public class ActivateDockableAction extends AbstractActionListener<Object> {
 
     private final Dockable dockable;
 
