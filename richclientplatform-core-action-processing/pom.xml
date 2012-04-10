@@ -7,10 +7,10 @@
         <version>0.1-SNAPSHOT</version>
         <relativePath>../richclientplatform-parent</relativePath>
     </parent>
-    <artifactId>richclientplatform-core-action-processing</artifactId>
+    <artifactId>richclientplatform-core-action-spi</artifactId>
     <packaging>bundle</packaging>
 
-    <name>Rich Client Platform - Core - Action - Processing</name>
+    <name>Rich Client Platform - Core - Action - SPI</name>
     <inceptionYear>2012</inceptionYear>
 
     <build>

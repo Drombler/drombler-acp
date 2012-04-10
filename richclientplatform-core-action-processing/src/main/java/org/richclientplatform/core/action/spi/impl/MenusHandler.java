@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.richclientplatform.core.action.processing.impl;
+package org.richclientplatform.core.action.spi.impl;
 
 import java.util.List;
 import org.apache.felix.scr.annotations.Component;
@@ -16,15 +16,15 @@ import org.osgi.framework.ServiceReference;
 import org.richclientplatform.core.action.jaxb.MenuEntryType;
 import org.richclientplatform.core.action.jaxb.MenuType;
 import org.richclientplatform.core.action.jaxb.MenusType;
-import org.richclientplatform.core.action.processing.ActionFactory;
-import org.richclientplatform.core.action.processing.ActionsMap;
-import org.richclientplatform.core.action.processing.MenuBarMenuContainerProvider;
-import org.richclientplatform.core.action.processing.MenuDescriptor;
-import org.richclientplatform.core.action.processing.MenuEntryDescriptor;
-import org.richclientplatform.core.action.processing.MenuFactory;
-import org.richclientplatform.core.action.processing.MenuItemContainer;
-import org.richclientplatform.core.action.processing.MenuItemFactory;
-import org.richclientplatform.core.action.processing.PositionableMenuItemAdapter;
+import org.richclientplatform.core.action.spi.ActionFactory;
+import org.richclientplatform.core.action.spi.ActionsMap;
+import org.richclientplatform.core.action.spi.MenuBarMenuContainerProvider;
+import org.richclientplatform.core.action.spi.MenuDescriptor;
+import org.richclientplatform.core.action.spi.MenuEntryDescriptor;
+import org.richclientplatform.core.action.spi.MenuFactory;
+import org.richclientplatform.core.action.spi.MenuItemContainer;
+import org.richclientplatform.core.action.spi.MenuItemFactory;
+import org.richclientplatform.core.action.spi.PositionableMenuItemAdapter;
 
 /**
  *

@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.richclientplatform.core.action.processing.impl;
+package org.richclientplatform.core.action.spi.impl;
 
 import java.util.Dictionary;
 import java.util.Hashtable;
@@ -15,10 +15,10 @@ import org.apache.felix.scr.annotations.ReferencePolicy;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
-import org.richclientplatform.core.action.processing.ActionDescriptor;
+import org.richclientplatform.core.action.spi.ActionDescriptor;
 import org.richclientplatform.core.action.jaxb.ActionsType;
 import org.richclientplatform.core.action.jaxb.ActionType;
-import org.richclientplatform.core.action.processing.ActionFactory;
+import org.richclientplatform.core.action.spi.ActionFactory;
 
 /**
  *
