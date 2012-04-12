@@ -5,6 +5,7 @@
         <groupId>org.richclientplatform</groupId>
         <artifactId>richclientplatform-parent</artifactId>
         <version>0.1-SNAPSHOT</version>
+        <relativePath>../richclientplatform-parent</relativePath>
     </parent>
 
     <artifactId>richclientplatform-core-standard-action</artifactId>

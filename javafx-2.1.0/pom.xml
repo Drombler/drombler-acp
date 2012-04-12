@@ -5,7 +5,7 @@
         <groupId>org.richclientplatform</groupId>
         <artifactId>richclientplatform-parent</artifactId>
         <version>0.1-SNAPSHOT</version>
-        <relativePath>richclientplatform-parent</relativePath>
+        <relativePath>../richclientplatform-parent</relativePath>
     </parent>
 
     <artifactId>javafx-2.1.0</artifactId>
