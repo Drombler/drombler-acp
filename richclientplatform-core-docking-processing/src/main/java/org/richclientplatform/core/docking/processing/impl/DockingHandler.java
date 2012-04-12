@@ -13,8 +13,8 @@ import org.apache.felix.scr.annotations.ReferencePolicy;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
-import org.richclientplatform.core.action.jaxb.ActionType;
-import org.richclientplatform.core.action.jaxb.MenuEntryType;
+import org.richclientplatform.core.action.spi.ActionDescriptor;
+import org.richclientplatform.core.action.spi.MenuEntryDescriptor;
 import org.richclientplatform.core.docking.jaxb.DockingType;
 import org.richclientplatform.core.docking.jaxb.DockingsType;
 import org.richclientplatform.core.docking.processing.DockingDescriptor;
@@ -38,7 +38,10 @@ public class DockingHandler {
             try {
                 DockingDescriptor dockingDescriptor = DockingDescriptor.createDockingDescriptor(dockingType, bundle);
                 context.registerService(DockingDescriptor.class, dockingDescriptor, null);
-
+                context.registerService(ActionDescriptor.class, dockingDescriptor.getActivateDockableActionDescriptor(),
+                        null);
+                context.registerService(MenuEntryDescriptor.class,
+                        dockingDescriptor.getActivateDockableMenuEntryDescriptor(), null);
 //            ActionType action = createAction(dockingType);
 //            context.registerService(ActionType.class, action, null);
 

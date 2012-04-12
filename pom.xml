@@ -16,7 +16,7 @@
     <modules>
         <module>richclientplatform-parent</module>
         <module>richclientplatform-core-action</module>
-        <module>richclientplatform-docking</module>
+        <module>richclientplatform-core-docking</module>
         <module>richclientplatform-core-standard-action</module>
         <module>richclientplatform-startup-main</module>
         <module>javafx-2.1.0</module>
