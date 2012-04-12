@@ -30,11 +30,7 @@ public class Main {
     public static final String JAVAFX_VERSION_PROPERTY = "jfx.specification.version";
     public static final String JAVAFX_VERSION_2_1_0 = "2.1.0";
     public static final String USER_DIR_PROPERTY = "platform.userdir";
-    /**
-     * Switch for specifying bundle directory.
-     *
-     */
-    public static final String BUNDLE_DIR_SWITCH = "-b";
+
     /**
      * The property name used to specify whether the launcher should install a shutdown hook.
      *
@@ -197,30 +193,9 @@ public class Main {
      *
      */
     public static void main(String[] args) throws Exception {
-        // Look for bundle directory and/or cache directory.
-        // We support at most one argument, which is the bundle
-        // cache directory.
-        String bundleDir = null;
-        String cacheDir = null;
-        boolean expectBundleDir = false;
-        for (int i = 0; i < args.length; i++) {
-            if (args[i].equals(BUNDLE_DIR_SWITCH)) {
-                expectBundleDir = true;
-            } else if (expectBundleDir) {
-                bundleDir = args[i];
-                expectBundleDir = false;
-            } else {
-                cacheDir = args[i];
-            }
-        }
-
-        if ((args.length > 3) || (expectBundleDir && bundleDir == null)) {
-            System.out.println("Usage: [-b <bundle-deploy-dir>] [<bundle-cache-dir>]");
-            System.exit(0);
-        }
-
+        CommandLineArgs commandLineArgs = CommandLineArgs.parseCommandLineArgs(args);
         Main main = new Main();
-        main.start(bundleDir, cacheDir);
+        main.start(commandLineArgs);
     }
 
     private void registerShutdownHook(Properties userConfigProps) {
@@ -252,7 +227,7 @@ public class Main {
         }
     }
 
-    private void start(String bundleDir, String cacheDir) throws URISyntaxException, MalformedURLException, IOException, MissingPropertyException {
+    public void start(CommandLineArgs commandLineArgs) throws URISyntaxException, MalformedURLException, IOException, MissingPropertyException {
         Path installDirPath = getInstallDirPath();
 
         loadSystemProperties(installDirPath);
@@ -273,14 +248,14 @@ public class Main {
 
         // If there is a passed in bundle auto-deploy directory, then
         // that overwrites anything in the config file.
-        if (bundleDir != null) {
-            userConfigProps.setProperty(AutoProcessor.AUTO_DEPLOY_DIR_PROPERY, bundleDir);
+        if (commandLineArgs.getBundleDir() != null) {
+            userConfigProps.setProperty(AutoProcessor.AUTO_DEPLOY_DIR_PROPERY, commandLineArgs.getBundleDir());
         }
 
         // If there is a passed in bundle cache directory, then
         // that overwrites anything in the config file.
-        if (cacheDir != null) {
-            userConfigProps.setProperty(Constants.FRAMEWORK_STORAGE, cacheDir);
+        if (commandLineArgs.getCacheDir() != null) {
+            userConfigProps.setProperty(Constants.FRAMEWORK_STORAGE, commandLineArgs.getCacheDir());
         }
 
         registerShutdownHook(userConfigProps);
@@ -404,7 +379,7 @@ public class Main {
         return mainJarPath.getParent().getParent();
     }
 
-    private Properties getDefaultConfigProps() throws IOException {
+    protected Properties getDefaultConfigProps() throws IOException {
         Properties props = new Properties();
         try (InputStream is = Main.class.getResourceAsStream("config.properties")) {
             props.load(is);
