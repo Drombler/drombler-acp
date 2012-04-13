@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.richclientplatform.core.util;
+package org.richclientplatform.core.lib.util;
 
 import java.util.Comparator;
 

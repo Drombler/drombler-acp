@@ -10,7 +10,7 @@ import java.util.ResourceBundle;
 import org.apache.commons.lang.StringUtils;
 import org.osgi.framework.Bundle;
 import org.richclientplatform.core.action.jaxb.ActionType;
-import org.richclientplatform.core.util.Resources;
+import org.richclientplatform.core.lib.util.Resources;
 
 /**
  *

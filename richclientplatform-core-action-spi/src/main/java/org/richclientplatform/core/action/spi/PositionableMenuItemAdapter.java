@@ -4,7 +4,7 @@
  */
 package org.richclientplatform.core.action.spi;
 
-import org.richclientplatform.core.util.Positionable;
+import org.richclientplatform.core.lib.util.Positionable;
 
 /**
  *

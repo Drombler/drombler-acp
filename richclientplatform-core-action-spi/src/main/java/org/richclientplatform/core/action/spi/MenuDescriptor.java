@@ -7,7 +7,7 @@ package org.richclientplatform.core.action.spi;
 import org.apache.commons.lang.StringUtils;
 import org.osgi.framework.Bundle;
 import org.richclientplatform.core.action.jaxb.MenuType;
-import org.richclientplatform.core.util.Resources;
+import org.richclientplatform.core.lib.util.Resources;
 
 /**
  *

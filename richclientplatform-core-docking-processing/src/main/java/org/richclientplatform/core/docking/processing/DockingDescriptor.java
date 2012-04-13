@@ -12,7 +12,7 @@ import org.richclientplatform.core.action.spi.MenuEntryDescriptor;
 import org.richclientplatform.core.docking.Dockable;
 import org.richclientplatform.core.docking.jaxb.DockingType;
 import org.richclientplatform.core.docking.processing.impl.ActivateDockableAction;
-import org.richclientplatform.core.util.Resources;
+import org.richclientplatform.core.lib.util.Resources;
 
 /**
  *

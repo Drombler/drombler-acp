@@ -5,10 +5,10 @@
 package org.richclientplatform.core.docking;
 
 import java.lang.annotation.Documented;
-import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+import org.richclientplatform.core.lib.geometry.Orientation;
 
 /**
  *
@@ -16,10 +16,10 @@ import java.lang.annotation.Target;
  */
 @Documented
 @Retention(RetentionPolicy.SOURCE)
-@Target(ElementType.PACKAGE)
-public @interface DockingArea {
+@Target({})
+public @interface DockingAreaPath {
 
-    String id();
-    DockingAreaKind kind() default DockingAreaKind.VIEW;
-    DockingAreaPath[] path();
+    Orientation orientation();
+
+    int position();
 }

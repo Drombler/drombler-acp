@@ -2,27 +2,23 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.richclientplatform.core.docking.impl;
+package org.richclientplatform.core.docking.processing;
 
 import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
-import static org.junit.Assert.*;
-import org.junit.BeforeClass;
 
 /**
  *
  * @author puce
  */
-public class DockingAreaAnnotationProcessorTest {
+public class DockingAreaPathDescriptorTest {
 
-    private DockingAreaAnnotationProcessor processor;
-
+    private DockingAreaPathDescriptor pathDescriptor;
 
     @Before
     public void setUp() {
-        processor = new DockingAreaAnnotationProcessor();
+        pathDescriptor = new DockingAreaPathDescriptor();
     }
 
     @After
