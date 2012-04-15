@@ -15,15 +15,11 @@ import org.apache.commons.lang.StringUtils;
 import org.richclientplatform.core.application.AbstractApplicationAnnotationProcessor;
 import org.richclientplatform.core.docking.DockingArea;
 import org.richclientplatform.core.docking.DockingAreaKind;
-import org.richclientplatform.core.docking.DockingAreaPath;
 import org.richclientplatform.core.docking.DockingAreas;
 import org.richclientplatform.core.docking.jaxb.DockingAreaKindType;
-import org.richclientplatform.core.docking.jaxb.DockingAreaPathType;
 import org.richclientplatform.core.docking.jaxb.DockingAreaPathsType;
 import org.richclientplatform.core.docking.jaxb.DockingAreaType;
 import org.richclientplatform.core.docking.jaxb.DockingAreasType;
-import org.richclientplatform.core.docking.jaxb.OrientationType;
-import org.richclientplatform.core.lib.geometry.Orientation;
 
 /**
  *
@@ -42,28 +38,12 @@ public class DockingAreaAnnotationProcessor extends AbstractApplicationAnnotatio
     // Note: There is a similar issue when reading and handling the XML (changes to DockingAreaKindType are missed at compile time)
     private static final Map<DockingAreaKind, DockingAreaKindType> DOCKING_AREA_KINDS = new EnumMap<>(
             DockingAreaKind.class);
-    //TODO: not safe as changes to Orientation are missed at compile time. 
-    // Possible solutions:
-    // - Consider to generate a part of the XSD from Orientation and omit OrientationType
-    // - Add a method toJaxb() to Orientation -> clutters the interface of the class (implementationg detail leaking in interface)
-    // - Use a unit test to test if the static block throws an IllegalStateException (current solution) 
-    //
-    // Note: There is a similar issue when reading and handling the XML (changes to DockingAreaKindType are missed at compile time)
-    private static final Map<Orientation, OrientationType> ORIENTATIONS = new EnumMap<>(Orientation.class);
 
     static {
         DOCKING_AREA_KINDS.put(DockingAreaKind.VIEW, DockingAreaKindType.VIEW);
         for (DockingAreaKind dockingAreaKind : DockingAreaKind.values()) {
             if (!DOCKING_AREA_KINDS.containsKey(dockingAreaKind)) {
                 throw new IllegalStateException("No mapping for: " + dockingAreaKind);
-            }
-        }
-
-        ORIENTATIONS.put(Orientation.HORIZONTAL, OrientationType.HORIZONTAL);
-        ORIENTATIONS.put(Orientation.VERTICAL, OrientationType.VERTICAL);
-        for (Orientation orientation : Orientation.values()) {
-            if (!ORIENTATIONS.containsKey(orientation)) {
-                throw new IllegalStateException("No mapping for: " + orientation);
             }
         }
     }
@@ -97,9 +77,9 @@ public class DockingAreaAnnotationProcessor extends AbstractApplicationAnnotatio
         DockingAreaType dockingArea = new DockingAreaType();
         dockingArea.setId(StringUtils.stripToNull(dockingAreaAnnotation.id()));
         dockingArea.setKind(DOCKING_AREA_KINDS.get(dockingAreaAnnotation.kind()));
+        dockingArea.setPosition(dockingAreaAnnotation.position());
         DockingAreaPathsType paths = new DockingAreaPathsType();
-        for (DockingAreaPath pathAnnotation : dockingAreaAnnotation.path()) {
-            DockingAreaPathType path = createPath(pathAnnotation);
+        for (int path : dockingAreaAnnotation.path()) {
             paths.getPath().add(path);
         }
         dockingArea.setPaths(paths);
@@ -113,12 +93,5 @@ public class DockingAreaAnnotationProcessor extends AbstractApplicationAnnotatio
             addJAXBRootClasses(DockingAreasType.class);
         }
         addOriginatingElements(element); // TODO: needed?
-    }
-
-    private DockingAreaPathType createPath(DockingAreaPath pathAnnotation) {
-        DockingAreaPathType path = new DockingAreaPathType();
-        path.setOrientation(ORIENTATIONS.get(pathAnnotation.orientation()));
-        path.setPosition(pathAnnotation.position());
-        return path;
     }
 }

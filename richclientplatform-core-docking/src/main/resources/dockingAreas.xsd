@@ -14,6 +14,7 @@
     <complexType name="DockingAreaType">
         <sequence>
             <element name="kind" type="tns:DockingAreaKindType" />
+            <element name="position" type="int" />
             <element name="paths" type="tns:DockingAreaPathsType" />
         </sequence>
         <attribute name="id" type="string" use="required"/>
@@ -27,23 +28,8 @@
     
     <complexType name="DockingAreaPathsType">
         <sequence>
-            <element name="path" type="tns:DockingAreaPathType" minOccurs="1" maxOccurs="unbounded" />
+            <element name="path" type="int" minOccurs="1" maxOccurs="unbounded" />
         </sequence>
     </complexType>
-    
-    <complexType name="DockingAreaPathType">
-        <sequence>
-            <element name="orientation" type="tns:OrientationType" />
-            <element name="position" type="int" />
-        </sequence>
-    </complexType>
-    
-<!--    TODO: import as common types-->
-    <simpleType name="OrientationType">
-        <restriction base="string">
-            <enumeration value="HORIZONTAL"/>
-            <enumeration value="VERTICAL"/>
-        </restriction>
-    </simpleType>
 
 </schema>

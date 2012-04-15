@@ -21,5 +21,6 @@ public @interface DockingArea {
 
     String id();
     DockingAreaKind kind() default DockingAreaKind.VIEW;
-    DockingAreaPath[] path();
+    int position();
+    int[] path();
 }
