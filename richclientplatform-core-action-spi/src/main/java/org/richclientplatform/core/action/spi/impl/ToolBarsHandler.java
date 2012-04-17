@@ -41,7 +41,7 @@ import org.richclientplatform.core.lib.util.PositionableAdapter;
 })
 public class ToolBarsHandler<T, B, A> {
 
-    private static final int ICON_SIZE = 16;
+    private static final int ICON_SIZE = 24;
     private final ToolBarResolutionManager toolBarResolutionManager = new ToolBarResolutionManager();
     private ToolBarContainer<T, B> toolBarContainer;
     @Reference
