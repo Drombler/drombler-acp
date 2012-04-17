@@ -5,26 +5,25 @@
 package org.richclientplatform.core.action.spi.impl;
 
 import org.osgi.framework.BundleContext;
-import org.richclientplatform.core.action.spi.MenuEntryDescriptor;
 
 /**
  *
  * @author puce
  */
-public class UnresolvedMenuEntry {
-    private final MenuEntryDescriptor menuEntryDescriptor;
+public class UnresolvedEntry<T> {
+    private final T entry;
     private final BundleContext context;
 
-    public UnresolvedMenuEntry(MenuEntryDescriptor menuEntryDescriptor, BundleContext context) {
-        this.menuEntryDescriptor = menuEntryDescriptor;
+    public UnresolvedEntry(T entry, BundleContext context) {
+        this.entry = entry;
         this.context = context;
     }
 
     /**
-     * @return the menuEntryDescriptor
+     * @return the entry
      */
-    public MenuEntryDescriptor getMenuEntryDescriptor() {
-        return menuEntryDescriptor;
+    public T getEntry() {
+        return entry;
     }
 
     /**

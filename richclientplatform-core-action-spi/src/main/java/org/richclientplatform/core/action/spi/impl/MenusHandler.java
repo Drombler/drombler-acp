@@ -203,8 +203,8 @@ public class MenusHandler<M, I, A> {
             }
         }
         if (container.containsUnresolvedMenuEntries(pathId)) {
-            for (UnresolvedMenuEntry unresolvedMenuEntry : container.removeUnresolvedMenuEntries(pathId)) {
-                resolveMenuItem(unresolvedMenuEntry.getMenuEntryDescriptor(), unresolvedMenuEntry.getContext());
+            for (UnresolvedEntry<MenuEntryDescriptor> unresolvedMenuEntry : container.removeUnresolvedMenuEntries(pathId)) {
+                resolveMenuItem(unresolvedMenuEntry.getEntry(), unresolvedMenuEntry.getContext());
             }
         }
     }
@@ -235,7 +235,7 @@ public class MenusHandler<M, I, A> {
                 }
             }
         }
-        resolutionManager.addUnresolvedMenuEntry(firstUnresolvedPathId, new UnresolvedMenuEntry(menuEntryDescriptor,
+        resolutionManager.addUnresolvedMenuEntry(firstUnresolvedPathId, new UnresolvedEntry(menuEntryDescriptor,
                 context));
     }
 }

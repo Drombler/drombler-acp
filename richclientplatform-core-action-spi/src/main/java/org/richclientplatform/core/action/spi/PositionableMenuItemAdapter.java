@@ -4,13 +4,13 @@
  */
 package org.richclientplatform.core.action.spi;
 
-import org.richclientplatform.core.lib.util.Positionable;
+import org.richclientplatform.core.lib.util.PositionableAdapter;
 
 /**
  *
  * @author puce
  */
-public class PositionableMenuItemAdapter<T> implements Positionable {
+public class PositionableMenuItemAdapter<T> extends PositionableAdapter<T> {
 
     public static <S> PositionableMenuItemAdapter<S> wrapSeparator(S separatorMenuItem, int position) {
         return new PositionableMenuItemAdapter<>(separatorMenuItem, position, true);
@@ -19,23 +19,11 @@ public class PositionableMenuItemAdapter<T> implements Positionable {
     public static <T> PositionableMenuItemAdapter<T> wrapMenuItem(T menuItem, int position) {
         return new PositionableMenuItemAdapter<>(menuItem, position, false);
     }
-    private final T menuItem;
-    private final int position;
     private final boolean separator;
 
     private PositionableMenuItemAdapter(T menuItem, int position, boolean separator) {
-        this.menuItem = menuItem;
-        this.position = position;
+        super(menuItem, position);
         this.separator = separator;
-    }
-
-    public T getMenuItem() {
-        return menuItem;
-    }
-
-    @Override
-    public int getPosition() {
-        return position;
     }
 
     public boolean isSeparator() {

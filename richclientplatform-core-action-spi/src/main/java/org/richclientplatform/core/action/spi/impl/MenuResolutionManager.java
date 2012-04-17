@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.richclientplatform.core.action.spi.MenuDescriptor;
+import org.richclientplatform.core.action.spi.MenuEntryDescriptor;
 
 
 /**
@@ -19,7 +20,7 @@ public class MenuResolutionManager {
 
     private final Map<String, MenuResolutionManager> unresolvedMenuItemContainers = new HashMap<>();
     private final Map<String, List<MenuDescriptor>> unresolvedMenuDescriptors = new HashMap<>();
-    private final Map<String, List<UnresolvedMenuEntry>> unresolvedMenuEntryDescriptors = new HashMap<>();
+    private final Map<String, List<UnresolvedEntry<MenuEntryDescriptor>>> unresolvedMenuEntryDescriptors = new HashMap<>();
 
     public void addUnresolvedMenu(String pathId, MenuDescriptor menuDescriptor) {
         if (!unresolvedMenuDescriptors.containsKey(pathId)) {
@@ -43,14 +44,14 @@ public class MenuResolutionManager {
         return unresolvedMenuItemContainers.get(pathId);
     }
 
-    public void addUnresolvedMenuEntry(String pathId, UnresolvedMenuEntry unresolvedMenuEntry) {
+    public void addUnresolvedMenuEntry(String pathId, UnresolvedEntry<MenuEntryDescriptor> unresolvedMenuEntry) {
         if (!unresolvedMenuEntryDescriptors.containsKey(pathId)) {
-            unresolvedMenuEntryDescriptors.put(pathId, new ArrayList<UnresolvedMenuEntry>());
+            unresolvedMenuEntryDescriptors.put(pathId, new ArrayList<UnresolvedEntry<MenuEntryDescriptor>>());
         }
         unresolvedMenuEntryDescriptors.get(pathId).add(unresolvedMenuEntry);
     }
 
-    public List<UnresolvedMenuEntry> removeUnresolvedMenuEntries(String pathId) {
+    public List<UnresolvedEntry<MenuEntryDescriptor>> removeUnresolvedMenuEntries(String pathId) {
         return unresolvedMenuEntryDescriptors.remove(pathId);
     }
 

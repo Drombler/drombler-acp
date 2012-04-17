@@ -12,4 +12,9 @@
             <jxb:class name="MenusType"/>
         </jxb:bindings> 
     </jxb:bindings>
+        <jxb:bindings schemaLocation="toolBars.xsd" node="/xs:schema">
+        <jxb:bindings  node="//xs:element[@name='toolBars']">
+            <jxb:class name="ToolBarsType"/>
+        </jxb:bindings> 
+    </jxb:bindings>
 </jxb:bindings>
