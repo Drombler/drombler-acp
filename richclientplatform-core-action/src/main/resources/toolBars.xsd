@@ -8,6 +8,7 @@
             <sequence>
                 <element name="toolBar" type="tns:ToolBarType" minOccurs="0" maxOccurs="unbounded" />
                 <element name="toolBarEntry" type="tns:ToolBarEntryType" minOccurs="0" maxOccurs="unbounded" />
+                <element name="toolBarToggleEntry" type="tns:ToolBarToggleEntryType" minOccurs="0" maxOccurs="unbounded" />
             </sequence>
         </complexType>
     </element>
@@ -27,5 +28,15 @@
             <element name="position" type="int"/>
         </sequence>
         <attribute name="actionId" type="string" use="required"/>
+    </complexType>
+    
+    <complexType name="ToolBarToggleEntryType">
+        <complexContent>
+            <extension base="tns:ToolBarEntryType">
+                <sequence>
+                    <element name="toggleGroupId" type="string" minOccurs="0"/>
+                </sequence>
+            </extension>
+        </complexContent>
     </complexType>
 </schema>

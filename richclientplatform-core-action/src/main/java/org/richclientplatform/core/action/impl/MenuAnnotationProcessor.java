@@ -4,28 +4,34 @@
  */
 package org.richclientplatform.core.action.impl;
 
-import java.awt.Desktop;
-import java.util.Comparator;
 import java.util.Set;
 import javax.annotation.processing.*;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
 import org.apache.commons.lang.StringUtils;
 import org.richclientplatform.core.action.Action;
+import org.richclientplatform.core.action.CheckMenuEntry;
 import org.richclientplatform.core.action.Menu;
 import org.richclientplatform.core.action.MenuEntry;
 import org.richclientplatform.core.action.Menus;
+import org.richclientplatform.core.action.RadioMenuEntry;
+import org.richclientplatform.core.action.jaxb.CheckMenuEntryType;
 import org.richclientplatform.core.action.jaxb.MenuEntryType;
 import org.richclientplatform.core.action.jaxb.MenuType;
 import org.richclientplatform.core.action.jaxb.MenusType;
+import org.richclientplatform.core.action.jaxb.RadioMenuEntryType;
 import org.richclientplatform.core.application.AbstractApplicationAnnotationProcessor;
 
 /**
  *
  * @author puce
  */
-@SupportedAnnotationTypes({"org.richclientplatform.core.action.Menus", "org.richclientplatform.core.action.Menu",
-    "org.richclientplatform.core.action.MenuEntry"})
+@SupportedAnnotationTypes({
+    "org.richclientplatform.core.action.Menus",
+    "org.richclientplatform.core.action.Menu",
+    "org.richclientplatform.core.action.MenuEntry",
+    "org.richclientplatform.core.action.CheckMenuEntry",
+    "org.richclientplatform.core.action.RadioMenuEntry"})
 public class MenuAnnotationProcessor extends AbstractApplicationAnnotationProcessor {
 
     private MenusType menus;
@@ -53,6 +59,22 @@ public class MenuAnnotationProcessor extends AbstractApplicationAnnotationProces
             if (menuEntryAnnotation != null) {
                 Action actionAnnotation = element.getAnnotation(Action.class);
                 registerMenuEntry(menuEntryAnnotation, actionAnnotation, element);
+            }
+        }
+
+        for (Element element : roundEnv.getElementsAnnotatedWith(CheckMenuEntry.class)) {
+            CheckMenuEntry checkMenuEntryAnnotation = element.getAnnotation(CheckMenuEntry.class);
+            if (checkMenuEntryAnnotation != null) {
+                Action actionAnnotation = element.getAnnotation(Action.class);
+                registerCheckMenuEntry(checkMenuEntryAnnotation, actionAnnotation, element);
+            }
+        }
+
+        for (Element element : roundEnv.getElementsAnnotatedWith(RadioMenuEntry.class)) {
+            RadioMenuEntry radioMenuEntryAnnotation = element.getAnnotation(RadioMenuEntry.class);
+            if (radioMenuEntryAnnotation != null) {
+                Action actionAnnotation = element.getAnnotation(Action.class);
+                registerRadioMenuEntry(radioMenuEntryAnnotation, actionAnnotation, element);
             }
         }
 
@@ -85,13 +107,39 @@ public class MenuAnnotationProcessor extends AbstractApplicationAnnotationProces
         init(element);
 
         MenuEntryType menuEntry = new MenuEntryType();
-        String actionId = StringUtils.stripToNull(menuEntryAnnotation.actionId());
+        configureMenuEntry(menuEntry, actionAnnotation, menuEntryAnnotation.actionId(), menuEntryAnnotation.position(),
+                menuEntryAnnotation.path());
+        menus.getMenuEntry().add(menuEntry);
+    }
+
+    private void registerCheckMenuEntry(CheckMenuEntry checkMenuEntryAnnotation, Action actionAnnotation, Element element) {
+        init(element);
+
+        CheckMenuEntryType menuEntry = new CheckMenuEntryType();
+        configureMenuEntry(menuEntry, actionAnnotation, checkMenuEntryAnnotation.actionId(),
+                checkMenuEntryAnnotation.position(),
+                checkMenuEntryAnnotation.path());
+        menus.getCheckMenuEntry().add(menuEntry);
+    }
+
+    private void registerRadioMenuEntry(RadioMenuEntry radioMenuEntryAnnotation, Action actionAnnotation, Element element) {
+        init(element);
+
+        RadioMenuEntryType menuEntry = new RadioMenuEntryType();
+        configureMenuEntry(menuEntry, actionAnnotation, radioMenuEntryAnnotation.actionId(),
+                radioMenuEntryAnnotation.position(),
+                radioMenuEntryAnnotation.path());
+        menuEntry.setToggleGroupId(StringUtils.stripToNull(radioMenuEntryAnnotation.toggleGroupId()));
+        menus.getRadioMenuEntry().add(menuEntry);
+    }
+
+    private void configureMenuEntry(MenuEntryType menuEntry, Action actionAnnotation, String actionId, int position, String path) {
+        actionId = StringUtils.stripToNull(actionId);
         if (actionId == null && actionAnnotation != null) {
             actionId = StringUtils.stripToNull(actionAnnotation.id());
         }
         menuEntry.setActionId(actionId);
-        menuEntry.setPosition(menuEntryAnnotation.position());
-        menuEntry.setPath(StringUtils.stripToNull(menuEntryAnnotation.path()));
-        menus.getMenuEntry().add(menuEntry);
+        menuEntry.setPosition(position);
+        menuEntry.setPath(StringUtils.stripToNull(path));
     }
 }

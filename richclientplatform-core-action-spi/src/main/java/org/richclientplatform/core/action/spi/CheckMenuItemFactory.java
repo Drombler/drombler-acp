@@ -8,7 +8,7 @@ package org.richclientplatform.core.action.spi;
  *
  * @author puce
  */
-public interface MenuBarMenuContainerProvider<MenuItem, Menu extends MenuItem> {
+public interface CheckMenuItemFactory<T, A> {
 
-    MenuItemRootContainer<MenuItem, Menu> getMenuBarMenuContainer();
+    T createCheckMenuItem(MenuEntryDescriptor menuEntryDescriptor, A action, int iconSize);
 }

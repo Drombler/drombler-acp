@@ -25,27 +25,31 @@ public abstract class AbstractActionListener<E> implements ActionListener<E> {
         if (this.disabled != disabled) {
             boolean oldValue = this.disabled;
             this.disabled = disabled;
-            propertyChangeSupport.firePropertyChange("disabled", oldValue, disabled);
+            getPropertyChangeSupport().firePropertyChange("disabled", oldValue, disabled);
         }
     }
 
     @Override
     public void addPropertyChangeListener(PropertyChangeListener listener) {
-        propertyChangeSupport.addPropertyChangeListener(listener);
+        getPropertyChangeSupport().addPropertyChangeListener(listener);
     }
 
     @Override
     public void addPropertyChangeListener(String propertyName, PropertyChangeListener listener) {
-        propertyChangeSupport.addPropertyChangeListener(propertyName, listener);
+        getPropertyChangeSupport().addPropertyChangeListener(propertyName, listener);
     }
 
     @Override
     public void removePropertyChangeListener(PropertyChangeListener listener) {
-        propertyChangeSupport.removePropertyChangeListener(listener);
+        getPropertyChangeSupport().removePropertyChangeListener(listener);
     }
 
     @Override
     public void removePropertyChangeListener(String propertyName, PropertyChangeListener listener) {
-        propertyChangeSupport.removePropertyChangeListener(propertyName, listener);
+        getPropertyChangeSupport().removePropertyChangeListener(propertyName, listener);
+    }
+
+    protected PropertyChangeSupport getPropertyChangeSupport() {
+        return propertyChangeSupport;
     }
 }

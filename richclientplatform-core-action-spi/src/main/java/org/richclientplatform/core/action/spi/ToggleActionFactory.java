@@ -8,7 +8,9 @@ package org.richclientplatform.core.action.spi;
  *
  * @author puce
  */
-public interface MenuBarMenuContainerProvider<MenuItem, Menu extends MenuItem> {
+public interface ToggleActionFactory<T> {
 
-    MenuItemRootContainer<MenuItem, Menu> getMenuBarMenuContainer();
+    T createToggleAction(ActionDescriptor actionDescriptor);
+
+    Class<T> getToggleActionClass();
 }

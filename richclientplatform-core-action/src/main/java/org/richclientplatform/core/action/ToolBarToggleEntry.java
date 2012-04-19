@@ -11,19 +11,19 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Not supported yet.
+ *
  * @author puce
  */
 @Documented
 @Retention(RetentionPolicy.SOURCE)
 @Target(ElementType.TYPE)
-public @interface RadioMenuEntry {
+public @interface ToolBarToggleEntry {
 
     String actionId() default "";
-    
-    String toggleGroupId();
 
-    String path();
+    String toolBarId();
+
+    String toggleGroupId() default "";
 
     int position();
 }

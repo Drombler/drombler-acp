@@ -8,6 +8,8 @@
             <sequence>
                 <element name="menu" type="tns:MenuType" minOccurs="0" maxOccurs="unbounded" />
                 <element name="menuEntry" type="tns:MenuEntryType" minOccurs="0" maxOccurs="unbounded" />
+                <element name="checkMenuEntry" type="tns:CheckMenuEntryType" minOccurs="0" maxOccurs="unbounded" />
+                <element name="radioMenuEntry" type="tns:RadioMenuEntryType" minOccurs="0" maxOccurs="unbounded" />
             </sequence>
         </complexType>
     </element>
@@ -29,6 +31,22 @@
             <element name="position" type="int"/>
         </sequence>
         <attribute name="actionId" type="string" use="required"/>
+    </complexType>
+    
+    <complexType name="CheckMenuEntryType">
+        <complexContent>
+            <extension base="tns:MenuEntryType" />
+        </complexContent>
+    </complexType>
+    
+    <complexType name="RadioMenuEntryType">
+        <complexContent>
+            <extension base="tns:MenuEntryType">
+                <sequence>
+                    <element name="toggleGroupId" type="string" minOccurs="0"/>
+                </sequence>
+            </extension>
+        </complexContent>
     </complexType>
     
 </schema>

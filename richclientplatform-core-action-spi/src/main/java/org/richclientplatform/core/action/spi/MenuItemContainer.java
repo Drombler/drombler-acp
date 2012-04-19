@@ -8,17 +8,17 @@ package org.richclientplatform.core.action.spi;
  *
  * @author puce
  */
-public interface MenuItemContainer<M, I> {
+public interface MenuItemContainer<MenuItem, Menu extends MenuItem> {
 
 //    void addMenu(String id, PositionableMenuItemAdapter<? extends M> menu);
-    void addMenu(String id, PositionableMenuItemAdapter<? extends M> menu);
+    void addMenu(String id, PositionableMenuItemAdapter<? extends Menu> menu);
 
-    void addMenuItem(PositionableMenuItemAdapter<? extends I> menuItem);
+    void addMenuItem(PositionableMenuItemAdapter<? extends MenuItem> menuItem);
 
     /**
      * @return the menuContainers
      */
-    MenuItemContainer<M, I> getMenuContainer(String id);
+    MenuItemContainer<MenuItem, Menu> getMenuContainer(String id);
 
     boolean isSupportingItems();
 }

@@ -8,7 +8,7 @@ package org.richclientplatform.core.action.spi;
  *
  * @author puce
  */
-public interface MenuBarMenuContainerProvider<MenuItem, Menu extends MenuItem> {
+public interface RadioMenuItemFactory<T, A> {
 
-    MenuItemRootContainer<MenuItem, Menu> getMenuBarMenuContainer();
+    T createRadioMenuItem(RadioMenuEntryDescriptor toggleMenuEntryDescriptor, A action, int iconSize);
 }

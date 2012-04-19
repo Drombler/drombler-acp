@@ -8,6 +8,7 @@ package org.richclientplatform.core.action;
  *
  * @author puce
  */
-class MenuItemFactory {
-    
+public interface CheckActionListener<E> extends ActionListener<E> {
+
+    boolean isSelected();
 }

@@ -8,7 +8,7 @@ package org.richclientplatform.core.action.spi;
  *
  * @author puce
  */
-public interface MenuBarMenuContainerProvider<MenuItem, Menu extends MenuItem> {
+public interface ToolBarToggleButtonFactory<B, A> {
 
-    MenuItemRootContainer<MenuItem, Menu> getMenuBarMenuContainer();
+    B createToolToggleBarButton(ToolBarToggleEntryDescriptor toolBarToggleEntryDescriptor, A action, int iconSize);
 }
