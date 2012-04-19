@@ -18,6 +18,8 @@ import org.richclientplatform.core.action.jaxb.ToolBarsType;
 import org.richclientplatform.core.action.spi.ActionFactory;
 import org.richclientplatform.core.action.spi.ActionRegistry;
 import org.richclientplatform.core.action.spi.ApplicationToolBarContainerProvider;
+import org.richclientplatform.core.action.spi.CheckActionDescriptor;
+import org.richclientplatform.core.action.spi.CheckMenuEntryDescriptor;
 import org.richclientplatform.core.action.spi.ToolBarButtonFactory;
 import org.richclientplatform.core.action.spi.ToolBarContainer;
 import org.richclientplatform.core.action.spi.ToolBarDescriptor;
@@ -58,8 +60,9 @@ public class ToolBarsHandler<T, B, A> {
         ToolBarsType toolBarsType = context.getService(serviceReference);
 
         for (ToolBarType toolBarType : toolBarsType.getToolBar()) {
-            ToolBarDescriptor toolBarDescriptor = ToolBarDescriptor.createToolBarDescriptor(toolBarType, bundle);
-            resolveToolBar(toolBarDescriptor);
+            ToolBarDescriptor toolBarDescriptor = ToolBarDescriptor.createToolBarDescriptor(toolBarType, bundle,
+                    toolBarContainer);
+            resolveToolBar(toolBarDescriptor, context);
         }
 
         for (ToolBarEntryType toolBarEntry : toolBarsType.getToolBarEntry()) {
@@ -127,14 +130,19 @@ public class ToolBarsHandler<T, B, A> {
         this.actionFactory = null;
     }
 
-    private void resolveToolBar(ToolBarDescriptor toolBarDescriptor) {
+    private void resolveToolBar(ToolBarDescriptor toolBarDescriptor, BundleContext context) {
         if (isInitialized()) {
             T toolBar = toolBarFactory.createToolBar(toolBarDescriptor);
             toolBarContainer.addToolBar(toolBarDescriptor.getId(),
                     new PositionableAdapter<>(toolBar, toolBarDescriptor.getPosition()));
+            toolBarContainer.setToolBarVisible(toolBarDescriptor.getId(), toolBarDescriptor.isVisible());
+            context.registerService(CheckActionDescriptor.class, toolBarDescriptor.getShowToolBarActionDescriptor(),
+                    null);
+            context.registerService(CheckMenuEntryDescriptor.class,
+                    toolBarDescriptor.getShowToolBarCheckMenuEntryDescriptor(), null);
             resolveUnresolvedToolBarEntries(toolBarDescriptor.getId());
         } else {
-            registerUnresolvedToolBar(toolBarDescriptor);
+            registerUnresolvedToolBar(toolBarDescriptor, context);
         }
     }
 
@@ -156,14 +164,14 @@ public class ToolBarsHandler<T, B, A> {
         }
     }
 
-    private void registerUnresolvedToolBar(ToolBarDescriptor toolBarDescriptor) {
-        toolBarResolutionManager.addUnresolvedToolBar(toolBarDescriptor);
+    private void registerUnresolvedToolBar(ToolBarDescriptor toolBarDescriptor, BundleContext context) {
+        toolBarResolutionManager.addUnresolvedToolBar(new UnresolvedEntry<>(toolBarDescriptor, context));
     }
 
     private void resolveUnresolvedItems() {
         if (isInitialized()) {
-            for (ToolBarDescriptor toolBarDescriptor : toolBarResolutionManager.removeUnresolvedToolBars()) {
-                resolveToolBar(toolBarDescriptor);
+            for (UnresolvedEntry<ToolBarDescriptor> toolBarDescriptor : toolBarResolutionManager.removeUnresolvedToolBars()) {
+                resolveToolBar(toolBarDescriptor.getEntry(), toolBarDescriptor.getContext());
             }
         }
     }

@@ -25,34 +25,13 @@ import org.richclientplatform.core.action.spi.ActionRegistry;
  * @author puce
  */
 @Component(immediate = true)
-@References({
-    @Reference(name = "actionsType", referenceInterface = ActionsType.class,
-    cardinality = ReferenceCardinality.OPTIONAL_MULTIPLE, policy = ReferencePolicy.DYNAMIC),
-    @Reference(name = "actionDescriptor", referenceInterface = ActionDescriptor.class,
-    cardinality = ReferenceCardinality.OPTIONAL_MULTIPLE, policy = ReferencePolicy.DYNAMIC)})
-public class ActionsHandler<T> {
+@Reference(name = "actionDescriptor", referenceInterface = ActionDescriptor.class,
+cardinality = ReferenceCardinality.OPTIONAL_MULTIPLE, policy = ReferencePolicy.DYNAMIC)
+public class ActionHandler<T> extends AbstractActionHandler {
 
     @Reference
     private ActionFactory<T> actionFactory;
     private final ActionRegistry actionRegistry = new ActionRegistry();
-
-    protected void bindActionsType(ServiceReference<ActionsType> serviceReference) {
-        Bundle bundle = serviceReference.getBundle();
-        BundleContext context = bundle.getBundleContext();
-        ActionsType actionsType = context.getService(serviceReference);
-        for (ActionType actionType : actionsType.getAction()) {
-            try {
-                registerAction(actionType, bundle, context);
-            } catch (ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
-                Logger.getLogger(ActionsHandler.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-
-    }
-
-    protected void unbindActionsType(ActionsType actionsType) {
-        // TODO
-    }
 
     protected void bindActionDescriptor(ServiceReference<ActionDescriptor> serviceReference) {
         BundleContext context = serviceReference.getBundle().getBundleContext();
@@ -70,6 +49,17 @@ public class ActionsHandler<T> {
 
     protected void unbindActionFactory(ActionFactory<T> actionFactory) {
         this.actionFactory = null;
+    }
+
+    @Override
+    protected void registerAction(ActionsType actionsType, Bundle bundle, BundleContext context) {
+        for (ActionType actionType : actionsType.getAction()) {
+            try {
+                registerAction(actionType, bundle, context);
+            } catch (ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
+                Logger.getLogger(ActionHandler.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }
 
     private void registerAction(ActionType actionType, Bundle bundle, BundleContext context)

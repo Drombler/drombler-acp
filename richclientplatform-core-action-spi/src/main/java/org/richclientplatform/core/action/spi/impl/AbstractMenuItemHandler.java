@@ -17,7 +17,6 @@ import org.richclientplatform.core.action.spi.AbstractMenuEntryDescriptor;
 import org.richclientplatform.core.action.spi.MenuBarMenuContainerProvider;
 import org.richclientplatform.core.action.spi.MenuItemContainer;
 import org.richclientplatform.core.action.spi.MenuItemContainerMenuEvent;
-import org.richclientplatform.core.action.spi.MenuItemContainerListener;
 import org.richclientplatform.core.action.spi.MenuItemContainerListenerAdapter;
 import org.richclientplatform.core.action.spi.MenuItemRootContainer;
 import org.richclientplatform.core.action.spi.PositionableMenuItemAdapter;

@@ -11,4 +11,6 @@ package org.richclientplatform.core.action;
 public interface CheckActionListener<E> extends ActionListener<E> {
 
     boolean isSelected();
+
+    void onSelectionChanged(boolean oldValue, boolean newValue);
 }

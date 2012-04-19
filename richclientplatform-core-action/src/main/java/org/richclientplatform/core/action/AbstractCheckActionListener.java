@@ -25,5 +25,9 @@ public abstract class AbstractCheckActionListener<E> extends AbstractActionListe
         }
     }
 
+    @Override
+    public void onAction(E event) {
+        // do nothing
+    }
 
 }

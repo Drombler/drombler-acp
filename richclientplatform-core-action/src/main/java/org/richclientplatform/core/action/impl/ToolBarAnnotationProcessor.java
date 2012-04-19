@@ -23,7 +23,7 @@ import org.richclientplatform.core.application.AbstractApplicationAnnotationProc
  *
  * @author puce
  */
-@SupportedAnnotationTypes({"org.richclientplatform.core.action.ToolBars", "org.richclientplatform.core.action.ToolBar", 
+@SupportedAnnotationTypes({"org.richclientplatform.core.action.ToolBars", "org.richclientplatform.core.action.ToolBar",
     "org.richclientplatform.core.action.ToolBarEntry"})
 public class ToolBarAnnotationProcessor extends AbstractApplicationAnnotationProcessor {
 
@@ -66,6 +66,7 @@ public class ToolBarAnnotationProcessor extends AbstractApplicationAnnotationPro
         toolBar.setId(StringUtils.stripToNull(toolBarAnnotation.id()));
         toolBar.setDisplayName(StringUtils.stripToNull(toolBarAnnotation.displayName()));
         toolBar.setPosition(toolBarAnnotation.position());
+        toolBar.setVisible(toolBarAnnotation.visible());
         toolBar.setPackage(element.asType().toString());
         toolBars.getToolBar().add(toolBar);
     }

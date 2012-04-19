@@ -18,7 +18,7 @@ import org.richclientplatform.core.action.ToolBarEntry;
 public class SaveAction extends AbstractActionListener<Object> {
 
     @Override
-    public void actionPerformed(Object event) {
+    public void onAction(Object event) {
         System.out.println("save");
     }
 }

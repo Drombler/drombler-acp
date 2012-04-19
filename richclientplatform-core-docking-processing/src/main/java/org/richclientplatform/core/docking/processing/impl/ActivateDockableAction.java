@@ -20,7 +20,7 @@ public class ActivateDockableAction extends AbstractActionListener<Object> {
     }
 
     @Override
-    public void actionPerformed(Object event) {
+    public void onAction(Object event) {
         dockable.open();
         dockable.requestActive();
     }

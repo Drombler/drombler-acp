@@ -15,4 +15,8 @@ public interface ToolBarContainer<T, B> {
     void addToolBar(String toolBarId, PositionableAdapter<T> toolBar);
 
     void addToolBarButton(String toolBarId, PositionableAdapter<B> toolBarButton);
+
+    boolean isToolBarVisible(String toolBarId);
+
+    void setToolBarVisible(String toolBarId, boolean visible);
 }

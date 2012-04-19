@@ -4,6 +4,7 @@
  */
 package org.richclientplatform.core.action.spi;
 
+import org.apache.commons.lang.StringUtils;
 import org.richclientplatform.core.action.jaxb.RadioMenuEntryType;
 
 /**
@@ -11,10 +12,6 @@ import org.richclientplatform.core.action.jaxb.RadioMenuEntryType;
  * @author puce
  */
 public class RadioMenuEntryDescriptor extends MenuEntryDescriptor {
-
-    public static RadioMenuEntryDescriptor createRadioMenuEntryDescriptor(RadioMenuEntryType menuEntry) {
-        throw new UnsupportedOperationException("Not yet implemented");
-    }
 
     private final String toggleGroupId;
 
@@ -28,5 +25,11 @@ public class RadioMenuEntryDescriptor extends MenuEntryDescriptor {
      */
     public String getToggleGroupId() {
         return toggleGroupId;
+    }
+
+    public static RadioMenuEntryDescriptor createRadioMenuEntryDescriptor(RadioMenuEntryType menuEntryType) {
+        return new RadioMenuEntryDescriptor(StringUtils.stripToNull(menuEntryType.getActionId()),
+                StringUtils.stripToEmpty(menuEntryType.getPath()), menuEntryType.getPosition(),
+                StringUtils.stripToNull(menuEntryType.getToggleGroupId()));
     }
 }

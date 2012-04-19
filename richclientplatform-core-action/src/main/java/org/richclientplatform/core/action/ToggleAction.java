@@ -10,16 +10,22 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+/**
+ *
+ * @author puce
+ */
 @Documented
 @Retention(RetentionPolicy.SOURCE)
-@Target(ElementType.PACKAGE)
-public @interface ToolBar {
+@Target(ElementType.TYPE)
+public @interface ToggleAction {
 
     String id();
-
+    
+    String category();
+    
     String displayName();
 
-    int position();
-
-    boolean visible() default true;
+    String accelerator() default "";
+    
+    String icon() default "";
 }

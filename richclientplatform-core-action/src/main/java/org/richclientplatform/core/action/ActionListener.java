@@ -14,7 +14,7 @@ import java.beans.PropertyChangeListener;
 //TODO E extend EventObject?
 public interface ActionListener<E> {
 
-    void actionPerformed(E event);
+    void onAction(E event);
 
     boolean isDisabled();
 

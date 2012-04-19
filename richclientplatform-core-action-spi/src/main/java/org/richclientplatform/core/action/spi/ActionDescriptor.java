@@ -92,17 +92,10 @@ public class ActionDescriptor {
         this.listener = listener;
     }
 
-    public static ActionDescriptor createActionDescriptor(ActionType actionType, Bundle bundle) throws ClassNotFoundException, InstantiationException, IllegalAccessException {
-
+    public static ActionDescriptor createActionDescriptor(ActionType actionType, Bundle bundle)
+            throws ClassNotFoundException, InstantiationException, IllegalAccessException {
         ActionDescriptor actionDescriptor = new ActionDescriptor();
-        Class<?> actionListenerClass = bundle.loadClass(StringUtils.stripToNull(actionType.getListenerClass()));
-        actionDescriptor.setId(StringUtils.stripToNull(actionType.getId()));
-        actionDescriptor.setDisplayName(Resources.getResourceString(actionListenerClass, actionType.getDisplayName()));
-        actionDescriptor.setAccelerator(Resources.getResourceString(actionListenerClass, actionType.getAccelerator()));
-        actionDescriptor.setIcon(StringUtils.stripToNull(actionType.getIcon()));
-        actionDescriptor.setListener(actionListenerClass.newInstance());
+        ActionDescriptorUtils.configureActionDescriptor(actionDescriptor, actionType, bundle);
         return actionDescriptor;
     }
-
-
 }

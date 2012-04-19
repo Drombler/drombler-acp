@@ -17,6 +17,7 @@
         <sequence>
             <element name="displayName" type="string"/>
             <element name="position" type="int"/>
+            <element name="visible" type="boolean"/>
             <element name="package" type="string"/>
         </sequence>
         <attribute name="id" type="string" use="required"/>

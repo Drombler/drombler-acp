@@ -26,11 +26,11 @@ public class MenuEntryDescriptor extends AbstractMenuEntryDescriptor {
     public String getActionId() {
         return actionId;
     }
+    
 //StringUtils.stripToNull(menuEntryType.getId()),StringUtils.stripToEmpty(menuEntryType.getPath()), menuEntryType.getPosition()
 
     public static MenuEntryDescriptor createMenuEntryDescriptor(MenuEntryType menuEntryType) {
-        int position = menuEntryType.getPosition();
         return new MenuEntryDescriptor(StringUtils.stripToNull(menuEntryType.getActionId()),
-                StringUtils.stripToEmpty(menuEntryType.getPath()), position);
+                StringUtils.stripToEmpty(menuEntryType.getPath()), menuEntryType.getPosition());
     }
 }

@@ -4,6 +4,7 @@
  */
 package org.richclientplatform.core.action.spi;
 
+import org.apache.commons.lang.StringUtils;
 import org.richclientplatform.core.action.jaxb.CheckMenuEntryType;
 
 /**
@@ -12,11 +13,12 @@ import org.richclientplatform.core.action.jaxb.CheckMenuEntryType;
  */
 public class CheckMenuEntryDescriptor extends MenuEntryDescriptor {
 
-    public static CheckMenuEntryDescriptor createCheckMenuEntryDescriptor(CheckMenuEntryType menuEntry) {
-        throw new UnsupportedOperationException("Not yet implemented");
+    public static CheckMenuEntryDescriptor createCheckMenuEntryDescriptor(CheckMenuEntryType menuEntryType) {
+        return new CheckMenuEntryDescriptor(StringUtils.stripToNull(menuEntryType.getActionId()),
+                StringUtils.stripToEmpty(menuEntryType.getPath()), menuEntryType.getPosition());
     }
 
-    public CheckMenuEntryDescriptor(String actionId, String path, int position, String toggleGroupId) {
+    public CheckMenuEntryDescriptor(String actionId, String path, int position) {
         super(actionId, path, position);
     }
 }

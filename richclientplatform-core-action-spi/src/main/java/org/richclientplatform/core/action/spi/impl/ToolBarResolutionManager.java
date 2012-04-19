@@ -17,15 +17,15 @@ import org.richclientplatform.core.action.spi.ToolBarEntryDescriptor;
  */
 public class ToolBarResolutionManager {
 
-    private final List<ToolBarDescriptor> unresolvedToolBarDescriptors = new ArrayList<>();
+    private final List<UnresolvedEntry<ToolBarDescriptor>> unresolvedToolBarDescriptors = new ArrayList<>();
     private final Map<String, List<UnresolvedEntry<ToolBarEntryDescriptor>>> unresolvedToolBarEntryDescriptors = new HashMap<>();
 
-    public void addUnresolvedToolBar(ToolBarDescriptor toolBarDescriptor) {
+    public void addUnresolvedToolBar(UnresolvedEntry<ToolBarDescriptor> toolBarDescriptor) {
         unresolvedToolBarDescriptors.add(toolBarDescriptor);
     }
 
-    public List<ToolBarDescriptor> removeUnresolvedToolBars() {
-        List<ToolBarDescriptor> toolBarDescriptors = new ArrayList<>(unresolvedToolBarDescriptors);
+    public List<UnresolvedEntry<ToolBarDescriptor>> removeUnresolvedToolBars() {
+        List<UnresolvedEntry<ToolBarDescriptor>> toolBarDescriptors = new ArrayList<>(unresolvedToolBarDescriptors);
         unresolvedToolBarDescriptors.clear();
         return toolBarDescriptors;
     }
