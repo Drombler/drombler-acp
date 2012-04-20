@@ -18,8 +18,8 @@ import org.richclientplatform.core.action.jaxb.ToolBarsType;
 import org.richclientplatform.core.action.spi.ActionFactory;
 import org.richclientplatform.core.action.spi.ActionRegistry;
 import org.richclientplatform.core.action.spi.ApplicationToolBarContainerProvider;
-import org.richclientplatform.core.action.spi.CheckActionDescriptor;
-import org.richclientplatform.core.action.spi.CheckMenuEntryDescriptor;
+import org.richclientplatform.core.action.spi.ToggleActionDescriptor;
+import org.richclientplatform.core.action.spi.ToggleMenuEntryDescriptor;
 import org.richclientplatform.core.action.spi.ToolBarButtonFactory;
 import org.richclientplatform.core.action.spi.ToolBarContainer;
 import org.richclientplatform.core.action.spi.ToolBarDescriptor;
@@ -136,9 +136,9 @@ public class ToolBarsHandler<T, B, A> {
             toolBarContainer.addToolBar(toolBarDescriptor.getId(),
                     new PositionableAdapter<>(toolBar, toolBarDescriptor.getPosition()));
             toolBarContainer.setToolBarVisible(toolBarDescriptor.getId(), toolBarDescriptor.isVisible());
-            context.registerService(CheckActionDescriptor.class, toolBarDescriptor.getShowToolBarActionDescriptor(),
+            context.registerService(ToggleActionDescriptor.class, toolBarDescriptor.getShowToolBarActionDescriptor(),
                     null);
-            context.registerService(CheckMenuEntryDescriptor.class,
+            context.registerService(ToggleMenuEntryDescriptor.class,
                     toolBarDescriptor.getShowToolBarCheckMenuEntryDescriptor(), null);
             resolveUnresolvedToolBarEntries(toolBarDescriptor.getId());
         } else {

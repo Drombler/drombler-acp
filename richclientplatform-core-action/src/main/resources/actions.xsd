@@ -7,7 +7,6 @@
         <complexType>
             <sequence>
                 <element name="action" type="tns:ActionType" minOccurs="0" maxOccurs="unbounded" />
-                <element name="checkAction" type="tns:CheckActionType" minOccurs="0" maxOccurs="unbounded" />
                 <element name="toggleAction" type="tns:ToggleActionType" minOccurs="0" maxOccurs="unbounded" />
             </sequence>
         </complexType>
@@ -24,15 +23,9 @@
         <attribute name="category" type="string" use="required"/>
     </complexType>
     
-    <complexType name="CheckActionType">
-        <complexContent>
-            <extension base="tns:ActionType" />
-        </complexContent>
-    </complexType>
-    
     <complexType name="ToggleActionType">
         <complexContent>
-            <extension base="tns:CheckActionType" /> <!--TODO: extend ActionType instead of CheckActionType?-->
+            <extension base="tns:ActionType" />
         </complexContent>
     </complexType>
 </schema>

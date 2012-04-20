@@ -14,12 +14,8 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.richclientplatform.core.action.jaxb.ActionsType;
-import org.richclientplatform.core.action.jaxb.CheckActionType;
 import org.richclientplatform.core.action.jaxb.ToggleActionType;
-import org.richclientplatform.core.action.spi.ActionDescriptor;
 import org.richclientplatform.core.action.spi.ActionRegistry;
-import org.richclientplatform.core.action.spi.CheckActionDescriptor;
-import org.richclientplatform.core.action.spi.CheckActionFactory;
 import org.richclientplatform.core.action.spi.ToggleActionDescriptor;
 import org.richclientplatform.core.action.spi.ToggleActionFactory;
 

@@ -8,7 +8,7 @@ package org.richclientplatform.core.action.spi;
  *
  * @author puce
  */
-public interface CheckMenuItemFactory<T, A> {
+public interface ToggleMenuItemFactory<T, A> {
 
-    T createCheckMenuItem(MenuEntryDescriptor menuEntryDescriptor, A action, int iconSize);
+    T createToggleMenuItem(ToggleMenuEntryDescriptor toggleMenuEntryDescriptor, A action, int iconSize);
 }

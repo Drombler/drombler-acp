@@ -11,21 +11,19 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- *
+ * Not supported yet.
  * @author puce
  */
 @Documented
 @Retention(RetentionPolicy.SOURCE)
 @Target(ElementType.TYPE)
-public @interface CheckAction {
+public @interface ToggleMenuEntry {
 
-    String id();
+    String actionId() default "";
     
-    String category();
-    
-    String displayName();
+    String toggleGroupId() default "";
 
-    String accelerator() default "";
-    
-    String icon() default "";
+    String path();
+
+    int position();
 }

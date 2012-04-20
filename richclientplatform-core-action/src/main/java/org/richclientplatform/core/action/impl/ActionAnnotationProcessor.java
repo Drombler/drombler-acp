@@ -11,11 +11,9 @@ import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
 import org.apache.commons.lang.StringUtils;
 import org.richclientplatform.core.action.Action;
-import org.richclientplatform.core.action.CheckAction;
 import org.richclientplatform.core.action.ToggleAction;
 import org.richclientplatform.core.action.jaxb.ActionType;
 import org.richclientplatform.core.action.jaxb.ActionsType;
-import org.richclientplatform.core.action.jaxb.CheckActionType;
 import org.richclientplatform.core.action.jaxb.ToggleActionType;
 import org.richclientplatform.core.application.AbstractApplicationAnnotationProcessor;
 
@@ -25,7 +23,6 @@ import org.richclientplatform.core.application.AbstractApplicationAnnotationProc
  */
 @SupportedAnnotationTypes({
     "org.richclientplatform.core.action.Action",
-    "org.richclientplatform.core.action.CheckAction",
     "org.richclientplatform.core.action.ToggleAction"
 })
 public class ActionAnnotationProcessor extends AbstractApplicationAnnotationProcessor {
@@ -38,13 +35,6 @@ public class ActionAnnotationProcessor extends AbstractApplicationAnnotationProc
             Action actionAnnotation = element.getAnnotation(Action.class);
             if (actionAnnotation != null) {
                 registerAction(element, actionAnnotation);
-            }
-        }
-
-        for (Element element : roundEnv.getElementsAnnotatedWith(CheckAction.class)) {
-            CheckAction actionAnnotation = element.getAnnotation(CheckAction.class);
-            if (actionAnnotation != null) {
-                registerCheckAction(element, actionAnnotation);
             }
         }
 
@@ -74,14 +64,6 @@ public class ActionAnnotationProcessor extends AbstractApplicationAnnotationProc
         configureAction(action, actionAnnotation.id(), actionAnnotation.category(), actionAnnotation.displayName(),
                 actionAnnotation.accelerator(), actionAnnotation.icon(), element);
         actions.getAction().add(action);
-    }
-
-    private void registerCheckAction(Element element, CheckAction actionAnnotation) {
-        init(element);
-        CheckActionType action = new CheckActionType();
-        configureAction(action, actionAnnotation.id(), actionAnnotation.category(), actionAnnotation.displayName(),
-                actionAnnotation.accelerator(), actionAnnotation.icon(), element);
-        actions.getCheckAction().add(action);;
     }
 
     private void registerToggleAction(Element element, ToggleAction actionAnnotation) {

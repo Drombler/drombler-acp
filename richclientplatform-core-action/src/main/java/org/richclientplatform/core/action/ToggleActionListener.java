@@ -8,7 +8,11 @@ package org.richclientplatform.core.action;
  *
  * @author puce
  */
-public interface ToggleActionListener<E> extends CheckActionListener<E> {
+public interface ToggleActionListener<E> extends ActionListener<E> {
+
+    boolean isSelected();
 
     void setSelected(boolean selected);
+
+    void onSelectionChanged(boolean oldValue, boolean newValue);
 }

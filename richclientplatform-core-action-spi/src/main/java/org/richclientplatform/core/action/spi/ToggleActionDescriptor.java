@@ -11,7 +11,7 @@ import org.richclientplatform.core.action.jaxb.ToggleActionType;
  *
  * @author puce
  */
-public class ToggleActionDescriptor extends CheckActionDescriptor { // TODO: extend CheckActionDescriptor or ActionDescriptor? ToggleActionListener extends CheckActionListener...
+public class ToggleActionDescriptor extends ActionDescriptor { // TODO: extend CheckActionDescriptor or ActionDescriptor? ToggleActionListener extends CheckActionListener...
 
     public static ToggleActionDescriptor createToggleActionDescriptor(ToggleActionType actionType, Bundle bundle)
             throws ClassNotFoundException, InstantiationException, IllegalAccessException {

@@ -12,10 +12,10 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.richclientplatform.core.action.jaxb.MenusType;
-import org.richclientplatform.core.action.jaxb.RadioMenuEntryType;
+import org.richclientplatform.core.action.jaxb.ToggleMenuEntryType;
 import org.richclientplatform.core.action.spi.ActionRegistry;
-import org.richclientplatform.core.action.spi.RadioMenuEntryDescriptor;
-import org.richclientplatform.core.action.spi.RadioMenuItemFactory;
+import org.richclientplatform.core.action.spi.ToggleMenuEntryDescriptor;
+import org.richclientplatform.core.action.spi.ToggleMenuItemFactory;
 import org.richclientplatform.core.action.spi.ToggleActionFactory;
 
 /**
@@ -23,33 +23,33 @@ import org.richclientplatform.core.action.spi.ToggleActionFactory;
  * @author puce
  */
 @Component(immediate = true)
-@Reference(name = "radioMenuEntryDescriptor", referenceInterface = RadioMenuEntryDescriptor.class,
+@Reference(name = "toggleMenuEntryDescriptor", referenceInterface = ToggleMenuEntryDescriptor.class,
 cardinality = ReferenceCardinality.OPTIONAL_MULTIPLE, policy = ReferencePolicy.DYNAMIC)
-public class RadioMenuItemHandler<MenuItem, Menu extends MenuItem, RadioMenuItem extends MenuItem, ToggleAction>
-        extends AbstractMenuItemHandler<MenuItem, Menu, RadioMenuItem, RadioMenuEntryDescriptor> {
+public class ToggleMenuItemHandler<MenuItem, Menu extends MenuItem, ToggleMenuItem extends MenuItem, ToggleAction>
+        extends AbstractMenuItemHandler<MenuItem, Menu, ToggleMenuItem, ToggleMenuEntryDescriptor> {
 
     @Reference
-    private RadioMenuItemFactory<RadioMenuItem, ToggleAction> menuItemFactory;
+    private ToggleMenuItemFactory<ToggleMenuItem, ToggleAction> menuItemFactory;
     @Reference
     private ToggleActionFactory<ToggleAction> actionFactory;
     private final ActionRegistry actionRegistry = new ActionRegistry();
 
-    protected void bindRadioMenuEntryDescriptor(ServiceReference<RadioMenuEntryDescriptor> serviceReference) {
+    protected void bindToggleMenuEntryDescriptor(ServiceReference<ToggleMenuEntryDescriptor> serviceReference) {
         BundleContext context = serviceReference.getBundle().getBundleContext();
-        RadioMenuEntryDescriptor menuEntryDescriptor = context.getService(serviceReference);
+        ToggleMenuEntryDescriptor menuEntryDescriptor = context.getService(serviceReference);
         resolveMenuItem(menuEntryDescriptor, context);
     }
 
-    protected void unbindRadioMenuEntryDescriptor(ServiceReference<RadioMenuEntryDescriptor> serviceReference) {
+    protected void unbindToggleMenuEntryDescriptor(ServiceReference<ToggleMenuEntryDescriptor> serviceReference) {
         // TODO
     }
 
-    protected void bindRadioMenuItemFactory(RadioMenuItemFactory<RadioMenuItem, ToggleAction> menuItemFactory) {
+    protected void bindToggleMenuItemFactory(ToggleMenuItemFactory<ToggleMenuItem, ToggleAction> menuItemFactory) {
         this.menuItemFactory = menuItemFactory;
         resolveUnresolvedItems();
     }
 
-    protected void unbindRadioMenuItemFactory(RadioMenuItemFactory<RadioMenuItem, ToggleAction> menuItemFactory) {
+    protected void unbindToggleMenuItemFactory(ToggleMenuItemFactory<ToggleMenuItem, ToggleAction> menuItemFactory) {
         this.menuItemFactory = null;
     }
 
@@ -69,18 +69,18 @@ public class RadioMenuItemHandler<MenuItem, Menu extends MenuItem, RadioMenuItem
 
     @Override
     protected void resolveMenuItem(MenusType menusType, Bundle bundle, BundleContext context) {
-        for (RadioMenuEntryType menuEntry : menusType.getRadioMenuEntry()) {
-            RadioMenuEntryDescriptor menuEntryDescriptor = RadioMenuEntryDescriptor.createRadioMenuEntryDescriptor(
+        for (ToggleMenuEntryType menuEntry : menusType.getToggleMenuEntry()) {
+            ToggleMenuEntryDescriptor menuEntryDescriptor = ToggleMenuEntryDescriptor.createRadioMenuEntryDescriptor(
                     menuEntry);
             resolveMenuItem(menuEntryDescriptor, context);
         }
     }
 
     @Override
-    protected RadioMenuItem createMenuItem(RadioMenuEntryDescriptor menuEntryDescriptor, BundleContext context, int iconSize) {
+    protected ToggleMenuItem createMenuItem(ToggleMenuEntryDescriptor menuEntryDescriptor, BundleContext context, int iconSize) {
         ToggleAction action = actionRegistry.getAction(menuEntryDescriptor.getActionId(),
                 actionFactory.getToggleActionClass(), context);
-        RadioMenuItem menuItem = menuItemFactory.createRadioMenuItem(menuEntryDescriptor, action, iconSize);
+        ToggleMenuItem menuItem = menuItemFactory.createToggleMenuItem(menuEntryDescriptor, action, iconSize);
         return menuItem;
     }
 }

@@ -21,8 +21,8 @@ public class ToolBarDescriptor implements Positionable {
     private String displayName;
     private int position;
     private boolean visible;
-    private CheckActionDescriptor showToolBarActionDescriptor;
-    private CheckMenuEntryDescriptor showToolBarCheckMenuEntryDescriptor;
+    private ToggleActionDescriptor showToolBarActionDescriptor;
+    private ToggleMenuEntryDescriptor showToolBarCheckMenuEntryDescriptor;
 
     public String getId() {
         return id;
@@ -83,14 +83,14 @@ public class ToolBarDescriptor implements Positionable {
                 toolBarType.getDisplayName(), bundle));
         toolBarDescriptor.setPosition(toolBarType.getPosition());
         toolBarDescriptor.setVisible(toolBarType.isVisible());
-        CheckActionDescriptor actionDescriptor = createShowToolBarActionDescriptor(toolBarDescriptor, toolBarContainer);
+        ToggleActionDescriptor actionDescriptor = createShowToolBarActionDescriptor(toolBarDescriptor, toolBarContainer);
         toolBarDescriptor.setShowToolBarActionDescriptor(actionDescriptor);
-        toolBarDescriptor.setShowToolBarCheckMenuEntryDescriptor(new CheckMenuEntryDescriptor(actionDescriptor.getId(),
+        toolBarDescriptor.setShowToolBarCheckMenuEntryDescriptor(new ToggleMenuEntryDescriptor(actionDescriptor.getId(),
                 "View/Toolbars", toolBarType.getPosition()));
         return toolBarDescriptor;
     }
 
-    private static <T, B> CheckActionDescriptor createShowToolBarActionDescriptor(ToolBarDescriptor toolBarDescriptor, ToolBarContainer<T, B> toolBarContainer) {
+    private static <T, B> ToggleActionDescriptor createShowToolBarActionDescriptor(ToolBarDescriptor toolBarDescriptor, ToolBarContainer<T, B> toolBarContainer) {
         ToggleActionDescriptor actionDescriptor = new ToggleActionDescriptor();
         actionDescriptor.setId(ShowToolBarAction.class.getName() + "#" + toolBarDescriptor.getId()); // TODO: ok?
         actionDescriptor.setDisplayName(toolBarDescriptor.getDisplayName());
@@ -98,25 +98,25 @@ public class ToolBarDescriptor implements Positionable {
         return actionDescriptor;
     }
 
-    public CheckActionDescriptor getShowToolBarActionDescriptor() {
+    public ToggleActionDescriptor getShowToolBarActionDescriptor() {
         return showToolBarActionDescriptor;
     }
 
     /**
      * @param showToolBarActionDescriptor the showToolBarActionDescriptor to set
      */
-    public void setShowToolBarActionDescriptor(CheckActionDescriptor showToolBarActionDescriptor) {
+    public void setShowToolBarActionDescriptor(ToggleActionDescriptor showToolBarActionDescriptor) {
         this.showToolBarActionDescriptor = showToolBarActionDescriptor;
     }
 
-    public CheckMenuEntryDescriptor getShowToolBarCheckMenuEntryDescriptor() {
+    public ToggleMenuEntryDescriptor getShowToolBarCheckMenuEntryDescriptor() {
         return showToolBarCheckMenuEntryDescriptor;
     }
 
     /**
      * @param showToolBarCheckMenuEntryDescriptor the showToolBarCheckMenuEntryDescriptor to set
      */
-    public void setShowToolBarCheckMenuEntryDescriptor(CheckMenuEntryDescriptor showToolBarCheckMenuEntryDescriptor) {
+    public void setShowToolBarCheckMenuEntryDescriptor(ToggleMenuEntryDescriptor showToolBarCheckMenuEntryDescriptor) {
         this.showToolBarCheckMenuEntryDescriptor = showToolBarCheckMenuEntryDescriptor;
     }
 }
