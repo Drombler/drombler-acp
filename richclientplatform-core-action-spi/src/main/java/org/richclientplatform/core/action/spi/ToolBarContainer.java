@@ -19,4 +19,12 @@ public interface ToolBarContainer<T, B> {
     boolean isToolBarVisible(String toolBarId);
 
     void setToolBarVisible(String toolBarId, boolean visible);
+
+    void addToolBarContainerListener(ToolBarContainerListener<T, B> containerListener);
+
+    void removeToolBarContainerListener(ToolBarContainerListener<T, B> containerListener);
+
+    void addToolBarContainerListener(String toolBarId, ToolBarContainerListener<T, B> containerListener);
+
+    void removeToolBarContainerListener(String toolBarId, ToolBarContainerListener<T, B> containerListener);
 }

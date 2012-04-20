@@ -17,6 +17,7 @@ public abstract class AbstractToggleActionListener<E> extends AbstractActionList
         return selected;
     }
 
+    @Override
     public void setSelected(boolean selected) {
         if (this.selected != selected) {
             boolean oldValue = this.selected;
