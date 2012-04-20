@@ -81,9 +81,13 @@ public class MenuHandler<MenuItem, Menu extends MenuItem> extends AbstractMenuIt
         return super.isInitialized() && menuFactory != null;
     }
 
-
     @Override
     protected Menu createMenuItem(MenuDescriptor menuEntryDescriptor, BundleContext context, int iconSize) {
         return menuFactory.createMenu(menuEntryDescriptor);
+    }
+
+    @Override
+    protected void registerUnresolvedMenuItem(MenuDescriptor menuEntryDescriptor, BundleContext context) {
+        // nothing to do
     }
 }

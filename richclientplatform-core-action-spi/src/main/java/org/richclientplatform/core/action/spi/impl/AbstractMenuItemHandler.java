@@ -95,13 +95,19 @@ public abstract class AbstractMenuItemHandler<MenuItem, Menu extends MenuItem, M
     protected void resolveMenuItem(D menuEntryDescriptor, BundleContext context) {
         if (isInitialized()) {
             M menuItem = createMenuItem(menuEntryDescriptor, context, ICON_SIZE);
-            resolveMenuItem(menuEntryDescriptor, context, menuItem);
+            if (menuItem != null) {
+                resolveMenuItem(menuEntryDescriptor, context, menuItem);
+            } else {
+                registerUnresolvedMenuItem(menuEntryDescriptor, context);
+            }
         } else {
             registerUnresolvedMenuEntry(menuEntryDescriptor, context);
         }
     }
 
     protected abstract M createMenuItem(D menuEntryDescriptor, BundleContext context, int iconSize);
+
+    protected abstract void registerUnresolvedMenuItem(D menuEntryDescriptor, BundleContext context);
 
     private void resolveMenuItem(D menuEntryDescriptor, BundleContext context, M menuItem) {
         MenuItemContainer<MenuItem, Menu> parentContainer = getParent(menuEntryDescriptor.getPath());

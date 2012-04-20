@@ -41,4 +41,8 @@ public class ActionRegistry {
 //    public ActionDescriptor putAction(String actionId, ActionDescriptor action) {
 //        return actionDescriptors.put(actionId, action);
 //    }
+
+    public String getActionId(ServiceReference<?> reference) {
+        return reference.getProperty(ActionDescriptor.ID_KEY).toString();
+    }
 }

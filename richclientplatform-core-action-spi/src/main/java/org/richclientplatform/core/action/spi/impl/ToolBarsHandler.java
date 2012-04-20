@@ -4,14 +4,20 @@
  */
 package org.richclientplatform.core.action.spi.impl;
 
+import org.apache.felix.scr.annotations.Activate;
 import org.apache.felix.scr.annotations.Component;
+import org.apache.felix.scr.annotations.Deactivate;
 import org.apache.felix.scr.annotations.Reference;
 import org.apache.felix.scr.annotations.ReferenceCardinality;
 import org.apache.felix.scr.annotations.ReferencePolicy;
 import org.apache.felix.scr.annotations.References;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.ServiceReference;
+import org.osgi.service.component.ComponentContext;
+import org.osgi.util.tracker.ServiceTracker;
+import org.osgi.util.tracker.ServiceTrackerCustomizer;
 import org.richclientplatform.core.action.jaxb.ToolBarEntryType;
 import org.richclientplatform.core.action.jaxb.ToolBarType;
 import org.richclientplatform.core.action.jaxb.ToolBarsType;
@@ -41,7 +47,7 @@ import org.richclientplatform.core.lib.util.PositionableAdapter;
 //    cardinality = ReferenceCardinality.OPTIONAL_MULTIPLE, policy = ReferencePolicy.DYNAMIC),
     @Reference(name = "applicationToolBarContainerProvider", referenceInterface = ApplicationToolBarContainerProvider.class)
 })
-public class ToolBarsHandler<T, B, A> {
+public class ToolBarsHandler<T, B, Action> {
 
     private static final int ICON_SIZE = 24;
     private final ToolBarResolutionManager toolBarResolutionManager = new ToolBarResolutionManager();
@@ -49,10 +55,12 @@ public class ToolBarsHandler<T, B, A> {
     @Reference
     private ToolBarFactory<T> toolBarFactory;
     @Reference
-    private ToolBarButtonFactory<B, A> toolBarButtonFactory;
+    private ToolBarButtonFactory<B, Action> toolBarButtonFactory;
     @Reference
-    private ActionFactory<A> actionFactory;
+    private ActionFactory<Action> actionFactory;
     private final ActionRegistry actionRegistry = new ActionRegistry();
+    private final ActionResolutionManager<ToolBarEntryDescriptor> actionResolutionManager = new ActionResolutionManager<>();
+    private ServiceTracker<Action, ServiceReference<Action>> tracker;
 
     protected void bindToolBarsType(ServiceReference<ToolBarsType> serviceReference) {
         Bundle bundle = serviceReference.getBundle();
@@ -112,22 +120,61 @@ public class ToolBarsHandler<T, B, A> {
         this.toolBarFactory = null;
     }
 
-    protected void bindToolBarButtonFactory(ToolBarButtonFactory<B, A> toolBarButtonFactory) {
+    protected void bindToolBarButtonFactory(ToolBarButtonFactory<B, Action> toolBarButtonFactory) {
         this.toolBarButtonFactory = toolBarButtonFactory;
         resolveUnresolvedItems();
     }
 
-    protected void unbindToolBarButtonFactory(ToolBarButtonFactory<B, A> toolBarButtonFactory) {
+    protected void unbindToolBarButtonFactory(ToolBarButtonFactory<B, Action> toolBarButtonFactory) {
         this.toolBarButtonFactory = null;
     }
 
-    protected void bindActionFactory(ActionFactory<A> actionFactory) {
+    protected void bindActionFactory(ActionFactory<Action> actionFactory) {
         this.actionFactory = actionFactory;
         resolveUnresolvedItems();
     }
 
-    protected void unbindActionFactory(ActionFactory<A> actionFactory) {
+    protected void unbindActionFactory(ActionFactory<Action> actionFactory) {
         this.actionFactory = null;
+    }
+
+    @Activate
+    protected void activate(ComponentContext context) {
+        tracker = createActionTracker(context);
+        tracker.open();
+    }
+
+    @Deactivate
+    protected void deactivate(ComponentContext context) {
+        tracker.close();
+    }
+
+    private ServiceTracker<Action, ServiceReference<Action>> createActionTracker(ComponentContext context) {
+        return new ServiceTracker<>(context.getBundleContext(), actionFactory.getActionClass(),
+                new ServiceTrackerCustomizer<Action, ServiceReference<Action>>() {
+
+                    @Override
+                    public ServiceReference<Action> addingService(ServiceReference<Action> reference) {
+                        String actionId = actionRegistry.getActionId(reference);
+                        if (actionResolutionManager.containsUnresolvedEntries(actionId)) {
+                            for (UnresolvedEntry<ToolBarEntryDescriptor> unresolvedEntry :
+                                    actionResolutionManager.removeUnresolvedEntries(actionId)) {
+                                resolveToolBarEntry(unresolvedEntry.getEntry(), unresolvedEntry.getContext());
+                            }
+                        }
+                        return reference;
+                    }
+
+                    @Override
+                    public void modifiedService(ServiceReference<Action> reference, ServiceReference<Action> service) {
+                        // TODO ???
+                    }
+
+                    @Override
+                    public void removedService(ServiceReference<Action> reference, ServiceReference<Action> service) {
+                        // TODO ???
+                    }
+                });
     }
 
     private void resolveToolBar(ToolBarDescriptor toolBarDescriptor, BundleContext context) {
@@ -152,12 +199,17 @@ public class ToolBarsHandler<T, B, A> {
 
     private void resolveToolBarEntry(ToolBarEntryDescriptor toolBarEntryDescriptor, BundleContext context) {
         if (isInitialized()) {
-            A action = actionRegistry.getAction(toolBarEntryDescriptor.getActionId(), actionFactory.getActionClass(),
+            System.out.println(actionFactory.getActionClass().getName() + ": " + toolBarEntryDescriptor.getActionId());
+            Action action = actionRegistry.getAction(toolBarEntryDescriptor.getActionId(),
+                    actionFactory.getActionClass(),
                     context);
             if (action != null) {
                 B button = toolBarButtonFactory.createToolBarButton(toolBarEntryDescriptor, action, ICON_SIZE);
                 toolBarContainer.addToolBarButton(toolBarEntryDescriptor.getToolBarId(),
                         new PositionableAdapter<>(button, toolBarEntryDescriptor.getPosition()));
+            } else {
+                actionResolutionManager.addUnresolvedEntry(toolBarEntryDescriptor.getActionId(),
+                        new UnresolvedEntry<>(toolBarEntryDescriptor, context));
             }
         } else {
             registerUnresolvedToolBarEntry(toolBarEntryDescriptor, context);
