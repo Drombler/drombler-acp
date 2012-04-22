@@ -10,7 +10,7 @@
     @Menu(id = "Help", displayName = "#helpMenu.displayName", position = 900)})
 @ToolBars({
     @ToolBar(id = "file", displayName = "#fileToolBar.displayName", position = 10),
-    @ToolBar(id = "edit", displayName = "#editToolBar.displayName", position = 10)
+    @ToolBar(id = "edit", displayName = "#editToolBar.displayName", position = 30)
 })
 package org.richclientplatform.core.standard.action;
 
