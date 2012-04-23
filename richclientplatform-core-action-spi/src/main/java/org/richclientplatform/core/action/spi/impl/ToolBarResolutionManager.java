@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.richclientplatform.core.action.jaxb.ToolBarType;
 import org.richclientplatform.core.action.spi.ToolBarDescriptor;
 import org.richclientplatform.core.action.spi.ToolBarEntryDescriptor;
 
@@ -18,7 +19,20 @@ import org.richclientplatform.core.action.spi.ToolBarEntryDescriptor;
 public class ToolBarResolutionManager {
 
     private final List<UnresolvedEntry<ToolBarDescriptor>> unresolvedToolBarDescriptors = new ArrayList<>();
+    private final List<UnresolvedEntry<ToolBarType>> unresolvedToolBarTypes = new ArrayList<>();
     private final Map<String, List<UnresolvedEntry<ToolBarEntryDescriptor>>> unresolvedToolBarEntryDescriptors = new HashMap<>();
+
+    // TODO: better name?
+    public void addUnresolvedToolBarType(UnresolvedEntry<ToolBarType> unresolvedEntry) {
+        unresolvedToolBarTypes.add(unresolvedEntry);
+    }
+
+    // TODO: better name?
+    public List<UnresolvedEntry<ToolBarType>> removeUnresolvedToolBarTypes() {
+        List<UnresolvedEntry<ToolBarType>> toolBarTypes = new ArrayList<>(unresolvedToolBarTypes);
+        unresolvedToolBarTypes.clear();
+        return toolBarTypes;
+    }
 
     public void addUnresolvedToolBar(UnresolvedEntry<ToolBarDescriptor> toolBarDescriptor) {
         unresolvedToolBarDescriptors.add(toolBarDescriptor);
@@ -39,7 +53,7 @@ public class ToolBarResolutionManager {
                 unresolvedToolBarEntry);
     }
 
-    public boolean containsUnresolvedMenuEntries(String toolBarId) {
+    public boolean containsUnresolvedToolBarEntries(String toolBarId) {
         return unresolvedToolBarEntryDescriptors.containsKey(toolBarId);
     }
 

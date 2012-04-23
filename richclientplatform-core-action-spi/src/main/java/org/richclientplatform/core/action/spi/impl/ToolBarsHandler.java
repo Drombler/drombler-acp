@@ -68,9 +68,7 @@ public class ToolBarsHandler<T, B, Action> {
         ToolBarsType toolBarsType = context.getService(serviceReference);
 
         for (ToolBarType toolBarType : toolBarsType.getToolBar()) {
-            ToolBarDescriptor toolBarDescriptor = ToolBarDescriptor.createToolBarDescriptor(toolBarType, bundle,
-                    toolBarContainer);
-            resolveToolBar(toolBarDescriptor, context);
+            resolveToolBar(toolBarType, bundle, context);
         }
 
         for (ToolBarEntryType toolBarEntry : toolBarsType.getToolBarEntry()) {
@@ -177,6 +175,16 @@ public class ToolBarsHandler<T, B, Action> {
                 });
     }
 
+    private void resolveToolBar(ToolBarType toolBarType, Bundle bundle, BundleContext context) {
+        if (isInitialized()) {
+            ToolBarDescriptor toolBarDescriptor = ToolBarDescriptor.createToolBarDescriptor(toolBarType, bundle,
+                    toolBarContainer);
+            resolveToolBar(toolBarDescriptor, context);
+        } else {
+            toolBarResolutionManager.addUnresolvedToolBarType(new UnresolvedEntry<>(toolBarType, context));
+        }
+    }
+
     private void resolveToolBar(ToolBarDescriptor toolBarDescriptor, BundleContext context) {
         if (isInitialized()) {
             T toolBar = toolBarFactory.createToolBar(toolBarDescriptor);
@@ -222,6 +230,10 @@ public class ToolBarsHandler<T, B, Action> {
 
     private void resolveUnresolvedItems() {
         if (isInitialized()) {
+            for (UnresolvedEntry<ToolBarType> unresolvedEntry : toolBarResolutionManager.removeUnresolvedToolBarTypes()) {
+                resolveToolBar(unresolvedEntry.getEntry(), unresolvedEntry.getContext().getBundle(),
+                        unresolvedEntry.getContext());
+            }
             for (UnresolvedEntry<ToolBarDescriptor> toolBarDescriptor : toolBarResolutionManager.removeUnresolvedToolBars()) {
                 resolveToolBar(toolBarDescriptor.getEntry(), toolBarDescriptor.getContext());
             }
@@ -233,7 +245,7 @@ public class ToolBarsHandler<T, B, Action> {
     }
 
     private void resolveUnresolvedToolBarEntries(String toolBarId) {
-        if (toolBarResolutionManager.containsUnresolvedMenuEntries(toolBarId)) {
+        if (toolBarResolutionManager.containsUnresolvedToolBarEntries(toolBarId)) {
             for (UnresolvedEntry<ToolBarEntryDescriptor> unresolvedEntry : toolBarResolutionManager.removeUnresolvedToolBarEntries(
                     toolBarId)) {
                 registerUnresolvedToolBarEntry(unresolvedEntry.getEntry(), unresolvedEntry.getContext());
