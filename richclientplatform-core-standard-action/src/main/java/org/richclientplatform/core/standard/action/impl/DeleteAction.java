@@ -12,7 +12,7 @@ import org.richclientplatform.core.action.ToolBarEntry;
  *
  * @author puce
  */
-@Action(id = "standard.delete", category = "core", displayName = "#delete.displayName", accelerator = "Del", icon = "delete.gif")
+@Action(id = "standard.delete", category = "core", displayName = "#delete.displayName", accelerator = "Delete", icon = "delete.png")
 @MenuEntry(path = "Edit", position = 2130)
 @ToolBarEntry(toolBarId = "edit", position = 80)
 public class DeleteAction extends AbstractActionListener<Object> {

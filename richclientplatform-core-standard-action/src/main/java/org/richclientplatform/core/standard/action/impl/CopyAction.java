@@ -12,7 +12,7 @@ import org.richclientplatform.core.action.ToolBarEntry;
  *
  * @author puce
  */
-@Action(id = "standard.copy", category = "core", displayName = "#copy.displayName", accelerator = "Shortcut+C", icon = "copy.gif")
+@Action(id = "standard.copy", category = "core", displayName = "#copy.displayName", accelerator = "Shortcut+C", icon = "copy.png")
 @MenuEntry(path = "Edit", position = 2110)
 @ToolBarEntry(toolBarId = "edit", position = 60)
 public class CopyAction extends AbstractActionListener<Object> {
