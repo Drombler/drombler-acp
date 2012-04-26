@@ -12,7 +12,7 @@ import org.richclientplatform.core.lib.util.PositionableAdapter;
  */
 public class ToolBarContainerToolBarButtonEvent<ToolBar, ToolBarButton> extends AbstractToolBarContainerEvent<ToolBar, ToolBarButton, ToolBarButton> {
 
-    public ToolBarContainerToolBarButtonEvent(ToolBarContainer<ToolBar, ToolBarButton> source, PositionableAdapter<? extends ToolBarButton> entry) {
-        super(source, entry);
+    public ToolBarContainerToolBarButtonEvent(ToolBarContainer<ToolBar, ToolBarButton> source, String toolBarId, PositionableAdapter<? extends ToolBarButton> entry) {
+        super(source, toolBarId, entry);
     }
 }

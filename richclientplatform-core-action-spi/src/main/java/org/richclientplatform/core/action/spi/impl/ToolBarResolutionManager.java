@@ -60,4 +60,13 @@ public class ToolBarResolutionManager {
     public List<UnresolvedEntry<ToolBarEntryDescriptor>> removeUnresolvedToolBarEntries(String toolBarId) {
         return unresolvedToolBarEntryDescriptors.remove(toolBarId);
     }
+
+    public List<UnresolvedEntry<ToolBarEntryDescriptor>> removeUnresolvedToolBarEntries() {
+        List<UnresolvedEntry<ToolBarEntryDescriptor>> unresolvedEntries = new ArrayList<>();
+        for (Map.Entry<String, List<UnresolvedEntry<ToolBarEntryDescriptor>>> entry : unresolvedToolBarEntryDescriptors.entrySet()) {
+            unresolvedEntries.addAll(entry.getValue());
+        }
+        unresolvedToolBarEntryDescriptors.clear();
+        return unresolvedEntries;
+    }
 }

@@ -13,11 +13,20 @@ import org.richclientplatform.core.lib.util.PositionableAdapter;
  */
 public abstract class AbstractToolBarContainerEvent<ToolBar, ToolBarButton, T> extends EventObject {
 
+    private final String toolBarId;
     private final PositionableAdapter<? extends T> entry;
 
-    public AbstractToolBarContainerEvent(ToolBarContainer<ToolBar, ToolBarButton> source, PositionableAdapter<? extends T> entry) {
+    public AbstractToolBarContainerEvent(ToolBarContainer<ToolBar, ToolBarButton> source, String toolBarId, PositionableAdapter<? extends T> entry) {
         super(source);
+        this.toolBarId = toolBarId;
         this.entry = entry;
+    }
+
+    /**
+     * @return the toolBarId
+     */
+    public String getToolBarId() {
+        return toolBarId;
     }
 
     /**
