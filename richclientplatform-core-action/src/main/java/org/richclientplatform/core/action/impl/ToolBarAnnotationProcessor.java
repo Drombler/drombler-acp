@@ -10,11 +10,13 @@ import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
 import org.apache.commons.lang.StringUtils;
 import org.richclientplatform.core.action.Action;
-import org.richclientplatform.core.action.MenuEntry;
+import org.richclientplatform.core.action.ToggleAction;
 import org.richclientplatform.core.action.ToolBar;
 import org.richclientplatform.core.action.ToolBarEntry;
+import org.richclientplatform.core.action.ToolBarToggleEntry;
 import org.richclientplatform.core.action.ToolBars;
 import org.richclientplatform.core.action.jaxb.ToolBarEntryType;
+import org.richclientplatform.core.action.jaxb.ToolBarToggleEntryType;
 import org.richclientplatform.core.action.jaxb.ToolBarType;
 import org.richclientplatform.core.action.jaxb.ToolBarsType;
 import org.richclientplatform.core.application.AbstractApplicationAnnotationProcessor;
@@ -56,6 +58,14 @@ public class ToolBarAnnotationProcessor extends AbstractApplicationAnnotationPro
         }
 
 
+        for (Element element : roundEnv.getElementsAnnotatedWith(ToolBarToggleEntry.class)) {
+            ToolBarToggleEntry toolBarEntryAnnotation = element.getAnnotation(ToolBarToggleEntry.class);
+            if (toolBarEntryAnnotation != null) {
+                ToggleAction actionAnnotation = element.getAnnotation(ToggleAction.class);
+                registerToolBarToggleEntry(toolBarEntryAnnotation, actionAnnotation, element);
+            }
+        }
+
         return false;
     }
 
@@ -84,13 +94,28 @@ public class ToolBarAnnotationProcessor extends AbstractApplicationAnnotationPro
         init(element);
 
         ToolBarEntryType toolBarEntry = new ToolBarEntryType();
-        String actionId = StringUtils.stripToNull(toolBarEntryAnnotation.actionId());
-        if (actionId == null && actionAnnotation != null) {
-            actionId = StringUtils.stripToNull(actionAnnotation.id());
+        String actionAnnotationActionId = actionAnnotation != null ? actionAnnotation.id() : null;
+        configureToolBarEntry(toolBarEntry, actionAnnotationActionId, toolBarEntryAnnotation.actionId(),
+                toolBarEntryAnnotation.toolBarId(), toolBarEntryAnnotation.position());
+        toolBars.getToolBarEntry().add(toolBarEntry);
+    }
+
+    private void registerToolBarToggleEntry(ToolBarToggleEntry toolBarEntryAnnotation, ToggleAction actionAnnotation, Element element) {
+        ToolBarToggleEntryType toolBarToggleEntry = new ToolBarToggleEntryType();
+        String actionAnnotationActionId = actionAnnotation != null ? actionAnnotation.id() : null;
+        configureToolBarEntry(toolBarToggleEntry, actionAnnotationActionId, toolBarEntryAnnotation.actionId(),
+                toolBarEntryAnnotation.toolBarId(), toolBarEntryAnnotation.position());
+        toolBarToggleEntry.setToggleGroupId(StringUtils.stripToNull(toolBarEntryAnnotation.toggleGroupId()));
+        toolBars.getToolBarToggleEntry().add(toolBarToggleEntry);
+    }
+
+    private void configureToolBarEntry(ToolBarEntryType toolBarEntry, String actionAnnotationActionId, String actionId, String toolBarId, int position) {
+        actionId = StringUtils.stripToNull(actionId);
+        if (actionId == null && actionAnnotationActionId != null) {
+            actionId = StringUtils.stripToNull(actionAnnotationActionId);
         }
         toolBarEntry.setActionId(actionId);
-        toolBarEntry.setToolBarId(StringUtils.stripToNull(toolBarEntryAnnotation.toolBarId()));
-        toolBarEntry.setPosition(toolBarEntryAnnotation.position());
-        toolBars.getToolBarEntry().add(toolBarEntry);
+        toolBarEntry.setToolBarId(StringUtils.stripToNull(toolBarId));
+        toolBarEntry.setPosition(position);
     }
 }

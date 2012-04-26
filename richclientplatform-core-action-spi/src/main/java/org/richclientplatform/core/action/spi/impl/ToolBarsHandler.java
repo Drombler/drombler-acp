@@ -26,6 +26,7 @@ import org.richclientplatform.core.lib.util.PositionableAdapter;
 @Component(immediate = true)
 public class ToolBarsHandler<T, B> extends AbstractToolBarHandler<T, B> {
 
+    private final ToolBarResolutionManager toolBarResolutionManager = new ToolBarResolutionManager();
     @Reference
     private ToolBarFactory<T> toolBarFactory;
 
@@ -63,7 +64,7 @@ public class ToolBarsHandler<T, B> extends AbstractToolBarHandler<T, B> {
                     getToolBarContainer());
             resolveToolBar(toolBarDescriptor, context);
         } else {
-            getToolBarResolutionManager().addUnresolvedToolBarType(new UnresolvedEntry<>(toolBarType, context));
+            toolBarResolutionManager.addUnresolvedToolBarType(new UnresolvedEntry<>(toolBarType, context));
         }
     }
 
@@ -89,17 +90,17 @@ public class ToolBarsHandler<T, B> extends AbstractToolBarHandler<T, B> {
     }
 
     private void registerUnresolvedToolBar(ToolBarDescriptor toolBarDescriptor, BundleContext context) {
-        getToolBarResolutionManager().addUnresolvedToolBar(new UnresolvedEntry<>(toolBarDescriptor, context));
+        toolBarResolutionManager.addUnresolvedToolBar(new UnresolvedEntry<>(toolBarDescriptor, context));
     }
 
     @Override
     protected void resolveUnresolvedItems() {
         if (isInitialized()) {
-            for (UnresolvedEntry<ToolBarType> unresolvedEntry : getToolBarResolutionManager().removeUnresolvedToolBarTypes()) {
+            for (UnresolvedEntry<ToolBarType> unresolvedEntry : toolBarResolutionManager.removeUnresolvedToolBarTypes()) {
                 resolveToolBar(unresolvedEntry.getEntry(), unresolvedEntry.getContext().getBundle(),
                         unresolvedEntry.getContext());
             }
-            for (UnresolvedEntry<ToolBarDescriptor> toolBarDescriptor : getToolBarResolutionManager().removeUnresolvedToolBars()) {
+            for (UnresolvedEntry<ToolBarDescriptor> toolBarDescriptor : toolBarResolutionManager.removeUnresolvedToolBars()) {
                 resolveToolBar(toolBarDescriptor.getEntry(), toolBarDescriptor.getContext());
             }
         }

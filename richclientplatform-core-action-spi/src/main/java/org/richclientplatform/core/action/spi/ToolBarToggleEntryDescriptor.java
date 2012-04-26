@@ -4,6 +4,9 @@
  */
 package org.richclientplatform.core.action.spi;
 
+import org.apache.commons.lang.StringUtils;
+import org.richclientplatform.core.action.jaxb.ToolBarToggleEntryType;
+
 /**
  *
  * @author puce
@@ -15,6 +18,12 @@ public class ToolBarToggleEntryDescriptor extends ToolBarEntryDescriptor {
     public ToolBarToggleEntryDescriptor(String actionId, String toolBarId, int position, String toggleGroupId) {
         super(actionId, toolBarId, position);
         this.toggleGroupId = toggleGroupId;
+    }
+
+    public static ToolBarToggleEntryDescriptor createToolBarToggleEntryDescriptor(ToolBarToggleEntryType toolBarEntryType) {
+        return new ToolBarToggleEntryDescriptor(StringUtils.stripToNull(toolBarEntryType.getActionId()),
+                StringUtils.stripToNull(toolBarEntryType.getToolBarId()), toolBarEntryType.getPosition(),
+                StringUtils.stripToNull(toolBarEntryType.getToggleGroupId()));
     }
 
     /**

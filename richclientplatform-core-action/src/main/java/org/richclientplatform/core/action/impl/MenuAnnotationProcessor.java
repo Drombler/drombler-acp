@@ -14,6 +14,7 @@ import org.richclientplatform.core.action.Action;
 import org.richclientplatform.core.action.Menu;
 import org.richclientplatform.core.action.MenuEntry;
 import org.richclientplatform.core.action.Menus;
+import org.richclientplatform.core.action.ToggleAction;
 import org.richclientplatform.core.action.ToggleMenuEntry;
 import org.richclientplatform.core.action.jaxb.MenuEntryType;
 import org.richclientplatform.core.action.jaxb.MenuType;
@@ -63,7 +64,7 @@ public class MenuAnnotationProcessor extends AbstractApplicationAnnotationProces
         for (Element element : roundEnv.getElementsAnnotatedWith(ToggleMenuEntry.class)) {
             ToggleMenuEntry toggleMenuEntryAnnotation = element.getAnnotation(ToggleMenuEntry.class);
             if (toggleMenuEntryAnnotation != null) {
-                Action actionAnnotation = element.getAnnotation(Action.class);
+                ToggleAction actionAnnotation = element.getAnnotation(ToggleAction.class);
                 registerToggleMenuEntry(toggleMenuEntryAnnotation, actionAnnotation, element);
             }
         }
@@ -97,26 +98,27 @@ public class MenuAnnotationProcessor extends AbstractApplicationAnnotationProces
         init(element);
 
         MenuEntryType menuEntry = new MenuEntryType();
-        configureMenuEntry(menuEntry, actionAnnotation, menuEntryAnnotation.actionId(), menuEntryAnnotation.position(),
-                menuEntryAnnotation.path());
+        String actionAnnotationActionId = actionAnnotation != null ? actionAnnotation.id() : null;
+        configureMenuEntry(menuEntry, actionAnnotationActionId, menuEntryAnnotation.actionId(),
+                menuEntryAnnotation.position(), menuEntryAnnotation.path());
         menus.getMenuEntry().add(menuEntry);
     }
 
-    private void registerToggleMenuEntry(ToggleMenuEntry toggleMenuEntryAnnotation, Action actionAnnotation, Element element) {
+    private void registerToggleMenuEntry(ToggleMenuEntry toggleMenuEntryAnnotation, ToggleAction actionAnnotation, Element element) {
         init(element);
 
         ToggleMenuEntryType menuEntry = new ToggleMenuEntryType();
-        configureMenuEntry(menuEntry, actionAnnotation, toggleMenuEntryAnnotation.actionId(),
-                toggleMenuEntryAnnotation.position(),
-                toggleMenuEntryAnnotation.path());
+        String actionAnnotationActionId = actionAnnotation != null ? actionAnnotation.id() : null;
+        configureMenuEntry(menuEntry, actionAnnotationActionId, toggleMenuEntryAnnotation.actionId(),
+                toggleMenuEntryAnnotation.position(), toggleMenuEntryAnnotation.path());
         menuEntry.setToggleGroupId(StringUtils.stripToNull(toggleMenuEntryAnnotation.toggleGroupId()));
         menus.getToggleMenuEntry().add(menuEntry);
     }
 
-    private void configureMenuEntry(MenuEntryType menuEntry, Action actionAnnotation, String actionId, int position, String path) {
+    private void configureMenuEntry(MenuEntryType menuEntry, String actionAnnotationActionId, String actionId, int position, String path) {
         actionId = StringUtils.stripToNull(actionId);
-        if (actionId == null && actionAnnotation != null) {
-            actionId = StringUtils.stripToNull(actionAnnotation.id());
+        if (actionId == null && actionAnnotationActionId != null) {
+            actionId = StringUtils.stripToNull(actionAnnotationActionId);
         }
         menuEntry.setActionId(actionId);
         menuEntry.setPosition(position);

@@ -33,7 +33,6 @@ import org.richclientplatform.core.action.spi.ToolBarContainer;
 })
 public abstract class AbstractToolBarHandler<T, B> {
 
-    private final ToolBarResolutionManager toolBarResolutionManager = new ToolBarResolutionManager();
     private ToolBarContainer<T, B> toolBarContainer;
     //    protected void bindMenuDescriptor(MenuDescriptor menuDescriptor) {
     //        resolveMenu(menuDescriptor);
@@ -88,10 +87,6 @@ public abstract class AbstractToolBarHandler<T, B> {
 
     protected boolean isInitialized() {
         return toolBarContainer != null;
-    }
-
-    protected ToolBarResolutionManager getToolBarResolutionManager() {
-        return toolBarResolutionManager;
     }
 
     protected ToolBarContainer<T, B> getToolBarContainer() {
