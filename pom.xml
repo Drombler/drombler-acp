@@ -23,6 +23,8 @@
         <module>richclientplatform-core-docking</module>
         <module>richclientplatform-core-docking-processing</module>
         <module>richclientplatform-core-standard-action</module>
+        <module>richclientplatform-core-standard-action-locale-de</module>
         <module>richclientplatform-core-standard-docking</module>
-    </modules>
+        <module>richclientplatform-locale-de</module>
+  </modules>
 </project>
