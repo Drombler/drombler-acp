@@ -7,10 +7,10 @@
         <version>0.1-SNAPSHOT</version>
         <relativePath>../richclientplatform-parent</relativePath>
     </parent>
-    <artifactId>richclientplatform-core-docking-processing</artifactId>
+    <artifactId>richclientplatform-core-docking-spi</artifactId>
     <packaging>bundle</packaging>
 
-    <name>Rich Client Platform - Core - Docking - Processing</name>
+    <name>Rich Client Platform - Core - Docking - SPI</name>
     <inceptionYear>2012</inceptionYear>
 
 
@@ -88,7 +88,6 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.10</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
