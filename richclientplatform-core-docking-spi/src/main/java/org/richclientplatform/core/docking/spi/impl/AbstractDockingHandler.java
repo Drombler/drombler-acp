@@ -2,11 +2,11 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.richclientplatform.core.docking.processing.impl;
+package org.richclientplatform.core.docking.spi.impl;
 
 import org.apache.felix.scr.annotations.Reference;
-import org.richclientplatform.core.docking.processing.DockingAreaContainer;
-import org.richclientplatform.core.docking.processing.DockingAreaContainerProvider;
+import org.richclientplatform.core.docking.spi.DockingAreaContainer;
+import org.richclientplatform.core.docking.spi.DockingAreaContainerProvider;
 
 /**
  *

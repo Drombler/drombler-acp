@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.richclientplatform.core.docking.processing.impl;
+package org.richclientplatform.core.docking.spi.impl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,8 +23,8 @@ import org.richclientplatform.core.action.spi.ActionDescriptor;
 import org.richclientplatform.core.action.spi.MenuEntryDescriptor;
 import org.richclientplatform.core.docking.jaxb.DockingType;
 import org.richclientplatform.core.docking.jaxb.DockingsType;
-import org.richclientplatform.core.docking.processing.DockableFactory;
-import org.richclientplatform.core.docking.processing.DockingDescriptor;
+import org.richclientplatform.core.docking.spi.DockableFactory;
+import org.richclientplatform.core.docking.spi.DockingDescriptor;
 import org.richclientplatform.core.lib.util.PositionableAdapter;
 
 /**

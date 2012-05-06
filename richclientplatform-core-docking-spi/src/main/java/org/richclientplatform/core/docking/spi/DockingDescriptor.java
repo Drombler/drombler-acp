@@ -2,16 +2,15 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.richclientplatform.core.docking.processing;
+package org.richclientplatform.core.docking.spi;
 
 import org.apache.commons.lang.StringUtils;
 import org.osgi.framework.Bundle;
 import org.richclientplatform.core.action.spi.ActionDescriptor;
-import org.richclientplatform.core.action.spi.MenuDescriptor;
 import org.richclientplatform.core.action.spi.MenuEntryDescriptor;
 import org.richclientplatform.core.docking.Dockable;
 import org.richclientplatform.core.docking.jaxb.DockingType;
-import org.richclientplatform.core.docking.processing.impl.ActivateDockableAction;
+import org.richclientplatform.core.docking.spi.impl.ActivateDockableAction;
 import org.richclientplatform.core.lib.util.Resources;
 
 /**

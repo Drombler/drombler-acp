@@ -2,12 +2,10 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.richclientplatform.core.docking.processing.impl;
+package org.richclientplatform.core.docking.spi.impl;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.apache.felix.scr.annotations.Activate;
 import org.apache.felix.scr.annotations.Component;
 import org.apache.felix.scr.annotations.Deactivate;
@@ -18,8 +16,8 @@ import org.apache.felix.scr.annotations.References;
 import org.osgi.service.component.ComponentContext;
 import org.richclientplatform.core.docking.jaxb.DockingAreaType;
 import org.richclientplatform.core.docking.jaxb.DockingAreasType;
-import org.richclientplatform.core.docking.processing.DockingAreaDescriptor;
-import org.richclientplatform.core.docking.processing.DockingAreaFactory;
+import org.richclientplatform.core.docking.spi.DockingAreaDescriptor;
+import org.richclientplatform.core.docking.spi.DockingAreaFactory;
 
 /**
  *
