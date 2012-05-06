@@ -84,7 +84,7 @@ public abstract class AbstractToolBarButtonHandler<ToolBar, ToolBarButton, Actio
 
     protected void resolveToolBarEntry(D toolBarEntryDescriptor, BundleContext context) {
         if (isInitialized() && getToolBarContainer().containsToolBar(toolBarEntryDescriptor.getToolBarId())) {
-            System.out.println(getActionClass().getName() + ": " + toolBarEntryDescriptor.getActionId());
+//            System.out.println(getActionClass().getName() + ": " + toolBarEntryDescriptor.getActionId());
             Action action = actionRegistry.getAction(toolBarEntryDescriptor.getActionId(), getActionClass(), context);
             if (action != null) {
                 ToolBarButton button = createToolBarButton(toolBarEntryDescriptor, action, ICON_SIZE);

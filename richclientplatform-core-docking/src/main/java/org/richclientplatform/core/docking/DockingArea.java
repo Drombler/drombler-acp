@@ -23,4 +23,5 @@ public @interface DockingArea {
     DockingAreaKind kind() default DockingAreaKind.VIEW;
     int position();
     int[] path();
+    boolean permanent() default false;
 }

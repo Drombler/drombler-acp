@@ -18,12 +18,14 @@ public class DockingAreaDescriptor {
     private String id;
     private int position;
     private List<Integer> path;
+    private boolean permanent;
 
     public static DockingAreaDescriptor createDockingAreaDescriptor(DockingAreaType dockingArea) {
         DockingAreaDescriptor dockingAreaDescriptor = new DockingAreaDescriptor();
         dockingAreaDescriptor.setId(StringUtils.stripToNull(dockingArea.getId()));
         dockingAreaDescriptor.setPosition(dockingArea.getPosition());
         dockingAreaDescriptor.setPath(new ArrayList<>(dockingArea.getPaths().getPath()));
+        dockingAreaDescriptor.setPermanent(dockingArea.isPermanent());
         return dockingAreaDescriptor;
     }
 
@@ -67,5 +69,19 @@ public class DockingAreaDescriptor {
      */
     public void setPath(List<Integer> path) {
         this.path = path;
+    }
+
+    /**
+     * @return the permanent
+     */
+    public boolean isPermanent() {
+        return permanent;
+    }
+
+    /**
+     * @param permanent the permanent to set
+     */
+    public void setPermanent(boolean permanent) {
+        this.permanent = permanent;
     }
 }

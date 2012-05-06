@@ -16,6 +16,7 @@
             <element name="kind" type="tns:DockingAreaKindType" />
             <element name="position" type="int" />
             <element name="paths" type="tns:DockingAreaPathsType" />
+            <element name="permanent" type="boolean" />
         </sequence>
         <attribute name="id" type="string" use="required"/>
     </complexType>

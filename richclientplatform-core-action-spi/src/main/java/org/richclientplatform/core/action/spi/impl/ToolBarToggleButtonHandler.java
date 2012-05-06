@@ -10,9 +10,7 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.richclientplatform.core.action.jaxb.ToolBarToggleEntryType;
 import org.richclientplatform.core.action.jaxb.ToolBarsType;
-import org.richclientplatform.core.action.spi.ActionRegistry;
 import org.richclientplatform.core.action.spi.ToggleActionFactory;
-import org.richclientplatform.core.action.spi.ToolBarEntryDescriptor;
 import org.richclientplatform.core.action.spi.ToolBarToggleButtonFactory;
 import org.richclientplatform.core.action.spi.ToolBarToggleEntryDescriptor;
 
@@ -28,8 +26,6 @@ public class ToolBarToggleButtonHandler<ToolBar, ToolBarButton, ToolBarToggleBut
     private ToolBarToggleButtonFactory<ToolBarToggleButton, ToggleAction> toolBarToggleButtonFactory;
     @Reference
     private ToggleActionFactory<ToggleAction> actionFactory;
-    private final ActionRegistry actionRegistry = new ActionRegistry();
-    private final ActionResolutionManager<ToolBarEntryDescriptor> actionResolutionManager = new ActionResolutionManager<>();
 
     protected void bindToolBarToggleButtonFactory(ToolBarToggleButtonFactory<ToolBarToggleButton, ToggleAction> toolBarToggleButtonFactory) {
         this.toolBarToggleButtonFactory = toolBarToggleButtonFactory;

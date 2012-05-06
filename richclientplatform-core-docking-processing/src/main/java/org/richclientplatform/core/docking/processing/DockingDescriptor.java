@@ -23,6 +23,8 @@ public class DockingDescriptor {
     private String id;
     private String displayName;
     private String icon;
+    private String areaId;
+    private int position;
     private Dockable dockable;
     private ActionDescriptor activateDockableActionDescriptor;
     private MenuEntryDescriptor activateDockableMenuEntryDescriptor;
@@ -70,6 +72,20 @@ public class DockingDescriptor {
     }
 
     /**
+     * @return the position
+     */
+    public int getPosition() {
+        return position;
+    }
+
+    /**
+     * @param position the position to set
+     */
+    public void setPosition(int position) {
+        this.position = position;
+    }
+
+    /**
      * @return the dockable
      */
     public Dockable getDockable() {
@@ -105,6 +121,8 @@ public class DockingDescriptor {
                 docking.getDockableClass()));
         dockingDescriptor.setDisplayName(Resources.getResourceString(dockableClass, docking.getDisplayName()));
         dockingDescriptor.setIcon(StringUtils.stripToNull(docking.getIcon()));
+        dockingDescriptor.setAreaId(StringUtils.stripToNull(docking.getAreaId()));
+        dockingDescriptor.setPosition(docking.getPosition());
         dockingDescriptor.setDockable(dockableClass.newInstance());
         dockingDescriptor.setActivateDockableActionDescriptor(createActivateDockableActionDescriptor(dockingDescriptor,
                 docking.getAccelerator()));
@@ -144,5 +162,19 @@ public class DockingDescriptor {
      */
     public void setActivateDockableMenuEntryDescriptor(MenuEntryDescriptor activateDockableMenuEntryDescriptor) {
         this.activateDockableMenuEntryDescriptor = activateDockableMenuEntryDescriptor;
+    }
+
+    /**
+     * @return the areaId
+     */
+    public String getAreaId() {
+        return areaId;
+    }
+
+    /**
+     * @param areaId the areaId to set
+     */
+    public void setAreaId(String areaId) {
+        this.areaId = areaId;
     }
 }

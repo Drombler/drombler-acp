@@ -123,7 +123,7 @@ public class MenuItemHandler<MenuItem, Menu extends MenuItem, Action> extends Ab
 
     @Override
     protected MenuItem createMenuItem(MenuEntryDescriptor menuEntryDescriptor, BundleContext context, int iconSize) {
-        System.out.println(actionFactory.getActionClass().getName() + ": " + menuEntryDescriptor.getActionId());
+//        System.out.println(actionFactory.getActionClass().getName() + ": " + menuEntryDescriptor.getActionId());
         Action action = actionRegistry.getAction(menuEntryDescriptor.getActionId(), actionFactory.getActionClass(),
                 context);
         if (action != null) {

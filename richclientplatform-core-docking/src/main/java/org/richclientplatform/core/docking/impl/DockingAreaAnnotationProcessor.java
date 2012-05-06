@@ -78,6 +78,7 @@ public class DockingAreaAnnotationProcessor extends AbstractApplicationAnnotatio
         dockingArea.setId(StringUtils.stripToNull(dockingAreaAnnotation.id()));
         dockingArea.setKind(DOCKING_AREA_KINDS.get(dockingAreaAnnotation.kind()));
         dockingArea.setPosition(dockingAreaAnnotation.position());
+        dockingArea.setPermanent(dockingAreaAnnotation.permanent());
         DockingAreaPathsType paths = new DockingAreaPathsType();
         for (int path : dockingAreaAnnotation.path()) {
             paths.getPath().add(path);

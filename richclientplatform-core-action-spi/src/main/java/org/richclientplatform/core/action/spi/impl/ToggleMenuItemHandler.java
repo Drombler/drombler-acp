@@ -124,7 +124,7 @@ public class ToggleMenuItemHandler<MenuItem, Menu extends MenuItem, ToggleMenuIt
 
     @Override
     protected ToggleMenuItem createMenuItem(ToggleMenuEntryDescriptor menuEntryDescriptor, BundleContext context, int iconSize) {
-        System.out.println(actionFactory.getToggleActionClass().getName() + ": " + menuEntryDescriptor.getActionId());
+//        System.out.println(actionFactory.getToggleActionClass().getName() + ": " + menuEntryDescriptor.getActionId());
         ToggleAction action = actionRegistry.getAction(menuEntryDescriptor.getActionId(),
                 actionFactory.getToggleActionClass(), context);
         if (action != null) {
