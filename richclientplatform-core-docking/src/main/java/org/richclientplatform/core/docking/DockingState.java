@@ -5,7 +5,7 @@
 package org.richclientplatform.core.docking;
 
 /**
- *
+ * Not supported yet!
  * @author puce
  */
 public enum DockingState {

@@ -5,7 +5,6 @@
 package org.richclientplatform.core.docking.spi;
 
 import java.util.List;
-import org.richclientplatform.core.lib.util.PositionableAdapter;
 
 /**
  *
@@ -15,7 +14,7 @@ public interface DockingAreaContainer<A, D> {
 
     void addDockingArea(List<Integer> path, A dockingArea);
 
-    void addDockable(String areaId, PositionableAdapter<D> dockable);
+    void addDockable(D dockable);
 
     public void addDockingAreaContainerListener(DockingAreaContainerListener<A, D> listener);
 

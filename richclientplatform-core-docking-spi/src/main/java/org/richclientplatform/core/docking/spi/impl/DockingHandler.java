@@ -24,8 +24,9 @@ import org.richclientplatform.core.action.spi.MenuEntryDescriptor;
 import org.richclientplatform.core.docking.jaxb.DockingType;
 import org.richclientplatform.core.docking.jaxb.DockingsType;
 import org.richclientplatform.core.docking.spi.DockableFactory;
+import org.richclientplatform.core.docking.spi.DockablePreferences;
+import org.richclientplatform.core.docking.spi.DockablePreferencesManager;
 import org.richclientplatform.core.docking.spi.DockingDescriptor;
-import org.richclientplatform.core.lib.util.PositionableAdapter;
 
 /**
  *
@@ -42,6 +43,8 @@ public class DockingHandler<A, D> extends AbstractDockingHandler<A, D> {
 
     @Reference
     private DockableFactory<D> dockableFactory;
+    @Reference
+    private DockablePreferencesManager<D> dockablePreferencesManager;
     private final List<UnresolvedEntry<DockingDescriptor>> unresolvedDockingDescriptors = new ArrayList<>();
 
     protected void bindDockableFactory(DockableFactory<D> dockableFactory) {
@@ -50,6 +53,14 @@ public class DockingHandler<A, D> extends AbstractDockingHandler<A, D> {
 
     protected void unbindDockableFactory(DockableFactory<D> dockableFactory) {
         this.dockableFactory = null;
+    }
+
+    protected void bindDockablePreferencesManager(DockablePreferencesManager dockablePreferencesManager) {
+        this.dockablePreferencesManager = dockablePreferencesManager;
+    }
+
+    protected void unbindDockablePreferencesManager(DockablePreferencesManager dockablePreferencesManager) {
+        this.dockablePreferencesManager = null;
     }
 
     protected void bindDockingsType(ServiceReference<DockingsType> serviceReference) {
@@ -90,14 +101,14 @@ public class DockingHandler<A, D> extends AbstractDockingHandler<A, D> {
 
     @Override
     protected boolean isInitialized() {
-        return super.isInitialized() && dockableFactory != null;
+        return super.isInitialized() && dockableFactory != null && dockablePreferencesManager != null;
     }
 
     private void resolveDockable(DockingDescriptor dockingDescriptor, BundleContext context) {
         if (isInitialized()) {
-            PositionableAdapter<D> dockable = new PositionableAdapter<>(
-                    dockableFactory.createDockable(dockingDescriptor), dockingDescriptor.getPosition());
-            getDockingAreaContainer().addDockable(dockingDescriptor.getAreaId(), dockable);
+            D dockable = dockableFactory.createDockable(dockingDescriptor);
+            registerDockablePreferences(dockable, dockingDescriptor);
+            getDockingAreaContainer().addDockable(dockable);
             context.registerService(ActionDescriptor.class, dockingDescriptor.getActivateDockableActionDescriptor(),
                     null);
             context.registerService(MenuEntryDescriptor.class,
@@ -107,11 +118,16 @@ public class DockingHandler<A, D> extends AbstractDockingHandler<A, D> {
         }
     }
 
+    private void registerDockablePreferences(D dockable, DockingDescriptor dockingDescriptor) {
+        DockablePreferences dockablePreferences = new DockablePreferences();
+        dockablePreferences.setAreaId(dockingDescriptor.getAreaId());
+        dockablePreferences.setPosition(dockingDescriptor.getPosition());
+        dockablePreferencesManager.registerDockablePreferences(dockable, dockablePreferences);
+    }
+
     private void resolveUnresolvedDockables() {
         for (UnresolvedEntry<DockingDescriptor> unresolvedEntry : unresolvedDockingDescriptors) {
             resolveDockable(unresolvedEntry.getEntry(), unresolvedEntry.getContext());
         }
     }
-
-
 }
