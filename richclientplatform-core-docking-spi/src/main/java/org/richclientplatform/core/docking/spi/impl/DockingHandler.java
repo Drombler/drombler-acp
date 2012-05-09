@@ -6,6 +6,7 @@ package org.richclientplatform.core.docking.spi.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Executor;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.felix.scr.annotations.Activate;
@@ -21,6 +22,7 @@ import org.osgi.framework.ServiceReference;
 import org.osgi.service.component.ComponentContext;
 import org.richclientplatform.core.action.spi.ActionDescriptor;
 import org.richclientplatform.core.action.spi.MenuEntryDescriptor;
+import org.richclientplatform.core.application.ApplicationExecutorProvider;
 import org.richclientplatform.core.docking.jaxb.DockingType;
 import org.richclientplatform.core.docking.jaxb.DockingsType;
 import org.richclientplatform.core.docking.spi.DockableFactory;
@@ -37,7 +39,8 @@ import org.richclientplatform.core.docking.spi.DockingDescriptor;
     @Reference(name = "dockingsType", referenceInterface = DockingsType.class,
     cardinality = ReferenceCardinality.OPTIONAL_MULTIPLE, policy = ReferencePolicy.DYNAMIC),
     @Reference(name = "dockingDescriptor", referenceInterface = DockingDescriptor.class,
-    cardinality = ReferenceCardinality.OPTIONAL_MULTIPLE, policy = ReferencePolicy.DYNAMIC)
+    cardinality = ReferenceCardinality.OPTIONAL_MULTIPLE, policy = ReferencePolicy.DYNAMIC),
+    @Reference(name = "applicationExecutorProvider", referenceInterface = ApplicationExecutorProvider.class)
 })
 public class DockingHandler<A, D> extends AbstractDockingHandler<A, D> {
 
@@ -45,6 +48,7 @@ public class DockingHandler<A, D> extends AbstractDockingHandler<A, D> {
     private DockableFactory<D> dockableFactory;
     @Reference
     private DockablePreferencesManager<D> dockablePreferencesManager;
+    private Executor applicationExecutor;
     private final List<UnresolvedEntry<DockingDescriptor>> unresolvedDockingDescriptors = new ArrayList<>();
 
     protected void bindDockableFactory(DockableFactory<D> dockableFactory) {
@@ -55,7 +59,15 @@ public class DockingHandler<A, D> extends AbstractDockingHandler<A, D> {
         this.dockableFactory = null;
     }
 
-    protected void bindDockablePreferencesManager(DockablePreferencesManager dockablePreferencesManager) {
+    protected void bindApplicationExecutorProvider(ApplicationExecutorProvider applicationExecutorProvider) {
+        applicationExecutor = applicationExecutorProvider.getApplicationExecutor();
+    }
+
+    protected void unbindApplicationExecutorProvider(ApplicationExecutorProvider applicationExecutorProvider) {
+        applicationExecutor = null;
+    }
+
+    protected void bindDockablePreferencesManager(DockablePreferencesManager<D> dockablePreferencesManager) {
         this.dockablePreferencesManager = dockablePreferencesManager;
     }
 
@@ -101,18 +113,26 @@ public class DockingHandler<A, D> extends AbstractDockingHandler<A, D> {
 
     @Override
     protected boolean isInitialized() {
-        return super.isInitialized() && dockableFactory != null && dockablePreferencesManager != null;
+        return super.isInitialized() && dockableFactory != null && dockablePreferencesManager != null && applicationExecutor != null;
     }
 
-    private void resolveDockable(DockingDescriptor dockingDescriptor, BundleContext context) {
+    private void resolveDockable(final DockingDescriptor dockingDescriptor, final BundleContext context) {
         if (isInitialized()) {
-            D dockable = dockableFactory.createDockable(dockingDescriptor);
-            registerDockablePreferences(dockable, dockingDescriptor);
-            getDockingAreaContainer().addDockable(dockable);
-            context.registerService(ActionDescriptor.class, dockingDescriptor.getActivateDockableActionDescriptor(),
-                    null);
-            context.registerService(MenuEntryDescriptor.class,
-                    dockingDescriptor.getActivateDockableMenuEntryDescriptor(), null);
+            Runnable runnable = new Runnable() {
+
+                @Override
+                public void run() {
+                    D dockable = dockableFactory.createDockable(dockingDescriptor);
+                    registerDockablePreferences(dockable, dockingDescriptor);
+                    getDockingAreaContainer().addDockable(dockable);
+                    context.registerService(ActionDescriptor.class,
+                            dockingDescriptor.getActivateDockableActionDescriptor(),
+                            null);
+                    context.registerService(MenuEntryDescriptor.class,
+                            dockingDescriptor.getActivateDockableMenuEntryDescriptor(), null);
+                }
+            };
+            applicationExecutor.execute(runnable);
         } else {
             unresolvedDockingDescriptors.add(new UnresolvedEntry<>(dockingDescriptor, context));
         }

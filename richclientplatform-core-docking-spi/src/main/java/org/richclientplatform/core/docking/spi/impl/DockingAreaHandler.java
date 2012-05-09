@@ -6,6 +6,7 @@ package org.richclientplatform.core.docking.spi.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Executor;
 import org.apache.felix.scr.annotations.Activate;
 import org.apache.felix.scr.annotations.Component;
 import org.apache.felix.scr.annotations.Deactivate;
@@ -14,6 +15,7 @@ import org.apache.felix.scr.annotations.ReferenceCardinality;
 import org.apache.felix.scr.annotations.ReferencePolicy;
 import org.apache.felix.scr.annotations.References;
 import org.osgi.service.component.ComponentContext;
+import org.richclientplatform.core.application.ApplicationExecutorProvider;
 import org.richclientplatform.core.docking.jaxb.DockingAreaType;
 import org.richclientplatform.core.docking.jaxb.DockingAreasType;
 import org.richclientplatform.core.docking.spi.DockingAreaDescriptor;
@@ -28,12 +30,14 @@ import org.richclientplatform.core.docking.spi.DockingAreaFactory;
     @Reference(name = "dockingAreasType", referenceInterface = DockingAreasType.class,
     cardinality = ReferenceCardinality.OPTIONAL_MULTIPLE, policy = ReferencePolicy.DYNAMIC),
     @Reference(name = "dockingAreaDescriptor", referenceInterface = DockingAreaDescriptor.class,
-    cardinality = ReferenceCardinality.OPTIONAL_MULTIPLE, policy = ReferencePolicy.DYNAMIC)
+    cardinality = ReferenceCardinality.OPTIONAL_MULTIPLE, policy = ReferencePolicy.DYNAMIC),
+    @Reference(name = "applicationExecutorProvider", referenceInterface = ApplicationExecutorProvider.class)
 })
 public class DockingAreaHandler<A, D> extends AbstractDockingHandler<A, D> {
 
     @Reference
     private DockingAreaFactory<A> dockingAreaFactory;
+    private Executor applicationExecutor;
     private final List<DockingAreaDescriptor> unresolvedDockingAreaDescriptors = new ArrayList<>();
 
     protected void bindDockingAreaFactory(DockingAreaFactory<A> dockingAreaFactory) {
@@ -42,6 +46,14 @@ public class DockingAreaHandler<A, D> extends AbstractDockingHandler<A, D> {
 
     protected void unbindDockingAreaFactory(DockingAreaFactory<A> dockingAreaFactory) {
         this.dockingAreaFactory = null;
+    }
+
+    protected void bindApplicationExecutorProvider(ApplicationExecutorProvider applicationExecutorProvider) {
+        applicationExecutor = applicationExecutorProvider.getApplicationExecutor();
+    }
+
+    protected void unbindApplicationExecutorProvider(ApplicationExecutorProvider applicationExecutorProvider) {
+        applicationExecutor = null;
     }
 
     protected void bindDockingAreasType(DockingAreasType dockingAreasType) {
@@ -73,15 +85,22 @@ public class DockingAreaHandler<A, D> extends AbstractDockingHandler<A, D> {
 
     @Override
     protected boolean isInitialized() {
-        return super.isInitialized() && dockingAreaFactory != null;
+        return super.isInitialized() && dockingAreaFactory != null && applicationExecutor != null;
     }
 
-    private void resolveDockingArea(DockingAreaDescriptor dockingAreaDescriptor) {
+    private void resolveDockingArea(final DockingAreaDescriptor dockingAreaDescriptor) {
         if (isInitialized()) {
             System.out.println(
                     DockingAreaHandler.class.getName() + ": added docking area: " + dockingAreaDescriptor.getId());
-            A dockingArea = dockingAreaFactory.createDockingArea(dockingAreaDescriptor);
-            getDockingAreaContainer().addDockingArea(dockingAreaDescriptor.getPath(), dockingArea);
+            Runnable runnable = new Runnable() {
+
+                @Override
+                public void run() {
+                    A dockingArea = dockingAreaFactory.createDockingArea(dockingAreaDescriptor);
+                    getDockingAreaContainer().addDockingArea(dockingAreaDescriptor.getPath(), dockingArea);
+                }
+            };
+            applicationExecutor.execute(runnable);
         } else {
             unresolvedDockingAreaDescriptors.add(dockingAreaDescriptor);
         }
