@@ -13,5 +13,5 @@ package org.richclientplatform.core.docking;
 //@XmlEnum
 public enum DockingAreaKind {
 
-    VIEW;
+    VIEW, EDITOR;
 }

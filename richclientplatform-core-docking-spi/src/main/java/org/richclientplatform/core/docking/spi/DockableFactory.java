@@ -10,5 +10,5 @@ package org.richclientplatform.core.docking.spi;
  */
 public interface DockableFactory<T> {
 
-    T createDockable(DockingDescriptor dockingDescriptor);
+    T createDockable(ViewDockingDescriptor dockingDescriptor);
 }

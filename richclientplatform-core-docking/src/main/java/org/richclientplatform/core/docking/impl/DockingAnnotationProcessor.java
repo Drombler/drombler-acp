@@ -13,10 +13,13 @@ import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
 import org.apache.commons.lang.StringUtils;
 import org.richclientplatform.core.application.AbstractApplicationAnnotationProcessor;
-import org.richclientplatform.core.docking.Docking;
+import org.richclientplatform.core.docking.ViewDocking;
 import org.richclientplatform.core.docking.DockingState;
+import org.richclientplatform.core.docking.EditorDocking;
+import org.richclientplatform.core.docking.jaxb.AbstractDockingType;
 import org.richclientplatform.core.docking.jaxb.DockingStateType;
-import org.richclientplatform.core.docking.jaxb.DockingType;
+import org.richclientplatform.core.docking.jaxb.ViewDockingType;
+import org.richclientplatform.core.docking.jaxb.EditorDockingType;
 import org.richclientplatform.core.docking.jaxb.DockingsType;
 import org.richclientplatform.core.docking.jaxb.WindowMenuEntryType;
 
@@ -24,7 +27,7 @@ import org.richclientplatform.core.docking.jaxb.WindowMenuEntryType;
  *
  * @author puce
  */
-@SupportedAnnotationTypes("org.richclientplatform.core.docking.Docking")
+@SupportedAnnotationTypes({"org.richclientplatform.core.docking.ViewDocking", "org.richclientplatform.core.docking.EditorDocking"})
 public class DockingAnnotationProcessor extends AbstractApplicationAnnotationProcessor {
 
     //TODO: not safe as changes to DockingAreaKind are missed at compile time. 
@@ -51,13 +54,19 @@ public class DockingAnnotationProcessor extends AbstractApplicationAnnotationPro
     }
     private DockingsType dockings;
 
-
     @Override
     protected boolean handleProcess(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
-        for (Element element : roundEnv.getElementsAnnotatedWith(Docking.class)) {
-            Docking dockingAnnotation = element.getAnnotation(Docking.class);
+        for (Element element : roundEnv.getElementsAnnotatedWith(ViewDocking.class)) {
+            ViewDocking dockingAnnotation = element.getAnnotation(ViewDocking.class);
             if (dockingAnnotation != null) {
-                registerDocking(dockingAnnotation, element);
+                registerViewDocking(dockingAnnotation, element);
+            }
+        }
+
+        for (Element element : roundEnv.getElementsAnnotatedWith(EditorDocking.class)) {
+            EditorDocking dockingAnnotation = element.getAnnotation(EditorDocking.class);
+            if (dockingAnnotation != null) {
+                registerEditorDocking(dockingAnnotation, element);
             }
         }
 
@@ -65,26 +74,33 @@ public class DockingAnnotationProcessor extends AbstractApplicationAnnotationPro
         return false;
     }
 
-    private void registerDocking(Docking dockingAnnotation, Element element) {
+    private void registerViewDocking(ViewDocking dockingAnnotation, Element element) {
         init(element);
 
-        DockingType docking = new DockingType();
-        docking.setId(element.asType().toString());
-        docking.setAreaId(StringUtils.stripToNull(dockingAnnotation.areaId()));
+        ViewDockingType docking = new ViewDockingType();
+        configureDocking(docking, element, dockingAnnotation.areaId(), dockingAnnotation.icon(),
+                dockingAnnotation.state());
+
         docking.setPosition(dockingAnnotation.position());
 //        docking.setSingleton(dockingAnnotation.singleton());
         docking.setDisplayName(StringUtils.stripToNull(dockingAnnotation.displayName()));
         docking.setAccelerator(StringUtils.stripToNull(dockingAnnotation.accelerator()));
-        docking.setIcon(StringUtils.stripToNull(dockingAnnotation.icon()));
-        docking.setState(DOCKING_STATES.get(dockingAnnotation.state()));
-        docking.setDockableClass(element.asType().toString());
-        
+
         WindowMenuEntryType windowMenuEntry = new WindowMenuEntryType();
         windowMenuEntry.setPosition(dockingAnnotation.menuEntry().position());
         windowMenuEntry.setPath(StringUtils.stripToNull(dockingAnnotation.menuEntry().path()));
         docking.setMenuEntry(windowMenuEntry);
-        
-        dockings.getDocking().add(docking);
+
+        dockings.getViewDocking().add(docking);
+    }
+
+    private void configureDocking(AbstractDockingType docking, Element element, String areaId, String icon,
+            DockingState dockingState) {
+        docking.setId(element.asType().toString());
+        docking.setAreaId(StringUtils.stripToNull(areaId));
+        docking.setIcon(StringUtils.stripToNull(icon));
+        docking.setState(DOCKING_STATES.get(dockingState));
+        docking.setDockableClass(element.asType().toString());
     }
 
     private void init(Element element) {
@@ -94,5 +110,14 @@ public class DockingAnnotationProcessor extends AbstractApplicationAnnotationPro
             addJAXBRootClasses(DockingsType.class);
         }
         addOriginatingElements(element); // TODO: needed?
+    }
+
+    private void registerEditorDocking(EditorDocking dockingAnnotation, Element element) {
+        init(element);
+
+        EditorDockingType docking = new EditorDockingType();
+        configureDocking(docking, element, dockingAnnotation.areaId(), dockingAnnotation.icon(),
+                dockingAnnotation.state());
+        dockings.getEditorDocking().add(docking);
     }
 }

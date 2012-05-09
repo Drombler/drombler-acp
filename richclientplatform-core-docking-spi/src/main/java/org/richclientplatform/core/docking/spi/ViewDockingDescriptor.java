@@ -9,7 +9,7 @@ import org.osgi.framework.Bundle;
 import org.richclientplatform.core.action.spi.ActionDescriptor;
 import org.richclientplatform.core.action.spi.MenuEntryDescriptor;
 import org.richclientplatform.core.docking.Dockable;
-import org.richclientplatform.core.docking.jaxb.DockingType;
+import org.richclientplatform.core.docking.jaxb.ViewDockingType;
 import org.richclientplatform.core.docking.spi.impl.ActivateDockableAction;
 import org.richclientplatform.core.lib.util.Resources;
 
@@ -17,30 +17,13 @@ import org.richclientplatform.core.lib.util.Resources;
  *
  * @author puce
  */
-public class DockingDescriptor {
+public class ViewDockingDescriptor extends AbstractDockableDockingDescriptor {
 
-    private String id;
     private String displayName;
-    private String icon;
-    private String areaId;
     private int position;
     private Dockable dockable;
     private ActionDescriptor activateDockableActionDescriptor;
     private MenuEntryDescriptor activateDockableMenuEntryDescriptor;
-
-    /**
-     * @return the id
-     */
-    public String getId() {
-        return id;
-    }
-
-    /**
-     * @param id the id to set
-     */
-    public void setId(String id) {
-        this.id = id;
-    }
 
     /**
      * @return the displayName
@@ -54,20 +37,6 @@ public class DockingDescriptor {
      */
     public void setDisplayName(String displayName) {
         this.displayName = displayName;
-    }
-
-    /**
-     * @return the icon
-     */
-    public String getIcon() {
-        return icon;
-    }
-
-    /**
-     * @param icon the icon to set
-     */
-    public void setIcon(String icon) {
-        this.icon = icon;
     }
 
     /**
@@ -112,9 +81,9 @@ public class DockingDescriptor {
         this.activateDockableActionDescriptor = activateDockableActionDescriptor;
     }
 
-    public static DockingDescriptor createDockingDescriptor(DockingType docking, Bundle bundle) throws ClassNotFoundException, InstantiationException, IllegalAccessException {
-        DockingDescriptor dockingDescriptor = new DockingDescriptor();
-        dockingDescriptor.setId(docking.getId());
+    public static ViewDockingDescriptor createViewDockingDescriptor(ViewDockingType docking, Bundle bundle) throws ClassNotFoundException, InstantiationException, IllegalAccessException {
+        ViewDockingDescriptor dockingDescriptor = new ViewDockingDescriptor();
+        dockingDescriptor.setId(StringUtils.stripToNull(docking.getId()));
         @SuppressWarnings("unchecked")
         Class<? extends Dockable> dockableClass = (Class<? extends Dockable>) bundle.loadClass(StringUtils.stripToNull(
                 docking.getDockableClass()));
@@ -130,7 +99,7 @@ public class DockingDescriptor {
         return dockingDescriptor;
     }
 
-    private static String getWindowPath(DockingType docking) {
+    private static String getWindowPath(ViewDockingType docking) {
         StringBuilder sb = new StringBuilder("Window");
         if (docking.getMenuEntry().getPath() != null) {
             sb.append("/");
@@ -139,7 +108,7 @@ public class DockingDescriptor {
         return sb.toString();
     }
 
-    private static ActionDescriptor createActivateDockableActionDescriptor(DockingDescriptor dockingDescriptor, String accelerator) {
+    private static ActionDescriptor createActivateDockableActionDescriptor(ViewDockingDescriptor dockingDescriptor, String accelerator) {
         ActionDescriptor actionDescriptor = new ActionDescriptor();
         actionDescriptor.setId(dockingDescriptor.getId());
         actionDescriptor.setDisplayName(dockingDescriptor.getDisplayName());
@@ -161,19 +130,5 @@ public class DockingDescriptor {
      */
     public void setActivateDockableMenuEntryDescriptor(MenuEntryDescriptor activateDockableMenuEntryDescriptor) {
         this.activateDockableMenuEntryDescriptor = activateDockableMenuEntryDescriptor;
-    }
-
-    /**
-     * @return the areaId
-     */
-    public String getAreaId() {
-        return areaId;
-    }
-
-    /**
-     * @param areaId the areaId to set
-     */
-    public void setAreaId(String areaId) {
-        this.areaId = areaId;
     }
 }

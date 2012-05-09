@@ -41,6 +41,7 @@ public class DockingAreaAnnotationProcessor extends AbstractApplicationAnnotatio
 
     static {
         DOCKING_AREA_KINDS.put(DockingAreaKind.VIEW, DockingAreaKindType.VIEW);
+        DOCKING_AREA_KINDS.put(DockingAreaKind.EDITOR, DockingAreaKindType.EDITOR);
         for (DockingAreaKind dockingAreaKind : DockingAreaKind.values()) {
             if (!DOCKING_AREA_KINDS.containsKey(dockingAreaKind)) {
                 throw new IllegalStateException("No mapping for: " + dockingAreaKind);

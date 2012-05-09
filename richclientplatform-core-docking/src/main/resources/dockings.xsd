@@ -6,22 +6,41 @@
     <element name="dockings">
         <complexType>
             <sequence>
-                <element name="docking" type="tns:DockingType" minOccurs="0" maxOccurs="unbounded" />
+                <element name="viewDocking" type="tns:ViewDockingType" minOccurs="0" maxOccurs="unbounded" />
+                <element name="editorDocking" type="tns:EditorDockingType" minOccurs="0" maxOccurs="unbounded" />
             </sequence>
         </complexType>
     </element>
 
-    <complexType name="DockingType">
+    <complexType name="ViewDockingType">
+        <complexContent>
+            <extension base="tns:AbstractDockingType">
+                <sequence>
+                    <element name="position" type="int" />
+<!--            <element name="singleton" type="boolean" />-->
+                    <element name="displayName" type="string" />
+                    <element name="accelerator" type="string" minOccurs="0"/>
+                    <element name="menuEntry" type="tns:WindowMenuEntryType"/>
+                </sequence>
+            </extension>
+        </complexContent>
+    </complexType>
+    
+    <complexType name="EditorDockingType">
+        <complexContent>
+            <extension base="tns:AbstractDockingType">
+                <sequence></sequence>
+            </extension>
+        </complexContent>
+    </complexType>
+    
+    <complexType name="AbstractDockingType">
         <sequence>
             <element name="areaId" type="string" />
-            <element name="position" type="int" />
 <!--            <element name="singleton" type="boolean" />-->
-            <element name="displayName" type="string" />
-            <element name="accelerator" type="string" minOccurs="0"/>
             <element name="icon" type="string" minOccurs="0" />
             <element name="state" type="tns:DockingStateType" />
             <element name="dockableClass" type="string"/>
-            <element name="menuEntry" type="tns:WindowMenuEntryType"/>
         </sequence>
         <attribute name="id" type="string" use="required"/>
     </complexType>

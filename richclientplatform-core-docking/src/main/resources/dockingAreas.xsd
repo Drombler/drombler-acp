@@ -24,6 +24,7 @@
     <simpleType name="DockingAreaKindType">
         <restriction base="string">
             <enumeration value="VIEW"/>
+            <enumeration value="EDITOR"/>
         </restriction>
     </simpleType>
     
