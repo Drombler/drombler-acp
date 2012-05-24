@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 @DockingAreas({
-    @DockingArea(id = "center", kind = DockingAreaKind.VIEW, position = 20, path = {20, 40, 50}, permanent = true),
+    @DockingArea(id = "center", kind = DockingAreaKind.EDITOR, position = 20, path = {20, 40, 50}, permanent = true),
     @DockingArea(id = "top", kind = DockingAreaKind.VIEW, position = 20, path = {20, 40, 20}),
     @DockingArea(id = "bottom", kind = DockingAreaKind.VIEW, position = 20, path = {20, 40, 80}),
     @DockingArea(id = "left", kind = DockingAreaKind.VIEW, position = 20, path = {20, 20}),

@@ -2,13 +2,12 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.richclientplatform.startup.main;
+package org.richclientplatform.startup.main.impl;
 
 import java.io.IOException;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
