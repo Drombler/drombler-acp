@@ -23,9 +23,20 @@
                 <extensions>true</extensions>
                 <configuration>
                     <instructions>
-                        <Fragment-Host>org.richclientplatform.core-standard-action</Fragment-Host><!--;bundle-version=${project.version} --> <!-- TODO: correct bundle-version (not Maven version)-->
+                        <Fragment-Host>org.richclientplatform.core-standard-action;bundle-version=${richclientplatform.osgi.version.clean}</Fragment-Host>
                     </instructions>
+                    <versions>
+                        <richclientplatform.osgi.version.clean>${project.version}</richclientplatform.osgi.version.clean>
+                    </versions>
                 </configuration>
+                <executions>
+                    <execution>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>cleanVersions</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>

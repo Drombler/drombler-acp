@@ -4,6 +4,8 @@
  */
 package org.richclientplatform.core.docking;
 
+import org.richclientplatform.core.lib.util.Context;
+
 /**
  *
  * @author puce
@@ -15,4 +17,7 @@ public interface Dockable {
     void open();
 
     void requestActive();
+    
+    // TODO: needed?
+    Context getContext();
 }

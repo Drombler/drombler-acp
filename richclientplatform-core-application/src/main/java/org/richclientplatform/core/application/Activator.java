@@ -4,6 +4,9 @@
  */
 package org.richclientplatform.core.application;
 
+import org.richclientplatform.core.lib.util.ContextListener;
+import org.richclientplatform.core.lib.util.Context;
+import org.richclientplatform.core.application.Contexts;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -65,8 +68,8 @@ public class Activator implements BundleActivator {
             return serviceCollection;
         }
 
-        @Override
-        public <T> void track(Class<T> type, final ContextListener<T> listener) {
+//        @Override
+//        public <T> void track(Class<T> type, final ContextListener<T> listener) {
 //            final ServiceTracker<T, T> serviceTracker = getServiceTracker(type, new ServiceTrackerCustomizer<T, T>() {
 //
 //                @Override
@@ -87,7 +90,7 @@ public class Activator implements BundleActivator {
 //                }
 //            });
 
-        }
+//        }
 
         private <T> ServiceTracker<?, ?> getServiceTracker(Class<T> type) {
             if (!serviceTrackers.containsKey(type)) {
@@ -103,6 +106,16 @@ public class Activator implements BundleActivator {
             for (ServiceTracker<?, ?> serviceTracker : serviceTrackers.values()) {
                 serviceTracker.close();
             }
+        }
+
+        @Override
+        public void addContextListener(Class<?> type, ContextListener listener) {
+            throw new UnsupportedOperationException("Not supported yet.");
+        }
+
+        @Override
+        public void removeContextListener(Class<?> type, ContextListener listener) {
+            throw new UnsupportedOperationException("Not supported yet.");
         }
     }
 }

@@ -4,13 +4,9 @@
  */
 package org.richclientplatform.core.action.spi;
 
-import java.util.Collections;
-import java.util.Locale;
-import java.util.ResourceBundle;
-import org.apache.commons.lang.StringUtils;
 import org.osgi.framework.Bundle;
 import org.richclientplatform.core.action.jaxb.ActionType;
-import org.richclientplatform.core.lib.util.Resources;
+import org.richclientplatform.core.lib.util.Context;
 
 /**
  *
@@ -92,10 +88,12 @@ public class ActionDescriptor {
         this.listener = listener;
     }
 
-    public static ActionDescriptor createActionDescriptor(ActionType actionType, Bundle bundle)
+    public static ActionDescriptor createActionDescriptor(ActionType actionType, Bundle bundle, Context activeContext,
+            Context applicationContext)
             throws ClassNotFoundException, InstantiationException, IllegalAccessException {
         ActionDescriptor actionDescriptor = new ActionDescriptor();
-        ActionDescriptorUtils.configureActionDescriptor(actionDescriptor, actionType, bundle);
+        ActionDescriptorUtils.configureActionDescriptor(actionDescriptor, actionType, bundle, activeContext,
+                applicationContext);
         return actionDescriptor;
     }
 }
