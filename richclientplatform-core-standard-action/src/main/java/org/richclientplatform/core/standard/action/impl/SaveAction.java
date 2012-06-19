@@ -45,9 +45,9 @@ public class SaveAction extends AbstractActionListener<Object> implements Active
     }
 
     @Override
-    public void setActiveContext(Context context) {
-        activeContext = context;
-        activeContext.addContextListener(Savable.class, new ContextListener() {
+    public void setActiveContext(Context activeContext) {
+        this.activeContext = activeContext;
+        this.activeContext.addContextListener(Savable.class, new ContextListener() {
 
             @Override
             public void contextChanged(ContextEvent event) {

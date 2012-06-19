@@ -14,6 +14,8 @@ public interface Context {
 
     <T> T find(Class<T> type);
 
+    //TODO: retunr List? 
+    //TODO: return <T> instead of <? extends T>?
     <T> Collection<? extends T> findAll(Class<T> type);
 
     void addContextListener(Class<?> type, ContextListener listener);

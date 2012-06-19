@@ -10,5 +10,5 @@ package org.richclientplatform.core.lib.util;
  */
 public interface ApplicationContextSensitive {
 
-    void setApplicationContext(Context context);
+    void setApplicationContext(Context applicationContext);
 }
