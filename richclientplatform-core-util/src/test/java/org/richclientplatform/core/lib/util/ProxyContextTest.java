@@ -130,6 +130,76 @@ public class ProxyContextTest {
     }
 
     @Test
+    public void testSetContextsList() {
+        System.out.println("setContextsList");
+
+        SimpleContext context1 = new SimpleContext();
+        MyCustomFoo foo1 = new MyCustomFoo();
+        context1.add(foo1);
+
+        TestContextListener fooContextListener = new TestContextListener();
+        context.addContextListener(Foo.class, fooContextListener);
+
+        assertFalse(fooContextListener.isContextChanged());
+
+        context.setContexts(Arrays.asList(context1));
+
+        assertTrue(fooContextListener.isContextChanged());
+
+        fooContextListener.reset();
+
+        assertFalse(fooContextListener.isContextChanged());
+
+        context.setContexts(Arrays.asList(context1));
+
+        assertFalse(fooContextListener.isContextChanged());
+
+        fooContextListener.reset();
+
+        assertFalse(fooContextListener.isContextChanged());
+
+        context.setContexts(Collections.<Context>emptyList());
+
+        assertTrue(fooContextListener.isContextChanged());
+
+    }
+    
+     @Test
+    public void testSetContextsVarArgs() {
+        System.out.println("setContextsVarArgs");
+
+        SimpleContext context1 = new SimpleContext();
+        MyCustomFoo foo1 = new MyCustomFoo();
+        context1.add(foo1);
+
+        TestContextListener fooContextListener = new TestContextListener();
+        context.addContextListener(Foo.class, fooContextListener);
+
+        assertFalse(fooContextListener.isContextChanged());
+
+        context.setContexts(context1);
+
+        assertTrue(fooContextListener.isContextChanged());
+
+        fooContextListener.reset();
+
+        assertFalse(fooContextListener.isContextChanged());
+
+        context.setContexts(context1);
+
+        assertFalse(fooContextListener.isContextChanged());
+
+        fooContextListener.reset();
+
+        assertFalse(fooContextListener.isContextChanged());
+
+        context.setContexts();
+
+        assertTrue(fooContextListener.isContextChanged());
+
+    }
+
+    @Test
     public void testAddContextListener() {
         System.out.println("addContextListener");
 

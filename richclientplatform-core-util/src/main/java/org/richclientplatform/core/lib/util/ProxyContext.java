@@ -5,9 +5,11 @@
 package org.richclientplatform.core.lib.util;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  *
@@ -65,25 +67,65 @@ public class ProxyContext extends AbstractContext {
 //        }
 //    }
     public void addContext(Context context) {
+        addContextOnly(context);
+        fireContextEvents(Arrays.asList(context));
+    }
+
+    private void addContextOnly(Context context) {
         contexts.add(context);
         for (Map.Entry<Class<?>, List<ContextListener>> entry : getListeners().entrySet()) {
             for (ContextListener contextListener : entry.getValue()) {
                 context.addContextListener(entry.getKey(), contextListener);
             }
-            if (!context.findAll(entry.getKey()).isEmpty()) {
-                fireContextEvent(entry.getKey());
-            }
         }
     }
 
     public void removeContext(Context context) {
+        removeContextOnly(context);
+        fireContextEvents(Arrays.asList(context));
+    }
+
+    private void removeContextOnly(Context context) {
         contexts.remove(context);
         for (Map.Entry<Class<?>, List<ContextListener>> entry : getListeners().entrySet()) {
             for (ContextListener contextListener : entry.getValue()) {
                 context.removeContextListener(entry.getKey(), contextListener);
             }
-            if (!context.findAll(entry.getKey()).isEmpty()) {
-                fireContextEvent(entry.getKey());
+        }
+    }
+
+    public void setContexts(Context... contexts) {
+        setContexts(Arrays.asList(contexts));
+    }
+
+    public void setContexts(List<? extends Context> contexts) {
+        List<Context> contextsToRemove = new ArrayList<>(this.contexts);
+        contextsToRemove.removeAll(contexts);
+
+        for (Context context : contextsToRemove) {
+            removeContextOnly(context);
+        }
+
+        List<Context> contextsToAdd = new ArrayList<>(contexts);
+        contextsToAdd.removeAll(this.contexts);
+
+        for (Context context : contexts) {
+            addContextOnly(context);
+        }
+
+        List<Context> changedContexts = new ArrayList<>(contextsToRemove);
+        changedContexts.addAll(contextsToAdd);
+
+        fireContextEvents(changedContexts);
+    }
+
+    private void fireContextEvents(List<Context> changedContexts) {
+        for (Class<?> type : getListeners().keySet()) {
+            for (Context context : changedContexts) {
+                if (!context.findAll(type).isEmpty()) {
+                    fireContextEvent(type);
+                    break;
+                }
             }
         }
     }
