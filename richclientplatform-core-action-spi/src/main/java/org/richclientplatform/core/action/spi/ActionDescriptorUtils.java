@@ -7,9 +7,9 @@ package org.richclientplatform.core.action.spi;
 import org.apache.commons.lang.StringUtils;
 import org.osgi.framework.Bundle;
 import org.richclientplatform.core.action.jaxb.ActionType;
-import org.richclientplatform.core.lib.util.ActiveContextSensitive;
-import org.richclientplatform.core.lib.util.ApplicationContextSensitive;
-import org.richclientplatform.core.lib.util.Context;
+import org.richclientplatform.core.lib.util.context.ActiveContextSensitive;
+import org.richclientplatform.core.lib.util.context.ApplicationContextSensitive;
+import org.richclientplatform.core.lib.util.context.Context;
 import org.richclientplatform.core.lib.util.Resources;
 
 /**

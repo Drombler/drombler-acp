@@ -8,10 +8,10 @@ import org.richclientplatform.core.action.AbstractActionListener;
 import org.richclientplatform.core.action.Action;
 import org.richclientplatform.core.action.MenuEntry;
 import org.richclientplatform.core.action.ToolBarEntry;
-import org.richclientplatform.core.lib.util.ApplicationContextSensitive;
-import org.richclientplatform.core.lib.util.Context;
-import org.richclientplatform.core.lib.util.ContextEvent;
-import org.richclientplatform.core.lib.util.ContextListener;
+import org.richclientplatform.core.lib.util.context.ApplicationContextSensitive;
+import org.richclientplatform.core.lib.util.context.Context;
+import org.richclientplatform.core.lib.util.context.ContextEvent;
+import org.richclientplatform.core.lib.util.context.ContextListener;
 import org.richclientplatform.core.standard.action.Savable;
 
 /*

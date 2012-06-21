@@ -6,7 +6,7 @@ package org.richclientplatform.core.action.spi;
 
 import org.osgi.framework.Bundle;
 import org.richclientplatform.core.action.jaxb.ToggleActionType;
-import org.richclientplatform.core.lib.util.Context;
+import org.richclientplatform.core.lib.util.context.Context;
 
 /**
  *

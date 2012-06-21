@@ -4,7 +4,7 @@
  */
 package org.richclientplatform.core.docking;
 
-import org.richclientplatform.core.lib.util.Context;
+import org.richclientplatform.core.lib.util.context.Context;
 
 /**
  *
