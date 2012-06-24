@@ -8,6 +8,7 @@ package org.richclientplatform.core.lib.geometry;
  *
  * @author puce
  */
+// TODO: needed?
 public enum Priority {
 
     ALWAYS,
