@@ -5,7 +5,6 @@
 package org.richclientplatform.core.docking.spi.impl;
 
 import org.apache.felix.scr.annotations.Reference;
-import org.richclientplatform.core.docking.spi.DockingAreaContainer;
 import org.richclientplatform.core.docking.spi.DockingAreaContainerProvider;
 
 /**
@@ -15,24 +14,24 @@ import org.richclientplatform.core.docking.spi.DockingAreaContainerProvider;
 @Reference(name = "dockingAreaContainerProvider", referenceInterface = DockingAreaContainerProvider.class)
 public abstract class AbstractDockingHandler<A, D> {
 
-    private DockingAreaContainer<A, D> dockingAreaContainer;
+    private DockingAreaContainerProvider<A, D> dockingAreaContainerProvider;
 
     protected void bindDockingAreaContainerProvider(DockingAreaContainerProvider<A, D> dockingAreaContainerProvider) {
-        this.dockingAreaContainer = dockingAreaContainerProvider.getDockingAreaContainer();
+        this.dockingAreaContainerProvider = dockingAreaContainerProvider;
     }
 
     protected void unbindDockingAreaContainerProvider(DockingAreaContainerProvider<A, D> dockingAreaContainerProvider) {
-        this.dockingAreaContainer = null;
+        this.dockingAreaContainerProvider = null;
     }
 
     /**
      * @return the dockingAreaContainer
      */
-    protected DockingAreaContainer<A, D> getDockingAreaContainer() {
-        return dockingAreaContainer;
+    protected DockingAreaContainerProvider<A, D> getDockingAreaContainerProvider() {
+        return dockingAreaContainerProvider;
     }
 
     protected boolean isInitialized() {
-        return dockingAreaContainer != null;
+        return dockingAreaContainerProvider != null;
     }
 }

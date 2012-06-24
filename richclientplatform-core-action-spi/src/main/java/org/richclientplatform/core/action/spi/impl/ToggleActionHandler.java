@@ -82,7 +82,7 @@ public class ToggleActionHandler<T> extends AbstractActionHandler<ToggleActionTy
 
     @Override
     protected ToggleActionDescriptor createActionDescriptor(ToggleActionType actionType, BundleContext context) throws IllegalAccessException, ClassNotFoundException, InstantiationException {
-        return ToggleActionDescriptor.createToggleActionDescriptor(actionType, context.getBundle(), getActiveContext(),
-                getApplicationContext());
+        return ToggleActionDescriptor.createToggleActionDescriptor(actionType, context.getBundle(),
+                getActiveContextProvider().getActiveContext(), getApplicationContextProvider().getApplicationContext());
     }
 }

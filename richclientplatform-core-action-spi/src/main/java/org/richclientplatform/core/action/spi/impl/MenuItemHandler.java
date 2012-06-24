@@ -22,6 +22,7 @@ import org.richclientplatform.core.action.jaxb.MenusType;
 import org.richclientplatform.core.action.spi.ActionFactory;
 import org.richclientplatform.core.action.spi.ActionRegistry;
 import org.richclientplatform.core.action.spi.MenuEntryDescriptor;
+import org.richclientplatform.core.action.spi.MenuItemContainer;
 import org.richclientplatform.core.action.spi.MenuItemFactory;
 
 /**
@@ -31,7 +32,7 @@ import org.richclientplatform.core.action.spi.MenuItemFactory;
 @Component(immediate = true)
 @Reference(name = "menuEntryDescriptor", referenceInterface = MenuEntryDescriptor.class,
 cardinality = ReferenceCardinality.OPTIONAL_MULTIPLE, policy = ReferencePolicy.DYNAMIC)
-public class MenuItemHandler<MenuItem, Menu extends MenuItem, Action> extends AbstractMenuItemHandler<MenuItem, Menu, MenuItem, MenuEntryDescriptor> {
+public class MenuItemHandler<MenuItem, Menu extends MenuItem, Action> extends AbstractMenuItemHandler<MenuItem, Menu, MenuItem, MenuEntryDescriptor, MenuItemConfig<Action>> {
 
     @Reference
     private MenuItemFactory<MenuItem, Action> menuItemFactory;
@@ -53,7 +54,6 @@ public class MenuItemHandler<MenuItem, Menu extends MenuItem, Action> extends Ab
 
     protected void bindMenuItemFactory(MenuItemFactory<MenuItem, Action> menuItemFactory) {
         this.menuItemFactory = menuItemFactory;
-        resolveUnresolvedItems();
     }
 
     protected void unbindMenuItemFactory(MenuItemFactory<MenuItem, Action> menuItemFactory) {
@@ -62,7 +62,6 @@ public class MenuItemHandler<MenuItem, Menu extends MenuItem, Action> extends Ab
 
     protected void bindActionFactory(ActionFactory<Action> actionFactory) {
         this.actionFactory = actionFactory;
-        resolveUnresolvedItems();
     }
 
     protected void unbindActionFactory(ActionFactory<Action> actionFactory) {
@@ -73,6 +72,7 @@ public class MenuItemHandler<MenuItem, Menu extends MenuItem, Action> extends Ab
     protected void activate(ComponentContext context) {
         tracker = createActionTracker(context);
         tracker.open();
+        resolveUnresolvedItems();
     }
 
     @Deactivate
@@ -122,15 +122,21 @@ public class MenuItemHandler<MenuItem, Menu extends MenuItem, Action> extends Ab
     }
 
     @Override
-    protected MenuItem createMenuItem(MenuEntryDescriptor menuEntryDescriptor, BundleContext context, int iconSize) {
-//        System.out.println(actionFactory.getActionClass().getName() + ": " + menuEntryDescriptor.getActionId());
+    protected MenuItemConfig<Action> createConfig(MenuEntryDescriptor menuEntryDescriptor, BundleContext context) {
         Action action = actionRegistry.getAction(menuEntryDescriptor.getActionId(), actionFactory.getActionClass(),
                 context);
         if (action != null) {
-            return menuItemFactory.createMenuItem(menuEntryDescriptor, action, iconSize);
+            return new MenuItemConfig<>(action);
         } else {
             return null;
         }
+    }
+
+    @Override
+    protected MenuItem createMenuItem(MenuEntryDescriptor menuEntryDescriptor, MenuItemConfig<Action> config) {
+//        System.out.println(actionFactory.getActionClass().getName() + ": " + menuEntryDescriptor.getActionId());
+        return menuItemFactory.createMenuItem(menuEntryDescriptor, config.getAction(), config.getIconSize());
+
     }
 
     @Override

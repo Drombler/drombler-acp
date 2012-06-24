@@ -20,6 +20,7 @@ import org.richclientplatform.core.docking.jaxb.DockingAreaKindType;
 import org.richclientplatform.core.docking.jaxb.DockingAreaPathsType;
 import org.richclientplatform.core.docking.jaxb.DockingAreaType;
 import org.richclientplatform.core.docking.jaxb.DockingAreasType;
+import org.richclientplatform.core.docking.jaxb.LayoutConstraintsType;
 
 /**
  *
@@ -85,6 +86,12 @@ public class DockingAreaAnnotationProcessor extends AbstractApplicationAnnotatio
             paths.getPath().add(path);
         }
         dockingArea.setPaths(paths);
+
+        LayoutConstraintsType layoutConstraints = new LayoutConstraintsType();
+        layoutConstraints.setPrefWidth(dockingAreaAnnotation.layoutConstraints().prefWidth());
+        layoutConstraints.setPrefHeight(dockingAreaAnnotation.layoutConstraints().prefHeight());
+        dockingArea.setLayoutConstraints(layoutConstraints);
+
         dockingAreas.getDockingArea().add(dockingArea);
     }
 

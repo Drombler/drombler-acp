@@ -71,8 +71,8 @@ public class ActionHandler<T> extends AbstractActionHandler<ActionType, ActionDe
 
     @Override
     protected ActionDescriptor createActionDescriptor(ActionType actionType, BundleContext context) throws IllegalAccessException, ClassNotFoundException, InstantiationException {
-        return ActionDescriptor.createActionDescriptor(actionType,
-                context.getBundle(), getActiveContext(), getApplicationContext());
+        return ActionDescriptor.createActionDescriptor(actionType, context.getBundle(),
+                getActiveContextProvider().getActiveContext(), getApplicationContextProvider().getApplicationContext());
     }
 
     @Override

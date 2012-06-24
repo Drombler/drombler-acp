@@ -10,7 +10,6 @@ import org.richclientplatform.core.action.spi.ActionDescriptor;
 import org.richclientplatform.core.action.spi.MenuEntryDescriptor;
 import org.richclientplatform.core.docking.Dockable;
 import org.richclientplatform.core.docking.jaxb.ViewDockingType;
-import org.richclientplatform.core.docking.spi.impl.ActivateDockableAction;
 import org.richclientplatform.core.lib.util.Resources;
 
 /**
@@ -21,7 +20,6 @@ public class ViewDockingDescriptor extends AbstractDockableDockingDescriptor {
 
     private String displayName;
     private int position;
-    private Dockable dockable;
     private ActionDescriptor activateDockableActionDescriptor;
     private MenuEntryDescriptor activateDockableMenuEntryDescriptor;
 
@@ -54,20 +52,6 @@ public class ViewDockingDescriptor extends AbstractDockableDockingDescriptor {
     }
 
     /**
-     * @return the dockable
-     */
-    public Dockable getDockable() {
-        return dockable;
-    }
-
-    /**
-     * @param dockable the dockable to set
-     */
-    public void setDockable(Dockable dockable) {
-        this.dockable = dockable;
-    }
-
-    /**
      * @return the activateDockableActionDescriptor
      */
     public ActionDescriptor getActivateDockableActionDescriptor() {
@@ -91,7 +75,7 @@ public class ViewDockingDescriptor extends AbstractDockableDockingDescriptor {
         dockingDescriptor.setIcon(StringUtils.stripToNull(docking.getIcon()));
         dockingDescriptor.setAreaId(StringUtils.stripToNull(docking.getAreaId()));
         dockingDescriptor.setPosition(docking.getPosition());
-        dockingDescriptor.setDockable(dockableClass.newInstance());
+        dockingDescriptor.setDockableClass(bundle.loadClass(StringUtils.stripToNull(docking.getDockableClass())));
         dockingDescriptor.setActivateDockableActionDescriptor(createActivateDockableActionDescriptor(dockingDescriptor,
                 docking.getAccelerator()));
         dockingDescriptor.setActivateDockableMenuEntryDescriptor(new MenuEntryDescriptor(dockingDescriptor.getId(),
@@ -114,7 +98,7 @@ public class ViewDockingDescriptor extends AbstractDockableDockingDescriptor {
         actionDescriptor.setDisplayName(dockingDescriptor.getDisplayName());
         actionDescriptor.setAccelerator(accelerator);
         actionDescriptor.setIcon(dockingDescriptor.getIcon());
-        actionDescriptor.setListener(new ActivateDockableAction(dockingDescriptor.getDockable()));
+//        actionDescriptor.setListener(new ActivateDockableAction(dockingDescriptor.getDockable()));
         return actionDescriptor;
     }
 

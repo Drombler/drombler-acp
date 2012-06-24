@@ -6,6 +6,7 @@ package org.richclientplatform.core.action.spi.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Executor;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.felix.scr.annotations.Reference;
@@ -16,42 +17,44 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.richclientplatform.core.action.jaxb.ActionsType;
 import org.richclientplatform.core.action.spi.ActionRegistry;
+import org.richclientplatform.core.application.ApplicationExecutorProvider;
 import org.richclientplatform.core.lib.util.context.ActiveContextProvider;
 import org.richclientplatform.core.lib.util.context.ApplicationContextProvider;
-import org.richclientplatform.core.lib.util.context.Context;
 
 /**
  *
  * @author puce
  */
 @References({
-    @Reference(name = "activeContextProvider", referenceInterface = ActiveContextProvider.class),
-    @Reference(name = "applicationContextProvider", referenceInterface = ApplicationContextProvider.class),
     @Reference(name = "actionsType", referenceInterface = ActionsType.class,
-    cardinality = ReferenceCardinality.OPTIONAL_MULTIPLE, policy = ReferencePolicy.DYNAMIC)
+    cardinality = ReferenceCardinality.OPTIONAL_MULTIPLE, policy = ReferencePolicy.DYNAMIC),
+    @Reference(name = "applicationExecutorProvider", referenceInterface = ApplicationExecutorProvider.class)
 })
 public abstract class AbstractActionHandler<A, D> {
 
+    @Reference
+    private ActiveContextProvider activeContextProvider;
+    @Reference
+    private ApplicationContextProvider applicationContextProvider;
+    private Executor applicationExecutor;
     private final ActionRegistry actionRegistry = new ActionRegistry();
-    private Context activeContext;
-    private Context applicationContext;
     private final List<UnresolvedEntry<A>> unresolvedActions = new ArrayList<>();
     private final List<UnresolvedEntry<D>> unresolvedActionDescriptors = new ArrayList<>();
 
     protected void bindActiveContextProvider(ActiveContextProvider activeContextProvider) {
-        activeContext = activeContextProvider.getActiveContext();
+        this.activeContextProvider = activeContextProvider;
     }
 
     protected void unbindActiveContextProvider(ActiveContextProvider activeContextProvider) {
-        activeContext = null;
+        this.activeContextProvider = null;
     }
 
     protected void bindApplicationContextProvider(ApplicationContextProvider applicationContextProvider) {
-        applicationContext = applicationContextProvider.getApplicationContext();
+        this.applicationContextProvider = applicationContextProvider;
     }
 
     protected void unbindApplicationContextProvider(ApplicationContextProvider applicationContextProvider) {
-        applicationContext = null;
+        this.applicationContextProvider = null;
     }
 
     protected void bindActionsType(ServiceReference<ActionsType> serviceReference) {
@@ -64,8 +67,16 @@ public abstract class AbstractActionHandler<A, D> {
         // TODO
     }
 
+    protected void bindApplicationExecutorProvider(ApplicationExecutorProvider applicationExecutorProvider) {
+        applicationExecutor = applicationExecutorProvider.getApplicationExecutor();
+    }
+
+    protected void unbindApplicationExecutorProvider(ApplicationExecutorProvider applicationExecutorProvider) {
+        applicationExecutor = null;
+    }
+
     protected boolean isInitialized() {
-        return getActiveContext() != null && getApplicationContext() != null;
+        return getActiveContextProvider() != null && getApplicationContextProvider() != null && applicationExecutor != null;
     }
 
     protected abstract void registerActions(ActionsType actionType, BundleContext context);
@@ -87,14 +98,21 @@ public abstract class AbstractActionHandler<A, D> {
         }
     }
 
-    protected void registerActionType(A actionType, BundleContext context) {
+    protected void registerActionType(final A actionType, final BundleContext context) {
         if (isInitialized()) {
-            try {
-                D actionDescriptor = createActionDescriptor(actionType, context);
-                registerActionDescriptor(actionDescriptor, context);
-            } catch (ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
-                Logger.getLogger(ActionHandler.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            Runnable runnable = new Runnable() {
+
+                @Override
+                public void run() {
+                    try {
+                        D actionDescriptor = createActionDescriptor(actionType, context);
+                        registerActionDescriptor(actionDescriptor, context);
+                    } catch (ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
+                        Logger.getLogger(ActionHandler.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            };
+            applicationExecutor.execute(runnable);
         } else {
             unresolvedActions.add(new UnresolvedEntry<>(actionType, context));
         }
@@ -117,16 +135,16 @@ public abstract class AbstractActionHandler<A, D> {
     }
 
     /**
-     * @return the activeContext
+     * @return the activeContextProvider
      */
-    protected Context getActiveContext() {
-        return activeContext;
+    protected ActiveContextProvider getActiveContextProvider() {
+        return activeContextProvider;
     }
 
     /**
-     * @return the applicationContext
+     * @return the applicationContextProvider
      */
-    protected Context getApplicationContext() {
-        return applicationContext;
+    protected ApplicationContextProvider getApplicationContextProvider() {
+        return applicationContextProvider;
     }
 }

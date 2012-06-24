@@ -13,6 +13,7 @@ public class AbstractDockableDockingDescriptor {
     private String id;
     private String areaId;
     private String icon;
+    private Class<?> dockableClass;
 
     /**
      * @return the areaId
@@ -54,5 +55,19 @@ public class AbstractDockableDockingDescriptor {
      */
     public void setId(String id) {
         this.id = id;
+    }
+
+    /**
+     * @return the dockableClass
+     */
+    public Class<?> getDockableClass() {
+        return dockableClass;
+    }
+
+    /**
+     * @param dockableClass the dockableClass to set
+     */
+    public void setDockableClass(Class<?> dockableClass) {
+        this.dockableClass = dockableClass;
     }
 }

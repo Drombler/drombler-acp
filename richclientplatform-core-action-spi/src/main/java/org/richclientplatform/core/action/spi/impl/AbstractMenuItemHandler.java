@@ -5,6 +5,7 @@
 package org.richclientplatform.core.action.spi.impl;
 
 import java.util.List;
+import java.util.concurrent.Executor;
 import org.apache.felix.scr.annotations.Reference;
 import org.apache.felix.scr.annotations.ReferenceCardinality;
 import org.apache.felix.scr.annotations.ReferencePolicy;
@@ -20,6 +21,7 @@ import org.richclientplatform.core.action.spi.MenuItemContainerMenuEvent;
 import org.richclientplatform.core.action.spi.MenuItemContainerListenerAdapter;
 import org.richclientplatform.core.action.spi.MenuItemRootContainer;
 import org.richclientplatform.core.action.spi.PositionableMenuItemAdapter;
+import org.richclientplatform.core.application.ApplicationExecutorProvider;
 
 /**
  *
@@ -28,12 +30,13 @@ import org.richclientplatform.core.action.spi.PositionableMenuItemAdapter;
 @References({
     @Reference(name = "menusType", referenceInterface = MenusType.class,
     cardinality = ReferenceCardinality.OPTIONAL_MULTIPLE, policy = ReferencePolicy.DYNAMIC),
-    @Reference(name = "menuBarMenuContainerProvider", referenceInterface = MenuBarMenuContainerProvider.class)
+    @Reference(name = "menuBarMenuContainerProvider", referenceInterface = MenuBarMenuContainerProvider.class),
+    @Reference(name = "applicationExecutorProvider", referenceInterface = ApplicationExecutorProvider.class)
 })
-public abstract class AbstractMenuItemHandler<MenuItem, Menu extends MenuItem, M extends MenuItem, D extends AbstractMenuEntryDescriptor> {
+public abstract class AbstractMenuItemHandler<MenuItem, Menu extends MenuItem, M extends MenuItem, D extends AbstractMenuEntryDescriptor, Config> {
 
     private static final String ROOT_PATH_ID = "";
-    private static final int ICON_SIZE = 16;
+    private Executor applicationExecutor;
     private final MenuItemResolutionManager<D> menuItemResolutionManager = new MenuItemResolutionManager<>();
     private MenuItemRootContainer<MenuItem, Menu> rootContainer;
 
@@ -65,8 +68,16 @@ public abstract class AbstractMenuItemHandler<MenuItem, Menu extends MenuItem, M
         rootContainer = null;
     }
 
+    protected void bindApplicationExecutorProvider(ApplicationExecutorProvider applicationExecutorProvider) {
+        applicationExecutor = applicationExecutorProvider.getApplicationExecutor();
+    }
+
+    protected void unbindApplicationExecutorProvider(ApplicationExecutorProvider applicationExecutorProvider) {
+        applicationExecutor = null;
+    }
+
     protected boolean isInitialized() {
-        return rootContainer != null;
+        return rootContainer != null && applicationExecutor != null;
     }
 
     protected abstract void resolveMenuItem(MenusType menusType, Bundle bundle, BundleContext context);
@@ -92,31 +103,41 @@ public abstract class AbstractMenuItemHandler<MenuItem, Menu extends MenuItem, M
         return manager;
     }
 
-    protected void resolveMenuItem(D menuEntryDescriptor, BundleContext context) {
+    protected void resolveMenuItem(final D menuEntryDescriptor, final BundleContext context) {
         if (isInitialized()) {
-            M menuItem = createMenuItem(menuEntryDescriptor, context, ICON_SIZE);
-            if (menuItem != null) {
-                resolveMenuItem(menuEntryDescriptor, context, menuItem);
+            MenuItemContainer<MenuItem, Menu> parentContainer = getParent(menuEntryDescriptor.getPath());
+            if (parentContainer != null) {
+                Config config = createConfig(menuEntryDescriptor, context);
+                if (config != null) {
+                    resolveMenuItem(config, menuEntryDescriptor, parentContainer);
+                } else {
+                    registerUnresolvedMenuItem(menuEntryDescriptor, context);
+                }
             } else {
-                registerUnresolvedMenuItem(menuEntryDescriptor, context);
+                registerUnresolvedMenuEntry(menuEntryDescriptor, context);
             }
         } else {
             registerUnresolvedMenuEntry(menuEntryDescriptor, context);
         }
     }
 
-    protected abstract M createMenuItem(D menuEntryDescriptor, BundleContext context, int iconSize);
+    protected void resolveMenuItem(final Config config, final D menuEntryDescriptor, final MenuItemContainer<MenuItem, Menu> parentContainer) {
+        Runnable runnable = new Runnable() {
+
+            @Override
+            public void run() {
+                M menuItem = createMenuItem(menuEntryDescriptor, config);
+                addToContainer(parentContainer, menuItem, menuEntryDescriptor);
+            }
+        };
+        applicationExecutor.execute(runnable);
+    }
+
+    protected abstract Config createConfig(D menuEntryDescriptor, BundleContext context);
+
+    protected abstract M createMenuItem(D menuEntryDescriptor, Config config);
 
     protected abstract void registerUnresolvedMenuItem(D menuEntryDescriptor, BundleContext context);
-
-    private void resolveMenuItem(D menuEntryDescriptor, BundleContext context, M menuItem) {
-        MenuItemContainer<MenuItem, Menu> parentContainer = getParent(menuEntryDescriptor.getPath());
-        if (parentContainer != null) {
-            addToContainer(parentContainer, menuItem, menuEntryDescriptor);
-        } else {
-            registerUnresolvedMenuEntry(menuEntryDescriptor, context);
-        }
-    }
 
     protected void addToContainer(MenuItemContainer<MenuItem, Menu> parentContainer, M menuItem, D menuEntryDescriptor) {
         //        if (parentContainer.isSupportingItems()) {

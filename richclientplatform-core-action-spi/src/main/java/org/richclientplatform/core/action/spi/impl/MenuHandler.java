@@ -4,12 +4,15 @@
  */
 package org.richclientplatform.core.action.spi.impl;
 
+import org.apache.felix.scr.annotations.Activate;
 import org.apache.felix.scr.annotations.Component;
+import org.apache.felix.scr.annotations.Deactivate;
 import org.apache.felix.scr.annotations.Reference;
 import org.apache.felix.scr.annotations.ReferenceCardinality;
 import org.apache.felix.scr.annotations.ReferencePolicy;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
+import org.osgi.service.component.ComponentContext;
 import org.richclientplatform.core.action.jaxb.MenuType;
 import org.richclientplatform.core.action.jaxb.MenusType;
 import org.richclientplatform.core.action.spi.MenuDescriptor;
@@ -24,7 +27,7 @@ import org.richclientplatform.core.action.spi.PositionableMenuItemAdapter;
 @Component(immediate = true)
 @Reference(name = "menuDescriptor", referenceInterface = MenuDescriptor.class,
 cardinality = ReferenceCardinality.OPTIONAL_MULTIPLE, policy = ReferencePolicy.DYNAMIC)
-public class MenuHandler<MenuItem, Menu extends MenuItem> extends AbstractMenuItemHandler<MenuItem, Menu, Menu, MenuDescriptor> {
+public class MenuHandler<MenuItem, Menu extends MenuItem> extends AbstractMenuItemHandler<MenuItem, Menu, Menu, MenuDescriptor, MenuConfig> {
 
     @Reference
     private MenuFactory<Menu> menuFactory;
@@ -39,11 +42,19 @@ public class MenuHandler<MenuItem, Menu extends MenuItem> extends AbstractMenuIt
 
     protected void bindMenuFactory(MenuFactory<Menu> menuFactory) {
         this.menuFactory = menuFactory;
-        resolveUnresolvedItems();
     }
 
     protected void unbindMenuFactory(MenuFactory<Menu> menuFactory) {
         this.menuFactory = null;
+    }
+
+    @Activate
+    protected void activate(ComponentContext context) {
+        resolveUnresolvedItems();
+    }
+
+    @Deactivate
+    protected void deactivate(ComponentContext context) {
     }
 
     private void resolveMenu(MenuDescriptor entry) {
@@ -82,7 +93,12 @@ public class MenuHandler<MenuItem, Menu extends MenuItem> extends AbstractMenuIt
     }
 
     @Override
-    protected Menu createMenuItem(MenuDescriptor menuEntryDescriptor, BundleContext context, int iconSize) {
+    protected MenuConfig createConfig(MenuDescriptor menuEntryDescriptor, BundleContext context) {
+        return MenuConfig.getInstance();
+    }
+
+    @Override
+    protected Menu createMenuItem(MenuDescriptor menuEntryDescriptor, MenuConfig config) {
         return menuFactory.createMenu(menuEntryDescriptor);
     }
 

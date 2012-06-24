@@ -31,7 +31,7 @@ import org.richclientplatform.core.action.spi.ToggleMenuItemFactory;
 @Reference(name = "toggleMenuEntryDescriptor", referenceInterface = ToggleMenuEntryDescriptor.class,
 cardinality = ReferenceCardinality.OPTIONAL_MULTIPLE, policy = ReferencePolicy.DYNAMIC)
 public class ToggleMenuItemHandler<MenuItem, Menu extends MenuItem, ToggleMenuItem extends MenuItem, ToggleAction>
-        extends AbstractMenuItemHandler<MenuItem, Menu, ToggleMenuItem, ToggleMenuEntryDescriptor> {
+        extends AbstractMenuItemHandler<MenuItem, Menu, ToggleMenuItem, ToggleMenuEntryDescriptor, MenuItemConfig<ToggleAction>> {
 
     @Reference
     private ToggleMenuItemFactory<ToggleMenuItem, ToggleAction> menuItemFactory;
@@ -53,7 +53,6 @@ public class ToggleMenuItemHandler<MenuItem, Menu extends MenuItem, ToggleMenuIt
 
     protected void bindToggleMenuItemFactory(ToggleMenuItemFactory<ToggleMenuItem, ToggleAction> menuItemFactory) {
         this.menuItemFactory = menuItemFactory;
-        resolveUnresolvedItems();
     }
 
     protected void unbindToggleMenuItemFactory(ToggleMenuItemFactory<ToggleMenuItem, ToggleAction> menuItemFactory) {
@@ -62,7 +61,6 @@ public class ToggleMenuItemHandler<MenuItem, Menu extends MenuItem, ToggleMenuIt
 
     protected void bindToggleActionFactory(ToggleActionFactory<ToggleAction> actionFactory) {
         this.actionFactory = actionFactory;
-        resolveUnresolvedItems();
     }
 
     protected void unbindToggleActionFactory(ToggleActionFactory<ToggleAction> actionFactory) {
@@ -73,6 +71,7 @@ public class ToggleMenuItemHandler<MenuItem, Menu extends MenuItem, ToggleMenuIt
     protected void activate(ComponentContext context) {
         tracker = createActionTracker(context);
         tracker.open();
+        resolveUnresolvedItems();
     }
 
     @Deactivate
@@ -123,15 +122,20 @@ public class ToggleMenuItemHandler<MenuItem, Menu extends MenuItem, ToggleMenuIt
     }
 
     @Override
-    protected ToggleMenuItem createMenuItem(ToggleMenuEntryDescriptor menuEntryDescriptor, BundleContext context, int iconSize) {
-//        System.out.println(actionFactory.getToggleActionClass().getName() + ": " + menuEntryDescriptor.getActionId());
+    protected MenuItemConfig<ToggleAction> createConfig(ToggleMenuEntryDescriptor menuEntryDescriptor, BundleContext context) {
         ToggleAction action = actionRegistry.getAction(menuEntryDescriptor.getActionId(),
                 actionFactory.getToggleActionClass(), context);
         if (action != null) {
-            return menuItemFactory.createToggleMenuItem(menuEntryDescriptor, action, iconSize);
+            return new MenuItemConfig<>(action);
         } else {
             return null;
         }
+    }
+
+    @Override
+    protected ToggleMenuItem createMenuItem(ToggleMenuEntryDescriptor menuEntryDescriptor, MenuItemConfig<ToggleAction> config) {
+//        System.out.println(actionFactory.getToggleActionClass().getName() + ": " + menuEntryDescriptor.getActionId());
+        return menuItemFactory.createToggleMenuItem(menuEntryDescriptor, config.getAction(), config.getIconSize());
     }
 
     @Override

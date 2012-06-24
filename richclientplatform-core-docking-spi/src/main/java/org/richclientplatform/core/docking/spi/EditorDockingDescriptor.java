@@ -14,22 +14,6 @@ import org.richclientplatform.core.docking.jaxb.EditorDockingType;
  */
 public class EditorDockingDescriptor extends AbstractDockableDockingDescriptor {
 
-    private Class<?> dockableClass;
-
-    /**
-     * @return the dockableClass
-     */
-    public Class<?> getDockableClass() {
-        return dockableClass;
-    }
-
-    /**
-     * @param dockableClass the dockableClass to set
-     */
-    public void setDockableClass(Class<?> dockableClass) {
-        this.dockableClass = dockableClass;
-    }
-
     public static EditorDockingDescriptor createEditorDockingDescriptor(EditorDockingType docking, Bundle bundle) throws ClassNotFoundException {
         EditorDockingDescriptor dockingDescriptor = new EditorDockingDescriptor();
         dockingDescriptor.setId(StringUtils.stripToNull(docking.getId()));

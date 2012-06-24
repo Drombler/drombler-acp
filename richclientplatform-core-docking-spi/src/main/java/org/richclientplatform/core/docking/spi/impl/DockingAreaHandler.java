@@ -97,7 +97,8 @@ public class DockingAreaHandler<A, D> extends AbstractDockingHandler<A, D> {
                 @Override
                 public void run() {
                     A dockingArea = dockingAreaFactory.createDockingArea(dockingAreaDescriptor);
-                    getDockingAreaContainer().addDockingArea(dockingAreaDescriptor.getPath(), dockingArea);
+                    getDockingAreaContainerProvider().getDockingAreaContainer().addDockingArea(
+                            dockingAreaDescriptor.getPath(), dockingArea);
                 }
             };
             applicationExecutor.execute(runnable);

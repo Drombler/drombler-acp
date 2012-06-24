@@ -5,7 +5,6 @@
 package org.richclientplatform.core.docking;
 
 import java.lang.annotation.Documented;
-import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
@@ -16,18 +15,10 @@ import java.lang.annotation.Target;
  */
 @Documented
 @Retention(RetentionPolicy.SOURCE)
-@Target(ElementType.PACKAGE)
-public @interface DockingArea {
+@Target({})
+public @interface LayoutConstraints {
 
-    String id();
+    double prefWidth() default -1;
 
-    DockingAreaKind kind() default DockingAreaKind.VIEW;
-
-    int position();
-
-    int[] path();
-
-    boolean permanent() default false;
-
-    LayoutConstraints layoutConstraints() default @LayoutConstraints;
+    double prefHeight() default -1;
 }

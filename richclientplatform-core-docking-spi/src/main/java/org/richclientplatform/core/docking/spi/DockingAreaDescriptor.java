@@ -19,6 +19,7 @@ public class DockingAreaDescriptor {
     private int position;
     private List<Integer> path;
     private boolean permanent;
+    private LayoutConstraintsDescriptor layoutConstraints;
 
     public static DockingAreaDescriptor createDockingAreaDescriptor(DockingAreaType dockingArea) {
         DockingAreaDescriptor dockingAreaDescriptor = new DockingAreaDescriptor();
@@ -26,6 +27,8 @@ public class DockingAreaDescriptor {
         dockingAreaDescriptor.setPosition(dockingArea.getPosition());
         dockingAreaDescriptor.setPath(new ArrayList<>(dockingArea.getPaths().getPath()));
         dockingAreaDescriptor.setPermanent(dockingArea.isPermanent());
+        dockingAreaDescriptor.setLayoutConstraints(LayoutConstraintsDescriptor.createLayoutConstraintsDescriptor(
+                dockingArea.getLayoutConstraints()));
         return dockingAreaDescriptor;
     }
 
@@ -83,5 +86,19 @@ public class DockingAreaDescriptor {
      */
     public void setPermanent(boolean permanent) {
         this.permanent = permanent;
+    }
+
+    /**
+     * @return the layoutConstraints
+     */
+    public LayoutConstraintsDescriptor getLayoutConstraints() {
+        return layoutConstraints;
+    }
+
+    /**
+     * @param layoutConstraints the layoutConstraints to set
+     */
+    public void setLayoutConstraints(LayoutConstraintsDescriptor layoutConstraints) {
+        this.layoutConstraints = layoutConstraints;
     }
 }
