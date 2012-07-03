@@ -72,13 +72,15 @@ public class SimpleContext extends AbstractContext {
     }
 
     public void remove(Object obj) {
-        Set<Class<?>> types = getTypes(obj);
-        for (Class<?> type : types) {
-            remove(type, obj);
-        }
+        if (obj != null) {
+            Set<Class<?>> types = getTypes(obj);
+            for (Class<?> type : types) {
+                remove(type, obj);
+            }
 
-        for (Class<?> type : types) {
-            fireContextEvent(type);
+            for (Class<?> type : types) {
+                fireContextEvent(type);
+            }
         }
     }
 

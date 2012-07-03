@@ -57,7 +57,7 @@ public class ToolBarToggleButtonHandler<ToolBar, ToolBarButton, ToolBarToggleBut
 
     @Override
     protected ToolBarToggleButton createToolBarButton(ToolBarToggleEntryDescriptor toolBarEntryDescriptor, ToggleAction action, int ICON_SIZE) {
-        return toolBarToggleButtonFactory.createToolToggleBarButton(toolBarEntryDescriptor, action, ICON_SIZE);
+        return toolBarToggleButtonFactory.createToolBarToggleButton(toolBarEntryDescriptor, action, ICON_SIZE);
     }
 
     @Override

@@ -10,5 +10,5 @@ package org.richclientplatform.core.action.spi;
  */
 public interface ToolBarToggleButtonFactory<B, A> {
 
-    B createToolToggleBarButton(ToolBarToggleEntryDescriptor toolBarToggleEntryDescriptor, A action, int iconSize);
+    B createToolBarToggleButton(ToolBarToggleEntryDescriptor toolBarToggleEntryDescriptor, A action, int iconSize);
 }

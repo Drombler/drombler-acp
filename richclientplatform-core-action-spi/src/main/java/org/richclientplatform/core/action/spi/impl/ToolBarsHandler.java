@@ -4,6 +4,7 @@
  */
 package org.richclientplatform.core.action.spi.impl;
 
+import java.util.concurrent.Executor;
 import org.apache.felix.scr.annotations.Activate;
 import org.apache.felix.scr.annotations.Component;
 import org.apache.felix.scr.annotations.Deactivate;
@@ -17,6 +18,7 @@ import org.richclientplatform.core.action.spi.ToggleActionDescriptor;
 import org.richclientplatform.core.action.spi.ToggleMenuEntryDescriptor;
 import org.richclientplatform.core.action.spi.ToolBarDescriptor;
 import org.richclientplatform.core.action.spi.ToolBarFactory;
+import org.richclientplatform.core.application.ApplicationExecutorProvider;
 import org.richclientplatform.core.lib.util.PositionableAdapter;
 
 /**
@@ -24,19 +26,28 @@ import org.richclientplatform.core.lib.util.PositionableAdapter;
  * @author puce
  */
 @Component(immediate = true)
+@Reference(name = "applicationExecutorProvider", referenceInterface = ApplicationExecutorProvider.class)
 public class ToolBarsHandler<T, B> extends AbstractToolBarHandler<T, B> {
 
     private final ToolBarResolutionManager toolBarResolutionManager = new ToolBarResolutionManager();
     @Reference
     private ToolBarFactory<T> toolBarFactory;
+    private Executor applicationExecutor;
 
     protected void bindToolBarFactory(ToolBarFactory<T> toolBarFactory) {
         this.toolBarFactory = toolBarFactory;
-        resolveUnresolvedItems();
     }
 
     protected void unbindToolBarFactory(ToolBarFactory<T> toolBarFactory) {
         this.toolBarFactory = null;
+    }
+
+    protected void bindApplicationExecutorProvider(ApplicationExecutorProvider applicationExecutorProvider) {
+        applicationExecutor = applicationExecutorProvider.getApplicationExecutor();
+    }
+
+    protected void unbindApplicationExecutorProvider(ApplicationExecutorProvider applicationExecutorProvider) {
+        applicationExecutor = null;
     }
 
     @Activate
@@ -70,20 +81,27 @@ public class ToolBarsHandler<T, B> extends AbstractToolBarHandler<T, B> {
 
     @Override
     protected boolean isInitialized() {
-        return super.isInitialized() && toolBarFactory != null;
+        return super.isInitialized() && toolBarFactory != null && applicationExecutor != null;
     }
 
-    protected void resolveToolBar(ToolBarDescriptor toolBarDescriptor, BundleContext context) {
+    protected void resolveToolBar(final ToolBarDescriptor toolBarDescriptor, final BundleContext context) {
         if (isInitialized()) {
-            T toolBar = toolBarFactory.createToolBar(toolBarDescriptor);
-            getToolBarContainer().addToolBar(toolBarDescriptor.getId(),
-                    new PositionableAdapter<>(toolBar, toolBarDescriptor.getPosition()));
-            getToolBarContainer().setToolBarVisible(toolBarDescriptor.getId(), toolBarDescriptor.isVisible());
-            context.registerService(ToggleActionDescriptor.class, toolBarDescriptor.getShowToolBarActionDescriptor(),
-                    null);
-            context.registerService(ToggleMenuEntryDescriptor.class,
-                    toolBarDescriptor.getShowToolBarCheckMenuEntryDescriptor(), null);
+            Runnable runnable = new Runnable() {
 
+                @Override
+                public void run() {
+                    T toolBar = toolBarFactory.createToolBar(toolBarDescriptor);
+                    getToolBarContainer().addToolBar(toolBarDescriptor.getId(),
+                            new PositionableAdapter<>(toolBar, toolBarDescriptor.getPosition()));
+                    getToolBarContainer().setToolBarVisible(toolBarDescriptor.getId(), toolBarDescriptor.isVisible());
+                    context.registerService(ToggleActionDescriptor.class,
+                            toolBarDescriptor.getShowToolBarActionDescriptor(),
+                            null);
+                    context.registerService(ToggleMenuEntryDescriptor.class,
+                            toolBarDescriptor.getShowToolBarCheckMenuEntryDescriptor(), null);
+                }
+            };
+            applicationExecutor.execute(runnable);
         } else {
             registerUnresolvedToolBar(toolBarDescriptor, context);
         }

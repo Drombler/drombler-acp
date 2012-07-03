@@ -4,9 +4,10 @@
  */
 package org.richclientplatform.core.action.spi.impl;
 
+import java.util.concurrent.Executor;
 import org.apache.felix.scr.annotations.Activate;
 import org.apache.felix.scr.annotations.Deactivate;
-import org.osgi.framework.Bundle;
+import org.apache.felix.scr.annotations.Reference;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.component.ComponentContext;
@@ -16,19 +17,30 @@ import org.richclientplatform.core.action.spi.ActionRegistry;
 import org.richclientplatform.core.action.spi.ToolBarContainerListenerAdapter;
 import org.richclientplatform.core.action.spi.ToolBarContainerToolBarEvent;
 import org.richclientplatform.core.action.spi.ToolBarEntryDescriptor;
+import org.richclientplatform.core.application.ApplicationExecutorProvider;
 import org.richclientplatform.core.lib.util.PositionableAdapter;
 
 /**
  *
  * @author puce
  */
+@Reference(name = "applicationExecutorProvider", referenceInterface = ApplicationExecutorProvider.class)
 public abstract class AbstractToolBarButtonHandler<ToolBar, ToolBarButton, Action, D extends ToolBarEntryDescriptor> extends AbstractToolBarHandler<ToolBar, ToolBarButton> {
 
     private static final int ICON_SIZE = 24;
     private final ToolBarEntryResolutionManager<D> toolBarEntryResolutionManager = new ToolBarEntryResolutionManager<>();
     private final ActionRegistry actionRegistry = new ActionRegistry();
     private final ActionResolutionManager<D> actionResolutionManager = new ActionResolutionManager<>();
+    private Executor applicationExecutor;
     private ServiceTracker<Action, ServiceReference<Action>> tracker;
+
+    protected void bindApplicationExecutorProvider(ApplicationExecutorProvider applicationExecutorProvider) {
+        applicationExecutor = applicationExecutorProvider.getApplicationExecutor();
+    }
+
+    protected void unbindApplicationExecutorProvider(ApplicationExecutorProvider applicationExecutorProvider) {
+        applicationExecutor = null;
+    }
 
     @Activate
     @Override
@@ -52,7 +64,10 @@ public abstract class AbstractToolBarButtonHandler<ToolBar, ToolBarButton, Actio
         super.deactivate(context);
     }
 
-
+    @Override
+    protected boolean isInitialized() {
+        return super.isInitialized() && applicationExecutor != null;
+    }
 
     private ServiceTracker<Action, ServiceReference<Action>> createActionTracker(ComponentContext context) {
         return new ServiceTracker<>(context.getBundleContext(), getActionClass(),
@@ -82,14 +97,21 @@ public abstract class AbstractToolBarButtonHandler<ToolBar, ToolBarButton, Actio
                 });
     }
 
-    protected void resolveToolBarEntry(D toolBarEntryDescriptor, BundleContext context) {
+    protected void resolveToolBarEntry(final D toolBarEntryDescriptor, BundleContext context) {
         if (isInitialized() && getToolBarContainer().containsToolBar(toolBarEntryDescriptor.getToolBarId())) {
-//            System.out.println(getActionClass().getName() + ": " + toolBarEntryDescriptor.getActionId());
-            Action action = actionRegistry.getAction(toolBarEntryDescriptor.getActionId(), getActionClass(), context);
+            final Action action = actionRegistry.getAction(toolBarEntryDescriptor.getActionId(), getActionClass(),
+                    context);
             if (action != null) {
-                ToolBarButton button = createToolBarButton(toolBarEntryDescriptor, action, ICON_SIZE);
-                getToolBarContainer().addToolBarButton(toolBarEntryDescriptor.getToolBarId(),
-                        new PositionableAdapter<>(button, toolBarEntryDescriptor.getPosition()));
+                Runnable runnable = new Runnable() {
+
+                    @Override
+                    public void run() {
+                        ToolBarButton button = createToolBarButton(toolBarEntryDescriptor, action, ICON_SIZE);
+                        getToolBarContainer().addToolBarButton(toolBarEntryDescriptor.getToolBarId(),
+                                new PositionableAdapter<>(button, toolBarEntryDescriptor.getPosition()));
+                    }
+                };
+                applicationExecutor.execute(runnable);
             } else {
                 actionResolutionManager.addUnresolvedEntry(toolBarEntryDescriptor.getActionId(),
                         new UnresolvedEntry<>(toolBarEntryDescriptor, context));

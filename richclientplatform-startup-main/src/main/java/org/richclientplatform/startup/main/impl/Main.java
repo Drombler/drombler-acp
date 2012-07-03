@@ -8,6 +8,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Files;
@@ -68,9 +69,13 @@ public class Main {
      */
     public static final String CONFIG_DIRECTORY = "conf";
     /**
-     * Length of the jar URI prefix "jar:file:"
+     * The jar URI prefix "jar:"
      */
-    private static int FULL_JAR_URI_PREFIX_LENGTH = 9;
+    private static final String FULL_JAR_URI_PREFIX = "jar:";
+    /**
+     * Length of the jar URI prefix "jar:"
+     */
+    private static final int FULL_JAR_URI_PREFIX_LENGTH = 4;
     private static final ServiceLoader<FrameworkFactory> frameworkFactoryLoader = ServiceLoader.load(
             FrameworkFactory.class);
     private static Framework m_fwk = null;
@@ -246,6 +251,7 @@ public class Main {
         if (!Files.exists(userDirPath)) {
             Files.createDirectories(userDirPath);
         }
+        System.out.println("User dir: "+ userDirPath);
         Properties userConfigProps = new Properties(installConfigProps);
         loadConfigProperties(userConfigProps, userDirPath);
 
@@ -381,7 +387,11 @@ public class Main {
         Class<Main> type = Main.class;
         String jarResourceURIString = type.getResource("/" + type.getName().replace(".", "/") + ".class").toURI().toString();
         int endOfJarPathIndex = jarResourceURIString.indexOf("!/");
-        Path mainJarPath = Paths.get(jarResourceURIString.substring(FULL_JAR_URI_PREFIX_LENGTH, endOfJarPathIndex));
+        String mainJarURIString = endOfJarPathIndex >= 0 ? jarResourceURIString.substring(0, endOfJarPathIndex) : jarResourceURIString;
+        if (mainJarURIString.startsWith(FULL_JAR_URI_PREFIX)) {
+            mainJarURIString = mainJarURIString.substring(FULL_JAR_URI_PREFIX_LENGTH);
+        }
+        Path mainJarPath = Paths.get(URI.create(mainJarURIString));
         // <install-dir>/bin/<main-jar>.jar
         return mainJarPath.getParent().getParent();
     }
