@@ -34,8 +34,6 @@ import org.richclientplatform.startup.main.ApplicationConfigProvider;
  */
 public class Main {
 
-    public static final String JAVAFX_VERSION_PROPERTY = "jfx.specification.version";
-    public static final String JAVAFX_VERSION_2_1_0 = "2.1.0";
     public static final String USER_DIR_PROPERTY = "platform.userdir";
 
     /**
@@ -209,35 +207,6 @@ public class Main {
         main.start(commandLineArgs);
     }
 
-    private void registerShutdownHook(Properties userConfigProps) {
-        // If enabled, register a shutdown hook to make sure the framework is
-        // cleanly shutdown when the VM exits.
-        String enableHook = userConfigProps.getProperty(SHUTDOWN_HOOK_PROP);
-        if ((enableHook == null) || !enableHook.equalsIgnoreCase("false")) {
-            Runtime.getRuntime().addShutdownHook(new Thread("Felix Shutdown Hook") {
-
-                @Override
-                public void run() {
-                    try {
-                        if (m_fwk != null) {
-                            m_fwk.stop();
-                            m_fwk.waitForStop(0);
-                        }
-                    } catch (Exception ex) {
-                        System.err.println("Error stopping framework: " + ex);
-                    }
-                }
-            });
-        }
-    }
-
-    private void resolveProperties(Properties configProps) throws IllegalArgumentException {
-        for (String propertyName : configProps.stringPropertyNames()) {
-            configProps.setProperty(propertyName,
-                    Util.substVars(configProps.getProperty(propertyName), propertyName, null, configProps));
-        }
-    }
-
     public void start(CommandLineArgs commandLineArgs) throws URISyntaxException, MalformedURLException, IOException, MissingPropertyException {
         Path installDirPath = getInstallDirPath();
 
@@ -246,7 +215,8 @@ public class Main {
         Properties defaultConfigProps = getDefaultConfigProps();
         Properties installConfigProps = new Properties(defaultConfigProps);
         loadConfigProperties(installConfigProps, installDirPath);
-
+        overrideInstallConfigProps(installConfigProps, commandLineArgs);
+        
         Path userDirPath = getUserDirPath(installConfigProps);
         if (!Files.exists(userDirPath)) {
             Files.createDirectories(userDirPath);
@@ -257,18 +227,6 @@ public class Main {
 
         resolveProperties(userConfigProps);
         copySystemProperties(userConfigProps);
-
-        // If there is a passed in bundle auto-deploy directory, then
-        // that overwrites anything in the config file.
-        if (commandLineArgs.getBundleDir() != null) {
-            userConfigProps.setProperty(AutoProcessor.AUTO_DEPLOY_DIR_PROPERY, commandLineArgs.getBundleDir());
-        }
-
-        // If there is a passed in bundle cache directory, then
-        // that overwrites anything in the config file.
-        if (commandLineArgs.getCacheDir() != null) {
-            userConfigProps.setProperty(Constants.FRAMEWORK_STORAGE, commandLineArgs.getCacheDir());
-        }
 
         registerShutdownHook(userConfigProps);
 
@@ -303,7 +261,42 @@ public class Main {
             System.exit(0);
         }
     }
+    
+    private void registerShutdownHook(Properties userConfigProps) {
+        // If enabled, register a shutdown hook to make sure the framework is
+        // cleanly shutdown when the VM exits.
+        String enableHook = userConfigProps.getProperty(SHUTDOWN_HOOK_PROP);
+        if ((enableHook == null) || !enableHook.equalsIgnoreCase("false")) {
+            Runtime.getRuntime().addShutdownHook(new Thread("Felix Shutdown Hook") {
 
+                @Override
+                public void run() {
+                    try {
+                        if (m_fwk != null) {
+                            m_fwk.stop();
+                            m_fwk.waitForStop(0);
+                        }
+                    } catch (Exception ex) {
+                        System.err.println("Error stopping framework: " + ex);
+                    }
+                }
+            });
+        }
+    }
+
+    private void resolveProperties(Properties configProps) throws IllegalArgumentException {
+        for (String propertyName : configProps.stringPropertyNames()) {
+            configProps.setProperty(propertyName,
+                    Util.substVars(configProps.getProperty(propertyName), propertyName, null, configProps));
+        }
+    }
+    
+    private void overrideInstallConfigProps(Properties installConfigProps, CommandLineArgs commandLineArgs) {
+        if (commandLineArgs.getUserDir() != null) {
+            installConfigProps.setProperty(USER_DIR_PROPERTY, commandLineArgs.getUserDir());
+        }
+    }
+    
     private Path getUserDirPath(Properties installConfigProps) throws MissingPropertyException {
         String userDirName = installConfigProps.getProperty(USER_DIR_PROPERTY);
         if (userDirName == null) {
@@ -330,7 +323,7 @@ public class Main {
      * </p>
      *
      */
-    private void loadSystemProperties(Path rootDirPath) throws MalformedURLException, IOException {
+    protected void loadSystemProperties(Path rootDirPath) throws MalformedURLException, IOException {
         Properties props = new Properties();
         loadProperties(props, SYSTEM_PROPERTIES_PROP, rootDirPath, SYSTEM_PROPERTIES_FILE_VALUE);
 
@@ -338,9 +331,6 @@ public class Main {
             System.setProperty(propertyName, Util.substVars(props.getProperty(propertyName), propertyName, null, null));
         }
         
-        if (System.getProperty(JAVAFX_VERSION_PROPERTY) == null){
-            System.setProperty(JAVAFX_VERSION_PROPERTY, JAVAFX_VERSION_2_1_0);
-        }
     }
 
     private void loadProperties(Properties props, String systemPropertyName, Path rootDirPath, String propertiesFileName) throws IOException, MalformedURLException {

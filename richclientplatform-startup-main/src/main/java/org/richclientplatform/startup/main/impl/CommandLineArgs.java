@@ -9,58 +9,49 @@ package org.richclientplatform.startup.main.impl;
  * @author puce
  */
 public class CommandLineArgs {
+
     /**
-     * Switch for specifying bundle directory.
+     * Switch for specifying the user directory.
      *
      */
-    public static final String BUNDLE_DIR_SWITCH = "-b";
-    
-    private final String bundleDir;
-    private final String cacheDir;
+    public static final String USER_DIR_SWITCH = "--userDir";
+    private final String userDir;
 
-    private CommandLineArgs(String bundleDir, String cacheDir) {
-        this.bundleDir = bundleDir;
-        this.cacheDir = cacheDir;
+    private CommandLineArgs(String userDir) {
+        this.userDir = userDir;
     }
 
-    public static CommandLineArgs parseCommandLineArgs(String[] args){
-        // Look for bundle directory and/or cache directory.
-        // We support at most one argument, which is the bundle
-        // cache directory.
-        String bundleDir = null;
-        String cacheDir = null;
-        boolean expectBundleDir = false;
+    public static CommandLineArgs parseCommandLineArgs(String[] args) {
+        String userDir = null;
+        boolean expectUserDir = false;
         for (int i = 0; i < args.length; i++) {
-            if (args[i].equals(BUNDLE_DIR_SWITCH)) {
-                expectBundleDir = true;
-            } else if (expectBundleDir) {
-                bundleDir = args[i];
-                expectBundleDir = false;
+            if (args[i].equals(USER_DIR_SWITCH)) {
+                expectUserDir = true;
+            } else if (expectUserDir) {
+                userDir = args[i];
+                expectUserDir = false;
             } else {
-                cacheDir = args[i];
+                wrongArguments();
             }
         }
 
-        if ((args.length > 3) || (expectBundleDir && bundleDir == null)) {
-            System.out.println("Usage: [-b <bundle-deploy-dir>] [<bundle-cache-dir>]");
-            System.exit(0);
+        if ((args.length > 2) || (expectUserDir && userDir == null)) {
+            wrongArguments();
         }
-        
-        return new CommandLineArgs(bundleDir, cacheDir);
+
+        return new CommandLineArgs(userDir);
     }
-    /**
-     * @return the bundleDir
-     */
-    public String getBundleDir() {
-        return bundleDir;
+
+    private static void wrongArguments() {
+        System.out.println("Usage: [--userDir <user-directory>]");
+        System.exit(0);
     }
 
     /**
-     * @return the cacheDir
+     * @return the userDir
      */
-    public String getCacheDir() {
-        return cacheDir;
+    public String getUserDir() {
+        return userDir;
     }
-    
-    
+
 }
