@@ -5,7 +5,7 @@
         <groupId>org.drombler.acp</groupId>
         <artifactId>drombler-acp-parent</artifactId>
         <version>0.1-SNAPSHOT</version>
-        <relativePath>richclientplatform-parent</relativePath>
+        <relativePath>drombler-acp-parent</relativePath>
     </parent>
     <artifactId>drombler-acp-all</artifactId>
     <packaging>pom</packaging>
@@ -14,18 +14,18 @@
     <inceptionYear>2012</inceptionYear>
     
     <modules>
-        <module>richclientplatform-parent</module>
-        <module>richclientplatform-startup-main</module>
-        <module>richclientplatform-core-application</module>
-        <module>richclientplatform-core-util</module>
-        <module>richclientplatform-core-action</module>
-        <module>richclientplatform-core-action-spi</module>
-        <module>richclientplatform-core-docking</module>
-        <module>richclientplatform-core-docking-spi</module>
-        <module>richclientplatform-core-standard-action</module>
-        <module>richclientplatform-core-standard-action-locale-de</module>
-        <module>richclientplatform-core-standard-docking</module>
-        <module>richclientplatform-locale-all</module>
-        <module>richclientplatform-locale-de</module>
+        <module>drombler-acp-parent</module>
+        <module>drombler-acp-startup-main</module>
+        <module>drombler-acp-core-application</module>
+        <module>drombler-acp-core-commons</module>
+        <module>drombler-acp-core-action</module>
+        <module>drombler-acp-core-action-spi</module>
+        <module>drombler-acp-core-docking</module>
+        <module>drombler-acp-core-docking-spi</module>
+        <module>drombler-acp-core-standard-action</module>
+        <module>drombler-acp-core-standard-action-locale-de</module>
+        <module>drombler-acp-core-standard-docking</module>
+        <module>drombler-acp-locale-all</module>
+        <module>drombler-acp-locale-de</module>
     </modules>
 </project>

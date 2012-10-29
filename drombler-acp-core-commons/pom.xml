@@ -6,13 +6,13 @@
         <groupId>org.drombler.acp</groupId>
         <artifactId>drombler-acp-parent</artifactId>
         <version>0.1-SNAPSHOT</version>
-        <relativePath>../richclientplatform-parent</relativePath>
+        <relativePath>../drombler-acp-parent</relativePath>
     </parent>
   
-    <artifactId>drombler-acp-core-util</artifactId>
+    <artifactId>drombler-acp-core-commons</artifactId>
     <packaging>bundle</packaging>
     
-    <name>Drombler - ACP - Core - Utilitly Library</name>
+    <name>Drombler - ACP - Core - Commons</name>
     <inceptionYear>2012</inceptionYear>
 
     <build>

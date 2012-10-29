@@ -5,7 +5,7 @@
         <groupId>org.drombler.acp</groupId>
         <artifactId>drombler-acp-parent</artifactId>
         <version>0.1-SNAPSHOT</version>
-        <relativePath>../richclientplatform-parent</relativePath>
+        <relativePath>../drombler-acp-parent</relativePath>
     </parent>
 
     <artifactId>drombler-acp-core-standard-action-locale-de</artifactId>
