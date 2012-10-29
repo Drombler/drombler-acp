@@ -1,2 +1,2 @@
-org.richclientplatform.core.docking.impl.DockingAreaAnnotationProcessor
-org.richclientplatform.core.docking.impl.DockingAnnotationProcessor
+org.drombler.acp.core.docking.impl.DockingAreaAnnotationProcessor
+org.drombler.acp.core.docking.impl.DockingAnnotationProcessor

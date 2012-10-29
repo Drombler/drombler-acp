@@ -1,0 +1,122 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package org.drombler.acp.core.action.spi;
+
+import org.apache.commons.lang.StringUtils;
+import org.osgi.framework.Bundle;
+import org.drombler.acp.core.action.jaxb.ToolBarType;
+import org.drombler.acp.core.action.spi.impl.ShowToolBarAction;
+import org.drombler.acp.core.lib.util.Positionable;
+import org.drombler.acp.core.lib.util.Resources;
+
+/**
+ *
+ * @author puce
+ */
+public class ToolBarDescriptor implements Positionable {
+
+    private String id;
+    private String displayName;
+    private int position;
+    private boolean visible;
+    private ToggleActionDescriptor showToolBarActionDescriptor;
+    private ToggleMenuEntryDescriptor showToolBarCheckMenuEntryDescriptor;
+
+    public String getId() {
+        return id;
+    }
+
+    /**
+     * @param id the id to set
+     */
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    /**
+     * @param displayName the displayName to set
+     */
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
+    }
+
+    /**
+     * @return the position
+     */
+    @Override
+    public int getPosition() {
+        return position;
+    }
+
+    /**
+     * @param position the position to set
+     */
+    public void setPosition(int position) {
+        this.position = position;
+    }
+
+    /**
+     * @return the visible
+     */
+    public boolean isVisible() {
+        return visible;
+    }
+
+    /**
+     * @param visible the visible to set
+     */
+    public void setVisible(boolean visible) {
+        this.visible = visible;
+    }
+
+    public static <T, B> ToolBarDescriptor createToolBarDescriptor(ToolBarType toolBarType, Bundle bundle, ToolBarContainer<T, B> toolBarContainer) {
+        ToolBarDescriptor toolBarDescriptor = new ToolBarDescriptor();
+
+        toolBarDescriptor.setId(StringUtils.stripToNull(toolBarType.getId()));
+        toolBarDescriptor.setDisplayName(Resources.getResourceString(toolBarType.getPackage(),
+                toolBarType.getDisplayName(), bundle));
+        toolBarDescriptor.setPosition(toolBarType.getPosition());
+        toolBarDescriptor.setVisible(toolBarType.isVisible());
+        ToggleActionDescriptor actionDescriptor = createShowToolBarActionDescriptor(toolBarDescriptor, toolBarContainer);
+        toolBarDescriptor.setShowToolBarActionDescriptor(actionDescriptor);
+        toolBarDescriptor.setShowToolBarCheckMenuEntryDescriptor(new ToggleMenuEntryDescriptor(actionDescriptor.getId(),
+                "View/Toolbars", toolBarType.getPosition()));
+        return toolBarDescriptor;
+    }
+
+    private static <T, B> ToggleActionDescriptor createShowToolBarActionDescriptor(ToolBarDescriptor toolBarDescriptor, ToolBarContainer<T, B> toolBarContainer) {
+        ToggleActionDescriptor actionDescriptor = new ToggleActionDescriptor();
+        actionDescriptor.setId(ShowToolBarAction.class.getName() + "#" + toolBarDescriptor.getId()); // TODO: ok?
+        actionDescriptor.setDisplayName(toolBarDescriptor.getDisplayName());
+        actionDescriptor.setListener(new ShowToolBarAction(toolBarDescriptor.getId(), toolBarContainer));
+        return actionDescriptor;
+    }
+
+    public ToggleActionDescriptor getShowToolBarActionDescriptor() {
+        return showToolBarActionDescriptor;
+    }
+
+    /**
+     * @param showToolBarActionDescriptor the showToolBarActionDescriptor to set
+     */
+    public void setShowToolBarActionDescriptor(ToggleActionDescriptor showToolBarActionDescriptor) {
+        this.showToolBarActionDescriptor = showToolBarActionDescriptor;
+    }
+
+    public ToggleMenuEntryDescriptor getShowToolBarCheckMenuEntryDescriptor() {
+        return showToolBarCheckMenuEntryDescriptor;
+    }
+
+    /**
+     * @param showToolBarCheckMenuEntryDescriptor the showToolBarCheckMenuEntryDescriptor to set
+     */
+    public void setShowToolBarCheckMenuEntryDescriptor(ToggleMenuEntryDescriptor showToolBarCheckMenuEntryDescriptor) {
+        this.showToolBarCheckMenuEntryDescriptor = showToolBarCheckMenuEntryDescriptor;
+    }
+}

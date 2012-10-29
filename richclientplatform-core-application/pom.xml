@@ -2,15 +2,15 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>org.richclientplatform</groupId>
-        <artifactId>richclientplatform-parent</artifactId>
+        <groupId>org.drombler.acp</groupId>
+        <artifactId>drombler-acp-parent</artifactId>
         <version>0.1-SNAPSHOT</version>
         <relativePath>../richclientplatform-parent</relativePath>
     </parent>
-    <artifactId>richclientplatform-core-application</artifactId>
+    <artifactId>drombler-acp-core-application</artifactId>
     <packaging>bundle</packaging>
 
-    <name>Rich Client Platform - Core - Application</name>
+    <name>Drombler - ACP - Core - Application</name>
     <inceptionYear>2012</inceptionYear>
     <properties>
 <!--  Doesn't work!?  Error: javac: invalid flag: -Xlint:all -proc:none -->
@@ -45,7 +45,7 @@
                             <goal>generate</goal>
                         </goals>
                         <configuration>
-                            <generatePackage>org.richclientplatform.core.application.jaxb</generatePackage>
+                            <generatePackage>org.drombler.acp.core.application.jaxb</generatePackage>
                         </configuration>
                     </execution>
                 </executions>
@@ -54,20 +54,19 @@
     </build>
     <dependencies>
         <dependency>
-            <groupId>org.richclientplatform</groupId>
-            <artifactId>richclientplatform-startup-main</artifactId>
+            <groupId>org.drombler.acp</groupId>
+            <artifactId>drombler-acp-startup-main</artifactId>
             <version>${project.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>org.richclientplatform</groupId>
-            <artifactId>richclientplatform-core-util</artifactId>
+            <groupId>org.drombler.acp</groupId>
+            <artifactId>drombler-acp-core-util</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>commons-lang</groupId>
             <artifactId>commons-lang</artifactId>
-            <version>2.6</version>
         </dependency>
         <dependency>
             <groupId>org.apache.felix</groupId>

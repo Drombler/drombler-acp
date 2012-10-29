@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.richclientplatform.org/schema/actions" 
-        xmlns:tns="http://www.richclientplatform.org/schema/actions" elementFormDefault="qualified" 
+<schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.drombler.org/schema/acp/actions" 
+        xmlns:tns="http://www.drombler.org/schema/acp/actions" elementFormDefault="qualified" 
         version="${project.version}">
 
     <element name="actions">

@@ -2,15 +2,15 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>org.richclientplatform</groupId>
-        <artifactId>richclientplatform-parent</artifactId>
+        <groupId>org.drombler.acp</groupId>
+        <artifactId>drombler-acp-parent</artifactId>
         <version>0.1-SNAPSHOT</version>
         <relativePath>../richclientplatform-parent</relativePath>
     </parent>
-    <artifactId>richclientplatform-startup-main</artifactId>
+    <artifactId>drombler-acp-startup-main</artifactId>
     <packaging>bundle</packaging>
 
-    <name>Rich Client Platform - Startup - Main</name>
+    <name>Drombler - ACP - Startup - Main</name>
     <inceptionYear>2012</inceptionYear>
     
     <properties>
@@ -27,18 +27,18 @@
                 <configuration>
                     <instructions>
                         <_donotcopy>(CVS|.svn|config.properties)</_donotcopy>
-                        <Main-Class>org.richclientplatform.startup.main.impl.Main</Main-Class>
+                        <Main-Class>org.drombler.acp.startup.main.impl.Main</Main-Class>
 <!--                        <Bundle-SymbolicName>org.apache.felix.main</Bundle-SymbolicName>
                         <Bundle-Name>Apache Felix</Bundle-Name>
                         <Bundle-Description>OSGi R4 framework.</Bundle-Description>
                         <Bundle-Vendor>The Apache Software Foundation</Bundle-Vendor>-->
                         <Embed-Dependency>*;artifactId=org.apache.felix.framework;inline=true</Embed-Dependency>
 <!--                        <Private-Package>org.richclientplatform.startup.main.*</Private-Package>-->
-                        <Export-Package>!org.osgi.service.log, !org.osgi.service.obr,org.osgi.*, !org.richclientplatform.startup.main.impl.*, org.richclientplatform.startup.main.*</Export-Package>
+                        <Export-Package>!org.osgi.service.log, !org.osgi.service.obr,org.osgi.*, !org.drombler.acp.startup.main.impl.*, org.drombler.acp.startup.main.*</Export-Package>
                         <Import-Package>!*</Import-Package>
                     </instructions>
                     <versions>
-                        <richclientplatform.osgi.version.clean>${project.version}</richclientplatform.osgi.version.clean>
+                        <drombler.acp.osgi.version.clean>${project.version}</drombler.acp.osgi.version.clean>
                     </versions>
                 </configuration>
                 <executions>

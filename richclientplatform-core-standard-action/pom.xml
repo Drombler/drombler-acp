@@ -2,16 +2,16 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>org.richclientplatform</groupId>
-        <artifactId>richclientplatform-parent</artifactId>
+        <groupId>org.drombler.acp</groupId>
+        <artifactId>drombler-acp-parent</artifactId>
         <version>0.1-SNAPSHOT</version>
         <relativePath>../richclientplatform-parent</relativePath>
     </parent>
 
-    <artifactId>richclientplatform-core-standard-action</artifactId>
+    <artifactId>drombler-acp-core-standard-action</artifactId>
     <packaging>bundle</packaging>
 
-    <name>Rich Client Platform - Core - Standard - Action</name>
+    <name>Drombler - ACP - Core - Standard - Action</name>
     <inceptionYear>2012</inceptionYear>
 
 
@@ -41,13 +41,13 @@
    
     <dependencies>
         <dependency>
-            <groupId>org.richclientplatform</groupId>
-            <artifactId>richclientplatform-core-action</artifactId>
+            <groupId>org.drombler.acp</groupId>
+            <artifactId>drombler-acp-core-action</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.richclientplatform</groupId>
-            <artifactId>richclientplatform-core-util</artifactId>
+            <groupId>org.drombler.acp</groupId>
+            <artifactId>drombler-acp-core-util</artifactId>
             <version>${project.version}</version>
         </dependency>
         

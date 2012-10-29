@@ -3,21 +3,20 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>org.projectx</groupId>
-        <artifactId>projectx-oss-parent</artifactId>
+        <groupId>org.drombler</groupId>
+        <artifactId>drombler-oss-parent</artifactId>
         <version>0.1-SNAPSHOT</version>
         <relativePath></relativePath>
     </parent>
-    <groupId>org.richclientplatform</groupId>
-    <artifactId>richclientplatform-parent</artifactId>
+    <groupId>org.drombler.acp</groupId>
+    <artifactId>drombler-acp-parent</artifactId>
     <version>0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
     
-    <name>Rich Client Platform - Parent</name>
+    <name>Drombler - ACP - Parent</name>
+    <description>Drombler - Abstract Client Platform - Parent</description>
     <inceptionYear>2012</inceptionYear>
     
-
-
     <build>
         <pluginManagement>        
             <plugins>
