@@ -1,6 +1,16 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+ *         COMMON DEVELOPMENT AND DISTRIBUTION LICENSE (CDDL) Notice
+ *
+ * The contents of this file are subject to the COMMON DEVELOPMENT AND DISTRIBUTION LICENSE (CDDL)
+ * Version 1.0 (the "License"); you may not use this file except in
+ * compliance with the License. A copy of the License is available at
+ * http://www.opensource.org/licenses/cddl1.txt
+ *
+ * The Original Code is Drombler.org. The Initial Developer of the
+ * Original Code is Florian Brunner (Sourceforge.net user: puce).
+ * Copyright 2012 Drombler.org. All Rights Reserved.
+ *
+ * Contributor(s): .
  */
 package org.drombler.acp.startup.main.impl;
 
@@ -80,14 +90,6 @@ public class AutoProcessor {
      */
     public static final String AUTO_START_PROP = "felix.auto.start";
 
-    /**
-     * Used to instigate auto-deploy directory process and auto-install/auto-start
-     * configuration property processing during.
-     *
-     * @param configMap Map of configuration properties.
-     * @param context The system bundle context.
-     *
-     */
     public void process(Framework framework, Map<String, String> configMap, Path installDirPath, Path userDirPath) throws IOException {
         if (configMap == null) {
             configMap = new HashMap<>();
@@ -113,12 +115,6 @@ public class AutoProcessor {
         }
     }
 
-    /**
-     * <p>
-     * Processes bundles in the auto-deploy directory, performing the
-     * specified deploy actions.
-     * </p>
-     */
     private void processAutoDeploy(Map<String, String> configMap, BundleContext frameworkContext, FrameworkStartLevel fsl,
             Path installDirPath, Path userDirPath) throws IOException {
         Set<BundleAction> bundleActions = getBundleActions(configMap);
@@ -169,12 +165,6 @@ public class AutoProcessor {
         }
     }
 
-    /**
-     * <p>
-     * Processes the auto-install and auto-start properties from the
-     * specified configuration properties.
-     * </p>
-     */
     private void processAutoProperties(Map<String, String> configMap, BundleContext frameworkContext, FrameworkStartLevel fsl) {
         installAutoInstallBundles(configMap, frameworkContext, fsl);
         startAutoStartBundles(configMap, frameworkContext);
@@ -182,23 +172,12 @@ public class AutoProcessor {
     }
 
     private void installAutoInstallBundles(Map<String, String> configMap, BundleContext frameworkContext, FrameworkStartLevel fsl) {
-        // Retrieve all auto-install and auto-start properties and install
-        // their associated bundles. The auto-install property specifies a
-        // space-delimited list of bundle URLs to be automatically installed
-        // into each new profile, while the auto-start property specifies
-        // bundles to be installed and started. The start level to which the
-        // bundles are assigned is specified by appending a ".n" to the
-        // property name, where "n" is the desired start level for the list
-        // of bundles. If no start level is specified, the default start
-        // level is assumed.
         for (String key : configMap.keySet()) {
             key = key.toLowerCase();
 
-            // Ignore all keys that are not an auto property.
             if (key.startsWith(AUTO_INSTALL_PROP) || key.startsWith(AUTO_START_PROP)) {
                 int startLevel = getAutoStartLevel(fsl, key);
 
-                // Parse and install the bundles associated with the key.
                 StringTokenizer st = new StringTokenizer(configMap.get(key), "\" ", true);
                 for (String location = nextLocation(st); location != null; location = nextLocation(st)) {
                     installBundle(location, frameworkContext, startLevel);
@@ -288,7 +267,6 @@ public class AutoProcessor {
     }
 
     private int getStartLevel(FrameworkStartLevel fsl, Map<String, String> configMap) {
-        // Get start level for auto-deploy bundles.
         int startLevel = fsl.getInitialBundleStartLevel();
         if (configMap.get(AUTO_DEPLOY_STARTLEVEL_PROPERY) != null) {
             try {
@@ -302,7 +280,6 @@ public class AutoProcessor {
     }
 
     private Set<BundleAction> getBundleActions(Map<String, String> configMap) {
-        // Determine if auto deploy actions to perform.
         String action = configMap.get(AUTO_DEPLOY_ACTION_PROPERY);
         if (action == null) {
             action = "";
