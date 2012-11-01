@@ -52,7 +52,7 @@ Contributor(s): .
         </dependency>
         <dependency>
             <groupId>org.drombler.acp</groupId>
-            <artifactId>drombler-acp-core-util</artifactId>
+            <artifactId>drombler-acp-core-commons</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>
