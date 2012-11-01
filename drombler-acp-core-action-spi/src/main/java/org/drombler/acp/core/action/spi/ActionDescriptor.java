@@ -16,7 +16,7 @@ package org.drombler.acp.core.action.spi;
 
 import org.osgi.framework.Bundle;
 import org.drombler.acp.core.action.jaxb.ActionType;
-import org.drombler.acp.core.lib.util.context.Context;
+import org.drombler.acp.core.commons.util.context.Context;
 
 /**
  *

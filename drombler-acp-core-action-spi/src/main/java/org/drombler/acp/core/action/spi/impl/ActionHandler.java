@@ -20,13 +20,13 @@ import org.apache.felix.scr.annotations.Deactivate;
 import org.apache.felix.scr.annotations.Reference;
 import org.apache.felix.scr.annotations.ReferenceCardinality;
 import org.apache.felix.scr.annotations.ReferencePolicy;
-import org.osgi.framework.BundleContext;
-import org.osgi.framework.ServiceReference;
-import org.osgi.service.component.ComponentContext;
 import org.drombler.acp.core.action.jaxb.ActionType;
 import org.drombler.acp.core.action.jaxb.ActionsType;
 import org.drombler.acp.core.action.spi.ActionDescriptor;
 import org.drombler.acp.core.action.spi.ActionFactory;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceReference;
+import org.osgi.service.component.ComponentContext;
 
 /**
  *

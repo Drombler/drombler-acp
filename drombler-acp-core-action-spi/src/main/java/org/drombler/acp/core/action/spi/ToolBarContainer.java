@@ -14,7 +14,7 @@
  */
 package org.drombler.acp.core.action.spi;
 
-import org.drombler.acp.core.lib.util.PositionableAdapter;
+import org.drombler.acp.core.commons.util.PositionableAdapter;
 
 /**
  *

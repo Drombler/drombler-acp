@@ -18,17 +18,17 @@ import java.util.concurrent.Executor;
 import org.apache.felix.scr.annotations.Activate;
 import org.apache.felix.scr.annotations.Deactivate;
 import org.apache.felix.scr.annotations.Reference;
-import org.osgi.framework.BundleContext;
-import org.osgi.framework.ServiceReference;
-import org.osgi.service.component.ComponentContext;
-import org.osgi.util.tracker.ServiceTracker;
-import org.osgi.util.tracker.ServiceTrackerCustomizer;
 import org.drombler.acp.core.action.spi.ActionRegistry;
 import org.drombler.acp.core.action.spi.ToolBarContainerListenerAdapter;
 import org.drombler.acp.core.action.spi.ToolBarContainerToolBarEvent;
 import org.drombler.acp.core.action.spi.ToolBarEntryDescriptor;
 import org.drombler.acp.core.application.ApplicationExecutorProvider;
-import org.drombler.acp.core.lib.util.PositionableAdapter;
+import org.drombler.acp.core.commons.util.PositionableAdapter;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceReference;
+import org.osgi.service.component.ComponentContext;
+import org.osgi.util.tracker.ServiceTracker;
+import org.osgi.util.tracker.ServiceTrackerCustomizer;
 
 /**
  *

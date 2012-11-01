@@ -19,9 +19,6 @@ import org.apache.felix.scr.annotations.Activate;
 import org.apache.felix.scr.annotations.Component;
 import org.apache.felix.scr.annotations.Deactivate;
 import org.apache.felix.scr.annotations.Reference;
-import org.osgi.framework.Bundle;
-import org.osgi.framework.BundleContext;
-import org.osgi.service.component.ComponentContext;
 import org.drombler.acp.core.action.jaxb.ToolBarType;
 import org.drombler.acp.core.action.jaxb.ToolBarsType;
 import org.drombler.acp.core.action.spi.ToggleActionDescriptor;
@@ -29,7 +26,10 @@ import org.drombler.acp.core.action.spi.ToggleMenuEntryDescriptor;
 import org.drombler.acp.core.action.spi.ToolBarDescriptor;
 import org.drombler.acp.core.action.spi.ToolBarFactory;
 import org.drombler.acp.core.application.ApplicationExecutorProvider;
-import org.drombler.acp.core.lib.util.PositionableAdapter;
+import org.drombler.acp.core.commons.util.PositionableAdapter;
+import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
+import org.osgi.service.component.ComponentContext;
 
 /**
  *

@@ -15,12 +15,12 @@
 package org.drombler.acp.core.action.spi;
 
 import org.apache.commons.lang.StringUtils;
-import org.osgi.framework.Bundle;
 import org.drombler.acp.core.action.jaxb.ActionType;
-import org.drombler.acp.core.lib.util.context.ActiveContextSensitive;
-import org.drombler.acp.core.lib.util.context.ApplicationContextSensitive;
-import org.drombler.acp.core.lib.util.context.Context;
-import org.drombler.acp.core.lib.util.Resources;
+import org.drombler.acp.core.commons.util.Resources;
+import org.drombler.acp.core.commons.util.context.ActiveContextSensitive;
+import org.drombler.acp.core.commons.util.context.ApplicationContextSensitive;
+import org.drombler.acp.core.commons.util.context.Context;
+import org.osgi.framework.Bundle;
 
 /**
  *

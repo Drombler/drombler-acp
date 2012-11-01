@@ -15,11 +15,11 @@
 package org.drombler.acp.core.action.spi;
 
 import org.apache.commons.lang.StringUtils;
-import org.osgi.framework.Bundle;
 import org.drombler.acp.core.action.jaxb.ToolBarType;
 import org.drombler.acp.core.action.spi.impl.ShowToolBarAction;
-import org.drombler.acp.core.lib.util.Positionable;
-import org.drombler.acp.core.lib.util.Resources;
+import org.drombler.acp.core.commons.util.Positionable;
+import org.drombler.acp.core.commons.util.Resources;
+import org.osgi.framework.Bundle;
 
 /**
  *

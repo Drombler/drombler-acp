@@ -23,13 +23,13 @@ import org.apache.felix.scr.annotations.Reference;
 import org.apache.felix.scr.annotations.ReferenceCardinality;
 import org.apache.felix.scr.annotations.ReferencePolicy;
 import org.apache.felix.scr.annotations.References;
-import org.osgi.framework.BundleContext;
-import org.osgi.framework.ServiceReference;
 import org.drombler.acp.core.action.jaxb.ActionsType;
 import org.drombler.acp.core.action.spi.ActionRegistry;
 import org.drombler.acp.core.application.ApplicationExecutorProvider;
-import org.drombler.acp.core.lib.util.context.ActiveContextProvider;
-import org.drombler.acp.core.lib.util.context.ApplicationContextProvider;
+import org.drombler.acp.core.commons.util.context.ActiveContextProvider;
+import org.drombler.acp.core.commons.util.context.ApplicationContextProvider;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceReference;
 
 /**
  *

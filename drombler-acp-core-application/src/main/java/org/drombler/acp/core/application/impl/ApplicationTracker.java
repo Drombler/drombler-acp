@@ -34,15 +34,15 @@ import org.apache.felix.scr.annotations.Deactivate;
 import org.apache.felix.scr.annotations.Reference;
 import org.apache.felix.scr.annotations.ReferenceCardinality;
 import org.apache.felix.scr.annotations.ReferencePolicy;
+import org.drombler.acp.core.application.ExtensionPoint;
+import org.drombler.acp.core.application.jaxb.ApplicationType;
+import org.drombler.acp.core.application.jaxb.ExtensionsType;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleEvent;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.util.tracker.BundleTracker;
 import org.osgi.util.tracker.BundleTrackerCustomizer;
-import org.drombler.acp.core.application.ExtensionPoint;
-import org.drombler.acp.core.application.jaxb.ApplicationType;
-import org.drombler.acp.core.application.jaxb.ExtensionsType;
 
 /**
  *
