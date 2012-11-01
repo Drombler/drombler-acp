@@ -14,7 +14,7 @@
  */
 package org.drombler.acp.core.docking;
 
-import org.drombler.acp.core.lib.util.context.Context;
+import org.drombler.acp.core.commons.util.context.Context;
 
 /**
  *

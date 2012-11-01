@@ -23,14 +23,14 @@ import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
 import org.apache.commons.lang.StringUtils;
 import org.drombler.acp.core.application.AbstractApplicationAnnotationProcessor;
-import org.drombler.acp.core.docking.ViewDocking;
 import org.drombler.acp.core.docking.DockingState;
 import org.drombler.acp.core.docking.EditorDocking;
+import org.drombler.acp.core.docking.ViewDocking;
 import org.drombler.acp.core.docking.jaxb.AbstractDockingType;
 import org.drombler.acp.core.docking.jaxb.DockingStateType;
-import org.drombler.acp.core.docking.jaxb.ViewDockingType;
-import org.drombler.acp.core.docking.jaxb.EditorDockingType;
 import org.drombler.acp.core.docking.jaxb.DockingsType;
+import org.drombler.acp.core.docking.jaxb.EditorDockingType;
+import org.drombler.acp.core.docking.jaxb.ViewDockingType;
 import org.drombler.acp.core.docking.jaxb.WindowMenuEntryType;
 
 /**

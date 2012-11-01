@@ -15,12 +15,12 @@
 package org.drombler.acp.core.docking.spi;
 
 import org.apache.commons.lang.StringUtils;
-import org.osgi.framework.Bundle;
 import org.drombler.acp.core.action.spi.ActionDescriptor;
 import org.drombler.acp.core.action.spi.MenuEntryDescriptor;
+import org.drombler.acp.core.commons.util.Resources;
 import org.drombler.acp.core.docking.Dockable;
 import org.drombler.acp.core.docking.jaxb.ViewDockingType;
-import org.drombler.acp.core.lib.util.Resources;
+import org.osgi.framework.Bundle;
 
 /**
  *
