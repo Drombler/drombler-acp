@@ -24,7 +24,7 @@ Contributor(s): .
     <artifactId>drombler-acp-core-application</artifactId>
     <packaging>bundle</packaging>
 
-    <name>Drombler - ACP - Core - Application</name>
+    <name>Drombler ACP - Core - Application</name>
     <inceptionYear>2012</inceptionYear>
     <properties>
 <!--  Doesn't work!?  Error: javac: invalid flag: -Xlint:all -proc:none -->

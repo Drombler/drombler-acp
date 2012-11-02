@@ -25,7 +25,7 @@ Contributor(s): .
     <artifactId>drombler-acp-locale-all</artifactId>
     <packaging>pom</packaging>
 
-    <name>Drombler - ACP - Locale - All</name>
+    <name>Drombler ACP - Locale - All</name>
     <inceptionYear>2012</inceptionYear>
     
     

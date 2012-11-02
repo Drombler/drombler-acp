@@ -24,7 +24,7 @@ Contributor(s): .
     <artifactId>drombler-acp-startup-main</artifactId>
     <packaging>bundle</packaging>
 
-    <name>Drombler - ACP - Startup - Main</name>
+    <name>Drombler ACP - Startup - Main</name>
     <inceptionYear>2012</inceptionYear>
     
     <properties>

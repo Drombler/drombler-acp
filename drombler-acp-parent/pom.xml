@@ -27,7 +27,7 @@ Contributor(s): .
     <version>0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
     
-    <name>Drombler - ACP - Parent</name>
+    <name>Drombler ACP - Parent</name>
     <description>Drombler - Abstract Client Platform - Parent</description>
     <inceptionYear>2012</inceptionYear>
     

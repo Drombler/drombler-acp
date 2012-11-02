@@ -26,7 +26,7 @@ Contributor(s): .
     <artifactId>drombler-acp-core-commons</artifactId>
     <packaging>bundle</packaging>
     
-    <name>Drombler - ACP - Core - Commons</name>
+    <name>Drombler ACP - Core - Commons</name>
     <inceptionYear>2012</inceptionYear>
 
     <build>

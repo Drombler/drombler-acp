@@ -24,7 +24,7 @@ Contributor(s): .
     <artifactId>drombler-acp-core-action-spi</artifactId>
     <packaging>bundle</packaging>
 
-    <name>Drombler - ACP - Core - Action - SPI</name>
+    <name>Drombler ACP - Core - Action - SPI</name>
     <inceptionYear>2012</inceptionYear>
 
     <build>

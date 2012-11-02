@@ -24,7 +24,7 @@ Contributor(s): .
     <artifactId>drombler-acp-all</artifactId>
     <packaging>pom</packaging>
     
-    <name>Drombler - ACP - All</name>
+    <name>Drombler ACP - All</name>
     <inceptionYear>2012</inceptionYear>
     
     <modules>
