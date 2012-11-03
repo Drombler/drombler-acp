@@ -27,6 +27,23 @@ Contributor(s): .
     <name>Drombler ACP - All</name>
     <inceptionYear>2012</inceptionYear>
     
+    <scm>
+        <connection>${scm.connection}</connection>
+        <developerConnection>${scm.developerConnection}</developerConnection>
+        <url>${scm.url}</url>
+    </scm>
+
+    <properties>
+        <scm.connection>${scm.parent.connection}</scm.connection>
+        <scm.developerConnection>${scm.parent.developerConnection}</scm.developerConnection>
+        <scm.url>${scm.parent.url}</scm.url>
+    </properties>
+    
+    <!-- Not inherited!?? -->
+    <prerequisites>
+        <maven>${maven.version}</maven>
+    </prerequisites>
+    
     <modules>
         <module>drombler-acp-parent</module>
         <module>drombler-acp-startup-main</module>
@@ -42,4 +59,15 @@ Contributor(s): .
         <module>drombler-acp-locale-all</module>
         <module>drombler-acp-locale-de</module>
     </modules>
+    
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-deploy-plugin</artifactId>
+                <configuration>
+                    <skip>true</skip>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>

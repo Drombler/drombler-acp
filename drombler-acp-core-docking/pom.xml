@@ -28,12 +28,26 @@ Contributor(s): .
     <name>Drombler ACP - Core - Docking</name>
     <inceptionYear>2012</inceptionYear>
 
+    <scm>
+        <connection>${scm.connection}</connection>
+        <developerConnection>${scm.developerConnection}</developerConnection>
+        <url>${scm.url}</url>
+    </scm>
+
     <properties>
-<!--  Doesn't work!?  Error: javac: invalid flag: -Xlint:all -proc:none -->
-<!--        <java.compiler.compilerArgument>-Xlint:all -proc:none</java.compiler.compilerArgument>-->
+        <scm.connection>${scm.parent.connection}</scm.connection>
+        <scm.developerConnection>${scm.parent.developerConnection}</scm.developerConnection>
+        <scm.url>${scm.parent.url}</scm.url>
+        <!--  Doesn't work!?  Error: javac: invalid flag: -Xlint:all -proc:none -->
+        <!--        <java.compiler.compilerArgument>-Xlint:all -proc:none</java.compiler.compilerArgument>-->
         <java.compiler.compilerArgument>-proc:none</java.compiler.compilerArgument>
     </properties>
 
+    <!-- Not inherited!?? -->
+    <prerequisites>
+        <maven>${maven.version}</maven>
+    </prerequisites>
+    
     <build>
         <plugins>
             <plugin>
@@ -52,7 +66,7 @@ Contributor(s): .
                         </goals>
                         <configuration>
                             <generatePackage>org.drombler.acp.core.docking.jaxb</generatePackage>
-<!--                            <args>
+                            <!--                            <args>
                                 <arg>-extension</arg>
                             </args>-->
                         </configuration>

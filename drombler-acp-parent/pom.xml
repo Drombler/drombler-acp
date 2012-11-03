@@ -20,7 +20,7 @@ Contributor(s): .
         <groupId>org.drombler</groupId>
         <artifactId>drombler-oss-parent</artifactId>
         <version>0.1-SNAPSHOT</version>
-        <relativePath></relativePath>
+        <relativePath />
     </parent>
     <groupId>org.drombler.acp</groupId>
     <artifactId>drombler-acp-parent</artifactId>
@@ -28,44 +28,43 @@ Contributor(s): .
     <packaging>pom</packaging>
     
     <name>Drombler ACP - Parent</name>
-    <description>Drombler - Abstract Client Platform - Parent</description>
+    <url>http://www.drombler.org</url>
+    <description>The parent POM of the Drombler ACP (Abstract Client Platform) project. This Drombler ACP Parent POM should be the parent (either directly or indirectly) of every Drombler ACP project unless there is a good reason to do otherwise (in which case the reason should be documented).</description>
     <inceptionYear>2012</inceptionYear>
     
-    <build>
-        <pluginManagement>        
-            <plugins>
-                <plugin>
-                    <groupId>org.apache.felix</groupId>
-                    <artifactId>maven-bundle-plugin</artifactId>
-                    <version>2.3.7</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.felix</groupId>
-                    <artifactId>maven-scr-plugin</artifactId>
-                    <version>1.7.4</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.jvnet.jaxb2.maven2</groupId>
-                    <artifactId>maven-jaxb2-plugin</artifactId>
-                    <version>0.8.1</version>
-                </plugin>
-            </plugins>
-        </pluginManagement>
+    <scm>
+        <connection>${scm.parent.connection}</connection>
+        <developerConnection>${scm.parent.developerConnection}</developerConnection>
+        <url>${scm.parent.url}</url>
+    </scm>
 
-    </build>
+    <licenses>
+        <license>
+            <name>COMMON DEVELOPMENT AND DISTRIBUTION LICENSE (CDDL) Version 1.0</name>
+            <distribution>repo</distribution>
+            <!--<url>http://java.sun.com/spl.html</url>-->
+            <url>../LICENSE.txt</url>
+        </license>
+    </licenses>
+    
+    <properties>
+        
+        <!-- Dev Environment Defaults -->
+        <scm.parent.connection>scm:hg:http://hg.code.sf.net/p/drombler/drombler-acp</scm.parent.connection>
+        <scm.parent.developerConnection>scm:hg:ssh://${username}@hg.code.sf.net/p/drombler/drombler-acp</scm.parent.developerConnection>
+        <scm.parent.url>http://sourceforge.net/p/drombler/drombler-acp</scm.parent.url>
+        
+        <!-- Dependency Versions Defaults -->
+
+    </properties>
+
+    <!-- Not inherited!?? -->
+    <prerequisites>
+        <maven>${maven.version}</maven>
+    </prerequisites>
     
     <dependencyManagement>
         <dependencies>
-            <dependency>
-                <groupId>org.apache.felix</groupId>
-                <artifactId>org.osgi.core</artifactId>
-                <version>1.4.0</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.felix</groupId>
-                <artifactId>org.osgi.compendium</artifactId>
-                <version>1.4.0</version>
-            </dependency>
             <dependency>
                 <groupId>commons-lang</groupId>
                 <artifactId>commons-lang</artifactId>
