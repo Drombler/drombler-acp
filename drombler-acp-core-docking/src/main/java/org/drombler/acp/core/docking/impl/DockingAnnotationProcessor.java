@@ -37,7 +37,7 @@ import org.drombler.acp.core.docking.jaxb.WindowMenuEntryType;
  *
  * @author puce
  */
-@SupportedAnnotationTypes({"org.richclientplatform.core.docking.ViewDocking", "org.richclientplatform.core.docking.EditorDocking"})
+@SupportedAnnotationTypes({"org.drombler.acp.core.docking.ViewDocking", "org.drombler.acp.core.docking.EditorDocking"})
 public class DockingAnnotationProcessor extends AbstractApplicationAnnotationProcessor {
 
     //TODO: not safe as changes to DockingAreaKind are missed at compile time. 

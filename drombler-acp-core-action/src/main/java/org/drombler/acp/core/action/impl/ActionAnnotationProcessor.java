@@ -32,8 +32,8 @@ import org.drombler.acp.core.application.AbstractApplicationAnnotationProcessor;
  * @author puce
  */
 @SupportedAnnotationTypes({
-    "org.richclientplatform.core.action.Action",
-    "org.richclientplatform.core.action.ToggleAction"
+    "org.drombler.acp.core.action.Action",
+    "org.drombler.acp.core.action.ToggleAction"
 })
 public class ActionAnnotationProcessor extends AbstractApplicationAnnotationProcessor {
 

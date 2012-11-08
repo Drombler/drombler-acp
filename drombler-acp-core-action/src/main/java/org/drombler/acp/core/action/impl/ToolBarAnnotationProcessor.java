@@ -35,8 +35,8 @@ import org.drombler.acp.core.application.AbstractApplicationAnnotationProcessor;
  *
  * @author puce
  */
-@SupportedAnnotationTypes({"org.richclientplatform.core.action.ToolBars", "org.richclientplatform.core.action.ToolBar",
-    "org.richclientplatform.core.action.ToolBarEntry"})
+@SupportedAnnotationTypes({"org.drombler.acp.core.action.ToolBars", "org.drombler.acp.core.action.ToolBar",
+    "org.drombler.acp.core.action.ToolBarEntry"})
 public class ToolBarAnnotationProcessor extends AbstractApplicationAnnotationProcessor {
 
     private ToolBarsType toolBars;

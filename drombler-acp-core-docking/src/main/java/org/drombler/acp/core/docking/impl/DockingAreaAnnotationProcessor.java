@@ -36,8 +36,8 @@ import org.drombler.acp.core.docking.jaxb.LayoutConstraintsType;
  *
  * @author puce
  */
-@SupportedAnnotationTypes({"org.richclientplatform.core.docking.DockingAreas",
-    "org.richclientplatform.core.docking.DockingArea"})
+@SupportedAnnotationTypes({"org.drombler.acp.core.docking.DockingAreas",
+    "org.drombler.acp.core.docking.DockingArea"})
 public class DockingAreaAnnotationProcessor extends AbstractApplicationAnnotationProcessor {
 
     //TODO: not safe as changes to DockingAreaKind are missed at compile time. 

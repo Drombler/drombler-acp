@@ -37,10 +37,10 @@ import org.drombler.acp.core.application.AbstractApplicationAnnotationProcessor;
  * @author puce
  */
 @SupportedAnnotationTypes({
-    "org.richclientplatform.core.action.Menus",
-    "org.richclientplatform.core.action.Menu",
-    "org.richclientplatform.core.action.MenuEntry",
-    "org.richclientplatform.core.action.ToggleMenuEntry"})
+    "org.drombler.acp.core.action.Menus",
+    "org.drombler.acp.core.action.Menu",
+    "org.drombler.acp.core.action.MenuEntry",
+    "org.drombler.acp.core.action.ToggleMenuEntry"})
 public class MenuAnnotationProcessor extends AbstractApplicationAnnotationProcessor {
 
     private MenusType menus;
