@@ -14,12 +14,12 @@
  */
 package org.drombler.acp.core.action.spi;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.drombler.acp.core.action.jaxb.ToolBarType;
 import org.drombler.acp.core.action.spi.impl.ShowToolBarAction;
-import org.drombler.acp.core.commons.util.Positionable;
 import org.drombler.acp.core.commons.util.Resources;
 import org.osgi.framework.Bundle;
+import org.softsmithy.lib.util.Positionable;
 
 /**
  *
@@ -104,7 +104,7 @@ public class ToolBarDescriptor implements Positionable {
         ToggleActionDescriptor actionDescriptor = new ToggleActionDescriptor();
         actionDescriptor.setId(ShowToolBarAction.class.getName() + "#" + toolBarDescriptor.getId()); // TODO: ok?
         actionDescriptor.setDisplayName(toolBarDescriptor.getDisplayName());
-        actionDescriptor.setListener(new ShowToolBarAction(toolBarDescriptor.getId(), toolBarContainer));
+        actionDescriptor.setListener(new ShowToolBarAction<>(toolBarDescriptor.getId(), toolBarContainer));
         return actionDescriptor;
     }
 

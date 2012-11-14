@@ -21,7 +21,7 @@ import javax.annotation.processing.RoundEnvironment;
 import javax.annotation.processing.SupportedAnnotationTypes;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.drombler.acp.core.application.AbstractApplicationAnnotationProcessor;
 import org.drombler.acp.core.docking.DockingArea;
 import org.drombler.acp.core.docking.DockingAreaKind;

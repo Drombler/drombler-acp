@@ -19,7 +19,7 @@ import javax.annotation.processing.RoundEnvironment;
 import javax.annotation.processing.SupportedAnnotationTypes;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.drombler.acp.core.action.Action;
 import org.drombler.acp.core.action.ToggleAction;
 import org.drombler.acp.core.action.jaxb.ActionType;

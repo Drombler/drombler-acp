@@ -24,12 +24,12 @@ import org.apache.felix.scr.annotations.Reference;
 import org.apache.felix.scr.annotations.ReferenceCardinality;
 import org.apache.felix.scr.annotations.ReferencePolicy;
 import org.apache.felix.scr.annotations.References;
-import org.osgi.service.component.ComponentContext;
 import org.drombler.acp.core.application.ApplicationExecutorProvider;
 import org.drombler.acp.core.docking.jaxb.DockingAreaType;
 import org.drombler.acp.core.docking.jaxb.DockingAreasType;
 import org.drombler.acp.core.docking.spi.DockingAreaDescriptor;
 import org.drombler.acp.core.docking.spi.DockingAreaFactory;
+import org.osgi.service.component.ComponentContext;
 
 /**
  *

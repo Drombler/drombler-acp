@@ -14,7 +14,7 @@
  */
 package org.drombler.acp.core.action.spi;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.drombler.acp.core.action.jaxb.MenuEntryType;
 
 /**
@@ -36,9 +36,8 @@ public class MenuEntryDescriptor extends AbstractMenuEntryDescriptor {
     public String getActionId() {
         return actionId;
     }
-    
-//StringUtils.stripToNull(menuEntryType.getId()),StringUtils.stripToEmpty(menuEntryType.getPath()), menuEntryType.getPosition()
 
+//StringUtils.stripToNull(menuEntryType.getId()),StringUtils.stripToEmpty(menuEntryType.getPath()), menuEntryType.getPosition()
     public static MenuEntryDescriptor createMenuEntryDescriptor(MenuEntryType menuEntryType) {
         return new MenuEntryDescriptor(StringUtils.stripToNull(menuEntryType.getActionId()),
                 StringUtils.stripToEmpty(menuEntryType.getPath()), menuEntryType.getPosition());

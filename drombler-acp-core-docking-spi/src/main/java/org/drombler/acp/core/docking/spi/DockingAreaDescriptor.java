@@ -16,7 +16,7 @@ package org.drombler.acp.core.docking.spi;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.drombler.acp.core.docking.jaxb.DockingAreaType;
 
 /**

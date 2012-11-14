@@ -16,7 +16,7 @@ package org.drombler.acp.core.commons.util;
 
 import java.util.Locale;
 import java.util.ResourceBundle;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.osgi.framework.Bundle;
 
 /**

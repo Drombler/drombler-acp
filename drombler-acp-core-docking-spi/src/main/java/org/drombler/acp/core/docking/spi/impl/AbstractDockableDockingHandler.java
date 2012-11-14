@@ -56,7 +56,7 @@ public abstract class AbstractDockableDockingHandler<A, D> extends AbstractDocki
         return super.isInitialized() && dockablePreferencesManager != null;
     }
 
-    protected void unbindDockablePreferencesManager(DockablePreferencesManager dockablePreferencesManager) {
+    protected void unbindDockablePreferencesManager(DockablePreferencesManager<D> dockablePreferencesManager) {
         this.dockablePreferencesManager = null;
     }
 

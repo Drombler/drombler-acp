@@ -23,7 +23,7 @@ import org.drombler.acp.core.action.spi.ToolBarContainerListenerAdapter;
 import org.drombler.acp.core.action.spi.ToolBarContainerToolBarEvent;
 import org.drombler.acp.core.action.spi.ToolBarEntryDescriptor;
 import org.drombler.acp.core.application.ApplicationExecutorProvider;
-import org.drombler.acp.core.commons.util.PositionableAdapter;
+import org.softsmithy.lib.util.PositionableAdapter;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.component.ComponentContext;

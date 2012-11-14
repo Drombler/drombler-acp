@@ -18,7 +18,7 @@ import java.util.Set;
 import javax.annotation.processing.*;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.drombler.acp.core.action.Action;
 import org.drombler.acp.core.action.ToggleAction;
 import org.drombler.acp.core.action.ToolBar;

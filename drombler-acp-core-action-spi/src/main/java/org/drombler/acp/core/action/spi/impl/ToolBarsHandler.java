@@ -26,10 +26,10 @@ import org.drombler.acp.core.action.spi.ToggleMenuEntryDescriptor;
 import org.drombler.acp.core.action.spi.ToolBarDescriptor;
 import org.drombler.acp.core.action.spi.ToolBarFactory;
 import org.drombler.acp.core.application.ApplicationExecutorProvider;
-import org.drombler.acp.core.commons.util.PositionableAdapter;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.service.component.ComponentContext;
+import org.softsmithy.lib.util.PositionableAdapter;
 
 /**
  *

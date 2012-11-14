@@ -14,9 +14,9 @@
  */
 package org.drombler.acp.core.action.spi;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.drombler.acp.core.action.jaxb.ToolBarEntryType;
-import org.drombler.acp.core.commons.util.Positionable;
+import org.softsmithy.lib.util.Positionable;
 
 /**
  *

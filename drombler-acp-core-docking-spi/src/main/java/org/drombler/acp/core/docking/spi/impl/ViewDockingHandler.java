@@ -26,18 +26,18 @@ import org.apache.felix.scr.annotations.Reference;
 import org.apache.felix.scr.annotations.ReferenceCardinality;
 import org.apache.felix.scr.annotations.ReferencePolicy;
 import org.apache.felix.scr.annotations.References;
-import org.osgi.framework.Bundle;
-import org.osgi.framework.BundleContext;
-import org.osgi.framework.ServiceReference;
-import org.osgi.service.component.ComponentContext;
 import org.drombler.acp.core.action.spi.ActionDescriptor;
 import org.drombler.acp.core.action.spi.MenuEntryDescriptor;
 import org.drombler.acp.core.application.ApplicationExecutorProvider;
 import org.drombler.acp.core.docking.Dockable;
-import org.drombler.acp.core.docking.spi.DockableFactory;
-import org.drombler.acp.core.docking.spi.ViewDockingDescriptor;
 import org.drombler.acp.core.docking.jaxb.DockingsType;
 import org.drombler.acp.core.docking.jaxb.ViewDockingType;
+import org.drombler.acp.core.docking.spi.DockableFactory;
+import org.drombler.acp.core.docking.spi.ViewDockingDescriptor;
+import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceReference;
+import org.osgi.service.component.ComponentContext;
 
 /**
  *
