@@ -24,7 +24,7 @@ public class CommandLineArgs {
      * Switch for specifying the user directory.
      *
      */
-    public static final String USER_DIR_SWITCH = "--userDir";
+    public static final String USER_DIR_SWITCH = "--userdir";
     private final String userDir;
 
     private CommandLineArgs(String userDir) {
@@ -53,7 +53,7 @@ public class CommandLineArgs {
     }
 
     private static void wrongArguments() {
-        System.out.println("Usage: [--userDir <user-directory>]");
+        System.out.println("Usage: [--userdir <user-directory>]");
         System.exit(0);
     }
 
