@@ -77,15 +77,12 @@ public class ViewDockingDescriptor extends AbstractDockableDockingDescriptor {
 
     public static ViewDockingDescriptor createViewDockingDescriptor(ViewDockingType docking, Bundle bundle) throws ClassNotFoundException, InstantiationException, IllegalAccessException {
         ViewDockingDescriptor dockingDescriptor = new ViewDockingDescriptor();
-        dockingDescriptor.setId(StringUtils.stripToNull(docking.getId()));
-        @SuppressWarnings("unchecked")
-        Class<? extends Dockable> dockableClass = (Class<? extends Dockable>) bundle.loadClass(StringUtils.stripToNull(
-                docking.getDockableClass()));
-        dockingDescriptor.setDisplayName(Resources.getResourceString(dockableClass, docking.getDisplayName()));
-        dockingDescriptor.setIcon(StringUtils.stripToNull(docking.getIcon()));
-        dockingDescriptor.setAreaId(StringUtils.stripToNull(docking.getAreaId()));
+
+        DockingDescriptorUtils.configureDockingDescriptor(dockingDescriptor, docking, bundle);
+
+        dockingDescriptor.setDisplayName(Resources.getResourceString(dockingDescriptor.getDockableClass(),
+                docking.getDisplayName()));
         dockingDescriptor.setPosition(docking.getPosition());
-        dockingDescriptor.setDockableClass(bundle.loadClass(StringUtils.stripToNull(docking.getDockableClass())));
         dockingDescriptor.setActivateDockableActionDescriptor(createActivateDockableActionDescriptor(dockingDescriptor,
                 docking.getAccelerator()));
         dockingDescriptor.setActivateDockableMenuEntryDescriptor(new MenuEntryDescriptor(dockingDescriptor.getId(),

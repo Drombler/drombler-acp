@@ -14,7 +14,6 @@
  */
 package org.drombler.acp.core.docking.spi;
 
-import org.apache.commons.lang3.StringUtils;
 import org.drombler.acp.core.docking.jaxb.EditorDockingType;
 import org.osgi.framework.Bundle;
 
@@ -26,10 +25,9 @@ public class EditorDockingDescriptor extends AbstractDockableDockingDescriptor {
 
     public static EditorDockingDescriptor createEditorDockingDescriptor(EditorDockingType docking, Bundle bundle) throws ClassNotFoundException {
         EditorDockingDescriptor dockingDescriptor = new EditorDockingDescriptor();
-        dockingDescriptor.setId(StringUtils.stripToNull(docking.getId()));
-        dockingDescriptor.setIcon(StringUtils.stripToNull(docking.getIcon()));
-        dockingDescriptor.setAreaId(StringUtils.stripToNull(docking.getAreaId()));
-        dockingDescriptor.setDockableClass(bundle.loadClass(StringUtils.stripToNull(docking.getDockableClass())));
+
+        DockingDescriptorUtils.configureDockingDescriptor(dockingDescriptor, docking, bundle);
+
         return dockingDescriptor;
     }
 }

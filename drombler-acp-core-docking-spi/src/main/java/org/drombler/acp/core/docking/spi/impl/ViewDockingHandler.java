@@ -29,6 +29,10 @@ import org.apache.felix.scr.annotations.References;
 import org.drombler.acp.core.action.spi.ActionDescriptor;
 import org.drombler.acp.core.action.spi.MenuEntryDescriptor;
 import org.drombler.acp.core.application.ApplicationExecutorProvider;
+import org.drombler.acp.core.commons.util.context.ActiveContextProvider;
+import org.drombler.acp.core.commons.util.context.ActiveContextSensitive;
+import org.drombler.acp.core.commons.util.context.ApplicationContextProvider;
+import org.drombler.acp.core.commons.util.context.ApplicationContextSensitive;
 import org.drombler.acp.core.docking.Dockable;
 import org.drombler.acp.core.docking.jaxb.DockingsType;
 import org.drombler.acp.core.docking.jaxb.ViewDockingType;
@@ -52,9 +56,29 @@ import org.osgi.service.component.ComponentContext;
 public class ViewDockingHandler<A, D extends Dockable> extends AbstractDockableDockingHandler<A, D> {
 
     @Reference
+    private ActiveContextProvider activeContextProvider;
+    @Reference
+    private ApplicationContextProvider applicationContextProvider;
+    @Reference
     private DockableFactory<D> dockableFactory;
     private Executor applicationExecutor;
     private final List<UnresolvedEntry<ViewDockingDescriptor>> unresolvedDockingDescriptors = new ArrayList<>();
+
+    protected void bindActiveContextProvider(ActiveContextProvider activeContextProvider) {
+        this.activeContextProvider = activeContextProvider;
+    }
+
+    protected void unbindActiveContextProvider(ActiveContextProvider activeContextProvider) {
+        this.activeContextProvider = null;
+    }
+
+    protected void bindApplicationContextProvider(ApplicationContextProvider applicationContextProvider) {
+        this.applicationContextProvider = applicationContextProvider;
+    }
+
+    protected void unbindApplicationContextProvider(ApplicationContextProvider applicationContextProvider) {
+        this.applicationContextProvider = null;
+    }
 
     protected void bindApplicationExecutorProvider(ApplicationExecutorProvider applicationExecutorProvider) {
         applicationExecutor = applicationExecutorProvider.getApplicationExecutor();
@@ -111,11 +135,18 @@ public class ViewDockingHandler<A, D extends Dockable> extends AbstractDockableD
     private void resolveDockable(final ViewDockingDescriptor dockingDescriptor, final BundleContext context) {
         if (isInitialized()) {
             Runnable dockableRegistration = new Runnable() {
-
                 @Override
                 public void run() {
                     D dockable = dockableFactory.createDockable(dockingDescriptor);
                     if (dockable != null) {
+                        if (dockable instanceof ActiveContextSensitive) {
+                            ((ActiveContextSensitive) dockable).setActiveContext(
+                                    activeContextProvider.getActiveContext());
+                        }
+                        if (dockable instanceof ApplicationContextSensitive) {
+                            ((ApplicationContextSensitive) dockable).setApplicationContext(
+                                    applicationContextProvider.getApplicationContext());
+                        }
                         dockingDescriptor.getActivateDockableActionDescriptor().setListener(new ActivateDockableAction(
                                 dockable));
                         registerDockablePreferences(dockable.getClass(), dockingDescriptor.getAreaId(),
