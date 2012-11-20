@@ -17,7 +17,8 @@ package org.drombler.acp.core.commons.util.context;
 import java.util.Collection;
 
 /**
- *
+ * A Context to find context-sensitive data.
+ * 
  * @author puce
  */
 public interface Context {
