@@ -53,7 +53,7 @@ Contributor(s): .
                 <extensions>true</extensions>
                 <configuration>
                     <instructions>
-                        <Fragment-Host>org.drombler.acp.core-standard-action;bundle-version=${drombler.acp.osgi.version.clean}</Fragment-Host>
+                        <Fragment-Host>org.drombler.acp.drombler-acp-core-standard-action;bundle-version=${drombler.acp.osgi.version.clean}</Fragment-Host>
                     </instructions>
                     <versions>
                         <drombler.acp.osgi.version.clean>${project.version}</drombler.acp.osgi.version.clean>
