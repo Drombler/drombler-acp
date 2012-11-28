@@ -18,7 +18,7 @@ Contributor(s): .
     <parent>
         <groupId>org.drombler.acp</groupId>
         <artifactId>drombler-acp-parent</artifactId>
-        <version>0.1</version>
+        <version>0.1.1-SNAPSHOT</version>
         <relativePath>../drombler-acp-parent</relativePath>
     </parent>
     <artifactId>drombler-acp-core-docking</artifactId>
