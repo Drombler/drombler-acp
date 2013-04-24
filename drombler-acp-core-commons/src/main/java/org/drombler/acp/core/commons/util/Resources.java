@@ -25,17 +25,25 @@ import org.osgi.framework.Bundle;
  */
 public class Resources {
 
-    private static final String PROPERTIES_FILE_BASE_NAME = "Bundle";
+    public static final String PROPERTIES_FILE_BASE_NAME = "Bundle";
 
     private Resources() {
     }
 
     public static ResourceBundle getResourceBundle(Class<?> type) {
-        return getResourceBundle(type.getPackage().getName(), type.getClassLoader());
+        return getResourceBundle(type, PROPERTIES_FILE_BASE_NAME);
+    }
+
+    public static ResourceBundle getResourceBundle(Class<?> type, String baseName) {
+        return getResourceBundle(type.getPackage().getName(), baseName, type.getClassLoader());
     }
 
     public static ResourceBundle getResourceBundle(String aPackage, ClassLoader classLoader) {
-        return ResourceBundle.getBundle(aPackage + "." + PROPERTIES_FILE_BASE_NAME, Locale.getDefault(),
+        return getResourceBundle(aPackage, PROPERTIES_FILE_BASE_NAME, classLoader);
+    }
+
+    public static ResourceBundle getResourceBundle(String aPackage, String baseName, ClassLoader classLoader) {
+        return ResourceBundle.getBundle(aPackage + "." + baseName, Locale.getDefault(),
                 classLoader);
     }
 
