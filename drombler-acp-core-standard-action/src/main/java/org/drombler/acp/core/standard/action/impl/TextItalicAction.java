@@ -23,7 +23,7 @@ import org.drombler.acp.core.action.ToolBarToggleEntry;
  *
  * @author puce
  */
-@ToggleAction(id = "standard.text.italic", category = "core", displayName = "#textItalic.displayName", accelerator = "Shortcut+I", icon = "undo.png")
+@ToggleAction(id = "standard.text.italic", category = "core", displayName = "%textItalic.displayName", accelerator = "Shortcut+I", icon = "undo.png")
 //@ToggleMenuEntry(path = "Edit", position = 3210)
 //@ToolBarToggleEntry(toolBarId = "edit", position = 260)
 public class TextItalicAction extends AbstractToggleActionListener<Object> {

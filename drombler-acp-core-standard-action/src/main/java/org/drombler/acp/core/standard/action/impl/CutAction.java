@@ -26,7 +26,7 @@ import org.drombler.acp.core.action.ToolBarEntry;
  *
  * @author puce
  */
-@Action(id = "standard.cut", category = "core", displayName = "#cut.displayName", accelerator = "Shortcut+X", icon = "cut.png")
+@Action(id = "standard.cut", category = "core", displayName = "%cut.displayName", accelerator = "Shortcut+X", icon = "cut.png")
 //@MenuEntry(path = "Edit", position = 2100)
 //@ToolBarEntry(toolBarId = "edit", position = 50)
 public class CutAction extends AbstractActionListener<Object> {

@@ -26,7 +26,7 @@ import org.drombler.acp.core.action.ToolBarEntry;
  *
  * @author puce
  */
-@Action(id = "standard.paste", category = "core", displayName = "#paste.displayName", accelerator = "Shortcut+V", icon = "paste.png")
+@Action(id = "standard.paste", category = "core", displayName = "%paste.displayName", accelerator = "Shortcut+V", icon = "paste.png")
 //@MenuEntry(path = "Edit", position = 2120)
 //@ToolBarEntry(toolBarId = "edit", position = 70)
 public class PasteAction extends AbstractActionListener<Object> {

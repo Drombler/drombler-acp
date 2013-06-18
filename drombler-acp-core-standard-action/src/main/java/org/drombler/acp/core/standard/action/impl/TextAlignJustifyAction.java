@@ -23,7 +23,7 @@ import org.drombler.acp.core.action.ToolBarToggleEntry;
  *
  * @author puce
  */
-@ToggleAction(id = "standard.text.alignJustify", category = "core", displayName = "#textAlignJustify.displayName", accelerator = "Shortcut+J", icon = "copy.png")
+@ToggleAction(id = "standard.text.alignJustify", category = "core", displayName = "%textAlignJustify.displayName", accelerator = "Shortcut+J", icon = "copy.png")
 //@ToggleMenuEntry(path = "Edit/Align", position = 1210, toggleGroupId="text.align")
 //@ToolBarToggleEntry(toolBarId = "align", position = 160, toggleGroupId="text.align")
 public class TextAlignJustifyAction extends AbstractToggleActionListener<Object> {

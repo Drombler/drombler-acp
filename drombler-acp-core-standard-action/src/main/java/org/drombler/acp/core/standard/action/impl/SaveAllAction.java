@@ -35,7 +35,7 @@ import org.drombler.acp.core.standard.action.Savable;
  *
  * @author puce
  */
-@Action(id = "standard.saveAll", category = "core", displayName = "#saveAll.displayName", accelerator = "Shortcut+Shift+S", icon = "saveAll.png")
+@Action(id = "standard.saveAll", category = "core", displayName = "%saveAll.displayName", accelerator = "Shortcut+Shift+S", icon = "saveAll.png")
 @MenuEntry(path = "File", position = 4210)
 @ToolBarEntry(toolBarId = "file", position = 60)
 public class SaveAllAction extends AbstractActionListener<Object> implements ApplicationContextSensitive {

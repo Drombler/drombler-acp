@@ -23,7 +23,7 @@ import org.drombler.acp.core.action.ToolBarToggleEntry;
  *
  * @author puce
  */
-@ToggleAction(id = "standard.text.underline", category = "core", displayName = "#textUnderline.displayName", accelerator = "Shortcut+U", icon = "paste.png")
+@ToggleAction(id = "standard.text.underline", category = "core", displayName = "%textUnderline.displayName", accelerator = "Shortcut+U", icon = "paste.png")
 //@ToggleMenuEntry(path = "Edit", position = 3220)
 //@ToolBarToggleEntry(toolBarId = "edit", position = 270)
 public class TextUnderlineAction extends AbstractToggleActionListener<Object> {

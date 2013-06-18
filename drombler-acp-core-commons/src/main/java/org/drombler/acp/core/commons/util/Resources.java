@@ -26,6 +26,7 @@ import org.osgi.framework.Bundle;
 public class Resources {
 
     public static final String PROPERTIES_FILE_BASE_NAME = "Bundle";
+    public static final String KEY_PREFIX = "%";
 
     private Resources() {
     }
@@ -57,7 +58,7 @@ public class Resources {
 
     private static String getResourceString(String aPackage, String resourceKey, ClassLoader classLoader) {
         String strippedResourceKey = StringUtils.stripToNull(resourceKey);
-        if (strippedResourceKey != null && strippedResourceKey.startsWith("#")) {
+        if (strippedResourceKey != null && strippedResourceKey.startsWith(KEY_PREFIX)) {
             strippedResourceKey = strippedResourceKey.substring(1);
             ResourceBundle rb = getResourceBundle(aPackage, classLoader);
 //            if (rb.containsKey(resourceKey)) {

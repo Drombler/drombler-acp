@@ -13,8 +13,8 @@
  * Contributor(s): .
  */
 @Menus({
-    @Menu(id = "Window", displayName = "#windowMenu.displayName", position = 800),
-    @Menu(id = "Other", path = "Window", displayName = "#otherMenu.displayName", position = 800)
+    @Menu(id = "Window", displayName = "%windowMenu.displayName", position = 800),
+    @Menu(id = "Other", path = "Window", displayName = "%otherMenu.displayName", position = 800)
 })
 package org.drombler.acp.core.docking.spi.impl;
 
