@@ -41,7 +41,7 @@ Contributor(s): .
         <scm.url>${scm.parent.url}</scm.url>
         
         <!-- Dependency Versions Defaults -->
-        <dependency.felix-framework.version>4.0.2</dependency.felix-framework.version>
+        <dependency.felix-framework.version>4.2.1</dependency.felix-framework.version>
     </properties>
 
     <!-- Not inherited!?? -->
