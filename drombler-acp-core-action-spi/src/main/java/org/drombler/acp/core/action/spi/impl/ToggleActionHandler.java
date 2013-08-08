@@ -38,7 +38,7 @@ cardinality = ReferenceCardinality.OPTIONAL_MULTIPLE, policy = ReferencePolicy.D
 public class ToggleActionHandler<T> extends AbstractActionHandler<ToggleActionType, ToggleActionDescriptor> {
 
     @Reference
-    private ToggleActionFactory<T> actionFactory;
+    private ToggleActionFactory<T> toggleActionFactory;
 
     protected void bindToggleActionDescriptor(ServiceReference<ToggleActionDescriptor> serviceReference) {
         BundleContext context = serviceReference.getBundle().getBundleContext();
@@ -50,12 +50,12 @@ public class ToggleActionHandler<T> extends AbstractActionHandler<ToggleActionTy
         // TODO
     }
 
-    protected void bindToggleActionFactory(ToggleActionFactory<T> actionFactory) {
-        this.actionFactory = actionFactory;
+    protected void bindToggleActionFactory(ToggleActionFactory<T> toggleActionFactory) {
+        this.toggleActionFactory = toggleActionFactory;
     }
 
-    protected void unbindToggleActionFactory(ToggleActionFactory<T> actionFactory) {
-        this.actionFactory = null;
+    protected void unbindToggleActionFactory(ToggleActionFactory<T> toggleActionFactory) {
+        this.toggleActionFactory = null;
     }
 
     @Activate
@@ -69,7 +69,7 @@ public class ToggleActionHandler<T> extends AbstractActionHandler<ToggleActionTy
 
     @Override
     protected boolean isInitialized() {
-        return super.isInitialized() && actionFactory != null;
+        return super.isInitialized() && toggleActionFactory != null;
     }
 
     @Override
@@ -82,8 +82,9 @@ public class ToggleActionHandler<T> extends AbstractActionHandler<ToggleActionTy
     @Override
     protected void registerActionDescriptor(ToggleActionDescriptor actionDescriptor, BundleContext context) {
         if (isInitialized()) {
-            T action = actionFactory.createToggleAction(actionDescriptor);
-            getActionRegistry().registerAction(actionDescriptor.getId(), actionFactory.getToggleActionClass(), action,
+            T action = toggleActionFactory.createToggleAction(actionDescriptor);
+            getActionRegistry().registerAction(actionDescriptor.getId(), toggleActionFactory.getToggleActionClass(),
+                    action,
                     context);
         } else {
             registerUnresolvedActionDescriptor(actionDescriptor, context);
@@ -91,7 +92,8 @@ public class ToggleActionHandler<T> extends AbstractActionHandler<ToggleActionTy
     }
 
     @Override
-    protected ToggleActionDescriptor createActionDescriptor(ToggleActionType actionType, BundleContext context) throws IllegalAccessException, ClassNotFoundException, InstantiationException {
+    protected ToggleActionDescriptor createActionDescriptor(ToggleActionType actionType, BundleContext context) throws
+            IllegalAccessException, ClassNotFoundException, InstantiationException {
         return ToggleActionDescriptor.createToggleActionDescriptor(actionType, context.getBundle(),
                 getActiveContextProvider().getActiveContext(), getApplicationContextProvider().getApplicationContext());
     }

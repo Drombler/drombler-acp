@@ -44,9 +44,9 @@ public class ToggleMenuItemHandler<MenuItem, Menu extends MenuItem, ToggleMenuIt
         extends AbstractMenuItemHandler<MenuItem, Menu, ToggleMenuItem, ToggleMenuEntryDescriptor, MenuItemConfig<ToggleAction>> {
 
     @Reference
-    private ToggleMenuItemFactory<ToggleMenuItem, ToggleAction> menuItemFactory;
+    private ToggleMenuItemFactory<ToggleMenuItem, ToggleAction> toggleMenuItemFactory;
     @Reference
-    private ToggleActionFactory<ToggleAction> actionFactory;
+    private ToggleActionFactory<ToggleAction> toggleActionFactory;
     private final ActionRegistry actionRegistry = new ActionRegistry();
     private final ActionResolutionManager<ToggleMenuEntryDescriptor> actionResolutionManager = new ActionResolutionManager<>();
     private ServiceTracker<ToggleAction, ServiceReference<ToggleAction>> tracker;
@@ -61,20 +61,20 @@ public class ToggleMenuItemHandler<MenuItem, Menu extends MenuItem, ToggleMenuIt
         // TODO
     }
 
-    protected void bindToggleMenuItemFactory(ToggleMenuItemFactory<ToggleMenuItem, ToggleAction> menuItemFactory) {
-        this.menuItemFactory = menuItemFactory;
+    protected void bindToggleMenuItemFactory(ToggleMenuItemFactory<ToggleMenuItem, ToggleAction> toggleMenuItemFactory) {
+        this.toggleMenuItemFactory = toggleMenuItemFactory;
     }
 
-    protected void unbindToggleMenuItemFactory(ToggleMenuItemFactory<ToggleMenuItem, ToggleAction> menuItemFactory) {
-        this.menuItemFactory = null;
+    protected void unbindToggleMenuItemFactory(ToggleMenuItemFactory<ToggleMenuItem, ToggleAction> toggleMenuItemFactory) {
+        this.toggleMenuItemFactory = null;
     }
 
-    protected void bindToggleActionFactory(ToggleActionFactory<ToggleAction> actionFactory) {
-        this.actionFactory = actionFactory;
+    protected void bindToggleActionFactory(ToggleActionFactory<ToggleAction> toggleActionFactory) {
+        this.toggleActionFactory = toggleActionFactory;
     }
 
-    protected void unbindToggleActionFactory(ToggleActionFactory<ToggleAction> actionFactory) {
-        this.actionFactory = null;
+    protected void unbindToggleActionFactory(ToggleActionFactory<ToggleAction> toggleActionFactory) {
+        this.toggleActionFactory = null;
     }
 
     @Activate
@@ -90,9 +90,8 @@ public class ToggleMenuItemHandler<MenuItem, Menu extends MenuItem, ToggleMenuIt
     }
 
     private ServiceTracker<ToggleAction, ServiceReference<ToggleAction>> createActionTracker(ComponentContext context) {
-        return new ServiceTracker<>(context.getBundleContext(), actionFactory.getToggleActionClass(),
+        return new ServiceTracker<>(context.getBundleContext(), toggleActionFactory.getToggleActionClass(),
                 new ServiceTrackerCustomizer<ToggleAction, ServiceReference<ToggleAction>>() {
-
                     @Override
                     public ServiceReference<ToggleAction> addingService(ServiceReference<ToggleAction> reference) {
                         String actionId = actionRegistry.getActionId(reference);
@@ -106,12 +105,14 @@ public class ToggleMenuItemHandler<MenuItem, Menu extends MenuItem, ToggleMenuIt
                     }
 
                     @Override
-                    public void modifiedService(ServiceReference<ToggleAction> reference, ServiceReference<ToggleAction> service) {
+                    public void modifiedService(ServiceReference<ToggleAction> reference,
+                            ServiceReference<ToggleAction> service) {
                         // TODO ???
                     }
 
                     @Override
-                    public void removedService(ServiceReference<ToggleAction> reference, ServiceReference<ToggleAction> service) {
+                    public void removedService(ServiceReference<ToggleAction> reference,
+                            ServiceReference<ToggleAction> service) {
                         // TODO ???
                     }
                 });
@@ -119,7 +120,7 @@ public class ToggleMenuItemHandler<MenuItem, Menu extends MenuItem, ToggleMenuIt
 
     @Override
     protected boolean isInitialized() {
-        return super.isInitialized() && menuItemFactory != null && actionFactory != null;
+        return super.isInitialized() && toggleMenuItemFactory != null && toggleActionFactory != null;
     }
 
     @Override
@@ -132,9 +133,10 @@ public class ToggleMenuItemHandler<MenuItem, Menu extends MenuItem, ToggleMenuIt
     }
 
     @Override
-    protected MenuItemConfig<ToggleAction> createConfig(ToggleMenuEntryDescriptor menuEntryDescriptor, BundleContext context) {
+    protected MenuItemConfig<ToggleAction> createConfig(ToggleMenuEntryDescriptor menuEntryDescriptor,
+            BundleContext context) {
         ToggleAction action = actionRegistry.getAction(menuEntryDescriptor.getActionId(),
-                actionFactory.getToggleActionClass(), context);
+                toggleActionFactory.getToggleActionClass(), context);
         if (action != null) {
             return new MenuItemConfig<>(action);
         } else {
@@ -143,9 +145,10 @@ public class ToggleMenuItemHandler<MenuItem, Menu extends MenuItem, ToggleMenuIt
     }
 
     @Override
-    protected ToggleMenuItem createMenuItem(ToggleMenuEntryDescriptor menuEntryDescriptor, MenuItemConfig<ToggleAction> config) {
+    protected ToggleMenuItem createMenuItem(ToggleMenuEntryDescriptor menuEntryDescriptor,
+            MenuItemConfig<ToggleAction> config) {
 //        System.out.println(actionFactory.getToggleActionClass().getName() + ": " + menuEntryDescriptor.getActionId());
-        return menuItemFactory.createToggleMenuItem(menuEntryDescriptor, config.getAction(), config.getIconSize());
+        return toggleMenuItemFactory.createToggleMenuItem(menuEntryDescriptor, config.getAction(), config.getIconSize());
     }
 
     @Override

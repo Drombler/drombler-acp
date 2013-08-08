@@ -16,13 +16,13 @@ package org.drombler.acp.core.action.spi.impl;
 
 import org.apache.felix.scr.annotations.Component;
 import org.apache.felix.scr.annotations.Reference;
-import org.osgi.framework.Bundle;
-import org.osgi.framework.BundleContext;
 import org.drombler.acp.core.action.jaxb.ToolBarEntryType;
 import org.drombler.acp.core.action.jaxb.ToolBarsType;
 import org.drombler.acp.core.action.spi.ActionFactory;
 import org.drombler.acp.core.action.spi.ToolBarButtonFactory;
 import org.drombler.acp.core.action.spi.ToolBarEntryDescriptor;
+import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
 
 /**
  *

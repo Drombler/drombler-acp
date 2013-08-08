@@ -35,7 +35,7 @@ public class ToolBarToggleButtonHandler<ToolBar, ToolBarButton, ToolBarToggleBut
     @Reference
     private ToolBarToggleButtonFactory<ToolBarToggleButton, ToggleAction> toolBarToggleButtonFactory;
     @Reference
-    private ToggleActionFactory<ToggleAction> actionFactory;
+    private ToggleActionFactory<ToggleAction> toggleActionFactory;
 
     protected void bindToolBarToggleButtonFactory(ToolBarToggleButtonFactory<ToolBarToggleButton, ToggleAction> toolBarToggleButtonFactory) {
         this.toolBarToggleButtonFactory = toolBarToggleButtonFactory;
@@ -46,23 +46,23 @@ public class ToolBarToggleButtonHandler<ToolBar, ToolBarButton, ToolBarToggleBut
         this.toolBarToggleButtonFactory = null;
     }
 
-    protected void bindToggleActionFactory(ToggleActionFactory<ToggleAction> actionFactory) {
-        this.actionFactory = actionFactory;
+    protected void bindToggleActionFactory(ToggleActionFactory<ToggleAction> toggleActionFactory) {
+        this.toggleActionFactory = toggleActionFactory;
         resolveUnresolvedItems();
     }
 
-    protected void unbindToggleActionFactory(ToggleActionFactory<ToggleAction> actionFactory) {
-        this.actionFactory = null;
+    protected void unbindToggleActionFactory(ToggleActionFactory<ToggleAction> toggleActionFactory) {
+        this.toggleActionFactory = null;
     }
 
     @Override
     protected boolean isInitialized() {
-        return super.isInitialized() && toolBarToggleButtonFactory != null && actionFactory != null;
+        return super.isInitialized() && toolBarToggleButtonFactory != null && toggleActionFactory != null;
     }
 
     @Override
     protected Class<ToggleAction> getActionClass() {
-        return actionFactory.getToggleActionClass();
+        return toggleActionFactory.getToggleActionClass();
     }
 
     @Override
