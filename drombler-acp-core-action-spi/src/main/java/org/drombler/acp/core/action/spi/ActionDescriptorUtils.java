@@ -21,6 +21,7 @@ import org.drombler.acp.core.commons.util.context.ActiveContextSensitive;
 import org.drombler.acp.core.commons.util.context.ApplicationContextSensitive;
 import org.drombler.acp.core.commons.util.context.Context;
 import org.osgi.framework.Bundle;
+import org.softsmithy.lib.util.ResourceLoader;
 
 /**
  *
@@ -31,13 +32,15 @@ class ActionDescriptorUtils {
     private ActionDescriptorUtils() {
     }
 
-    public static void configureActionDescriptor(ActionDescriptor actionDescriptor, ActionType actionType, Bundle bundle, 
-            Context activeContext, Context applicationContext) throws ClassNotFoundException, InstantiationException, IllegalAccessException {
+    public static void configureActionDescriptor(ActionDescriptor actionDescriptor, ActionType actionType, Bundle bundle,
+            Context activeContext, Context applicationContext) throws ClassNotFoundException, InstantiationException,
+            IllegalAccessException {
         Class<?> actionListenerClass = bundle.loadClass(StringUtils.stripToNull(actionType.getListenerClass()));
         actionDescriptor.setId(StringUtils.stripToNull(actionType.getId()));
         actionDescriptor.setDisplayName(Resources.getResourceString(actionListenerClass, actionType.getDisplayName()));
         actionDescriptor.setAccelerator(Resources.getResourceString(actionListenerClass, actionType.getAccelerator()));
         actionDescriptor.setIcon(StringUtils.stripToNull(actionType.getIcon()));
+        actionDescriptor.setResourceLoader(new ResourceLoader(actionListenerClass));
         Object actionListener = actionListenerClass.newInstance();
         if (actionListener instanceof ActiveContextSensitive) {
             ((ActiveContextSensitive) actionListener).setActiveContext(activeContext);

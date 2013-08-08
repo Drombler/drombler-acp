@@ -14,9 +14,10 @@
  */
 package org.drombler.acp.core.action.spi;
 
-import org.osgi.framework.Bundle;
 import org.drombler.acp.core.action.jaxb.ActionType;
 import org.drombler.acp.core.commons.util.context.Context;
+import org.osgi.framework.Bundle;
+import org.softsmithy.lib.util.ResourceLoader;
 
 /**
  *
@@ -30,6 +31,7 @@ public class ActionDescriptor {
     private String accelerator;
     private String icon;
     private Object listener;
+    private ResourceLoader resourceLoader;
 
     /**
      * @return the id
@@ -96,6 +98,14 @@ public class ActionDescriptor {
      */
     public void setListener(Object listener) {
         this.listener = listener;
+    }
+
+    public ResourceLoader getResourceLoader() {
+        return resourceLoader;
+    }
+
+    public void setResourceLoader(ResourceLoader resourceLoader) {
+        this.resourceLoader = resourceLoader;
     }
 
     public static ActionDescriptor createActionDescriptor(ActionType actionType, Bundle bundle, Context activeContext,
