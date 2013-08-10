@@ -17,6 +17,7 @@ package org.drombler.acp.core.docking.spi;
 import org.apache.commons.lang3.StringUtils;
 import org.drombler.acp.core.docking.jaxb.AbstractDockingType;
 import org.osgi.framework.Bundle;
+import org.softsmithy.lib.util.ResourceLoader;
 
 /**
  *
@@ -26,9 +27,11 @@ public class DockingDescriptorUtils {
 
     public static void configureDockingDescriptor(AbstractDockableDockingDescriptor dockingDescriptor,
             AbstractDockingType dockingType, Bundle bundle) throws ClassNotFoundException {
+        final Class<?> dockableClass = bundle.loadClass(StringUtils.stripToNull(dockingType.getDockableClass()));
         dockingDescriptor.setId(StringUtils.stripToNull(dockingType.getId()));
         dockingDescriptor.setIcon(StringUtils.stripToNull(dockingType.getIcon()));
         dockingDescriptor.setAreaId(StringUtils.stripToNull(dockingType.getAreaId()));
-        dockingDescriptor.setDockableClass(bundle.loadClass(StringUtils.stripToNull(dockingType.getDockableClass())));
+        dockingDescriptor.setDockableClass(dockableClass);
+        dockingDescriptor.setResourceLoader(new ResourceLoader(dockableClass));
     }
 }

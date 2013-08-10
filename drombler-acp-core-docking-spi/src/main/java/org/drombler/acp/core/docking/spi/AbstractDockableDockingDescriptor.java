@@ -14,6 +14,8 @@
  */
 package org.drombler.acp.core.docking.spi;
 
+import org.softsmithy.lib.util.ResourceLoader;
+
 /**
  *
  * @author puce
@@ -24,6 +26,7 @@ public class AbstractDockableDockingDescriptor {
     private String areaId;
     private String icon;
     private Class<?> dockableClass;
+    private ResourceLoader resourceLoader;
 
     /**
      * @return the areaId
@@ -79,5 +82,13 @@ public class AbstractDockableDockingDescriptor {
      */
     public void setDockableClass(Class<?> dockableClass) {
         this.dockableClass = dockableClass;
+    }
+
+    public ResourceLoader getResourceLoader() {
+        return resourceLoader;
+    }
+
+    public void setResourceLoader(ResourceLoader resourceLoader) {
+        this.resourceLoader = resourceLoader;
     }
 }

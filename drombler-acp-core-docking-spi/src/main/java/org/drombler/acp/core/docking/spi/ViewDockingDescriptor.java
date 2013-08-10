@@ -104,7 +104,7 @@ public class ViewDockingDescriptor extends AbstractDockableDockingDescriptor {
         actionDescriptor.setDisplayName(dockingDescriptor.getDisplayName());
         actionDescriptor.setAccelerator(accelerator);
         actionDescriptor.setIcon(dockingDescriptor.getIcon());
-        actionDescriptor.setResourceLoader(new ResourceLoader(dockingDescriptor.getDockableClass()));
+        actionDescriptor.setResourceLoader(dockingDescriptor.getResourceLoader());
 //        actionDescriptor.setListener(new ActivateDockableAction(dockingDescriptor.getDockable()));
         return actionDescriptor;
     }
