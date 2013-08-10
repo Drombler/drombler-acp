@@ -14,8 +14,6 @@
  */
 package org.drombler.acp.core.action.spi.impl;
 
-import org.drombler.acp.core.action.spi.MenuEntryDescriptor;
-
 /**
  *
  * @author puce
