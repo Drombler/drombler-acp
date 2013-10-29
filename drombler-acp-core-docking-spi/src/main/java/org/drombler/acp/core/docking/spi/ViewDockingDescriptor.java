@@ -19,7 +19,6 @@ import org.drombler.acp.core.action.spi.MenuEntryDescriptor;
 import org.drombler.acp.core.commons.util.Resources;
 import org.drombler.acp.core.docking.jaxb.ViewDockingType;
 import org.osgi.framework.Bundle;
-import org.softsmithy.lib.util.ResourceLoader;
 
 /**
  *
