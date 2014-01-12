@@ -26,8 +26,8 @@ import org.apache.felix.scr.annotations.References;
 import org.drombler.acp.core.action.jaxb.ActionsType;
 import org.drombler.acp.core.action.spi.ActionRegistry;
 import org.drombler.acp.core.application.ApplicationExecutorProvider;
-import org.drombler.acp.core.commons.util.context.ActiveContextProvider;
-import org.drombler.acp.core.commons.util.context.ApplicationContextProvider;
+import org.drombler.commons.context.ActiveContextProvider;
+import org.drombler.commons.context.ApplicationContextProvider;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 

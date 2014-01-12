@@ -35,8 +35,8 @@ Contributor(s): .
         <connection>${scm.parent.connection}</connection>
         <developerConnection>${scm.parent.developerConnection}</developerConnection>
         <url>${scm.parent.url}</url>
-      <tag>HEAD</tag>
-  </scm>
+        <tag>HEAD</tag>
+    </scm>
 
     <licenses>
         <license>
@@ -47,13 +47,22 @@ Contributor(s): .
         </license>
     </licenses>
     
+    <distributionManagement>
+        <site>
+            <id>drombler.sourceforge.net</id>
+            <name>Drombler ACP</name>
+            <url>${distributionManagement.parent.url}/${project.artifactId}/</url>
+        </site>
+    </distributionManagement>
+    
     <properties>
         
         <!-- Dev Environment Defaults -->
         <scm.parent.connection>scm:hg:http://hg.code.sf.net/p/drombler/drombler-acp</scm.parent.connection>
         <scm.parent.developerConnection>scm:hg:ssh://${username}@hg.code.sf.net/p/drombler/drombler-acp</scm.parent.developerConnection>
         <scm.parent.url>http://sourceforge.net/p/drombler/drombler-acp</scm.parent.url>
-        
+        <distributionManagement.parent.url>scp://${username}@shell.sourceforge.net/home/project-web/drombler/htdocs/DromblerACP/docs/site/${project.version}</distributionManagement.parent.url>
+        <drombler-commons.version>0.3-SNAPSHOT</drombler-commons.version>
         <!-- Dependency Versions Defaults -->
 
     </properties>
@@ -63,4 +72,15 @@ Contributor(s): .
         <maven>${maven.version}</maven>
     </prerequisites>
 
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.drombler.commons</groupId>
+                <artifactId>drombler-commons-all</artifactId>
+                <version>${drombler-commons.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>       
+        </dependencies>
+    </dependencyManagement>
 </project>

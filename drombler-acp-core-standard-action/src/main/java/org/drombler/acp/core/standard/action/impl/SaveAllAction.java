@@ -22,10 +22,10 @@ import org.drombler.acp.core.action.AbstractActionListener;
 import org.drombler.acp.core.action.Action;
 import org.drombler.acp.core.action.MenuEntry;
 import org.drombler.acp.core.action.ToolBarEntry;
-import org.drombler.acp.core.commons.util.context.ApplicationContextSensitive;
-import org.drombler.acp.core.commons.util.context.Context;
-import org.drombler.acp.core.commons.util.context.ContextEvent;
-import org.drombler.acp.core.commons.util.context.ContextListener;
+import org.drombler.commons.context.ApplicationContextSensitive;
+import org.drombler.commons.context.Context;
+import org.drombler.commons.context.ContextEvent;
+import org.drombler.commons.context.ContextListener;
 import org.drombler.acp.core.standard.action.Savable;
 
 /*
