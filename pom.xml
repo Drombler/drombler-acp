@@ -21,7 +21,7 @@ Contributor(s): .
         <version>0.2.1-SNAPSHOT</version>
         <relativePath>drombler-acp-parent</relativePath>
     </parent>
-    <artifactId>drombler-acp-all</artifactId>
+    <artifactId>drombler-acp</artifactId>
     <packaging>pom</packaging>
     
     <name>Drombler ACP - All</name>
@@ -62,17 +62,6 @@ Contributor(s): .
         <module>drombler-acp-locale-all</module>
         <module>drombler-acp-locale-de</module>
     </modules>
-    
-    <build>
-        <plugins>
-            <plugin>
-                <artifactId>maven-deploy-plugin</artifactId>
-                <configuration>
-                    <skip>true</skip>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
     
     <dependencyManagement>
         <dependencies>

@@ -76,7 +76,7 @@ Contributor(s): .
         <dependencies>
             <dependency>
                 <groupId>org.drombler.commons</groupId>
-                <artifactId>drombler-commons-all</artifactId>
+                <artifactId>drombler-commons</artifactId>
                 <version>${drombler-commons.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
