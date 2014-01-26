@@ -16,7 +16,7 @@ package org.drombler.acp.core.docking.spi;
 
 import org.drombler.acp.core.action.spi.ActionDescriptor;
 import org.drombler.acp.core.action.spi.MenuEntryDescriptor;
-import org.drombler.commons.client.util.Resources;
+import org.drombler.commons.client.util.ResourceBundleUtils;
 import org.drombler.acp.core.docking.jaxb.ViewDockingType;
 import org.osgi.framework.Bundle;
 
@@ -78,7 +78,7 @@ public class ViewDockingDescriptor extends AbstractDockableDockingDescriptor {
 
         DockingDescriptorUtils.configureDockingDescriptor(dockingDescriptor, docking, bundle);
 
-        dockingDescriptor.setDisplayName(Resources.getResourceString(dockingDescriptor.getDockableClass(),
+        dockingDescriptor.setDisplayName(ResourceBundleUtils.getPackageResourceStringPrefixed(dockingDescriptor.getDockableClass(),
                 docking.getDisplayName()));
         dockingDescriptor.setPosition(docking.getPosition());
         dockingDescriptor.setActivateDockableActionDescriptor(createActivateDockableActionDescriptor(dockingDescriptor,

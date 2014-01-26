@@ -16,7 +16,7 @@ package org.drombler.acp.core.action.spi;
 
 import org.apache.commons.lang3.StringUtils;
 import org.drombler.acp.core.action.jaxb.ActionType;
-import org.drombler.commons.client.util.Resources;
+import org.drombler.commons.client.util.ResourceBundleUtils;
 import org.drombler.commons.context.ActiveContextSensitive;
 import org.drombler.commons.context.ApplicationContextSensitive;
 import org.drombler.commons.context.Context;
@@ -37,8 +37,10 @@ class ActionDescriptorUtils {
             IllegalAccessException {
         Class<?> actionListenerClass = bundle.loadClass(StringUtils.stripToNull(actionType.getListenerClass()));
         actionDescriptor.setId(StringUtils.stripToNull(actionType.getId()));
-        actionDescriptor.setDisplayName(Resources.getResourceString(actionListenerClass, actionType.getDisplayName()));
-        actionDescriptor.setAccelerator(Resources.getResourceString(actionListenerClass, actionType.getAccelerator()));
+        actionDescriptor.setDisplayName(ResourceBundleUtils.getPackageResourceStringPrefixed(actionListenerClass,
+                actionType.getDisplayName()));
+        actionDescriptor.setAccelerator(ResourceBundleUtils.getPackageResourceStringPrefixed(actionListenerClass,
+                actionType.getAccelerator()));
         actionDescriptor.setIcon(StringUtils.stripToNull(actionType.getIcon()));
         actionDescriptor.setResourceLoader(new ResourceLoader(actionListenerClass));
         Object actionListener = actionListenerClass.newInstance();

@@ -15,7 +15,7 @@
 package org.drombler.acp.core.commons.util;
 
 import java.util.ResourceBundle;
-import org.drombler.commons.client.util.Resources;
+import org.drombler.commons.client.util.ResourceBundleUtils;
 import org.osgi.framework.Bundle;
 
 /**
@@ -23,9 +23,9 @@ import org.osgi.framework.Bundle;
  *
  * @author puce
  */
-public class BundleResources {
+public class OSGiResourceBundleUtils {
 
-    private BundleResources() {
+    private OSGiResourceBundleUtils() {
     }
 
     /**
@@ -40,7 +40,7 @@ public class BundleResources {
      * @param bundle
      * @return
      */
-    public static String getResourceString(String aPackage, String resourceKey, Bundle bundle) {
-        return Resources.getResourceString(aPackage, resourceKey, new BundleProxyClassLoader(bundle));
+    public static String getPackageResourceStringPrefixed(String aPackage, String resourceKey, Bundle bundle) {
+        return ResourceBundleUtils.getPackageResourceStringPrefixed(aPackage, resourceKey, new BundleProxyClassLoader(bundle));
     }
 }

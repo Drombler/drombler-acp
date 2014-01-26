@@ -16,7 +16,7 @@ package org.drombler.acp.core.action.spi;
 
 import org.apache.commons.lang3.StringUtils;
 import org.drombler.acp.core.action.jaxb.MenuType;
-import org.drombler.acp.core.commons.util.BundleResources;
+import org.drombler.acp.core.commons.util.OSGiResourceBundleUtils;
 import org.osgi.framework.Bundle;
 
 /**
@@ -85,7 +85,7 @@ public class MenuDescriptor extends AbstractMenuEntryDescriptor {
 
     public static MenuDescriptor createMenuDescriptor(MenuType menuType, Bundle bundle) {
         return new MenuDescriptor(StringUtils.stripToNull(menuType.getId()),
-                BundleResources.getResourceString(menuType.getPackage(),
+                OSGiResourceBundleUtils.getPackageResourceStringPrefixed(menuType.getPackage(),
                 menuType.getDisplayName(), bundle), StringUtils.stripToEmpty(menuType.getPath()), menuType.getPosition());
     }
 //    private void registerMenu(MenuDescriptor menuDescriptor) {

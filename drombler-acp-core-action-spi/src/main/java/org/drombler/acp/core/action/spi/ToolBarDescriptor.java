@@ -17,7 +17,7 @@ package org.drombler.acp.core.action.spi;
 import org.apache.commons.lang3.StringUtils;
 import org.drombler.acp.core.action.jaxb.ToolBarType;
 import org.drombler.acp.core.action.spi.impl.ShowToolBarAction;
-import org.drombler.acp.core.commons.util.BundleResources;
+import org.drombler.acp.core.commons.util.OSGiResourceBundleUtils;
 import org.osgi.framework.Bundle;
 import org.softsmithy.lib.util.Positionable;
 
@@ -89,7 +89,7 @@ public class ToolBarDescriptor implements Positionable {
         ToolBarDescriptor toolBarDescriptor = new ToolBarDescriptor();
 
         toolBarDescriptor.setId(StringUtils.stripToNull(toolBarType.getId()));
-        toolBarDescriptor.setDisplayName(BundleResources.getResourceString(toolBarType.getPackage(),
+        toolBarDescriptor.setDisplayName(OSGiResourceBundleUtils.getPackageResourceStringPrefixed(toolBarType.getPackage(),
                 toolBarType.getDisplayName(), bundle));
         toolBarDescriptor.setPosition(toolBarType.getPosition());
         toolBarDescriptor.setVisible(toolBarType.isVisible());
