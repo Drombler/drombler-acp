@@ -16,7 +16,7 @@ package org.drombler.acp.core.docking.spi;
 
 import org.drombler.acp.core.action.spi.ActionDescriptor;
 import org.drombler.acp.core.action.spi.MenuEntryDescriptor;
-import org.drombler.acp.core.commons.util.Resources;
+import org.drombler.commons.client.util.Resources;
 import org.drombler.acp.core.docking.jaxb.ViewDockingType;
 import org.osgi.framework.Bundle;
 

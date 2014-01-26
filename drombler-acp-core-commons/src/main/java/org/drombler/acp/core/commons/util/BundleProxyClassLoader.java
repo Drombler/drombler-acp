@@ -33,14 +33,7 @@ class BundleProxyClassLoader extends ClassLoader {
         this.parent = parent;
         this.bundle = bundle;
     }
-
-    // Note: Both ClassLoader.getResources(...) and bundle.getResources(...) consult 
-    // the boot classloader. As a result, BundleProxyClassLoader.getResources(...) 
-    // might return duplicate results from the boot classloader. Prior to Java 5 
-    // Classloader.getResources was marked final. If your target environment requires
-    // at least Java 5 you can prevent the occurence of duplicate boot classloader 
-    // resources by overriding ClassLoader.getResources(...) instead of 
-    // ClassLoader.findResources(...).   
+  
     @Override
     public Enumeration<URL> getResources(String name) throws IOException {
         return bundle.getResources(name);

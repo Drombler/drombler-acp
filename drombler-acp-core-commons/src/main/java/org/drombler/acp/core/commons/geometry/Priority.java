@@ -19,7 +19,7 @@ package org.drombler.acp.core.commons.geometry;
  * @author puce
  */
 // TODO: needed?
-public enum Priority {
+enum Priority {
 
     ALWAYS,
     NEVER,

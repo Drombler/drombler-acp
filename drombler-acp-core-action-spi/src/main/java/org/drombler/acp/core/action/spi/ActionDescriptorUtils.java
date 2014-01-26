@@ -16,7 +16,7 @@ package org.drombler.acp.core.action.spi;
 
 import org.apache.commons.lang3.StringUtils;
 import org.drombler.acp.core.action.jaxb.ActionType;
-import org.drombler.acp.core.commons.util.Resources;
+import org.drombler.commons.client.util.Resources;
 import org.drombler.commons.context.ActiveContextSensitive;
 import org.drombler.commons.context.ApplicationContextSensitive;
 import org.drombler.commons.context.Context;
