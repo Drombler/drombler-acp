@@ -29,15 +29,16 @@ import org.apache.felix.scr.annotations.References;
 import org.drombler.acp.core.action.spi.ActionDescriptor;
 import org.drombler.acp.core.action.spi.MenuEntryDescriptor;
 import org.drombler.acp.core.application.ApplicationExecutorProvider;
-import org.drombler.commons.context.ActiveContextProvider;
-import org.drombler.commons.context.ActiveContextSensitive;
-import org.drombler.commons.context.ApplicationContextProvider;
-import org.drombler.commons.context.ApplicationContextSensitive;
-import org.drombler.acp.core.docking.Dockable;
 import org.drombler.acp.core.docking.jaxb.DockingsType;
 import org.drombler.acp.core.docking.jaxb.ViewDockingType;
 import org.drombler.acp.core.docking.spi.DockableFactory;
 import org.drombler.acp.core.docking.spi.ViewDockingDescriptor;
+import org.drombler.commons.client.docking.Dockable;
+import org.drombler.commons.client.docking.DockablePreferences;
+import org.drombler.commons.context.ActiveContextProvider;
+import org.drombler.commons.context.ActiveContextSensitive;
+import org.drombler.commons.context.ApplicationContextProvider;
+import org.drombler.commons.context.ApplicationContextSensitive;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
@@ -50,7 +51,7 @@ import org.osgi.service.component.ComponentContext;
 @Component(immediate = true)
 @References({
     @Reference(name = "viewDockingDescriptor", referenceInterface = ViewDockingDescriptor.class,
-    cardinality = ReferenceCardinality.OPTIONAL_MULTIPLE, policy = ReferencePolicy.DYNAMIC),
+            cardinality = ReferenceCardinality.OPTIONAL_MULTIPLE, policy = ReferencePolicy.DYNAMIC),
     @Reference(name = "applicationExecutorProvider", referenceInterface = ApplicationExecutorProvider.class)
 })
 public class ViewDockingHandler<A, D extends Dockable> extends AbstractDockableDockingHandler<A, D> {
@@ -149,9 +150,11 @@ public class ViewDockingHandler<A, D extends Dockable> extends AbstractDockableD
                         }
                         dockingDescriptor.getActivateDockableActionDescriptor().setListener(new ActivateDockableAction(
                                 dockable));
-                        registerDockablePreferences(dockable.getClass(), dockingDescriptor.getAreaId(),
-                                dockingDescriptor.getPosition());
-                        getDockingAreaContainerProvider().getDockingAreaContainer().addDockable(dockable);
+                        DockablePreferences dockablePreferences = createDockablePreferences(dockingDescriptor.
+                                getAreaId(), dockingDescriptor.getPosition());
+                        registerDefaultDockablePreferences(dockable.getClass(), dockablePreferences);
+                        getDockingAreaContainerProvider().getDockingAreaContainer().addDockable(dockable,
+                                dockablePreferences);
                         context.registerService(ActionDescriptor.class,
                                 dockingDescriptor.getActivateDockableActionDescriptor(),
                                 null);

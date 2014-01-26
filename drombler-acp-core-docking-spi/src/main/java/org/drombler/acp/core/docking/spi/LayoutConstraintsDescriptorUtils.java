@@ -15,15 +15,16 @@
 package org.drombler.acp.core.docking.spi;
 
 import org.drombler.acp.core.docking.jaxb.LayoutConstraintsType;
+import org.drombler.commons.client.docking.LayoutConstraintsDescriptor;
 
 /**
  *
  * @author puce
  */
-public class LayoutConstraintsDescriptor {
+public class LayoutConstraintsDescriptorUtils {
 
-    private double prefWidth;
-    private double prefHeight;
+    private LayoutConstraintsDescriptorUtils() {
+    }
 
     public static LayoutConstraintsDescriptor createLayoutConstraintsDescriptor(LayoutConstraintsType layoutConstraints) {
         LayoutConstraintsDescriptor layoutConstraintsDescriptor = new LayoutConstraintsDescriptor();
@@ -32,31 +33,4 @@ public class LayoutConstraintsDescriptor {
         return layoutConstraintsDescriptor;
     }
 
-    /**
-     * @return the prefWidth
-     */
-    public double getPrefWidth() {
-        return prefWidth;
-    }
-
-    /**
-     * @param prefWidth the prefWidth to set
-     */
-    public void setPrefWidth(double prefWidth) {
-        this.prefWidth = prefWidth;
-    }
-
-    /**
-     * @return the prefHeight
-     */
-    public double getPrefHeight() {
-        return prefHeight;
-    }
-
-    /**
-     * @param prefHeight the prefHeight to set
-     */
-    public void setPrefHeight(double prefHeight) {
-        this.prefHeight = prefHeight;
-    }
 }

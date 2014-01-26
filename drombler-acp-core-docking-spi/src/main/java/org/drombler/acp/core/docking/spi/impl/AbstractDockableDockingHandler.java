@@ -19,8 +19,8 @@ import org.apache.felix.scr.annotations.ReferenceCardinality;
 import org.apache.felix.scr.annotations.ReferencePolicy;
 import org.apache.felix.scr.annotations.References;
 import org.drombler.acp.core.docking.jaxb.DockingsType;
-import org.drombler.acp.core.docking.spi.DockablePreferences;
-import org.drombler.acp.core.docking.spi.DockablePreferencesManager;
+import org.drombler.acp.core.docking.spi.DockablePreferencesManagerProvider;
+import org.drombler.commons.client.docking.DockablePreferences;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
@@ -36,10 +36,11 @@ import org.osgi.framework.ServiceReference;
 public abstract class AbstractDockableDockingHandler<A, D> extends AbstractDockingHandler<A, D> {
 
     @Reference
-    private DockablePreferencesManager<D> dockablePreferencesManager;
+    private DockablePreferencesManagerProvider<D> dockablePreferencesManagerProvider;
 
-    protected void bindDockablePreferencesManager(DockablePreferencesManager<D> dockablePreferencesManager) {
-        this.dockablePreferencesManager = dockablePreferencesManager;
+    protected void bindDockablePreferencesManagerProvider(
+            DockablePreferencesManagerProvider<D> dockablePreferencesManagerProvider) {
+        this.dockablePreferencesManagerProvider = dockablePreferencesManagerProvider;
     }
 
     protected void bindDockingsType(ServiceReference<DockingsType> serviceReference) {
@@ -53,21 +54,27 @@ public abstract class AbstractDockableDockingHandler<A, D> extends AbstractDocki
 
     @Override
     protected boolean isInitialized() {
-        return super.isInitialized() && dockablePreferencesManager != null;
+        return super.isInitialized() && dockablePreferencesManagerProvider != null;
     }
 
-    protected void unbindDockablePreferencesManager(DockablePreferencesManager<D> dockablePreferencesManager) {
-        this.dockablePreferencesManager = null;
+    protected void unbindDockablePreferencesManagerProvider(
+            DockablePreferencesManagerProvider<D> dockablePreferencesManagerProvider) {
+        this.dockablePreferencesManagerProvider = null;
     }
 
     protected void unbindDockingsType(DockingsType dockingAreasType) {
         // TODO
     }
 
-    protected void registerDockablePreferences(Class<?> dockableClass, String areaId, int position) {
+    protected void registerDefaultDockablePreferences(Class<?> dockableClass, DockablePreferences dockablePreferences) {
+        dockablePreferencesManagerProvider.getDockablePreferencesManager().registerDefaultDockablePreferences(
+                dockableClass, dockablePreferences);
+    }
+
+    protected DockablePreferences createDockablePreferences(String areaId, int position) {
         DockablePreferences dockablePreferences = new DockablePreferences();
         dockablePreferences.setAreaId(areaId);
         dockablePreferences.setPosition(position);
-        dockablePreferencesManager.registerDefaultDockablePreferences(dockableClass, dockablePreferences);
+        return dockablePreferences;
     }
 }

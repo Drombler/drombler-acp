@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.drombler.acp.core.docking.jaxb.DockingAreaType;
+import org.drombler.commons.client.docking.LayoutConstraintsDescriptor;
 
 /**
  *
@@ -37,7 +38,7 @@ public class DockingAreaDescriptor {
         dockingAreaDescriptor.setPosition(dockingArea.getPosition());
         dockingAreaDescriptor.setPath(new ArrayList<>(dockingArea.getPaths().getPath()));
         dockingAreaDescriptor.setPermanent(dockingArea.isPermanent());
-        dockingAreaDescriptor.setLayoutConstraints(LayoutConstraintsDescriptor.createLayoutConstraintsDescriptor(
+        dockingAreaDescriptor.setLayoutConstraints(LayoutConstraintsDescriptorUtils.createLayoutConstraintsDescriptor(
                 dockingArea.getLayoutConstraints()));
         return dockingAreaDescriptor;
     }

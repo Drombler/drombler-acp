@@ -14,19 +14,13 @@
  */
 package org.drombler.acp.core.docking.spi;
 
+import org.drombler.commons.client.docking.DockablePreferencesManager;
+
 /**
  *
  * @author puce
  */
-public interface DockablePreferencesManager<D> {
+public interface DockablePreferencesManagerProvider<D> {
 
-    DockablePreferences getDockablePreferences(D dockable);
-
-    void registerDefaultDockablePreferences(Class<?> dockableClass, DockablePreferences dockablePreferences);
-    
-    void registerDockablePreferences(D dockable, DockablePreferences dockablePreferences);
-
-    DockablePreferences unregisterDockablePreferences(D dockable);
-    
-    void reset();
+    DockablePreferencesManager<D> getDockablePreferencesManager();
 }

@@ -14,6 +14,8 @@
  */
 package org.drombler.acp.core.docking.spi;
 
+import org.drombler.commons.client.docking.DockingAreaContainer;
+
 /**
  *
  * @author puce

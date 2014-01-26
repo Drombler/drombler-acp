@@ -27,6 +27,7 @@ import org.apache.felix.scr.annotations.ReferencePolicy;
 import org.drombler.acp.core.docking.jaxb.DockingsType;
 import org.drombler.acp.core.docking.jaxb.EditorDockingType;
 import org.drombler.acp.core.docking.spi.EditorDockingDescriptor;
+import org.drombler.commons.client.docking.DockablePreferences;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.service.component.ComponentContext;
@@ -73,7 +74,8 @@ public class EditorDockingHandler<A, D> extends AbstractDockableDockingHandler<A
 
     private void resolveDockingDescriptor(EditorDockingDescriptor dockingDescriptor) {
         if (isInitialized()) {
-            registerDockablePreferences(dockingDescriptor.getDockableClass(), dockingDescriptor.getAreaId(), 0);
+            DockablePreferences dockablePreferences = createDockablePreferences(dockingDescriptor.getAreaId(), 0);
+            registerDefaultDockablePreferences(dockingDescriptor.getDockableClass(), dockablePreferences);
         } else {
             unresolvedDockingDescriptors.add(dockingDescriptor);
         }
