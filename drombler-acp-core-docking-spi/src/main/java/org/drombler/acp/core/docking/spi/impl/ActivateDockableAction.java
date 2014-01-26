@@ -15,7 +15,8 @@
 package org.drombler.acp.core.docking.spi.impl;
 
 import org.drombler.acp.core.action.AbstractActionListener;
-import org.drombler.acp.core.docking.Dockable;
+import org.drombler.acp.core.docking.spi.Dockables;
+import org.drombler.commons.client.docking.Dockable;
 
 /**
  *
@@ -31,7 +32,7 @@ public class ActivateDockableAction extends AbstractActionListener<Object> {
 
     @Override
     public void onAction(Object event) {
-        dockable.open();
+        Dockables.open(dockable);
         dockable.requestActive();
     }
 }
