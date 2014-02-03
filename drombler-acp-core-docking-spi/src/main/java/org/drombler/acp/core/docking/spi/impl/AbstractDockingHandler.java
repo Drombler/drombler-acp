@@ -22,22 +22,22 @@ import org.drombler.acp.core.docking.spi.DockingAreaContainerProvider;
  * @author puce
  */
 @Reference(name = "dockingAreaContainerProvider", referenceInterface = DockingAreaContainerProvider.class)
-public abstract class AbstractDockingHandler<A, D> {
+public abstract class AbstractDockingHandler<D> {
 
-    private DockingAreaContainerProvider<A, D> dockingAreaContainerProvider;
+    private DockingAreaContainerProvider<D> dockingAreaContainerProvider;
 
-    protected void bindDockingAreaContainerProvider(DockingAreaContainerProvider<A, D> dockingAreaContainerProvider) {
+    protected void bindDockingAreaContainerProvider(DockingAreaContainerProvider<D> dockingAreaContainerProvider) {
         this.dockingAreaContainerProvider = dockingAreaContainerProvider;
     }
 
-    protected void unbindDockingAreaContainerProvider(DockingAreaContainerProvider<A, D> dockingAreaContainerProvider) {
+    protected void unbindDockingAreaContainerProvider(DockingAreaContainerProvider<D> dockingAreaContainerProvider) {
         this.dockingAreaContainerProvider = null;
     }
 
     /**
      * @return the dockingAreaContainer
      */
-    protected DockingAreaContainerProvider<A, D> getDockingAreaContainerProvider() {
+    protected DockingAreaContainerProvider<D> getDockingAreaContainerProvider() {
         return dockingAreaContainerProvider;
     }
 

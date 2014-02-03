@@ -33,7 +33,7 @@ import org.osgi.framework.ServiceReference;
     @Reference(name = "dockingsType", referenceInterface = DockingsType.class,
     cardinality = ReferenceCardinality.OPTIONAL_MULTIPLE, policy = ReferencePolicy.DYNAMIC)
 })
-public abstract class AbstractDockableDockingHandler<A, D> extends AbstractDockingHandler<A, D> {
+public abstract class AbstractDockableDockingHandler<D> extends AbstractDockingHandler<D> {
 
     @Reference
     private DockablePreferencesManagerProvider<D> dockablePreferencesManagerProvider;

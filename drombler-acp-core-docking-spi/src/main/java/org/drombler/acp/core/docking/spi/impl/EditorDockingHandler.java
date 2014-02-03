@@ -39,7 +39,7 @@ import org.osgi.service.component.ComponentContext;
 @Component(immediate = true)
 @Reference(name = "editorDockingDescriptor", referenceInterface = EditorDockingDescriptor.class,
 cardinality = ReferenceCardinality.OPTIONAL_MULTIPLE, policy = ReferencePolicy.DYNAMIC)
-public class EditorDockingHandler<A, D> extends AbstractDockableDockingHandler<A, D> {
+public class EditorDockingHandler<D> extends AbstractDockableDockingHandler<D> {
 
     private final List<EditorDockingDescriptor> unresolvedDockingDescriptors = new ArrayList<>();
 

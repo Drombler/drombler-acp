@@ -20,7 +20,7 @@ import org.drombler.commons.client.docking.DockingAreaContainer;
  *
  * @author puce
  */
-public interface DockingAreaContainerProvider<A, D> {
+public interface DockingAreaContainerProvider<D> {
 
-    DockingAreaContainer<A, D> getDockingAreaContainer();
+    DockingAreaContainer<D> getDockingAreaContainer();
 }

@@ -27,8 +27,8 @@ import org.apache.felix.scr.annotations.References;
 import org.drombler.acp.core.application.ApplicationExecutorProvider;
 import org.drombler.acp.core.docking.jaxb.DockingAreaType;
 import org.drombler.acp.core.docking.jaxb.DockingAreasType;
-import org.drombler.acp.core.docking.spi.DockingAreaDescriptor;
-import org.drombler.acp.core.docking.spi.DockingAreaFactory;
+import org.drombler.acp.core.docking.spi.DockingAreaDescriptorUtils;
+import org.drombler.commons.client.docking.DockingAreaDescriptor;
 import org.osgi.service.component.ComponentContext;
 
 /**
@@ -43,20 +43,10 @@ import org.osgi.service.component.ComponentContext;
     cardinality = ReferenceCardinality.OPTIONAL_MULTIPLE, policy = ReferencePolicy.DYNAMIC),
     @Reference(name = "applicationExecutorProvider", referenceInterface = ApplicationExecutorProvider.class)
 })
-public class DockingAreaHandler<A, D> extends AbstractDockingHandler<A, D> {
+public class DockingAreaHandler<D> extends AbstractDockingHandler<D> {
 
-    @Reference
-    private DockingAreaFactory<A> dockingAreaFactory;
     private Executor applicationExecutor;
     private final List<DockingAreaDescriptor> unresolvedDockingAreaDescriptors = new ArrayList<>();
-
-    protected void bindDockingAreaFactory(DockingAreaFactory<A> dockingAreaFactory) {
-        this.dockingAreaFactory = dockingAreaFactory;
-    }
-
-    protected void unbindDockingAreaFactory(DockingAreaFactory<A> dockingAreaFactory) {
-        this.dockingAreaFactory = null;
-    }
 
     protected void bindApplicationExecutorProvider(ApplicationExecutorProvider applicationExecutorProvider) {
         applicationExecutor = applicationExecutorProvider.getApplicationExecutor();
@@ -68,7 +58,8 @@ public class DockingAreaHandler<A, D> extends AbstractDockingHandler<A, D> {
 
     protected void bindDockingAreasType(DockingAreasType dockingAreasType) {
         for (DockingAreaType dockingArea : dockingAreasType.getDockingArea()) {
-            DockingAreaDescriptor dockingAreaDescriptor = DockingAreaDescriptor.createDockingAreaDescriptor(dockingArea);
+            DockingAreaDescriptor dockingAreaDescriptor = DockingAreaDescriptorUtils.createDockingAreaDescriptor(
+                    dockingArea);
             resolveDockingArea(dockingAreaDescriptor);
         }
     }
@@ -95,7 +86,7 @@ public class DockingAreaHandler<A, D> extends AbstractDockingHandler<A, D> {
 
     @Override
     protected boolean isInitialized() {
-        return super.isInitialized() && dockingAreaFactory != null && applicationExecutor != null;
+        return super.isInitialized() && applicationExecutor != null;
     }
 
     private void resolveDockingArea(final DockingAreaDescriptor dockingAreaDescriptor) {
@@ -106,9 +97,7 @@ public class DockingAreaHandler<A, D> extends AbstractDockingHandler<A, D> {
 
                 @Override
                 public void run() {
-                    A dockingArea = dockingAreaFactory.createDockingArea(dockingAreaDescriptor);
-                    getDockingAreaContainerProvider().getDockingAreaContainer().addDockingArea(
-                            dockingAreaDescriptor.getPath(), dockingArea);
+                    getDockingAreaContainerProvider().getDockingAreaContainer().addDockingArea(dockingAreaDescriptor);
                 }
             };
             applicationExecutor.execute(runnable);

@@ -42,7 +42,7 @@ public class Dockables {
         ServiceReference<DockingAreaContainerProvider> dockingAreaContainerProviderServiceReference
                 = bundleContext.getServiceReference(DockingAreaContainerProvider.class);
         @SuppressWarnings("unchecked")
-        DockingAreaContainerProvider<?, D> dockingPaneProvider
+        DockingAreaContainerProvider<D> dockingPaneProvider
                 = bundleContext.getService(dockingAreaContainerProviderServiceReference);
 
         dockingPaneProvider.getDockingAreaContainer().addDockable(dockable, dockablePreferencesManagerProvider.

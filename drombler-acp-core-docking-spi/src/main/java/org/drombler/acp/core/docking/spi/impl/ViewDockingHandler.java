@@ -54,7 +54,7 @@ import org.osgi.service.component.ComponentContext;
             cardinality = ReferenceCardinality.OPTIONAL_MULTIPLE, policy = ReferencePolicy.DYNAMIC),
     @Reference(name = "applicationExecutorProvider", referenceInterface = ApplicationExecutorProvider.class)
 })
-public class ViewDockingHandler<A, D extends Dockable> extends AbstractDockableDockingHandler<A, D> {
+public class ViewDockingHandler<D extends Dockable> extends AbstractDockableDockingHandler<D> {
 
     @Reference
     private ActiveContextProvider activeContextProvider;
