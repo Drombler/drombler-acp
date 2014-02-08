@@ -65,6 +65,7 @@ public class EditorDockingHandler<D> extends AbstractDockableDockingHandler<D> {
             try {
                 EditorDockingDescriptor dockingDescriptor = EditorDockingDescriptor.createEditorDockingDescriptor(
                         dockingType, bundle);
+                // TODO: register EditorDockingDescriptor as service? Omit resolveDockingDescriptor?
                 resolveDockingDescriptor(dockingDescriptor);
             } catch (Exception ex) {
                 Logger.getLogger(EditorDockingHandler.class.getName()).log(Level.SEVERE, null, ex);

@@ -38,9 +38,9 @@ import org.osgi.service.component.ComponentContext;
 @Component(immediate = true)
 @References({
     @Reference(name = "dockingAreasType", referenceInterface = DockingAreasType.class,
-    cardinality = ReferenceCardinality.OPTIONAL_MULTIPLE, policy = ReferencePolicy.DYNAMIC),
+            cardinality = ReferenceCardinality.OPTIONAL_MULTIPLE, policy = ReferencePolicy.DYNAMIC),
     @Reference(name = "dockingAreaDescriptor", referenceInterface = DockingAreaDescriptor.class,
-    cardinality = ReferenceCardinality.OPTIONAL_MULTIPLE, policy = ReferencePolicy.DYNAMIC),
+            cardinality = ReferenceCardinality.OPTIONAL_MULTIPLE, policy = ReferencePolicy.DYNAMIC),
     @Reference(name = "applicationExecutorProvider", referenceInterface = ApplicationExecutorProvider.class)
 })
 public class DockingAreaHandler<D> extends AbstractDockingHandler<D> {
@@ -60,6 +60,7 @@ public class DockingAreaHandler<D> extends AbstractDockingHandler<D> {
         for (DockingAreaType dockingArea : dockingAreasType.getDockingArea()) {
             DockingAreaDescriptor dockingAreaDescriptor = DockingAreaDescriptorUtils.createDockingAreaDescriptor(
                     dockingArea);
+            // TODO: register DockingAreaDescriptor as service? Omit resolveDockingArea?
             resolveDockingArea(dockingAreaDescriptor);
         }
     }
