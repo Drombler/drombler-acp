@@ -30,7 +30,7 @@ public class Dockables {
 
     public static <D> void open(D dockable) {
         // TODO: cache ServiceReference? or even DockingAreaContainerProvider?
-        // TODO: check if the code is safe, if the service disappears
+        // TODO: check if the code is safe, if the services disappear
         BundleContext bundleContext = FrameworkUtil.getBundle(Dockables.class).getBundleContext();
 
         ServiceReference<DockablePreferencesManagerProvider> dockablePreferencesManagerProviderServiceReference
