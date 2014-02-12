@@ -21,6 +21,7 @@ import org.apache.felix.scr.annotations.References;
 import org.drombler.acp.core.docking.jaxb.DockingsType;
 import org.drombler.acp.core.docking.spi.DockablePreferencesManagerProvider;
 import org.drombler.commons.client.docking.DockablePreferences;
+import org.drombler.commons.client.docking.DockablePreferencesManager;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
@@ -67,8 +68,11 @@ public abstract class AbstractDockableDockingHandler<D> extends AbstractDockingH
     }
 
     protected void registerDefaultDockablePreferences(Class<?> dockableClass, DockablePreferences dockablePreferences) {
-        dockablePreferencesManagerProvider.getDockablePreferencesManager().registerDefaultDockablePreferences(
-                dockableClass, dockablePreferences);
+        getDockablePreferencesManager().registerDefaultDockablePreferences(dockableClass, dockablePreferences);
+    }
+
+    protected DockablePreferencesManager<D> getDockablePreferencesManager() {
+        return dockablePreferencesManagerProvider.getDockablePreferencesManager();
     }
 
     protected DockablePreferences createDockablePreferences(String areaId, int position) {

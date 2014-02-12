@@ -14,6 +14,7 @@
  */
 package org.drombler.acp.core.docking.spi;
 
+import org.drombler.commons.client.docking.DockableEntry;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.ServiceReference;
@@ -44,9 +45,9 @@ public class Dockables {
         @SuppressWarnings("unchecked")
         DockingAreaContainerProvider<D> dockingPaneProvider
                 = bundleContext.getService(dockingAreaContainerProviderServiceReference);
-
-        dockingPaneProvider.getDockingAreaContainer().addDockable(dockable, dockablePreferencesManagerProvider.
-                getDockablePreferencesManager().getDockablePreferences(dockable));
+        dockingPaneProvider.getDockingAreaContainer().addDockable(new DockableEntry<>(dockable,
+                dockablePreferencesManagerProvider.
+                getDockablePreferencesManager().getDockablePreferences(dockable)));
 
         bundleContext.ungetService(dockingAreaContainerProviderServiceReference);
         bundleContext.ungetService(dockablePreferencesManagerProviderServiceReference);

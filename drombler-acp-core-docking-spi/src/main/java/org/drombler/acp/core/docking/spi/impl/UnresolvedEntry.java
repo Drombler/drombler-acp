@@ -21,7 +21,7 @@ import org.osgi.framework.BundleContext;
  * @author puce
  */
 // TODO: consider to remove code duplication: org.drombler.acp.core.action.spi.impl.UnresolvedEntry
-public class UnresolvedEntry<T> {
+class UnresolvedEntry<T> {
     private final T entry;
     private final BundleContext context;
 
