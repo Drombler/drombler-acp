@@ -14,11 +14,26 @@
  */
 package org.drombler.acp.core.docking.spi;
 
+import java.util.EventObject;
+
 /**
  *
  * @author puce
  */
-public interface DockingAreaContainerProvider<D> {
+public class DockingAreaContainerDockingAreaEvent<D> extends EventObject {
 
-    DockingAreaContainer<D> getDockingAreaContainer();
+    private final String areaId;
+
+    public DockingAreaContainerDockingAreaEvent(DockingAreaContainer<D> source, String areaId) {
+        super(source);
+        this.areaId = areaId;
+    }
+
+    /**
+     * @return the areaId
+     */
+    public String getAreaId() {
+        return areaId;
+    }
+
 }

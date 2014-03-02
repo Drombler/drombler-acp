@@ -29,13 +29,14 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.ServiceLoader;
 import org.apache.felix.framework.util.Util;
-import org.osgi.framework.Constants;
+import org.drombler.acp.startup.main.ApplicationConfigProvider;
 import org.osgi.framework.FrameworkEvent;
 import org.osgi.framework.launch.Framework;
 import org.osgi.framework.launch.FrameworkFactory;
-import org.drombler.acp.startup.main.ApplicationConfigProvider;
 
 public class Main {
+
+//    private static final Logger LOG = LoggerFactory.getLogger(Main.class); // TODO: outside OSGi Framework...?
 
     public static final String USER_DIR_PROPERTY = "platform.userdir";
 
