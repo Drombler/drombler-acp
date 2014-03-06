@@ -35,6 +35,13 @@ Contributor(s): .
         <tag>HEAD</tag>
     </scm>
 
+    <distributionManagement>
+        <site>
+            <id>drombler.sourceforge.net</id>
+            <url>${distributionManagement.parent.url}/</url>
+        </site>
+    </distributionManagement>
+    
     <properties>
         <scm.connection>${scm.parent.connection}</scm.connection>
         <scm.developerConnection>${scm.parent.developerConnection}</scm.developerConnection>

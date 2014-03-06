@@ -23,7 +23,7 @@
     @DockingArea(id = "right", kind = DockingAreaKind.VIEW, position = 20, path = {20, 80},
     layoutConstraints = @LayoutConstraints(prefWidth = 200))
 })
-package org.drombler.acp.core.standard.docking;
+package org.drombler.acp.core.standard.docking.impl;
 
 import org.drombler.acp.core.docking.DockingArea;
 import org.drombler.acp.core.docking.DockingAreaKind;
