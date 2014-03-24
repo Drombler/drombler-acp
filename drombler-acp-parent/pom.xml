@@ -27,7 +27,7 @@ Contributor(s): .
     <packaging>pom</packaging>
     
     <name>Drombler ACP - Parent</name>
-    <url>http://www.drombler.org</url>
+    <url>http://www.drombler.org/DromblerACP/docs/site/${project.version}</url>
     <description>The parent POM of the Drombler ACP (Abstract Client Platform) project. This Drombler ACP Parent POM should be the parent (either directly or indirectly) of every Drombler ACP project unless there is a good reason to do otherwise (in which case the reason should be documented).</description>
     <inceptionYear>2012</inceptionYear>
     
@@ -112,13 +112,9 @@ Contributor(s): .
                     </reportSet>
                     <reportSet>
                         <id>aggregate</id>
-                        <!--<inherited>false</inherited>--><!-- don't run aggregate in child modules -->
                         <reports>
                             <report>aggregate</report>
                         </reports>
-                        <configuration>
-                            <excludePackageNames>${excludePackageNames}</excludePackageNames>
-                        </configuration>
                     </reportSet>
                 </reportSets>
             </plugin>
