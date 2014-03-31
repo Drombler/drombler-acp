@@ -27,7 +27,7 @@ Contributor(s): .
     <packaging>pom</packaging>
     
     <name>Drombler ACP - Parent</name>
-    <url>http://www.drombler.org/DromblerACP/docs/site/${project.version}</url>
+    <url>http://www.drombler.org/DromblerACP/${project.version}/docs/site</url>
     <description>The parent POM of the Drombler ACP (Abstract Client Platform) project. This Drombler ACP Parent POM should be the parent (either directly or indirectly) of every Drombler ACP project unless there is a good reason to do otherwise (in which case the reason should be documented).</description>
     <inceptionYear>2012</inceptionYear>
     
@@ -58,10 +58,12 @@ Contributor(s): .
     <properties>
         
         <!-- Dev Environment Defaults -->
+        <netbeans.hint.jdkPlatform>JDK_1.7</netbeans.hint.jdkPlatform>
         <scm.parent.connection>scm:hg:http://hg.code.sf.net/p/drombler/drombler-acp</scm.parent.connection>
         <scm.parent.developerConnection>scm:hg:ssh://${username}@hg.code.sf.net/p/drombler/drombler-acp</scm.parent.developerConnection>
         <scm.parent.url>http://sourceforge.net/p/drombler/drombler-acp</scm.parent.url>
-        <distributionManagement.parent.url>scp://${username}@shell.sourceforge.net/home/project-web/drombler/htdocs/DromblerACP/docs/site/${project.version}</distributionManagement.parent.url>
+        <distributionManagement.parent.url>scp://${username}@shell.sourceforge.net/home/project-web/drombler/htdocs/DromblerACP/${project.version}/docs/site</distributionManagement.parent.url>
+        <!--<url.parent>http://www.drombler.org/DromblerACP/${project.version}/docs/site</url.parent>-->
         <drombler-commons.version>0.3-SNAPSHOT</drombler-commons.version>
         <!-- Dependency Versions Defaults -->
 
@@ -117,6 +119,9 @@ Contributor(s): .
                         </reports>
                     </reportSet>
                 </reportSets>
+                <configuration>
+                    <detectLinks>true</detectLinks>
+                </configuration>
             </plugin>
         </plugins>
     </reporting>

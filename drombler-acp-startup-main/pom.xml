@@ -26,6 +26,8 @@ Contributor(s): .
 
     <name>Drombler ACP - Startup - Main</name>
     <inceptionYear>2012</inceptionYear>
+    <!-- required for Javadoc (apidocs) linking -->
+    <url>http://www.drombler.org/DromblerACP/${project.version}/docs/site</url>
     
     <scm>
         <connection>${scm.connection}</connection>
@@ -34,6 +36,13 @@ Contributor(s): .
       <tag>HEAD</tag>
   </scm>
 
+  <distributionManagement>
+      <site>
+          <id>drombler.sourceforge.net</id>
+          <url>${distributionManagement.parent.url}/${project.artifactId}/</url>
+      </site>
+  </distributionManagement>
+    
     <properties>
         
         <!-- Dev Environment Defaults -->

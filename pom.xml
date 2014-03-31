@@ -27,6 +27,8 @@ Contributor(s): .
     <name>Drombler ACP - All</name>
     <description>Drombler ACP (Abstract Client Platform) is a GUI toolkit agnostic abstract Rich Client Platform (RCP) based on Maven and OSGi.</description>
     <inceptionYear>2012</inceptionYear>
+    <!-- required for Javadoc (apidocs) linking -->
+    <url>http://www.drombler.org/DromblerACP/${project.version}/docs/site</url>
     
     <scm>
         <connection>${scm.connection}</connection>
