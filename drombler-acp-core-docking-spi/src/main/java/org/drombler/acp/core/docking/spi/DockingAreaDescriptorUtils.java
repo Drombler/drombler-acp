@@ -29,7 +29,7 @@ public class DockingAreaDescriptorUtils {
         DockingAreaDescriptor dockingAreaDescriptor = new DockingAreaDescriptor();
         dockingAreaDescriptor.setId(StringUtils.stripToNull(dockingArea.getId()));
         dockingAreaDescriptor.setPosition(dockingArea.getPosition());
-        dockingAreaDescriptor.setPath(new ArrayList<>(dockingArea.getPaths().getPath()));
+        dockingAreaDescriptor.setParentPath(new ArrayList<>(dockingArea.getPaths().getPath()));
         dockingAreaDescriptor.setPermanent(dockingArea.isPermanent());
         dockingAreaDescriptor.setLayoutConstraints(LayoutConstraintsDescriptorUtils.createLayoutConstraintsDescriptor(
                 dockingArea.getLayoutConstraints()));
