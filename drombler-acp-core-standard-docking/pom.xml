@@ -29,6 +29,7 @@ Contributor(s): .
 
 
     <name>Drombler ACP - Core - Standard - Docking</name>
+    <description>Standard core Docking Framework configurations.</description>
     <inceptionYear>2012</inceptionYear>
     <!-- required for Javadoc (apidocs) linking -->
     <url>http://www.drombler.org/DromblerACP/${project.version}/docs/site</url>

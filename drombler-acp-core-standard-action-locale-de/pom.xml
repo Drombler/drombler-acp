@@ -26,6 +26,7 @@ Contributor(s): .
     <packaging>bundle</packaging>
 
     <name>Drombler ACP - Core - Standard - Action - Locale - German</name>
+    <description>L10n (German) for the standard core Actions.</description>
     <inceptionYear>2012</inceptionYear>
     <!-- required for Javadoc (apidocs) linking -->
     <url>http://www.drombler.org/DromblerACP/${project.version}/docs/site</url>

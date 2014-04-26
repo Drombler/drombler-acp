@@ -25,6 +25,7 @@ Contributor(s): .
     <packaging>bundle</packaging>
 
     <name>Drombler ACP - Core - Application</name>
+    <description>Core Drombler ACP Application classes.</description>
     <inceptionYear>2012</inceptionYear>
     <!-- required for Javadoc (apidocs) linking -->
     <url>http://www.drombler.org/DromblerACP/${project.version}/docs/site</url>

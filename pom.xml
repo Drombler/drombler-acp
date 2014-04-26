@@ -25,7 +25,9 @@ Contributor(s): .
     <packaging>pom</packaging>
     
     <name>Drombler ACP - All</name>
-    <description>Drombler ACP (Abstract Client Platform) is a GUI toolkit agnostic abstract Rich Client Platform (RCP) based on Maven and OSGi.</description>
+    <description>Drombler ACP (Abstract Client Platform) is a GUI toolkit agnostic abstract Rich Client Platform (RCP) 
+        based on Maven and OSGi. You can use this POM file e.g. in your dependencyManagement section to manage your 
+        Drombler ACP dependencies.</description>
     <inceptionYear>2012</inceptionYear>
     <!-- required for Javadoc (apidocs) linking -->
     <url>http://www.drombler.org/DromblerACP/${project.version}/docs/site</url>

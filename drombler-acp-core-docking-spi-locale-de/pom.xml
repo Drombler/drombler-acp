@@ -26,6 +26,7 @@ Contributor(s): .
     <packaging>bundle</packaging>
 
     <name>Drombler ACP - Core - Docking - SPI - Locale - German</name>
+    <description>L10n (German) for the SPI for building a declarative and modular Docking Framework.</description>
     <inceptionYear>2012</inceptionYear>
     <!-- required for Javadoc (apidocs) linking -->
     <url>http://www.drombler.org/DromblerACP/${project.version}/docs/site</url>

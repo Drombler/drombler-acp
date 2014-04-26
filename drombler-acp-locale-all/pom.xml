@@ -26,6 +26,7 @@ Contributor(s): .
     <packaging>pom</packaging>
 
     <name>Drombler ACP - Locale - All</name>
+    <description>L10n of Drombler ACP.</description>
     <inceptionYear>2012</inceptionYear>
     <!-- required for Javadoc (apidocs) linking -->
     <url>http://www.drombler.org/DromblerACP/${project.version}/docs/site</url>
