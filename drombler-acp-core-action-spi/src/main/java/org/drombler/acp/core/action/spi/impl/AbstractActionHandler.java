@@ -17,8 +17,6 @@ package org.drombler.acp.core.action.spi.impl;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executor;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.apache.felix.scr.annotations.Reference;
 import org.apache.felix.scr.annotations.ReferenceCardinality;
 import org.apache.felix.scr.annotations.ReferencePolicy;
@@ -30,6 +28,8 @@ import org.drombler.commons.context.ActiveContextProvider;
 import org.drombler.commons.context.ApplicationContextProvider;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -37,10 +37,12 @@ import org.osgi.framework.ServiceReference;
  */
 @References({
     @Reference(name = "actionsType", referenceInterface = ActionsType.class,
-    cardinality = ReferenceCardinality.OPTIONAL_MULTIPLE, policy = ReferencePolicy.DYNAMIC),
+            cardinality = ReferenceCardinality.OPTIONAL_MULTIPLE, policy = ReferencePolicy.DYNAMIC),
     @Reference(name = "applicationExecutorProvider", referenceInterface = ApplicationExecutorProvider.class)
 })
 public abstract class AbstractActionHandler<A, D> {
+
+    private static final Logger LOG = LoggerFactory.getLogger(AbstractActionHandler.class);
 
     @Reference
     private ActiveContextProvider activeContextProvider;
@@ -118,7 +120,7 @@ public abstract class AbstractActionHandler<A, D> {
                         D actionDescriptor = createActionDescriptor(actionType, context);
                         registerActionDescriptor(actionDescriptor, context);
                     } catch (ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
-                        Logger.getLogger(ActionHandler.class.getName()).log(Level.SEVERE, null, ex);
+                        LOG.error(ex.getMessage(), ex);
                     }
                 }
             };

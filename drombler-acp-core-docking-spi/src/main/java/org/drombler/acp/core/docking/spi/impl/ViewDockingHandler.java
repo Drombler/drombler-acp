@@ -17,8 +17,6 @@ package org.drombler.acp.core.docking.spi.impl;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executor;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.apache.felix.scr.annotations.Activate;
 import org.apache.felix.scr.annotations.Component;
 import org.apache.felix.scr.annotations.Deactivate;
@@ -39,6 +37,8 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.component.ComponentContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * TODO: thread-safe???
@@ -52,6 +52,8 @@ import org.osgi.service.component.ComponentContext;
     @Reference(name = "applicationExecutorProvider", referenceInterface = ApplicationExecutorProvider.class)
 })
 public class ViewDockingHandler<D extends Dockable> extends AbstractDockableDockingHandler<D> {
+
+    private static final Logger LOG = LoggerFactory.getLogger(ViewDockingHandler.class);
 
     @Reference
     private ActiveContextProvider activeContextProvider;
@@ -132,7 +134,7 @@ public class ViewDockingHandler<D extends Dockable> extends AbstractDockableDock
                 // TODO: register ViewDockingDescriptor as service? Omit resolveDockable?
                 resolveDockable(dockingDescriptor, context);
             } catch (Exception ex) {
-                Logger.getLogger(ViewDockingHandler.class.getName()).log(Level.SEVERE, null, ex);
+                LOG.error(ex.getMessage(), ex);
             }
         }
     }

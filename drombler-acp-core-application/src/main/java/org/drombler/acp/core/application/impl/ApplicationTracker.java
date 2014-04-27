@@ -23,8 +23,6 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
@@ -43,6 +41,8 @@ import org.osgi.framework.BundleEvent;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.util.tracker.BundleTracker;
 import org.osgi.util.tracker.BundleTrackerCustomizer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -52,6 +52,8 @@ import org.osgi.util.tracker.BundleTrackerCustomizer;
 @Reference(name = "extensionPoint", referenceInterface = ExtensionPoint.class,
 cardinality = ReferenceCardinality.OPTIONAL_MULTIPLE, policy = ReferencePolicy.DYNAMIC)
 public class ApplicationTracker {
+
+    private static final Logger LOG = LoggerFactory.getLogger(ApplicationTracker.class);
 
     private BundleTracker<ApplicationType> bundleTracker;
     private final Set<Class<?>> jaxbRootClassesSet = new HashSet<Class<?>>(Arrays.asList(ApplicationType.class));
@@ -123,7 +125,7 @@ public class ApplicationTracker {
 //                actionTrackerListener.addingExtension(bundle, event, actionDescriptors);
             } catch (JAXBException ex) {
                 // TODO: ???
-                Logger.getLogger(ApplicationTracker.class.getName()).log(Level.SEVERE, null, ex);
+                LOG.error(ex.getMessage(), ex);
             }
         }
         return null;

@@ -17,17 +17,19 @@ package org.drombler.acp.core.action.spi;
 import java.util.Collection;
 import java.util.Dictionary;
 import java.util.Hashtable;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
  * @author puce
  */
 public class ActionRegistry {
+
+    private static final Logger LOG = LoggerFactory.getLogger(ActionRegistry.class);
 
 //    private final Map<String, ActionDescriptor> actionDescriptors = new HashMap<>();
     public <T> T getAction(String actionId, Class<T> actionClass, BundleContext context) {
@@ -38,7 +40,7 @@ public class ActionRegistry {
                 return context.getService(serviceReferences.iterator().next());
             }
         } catch (InvalidSyntaxException ex) {
-            Logger.getLogger(ActionRegistry.class.getName()).log(Level.SEVERE, null, ex);
+            LOG.error(ex.getMessage(), ex);
         }
         return null;
     }

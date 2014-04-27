@@ -16,8 +16,6 @@ package org.drombler.acp.core.docking.spi.impl;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.apache.felix.scr.annotations.Activate;
 import org.apache.felix.scr.annotations.Component;
 import org.apache.felix.scr.annotations.Deactivate;
@@ -31,6 +29,8 @@ import org.drombler.commons.client.docking.DockablePreferences;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.service.component.ComponentContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -40,6 +40,8 @@ import org.osgi.service.component.ComponentContext;
 @Reference(name = "editorDockingDescriptor", referenceInterface = EditorDockingDescriptor.class,
 cardinality = ReferenceCardinality.OPTIONAL_MULTIPLE, policy = ReferencePolicy.DYNAMIC)
 public class EditorDockingHandler<D> extends AbstractDockableDockingHandler<D> {
+
+    private static final Logger LOG = LoggerFactory.getLogger(EditorDockingHandler.class);
 
     private final List<EditorDockingDescriptor> unresolvedDockingDescriptors = new ArrayList<>();
 
@@ -68,7 +70,7 @@ public class EditorDockingHandler<D> extends AbstractDockableDockingHandler<D> {
                 // TODO: register EditorDockingDescriptor as service? Omit resolveDockingDescriptor?
                 resolveDockingDescriptor(dockingDescriptor);
             } catch (Exception ex) {
-                Logger.getLogger(EditorDockingHandler.class.getName()).log(Level.SEVERE, null, ex);
+                LOG.error(ex.getMessage(), ex);
             }
         }
     }
