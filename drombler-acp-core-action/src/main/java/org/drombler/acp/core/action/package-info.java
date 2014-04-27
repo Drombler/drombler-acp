@@ -12,8 +12,7 @@
  *
  * Contributor(s): .
  */
-//@Menus({
-//    @Menu(id = "File", displayName = "#fileMenu.displayName", position = 10),
-//    @Menu(id = "Window", displayName = "#windowMenu.displayName", position = 800)
-//})
+/**
+ * Declarative actions, menus and toolbars support for Drombler ACP.
+ */
 package org.drombler.acp.core.action;

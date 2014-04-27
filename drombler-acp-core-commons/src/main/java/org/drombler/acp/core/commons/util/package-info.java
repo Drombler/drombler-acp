@@ -8,11 +8,11 @@
  *
  * The Original Code is Drombler.org. The Initial Developer of the
  * Original Code is Florian Brunner (Sourceforge.net user: puce).
- * Copyright 2012 Drombler.org. All Rights Reserved.
+ * Copyright 2014 Drombler.org. All Rights Reserved.
  *
  * Contributor(s): .
  */
 /**
- * Standard core Action support classes.
+ * Drombler ACP utility classes.
  */
-package org.drombler.acp.core.standard.action;
+package org.drombler.acp.core.commons.util;

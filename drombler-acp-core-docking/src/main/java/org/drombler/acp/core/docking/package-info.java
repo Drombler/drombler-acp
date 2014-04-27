@@ -12,4 +12,7 @@
  *
  * Contributor(s): .
  */
+/**
+ * A declarative, modular and GUI toolkit agnostic, abstract Docking Framework.
+ */
 package org.drombler.acp.core.docking;
