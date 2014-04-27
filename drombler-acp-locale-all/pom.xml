@@ -26,7 +26,8 @@ Contributor(s): .
     <packaging>pom</packaging>
 
     <name>Drombler ACP - Locale - All</name>
-    <description>L10n of Drombler ACP.</description>
+    <description>L10n of Drombler ACP. You can use this POM file e.g. in your dependencyManagement section to manage your 
+        Drombler ACP L10n dependencies.</description>
     <inceptionYear>2012</inceptionYear>
     <!-- required for Javadoc (apidocs) linking -->
     <url>http://www.drombler.org/DromblerACP/${project.version}/docs/site</url>
