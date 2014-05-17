@@ -50,11 +50,11 @@ public class MenuDescriptor extends AbstractMenuEntryDescriptor {
 //        }
 //        return level;
 //    }
-    /**
-     *
-     * @param path must be the path to this {@link MenuDescriptor} or a subpath.
-     * @return null if the path is the same as the current path else the first unresolved path id of the subpath
-     */
+//    /**
+//     *
+//     * @param path must be the path to this {@link MenuDescriptor} or a subpath.
+//     * @return null if the path is the same as the current path else the first unresolved path id of the subpath
+//     */
 //    private String getUnresolvedPathId(String[] path) {
 //        int level = getLevel();
 //        if (path.length > level) {
