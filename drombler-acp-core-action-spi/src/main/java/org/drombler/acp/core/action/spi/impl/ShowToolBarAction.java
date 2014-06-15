@@ -14,7 +14,7 @@
  */
 package org.drombler.acp.core.action.spi.impl;
 
-import org.drombler.acp.core.action.AbstractToggleActionListener;
+import org.drombler.commons.action.AbstractToggleActionListener;
 import org.drombler.acp.core.action.spi.ToolBarContainer;
 import org.drombler.acp.core.action.spi.ToolBarContainerListenerAdapter;
 import org.drombler.acp.core.action.spi.ToolBarContainerToolBarEvent;

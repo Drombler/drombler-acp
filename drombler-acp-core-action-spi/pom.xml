@@ -97,6 +97,10 @@ Contributor(s): .
         </dependency>
         <dependency>
             <groupId>org.drombler.commons</groupId>
+            <artifactId>drombler-commons-action-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.drombler.commons</groupId>
             <artifactId>drombler-commons-client-core</artifactId>
         </dependency>
         <dependency>

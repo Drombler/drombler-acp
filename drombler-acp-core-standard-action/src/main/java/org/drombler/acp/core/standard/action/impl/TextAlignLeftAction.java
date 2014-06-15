@@ -14,7 +14,7 @@
  */
 package org.drombler.acp.core.standard.action.impl;
 
-import org.drombler.acp.core.action.AbstractToggleActionListener;
+import org.drombler.commons.action.AbstractToggleActionListener;
 import org.drombler.acp.core.action.ToggleAction;
 import org.drombler.acp.core.action.ToggleMenuEntry;
 import org.drombler.acp.core.action.ToolBarToggleEntry;

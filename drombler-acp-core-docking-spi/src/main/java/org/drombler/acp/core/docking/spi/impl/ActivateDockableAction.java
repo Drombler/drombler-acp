@@ -14,7 +14,7 @@
  */
 package org.drombler.acp.core.docking.spi.impl;
 
-import org.drombler.acp.core.action.AbstractActionListener;
+import org.drombler.commons.action.AbstractActionListener;
 import org.drombler.acp.core.docking.spi.Dockables;
 import org.drombler.commons.client.docking.Dockable;
 
