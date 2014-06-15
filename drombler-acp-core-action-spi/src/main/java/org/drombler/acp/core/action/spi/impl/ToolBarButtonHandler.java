@@ -67,7 +67,7 @@ public class ToolBarButtonHandler<ToolBar, ToolBarButton, Action>
 
     @Override
     protected ToolBarButton createToolBarButton(ToolBarEntryDescriptor toolBarEntryDescriptor, Action action, int iconSize) {
-        return toolBarButtonFactory.createToolBarButton(toolBarEntryDescriptor, action, iconSize);
+        return toolBarButtonFactory.createToolBarButton(action, iconSize);
     }
 
     @Override

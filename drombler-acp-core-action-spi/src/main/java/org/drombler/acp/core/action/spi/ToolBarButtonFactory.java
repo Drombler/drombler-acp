@@ -20,5 +20,5 @@ package org.drombler.acp.core.action.spi;
  */
 public interface ToolBarButtonFactory<B, A> {
 
-    B createToolBarButton(ToolBarEntryDescriptor toolBarEntryDescriptor, A action, int iconSize);
+    B createToolBarButton(A action, int iconSize);
 }
