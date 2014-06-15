@@ -20,5 +20,5 @@ package org.drombler.acp.core.action.spi;
  */
 public interface MenuItemFactory<T, A> {
 
-    T createMenuItem(MenuEntryDescriptor menuEntryDescriptor, A action, int iconSize);
+    T createMenuItem(A action, int iconSize);
 }

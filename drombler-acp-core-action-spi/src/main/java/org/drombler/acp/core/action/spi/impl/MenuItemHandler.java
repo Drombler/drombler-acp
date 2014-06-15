@@ -20,18 +20,18 @@ import org.apache.felix.scr.annotations.Deactivate;
 import org.apache.felix.scr.annotations.Reference;
 import org.apache.felix.scr.annotations.ReferenceCardinality;
 import org.apache.felix.scr.annotations.ReferencePolicy;
-import org.osgi.framework.Bundle;
-import org.osgi.framework.BundleContext;
-import org.osgi.framework.ServiceReference;
-import org.osgi.service.component.ComponentContext;
-import org.osgi.util.tracker.ServiceTracker;
-import org.osgi.util.tracker.ServiceTrackerCustomizer;
 import org.drombler.acp.core.action.jaxb.MenuEntryType;
 import org.drombler.acp.core.action.jaxb.MenusType;
 import org.drombler.acp.core.action.spi.ActionFactory;
 import org.drombler.acp.core.action.spi.ActionRegistry;
 import org.drombler.acp.core.action.spi.MenuEntryDescriptor;
 import org.drombler.acp.core.action.spi.MenuItemFactory;
+import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceReference;
+import org.osgi.service.component.ComponentContext;
+import org.osgi.util.tracker.ServiceTracker;
+import org.osgi.util.tracker.ServiceTrackerCustomizer;
 
 /**
  *
@@ -143,7 +143,7 @@ public class MenuItemHandler<MenuItem, Menu extends MenuItem, Action> extends Ab
     @Override
     protected MenuItem createMenuItem(MenuEntryDescriptor menuEntryDescriptor, MenuItemConfig<Action> config) {
 //        System.out.println(actionFactory.getActionClass().getName() + ": " + menuEntryDescriptor.getActionId());
-        return menuItemFactory.createMenuItem(menuEntryDescriptor, config.getAction(), config.getIconSize());
+        return menuItemFactory.createMenuItem(config.getAction(), config.getIconSize());
 
     }
 
