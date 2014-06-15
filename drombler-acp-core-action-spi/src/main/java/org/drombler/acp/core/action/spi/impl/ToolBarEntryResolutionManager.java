@@ -31,7 +31,7 @@ public class ToolBarEntryResolutionManager<D extends ToolBarEntryDescriptor> {
     public void addUnresolvedToolBarEntry(UnresolvedEntry<D> unresolvedToolBarEntry) {
         if (!unresolvedToolBarEntryDescriptors.containsKey(unresolvedToolBarEntry.getEntry().getToolBarId())) {
             unresolvedToolBarEntryDescriptors.put(unresolvedToolBarEntry.getEntry().getToolBarId(),
-                    new ArrayList<UnresolvedEntry<D>>());
+                    new ArrayList<>());
         }
         unresolvedToolBarEntryDescriptors.get(unresolvedToolBarEntry.getEntry().getToolBarId()).add(
                 unresolvedToolBarEntry);

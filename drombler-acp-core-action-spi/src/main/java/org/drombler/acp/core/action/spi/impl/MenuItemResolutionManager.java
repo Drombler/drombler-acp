@@ -33,14 +33,14 @@ public class MenuItemResolutionManager<D extends AbstractMenuEntryDescriptor> {
 
     public MenuItemResolutionManager<D> getMenuResolutionManager(String pathId) {
         if (!unresolvedMenuItemContainers.containsKey(pathId)) {
-            unresolvedMenuItemContainers.put(pathId, new MenuItemResolutionManager<D>());
+            unresolvedMenuItemContainers.put(pathId, new MenuItemResolutionManager<>());
         }
         return unresolvedMenuItemContainers.get(pathId);
     }
 
     public void addUnresolvedMenuEntry(String pathId, UnresolvedEntry<D> unresolvedMenuEntry) {
         if (!unresolvedMenuEntryDescriptors.containsKey(pathId)) {
-            unresolvedMenuEntryDescriptors.put(pathId, new ArrayList<UnresolvedEntry<D>>());
+            unresolvedMenuEntryDescriptors.put(pathId, new ArrayList<>());
         }
         unresolvedMenuEntryDescriptors.get(pathId).add(unresolvedMenuEntry);
     }

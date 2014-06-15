@@ -29,7 +29,7 @@ public class ActionResolutionManager<T> {
 
     public void addUnresolvedEntry(String actionId, UnresolvedEntry<T> unresolvedToolBarEntry) {
         if (!unresolvedToolBarEntryDescriptors.containsKey(actionId)) {
-            unresolvedToolBarEntryDescriptors.put(actionId, new ArrayList<UnresolvedEntry<T>>());
+            unresolvedToolBarEntryDescriptors.put(actionId, new ArrayList<>());
         }
         unresolvedToolBarEntryDescriptors.get(actionId).add(unresolvedToolBarEntry);
     }
