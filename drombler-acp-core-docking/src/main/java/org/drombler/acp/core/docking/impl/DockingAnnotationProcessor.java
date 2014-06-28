@@ -98,6 +98,7 @@ public class DockingAnnotationProcessor extends AbstractApplicationAnnotationPro
 //        docking.setSingleton(dockingAnnotation.singleton());
         docking.setDisplayName(StringUtils.stripToNull(dockingAnnotation.displayName()));
         docking.setAccelerator(StringUtils.stripToNull(dockingAnnotation.accelerator()));
+        docking.setResourceBundleBaseName(StringUtils.stripToNull(dockingAnnotation.resourceBundleBaseName()));
 
         WindowMenuEntryType windowMenuEntry = new WindowMenuEntryType();
         windowMenuEntry.setPosition(dockingAnnotation.menuEntry().position());

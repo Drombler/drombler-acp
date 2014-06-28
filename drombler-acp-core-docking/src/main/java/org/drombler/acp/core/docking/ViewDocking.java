@@ -44,4 +44,6 @@ public @interface ViewDocking {
     DockingState state() default DockingState.DOCKED;
 
     WindowMenuEntry menuEntry();
+
+    String resourceBundleBaseName() default "";
 }

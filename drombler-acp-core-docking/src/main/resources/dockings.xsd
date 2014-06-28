@@ -35,6 +35,7 @@ Contributor(s): .
                     <element name="displayName" type="string" />
                     <element name="accelerator" type="string" minOccurs="0"/>
                     <element name="menuEntry" type="tns:WindowMenuEntryType"/>
+                    <element name="resourceBundleBaseName" type="string" minOccurs="0" />
                 </sequence>
             </extension>
         </complexContent>

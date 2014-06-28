@@ -14,10 +14,11 @@
  */
 package org.drombler.acp.core.docking.spi;
 
+import java.util.ResourceBundle;
 import org.drombler.acp.core.action.spi.ActionDescriptor;
 import org.drombler.acp.core.action.spi.MenuEntryDescriptor;
-import org.drombler.commons.client.util.ResourceBundleUtils;
 import org.drombler.acp.core.docking.jaxb.ViewDockingType;
+import org.drombler.commons.client.util.ResourceBundleUtils;
 import org.osgi.framework.Bundle;
 
 /**
@@ -30,6 +31,7 @@ public class ViewDockingDescriptor extends AbstractDockableDockingDescriptor {
     private int position;
     private ActionDescriptor activateDockableActionDescriptor;
     private MenuEntryDescriptor activateDockableMenuEntryDescriptor;
+    private ResourceBundle resourceBundle;
 
     /**
      * @return the displayName
@@ -73,19 +75,27 @@ public class ViewDockingDescriptor extends AbstractDockableDockingDescriptor {
         this.activateDockableActionDescriptor = activateDockableActionDescriptor;
     }
 
-    public static ViewDockingDescriptor createViewDockingDescriptor(ViewDockingType docking, Bundle bundle) throws ClassNotFoundException, InstantiationException, IllegalAccessException {
+    public static ViewDockingDescriptor createViewDockingDescriptor(ViewDockingType docking, Bundle bundle) throws
+            ClassNotFoundException, InstantiationException, IllegalAccessException {
         ViewDockingDescriptor dockingDescriptor = new ViewDockingDescriptor();
 
         DockingDescriptorUtils.configureDockingDescriptor(dockingDescriptor, docking, bundle);
-
-        dockingDescriptor.setDisplayName(ResourceBundleUtils.getPackageResourceStringPrefixed(dockingDescriptor.getDockableClass(),
-                docking.getDisplayName()));
+        dockingDescriptor.setResourceBundle(ResourceBundleUtils.getResourceBundle(dockingDescriptor.getDockableClass(),
+                docking.getResourceBundleBaseName(), docking.getDisplayName()));
+        String displayName = getDisplayName(docking, dockingDescriptor);
+        dockingDescriptor.setDisplayName(displayName);
         dockingDescriptor.setPosition(docking.getPosition());
         dockingDescriptor.setActivateDockableActionDescriptor(createActivateDockableActionDescriptor(dockingDescriptor,
                 docking.getAccelerator()));
         dockingDescriptor.setActivateDockableMenuEntryDescriptor(new MenuEntryDescriptor(dockingDescriptor.getId(),
                 getWindowPath(docking), docking.getMenuEntry().getPosition()));
         return dockingDescriptor;
+    }
+
+    private static String getDisplayName(ViewDockingType docking, ViewDockingDescriptor dockingDescriptor) {
+        return ResourceBundleUtils.getResourceStringPrefixed(docking.getDisplayName(), dockingDescriptor.
+                getResourceBundle());
+
     }
 
     private static String getWindowPath(ViewDockingType docking) {
@@ -97,7 +107,8 @@ public class ViewDockingDescriptor extends AbstractDockableDockingDescriptor {
         return sb.toString();
     }
 
-    private static ActionDescriptor createActivateDockableActionDescriptor(ViewDockingDescriptor dockingDescriptor, String accelerator) {
+    private static ActionDescriptor createActivateDockableActionDescriptor(ViewDockingDescriptor dockingDescriptor,
+            String accelerator) {
         ActionDescriptor actionDescriptor = new ActionDescriptor();
         actionDescriptor.setId(dockingDescriptor.getId());
         actionDescriptor.setDisplayName(dockingDescriptor.getDisplayName());
@@ -121,4 +132,13 @@ public class ViewDockingDescriptor extends AbstractDockableDockingDescriptor {
     public void setActivateDockableMenuEntryDescriptor(MenuEntryDescriptor activateDockableMenuEntryDescriptor) {
         this.activateDockableMenuEntryDescriptor = activateDockableMenuEntryDescriptor;
     }
+
+    public ResourceBundle getResourceBundle() {
+        return resourceBundle;
+    }
+
+    public void setResourceBundle(ResourceBundle resourceBundle) {
+        this.resourceBundle = resourceBundle;
+    }
+
 }
