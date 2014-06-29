@@ -18,6 +18,7 @@ import java.util.ResourceBundle;
 import org.drombler.acp.core.action.spi.ActionDescriptor;
 import org.drombler.acp.core.action.spi.MenuEntryDescriptor;
 import org.drombler.acp.core.docking.jaxb.ViewDockingType;
+import org.drombler.commons.client.util.MnemonicUtils;
 import org.drombler.commons.client.util.ResourceBundleUtils;
 import org.osgi.framework.Bundle;
 
@@ -82,20 +83,15 @@ public class ViewDockingDescriptor extends AbstractDockableDockingDescriptor {
         DockingDescriptorUtils.configureDockingDescriptor(dockingDescriptor, docking, bundle);
         dockingDescriptor.setResourceBundle(ResourceBundleUtils.getResourceBundle(dockingDescriptor.getDockableClass(),
                 docking.getResourceBundleBaseName(), docking.getDisplayName()));
-        String displayName = getDisplayName(docking, dockingDescriptor);
-        dockingDescriptor.setDisplayName(displayName);
+        String displayName = ResourceBundleUtils.getResourceStringPrefixed(docking.getDisplayName(), dockingDescriptor.
+                getResourceBundle());
+        dockingDescriptor.setDisplayName(MnemonicUtils.removeMnemonicChar(displayName));
         dockingDescriptor.setPosition(docking.getPosition());
         dockingDescriptor.setActivateDockableActionDescriptor(createActivateDockableActionDescriptor(dockingDescriptor,
-                docking.getAccelerator()));
+                displayName, docking.getAccelerator()));
         dockingDescriptor.setActivateDockableMenuEntryDescriptor(new MenuEntryDescriptor(dockingDescriptor.getId(),
                 getWindowPath(docking), docking.getMenuEntry().getPosition()));
         return dockingDescriptor;
-    }
-
-    private static String getDisplayName(ViewDockingType docking, ViewDockingDescriptor dockingDescriptor) {
-        return ResourceBundleUtils.getResourceStringPrefixed(docking.getDisplayName(), dockingDescriptor.
-                getResourceBundle());
-
     }
 
     private static String getWindowPath(ViewDockingType docking) {
@@ -108,10 +104,10 @@ public class ViewDockingDescriptor extends AbstractDockableDockingDescriptor {
     }
 
     private static ActionDescriptor createActivateDockableActionDescriptor(ViewDockingDescriptor dockingDescriptor,
-            String accelerator) {
+            String displayName, String accelerator) {
         ActionDescriptor actionDescriptor = new ActionDescriptor();
         actionDescriptor.setId(dockingDescriptor.getId());
-        actionDescriptor.setDisplayName(dockingDescriptor.getDisplayName());
+        actionDescriptor.setDisplayName(displayName);
         actionDescriptor.setAccelerator(accelerator);
         actionDescriptor.setIcon(dockingDescriptor.getIcon());
         actionDescriptor.setResourceLoader(dockingDescriptor.getResourceLoader());
