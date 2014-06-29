@@ -74,9 +74,7 @@ public class ToolBarsHandler<T, B> extends AbstractToolBarHandler<T, B> {
 
     @Override
     protected void resolveToolBarsType(ToolBarsType toolBarsType, Bundle bundle, BundleContext context) {
-        for (ToolBarType toolBarType : toolBarsType.getToolBar()) {
-            resolveToolBar(toolBarType, bundle, context);
-        }
+        toolBarsType.getToolBar().forEach((toolBarType) -> resolveToolBar(toolBarType, bundle, context));
     }
 
     private void resolveToolBar(ToolBarType toolBarType, Bundle bundle, BundleContext context) {
@@ -96,20 +94,16 @@ public class ToolBarsHandler<T, B> extends AbstractToolBarHandler<T, B> {
 
     protected void resolveToolBar(final ToolBarDescriptor toolBarDescriptor, final BundleContext context) {
         if (isInitialized()) {
-            Runnable runnable = new Runnable() {
-
-                @Override
-                public void run() {
-                    T toolBar = toolBarFactory.createToolBar(toolBarDescriptor);
-                    getToolBarContainer().addToolBar(toolBarDescriptor.getId(),
-                            new PositionableAdapter<>(toolBar, toolBarDescriptor.getPosition()));
-                    getToolBarContainer().setToolBarVisible(toolBarDescriptor.getId(), toolBarDescriptor.isVisible());
-                    context.registerService(ToggleActionDescriptor.class,
-                            toolBarDescriptor.getShowToolBarActionDescriptor(),
-                            null);
-                    context.registerService(ToggleMenuEntryDescriptor.class,
-                            toolBarDescriptor.getShowToolBarCheckMenuEntryDescriptor(), null);
-                }
+            Runnable runnable = () -> {
+                T toolBar = toolBarFactory.createToolBar(toolBarDescriptor);
+                getToolBarContainer().addToolBar(toolBarDescriptor.getId(),
+                        new PositionableAdapter<>(toolBar, toolBarDescriptor.getPosition()));
+                getToolBarContainer().setToolBarVisible(toolBarDescriptor.getId(), toolBarDescriptor.isVisible());
+                context.registerService(ToggleActionDescriptor.class,
+                        toolBarDescriptor.getShowToolBarActionDescriptor(),
+                        null);
+                context.registerService(ToggleMenuEntryDescriptor.class,
+                        toolBarDescriptor.getShowToolBarCheckMenuEntryDescriptor(), null);
             };
             applicationExecutor.execute(runnable);
         } else {
@@ -124,13 +118,10 @@ public class ToolBarsHandler<T, B> extends AbstractToolBarHandler<T, B> {
     @Override
     protected void resolveUnresolvedItems() {
         if (isInitialized()) {
-            for (UnresolvedEntry<ToolBarType> unresolvedEntry : toolBarResolutionManager.removeUnresolvedToolBarTypes()) {
-                resolveToolBar(unresolvedEntry.getEntry(), unresolvedEntry.getContext().getBundle(),
-                        unresolvedEntry.getContext());
-            }
-            for (UnresolvedEntry<ToolBarDescriptor> toolBarDescriptor : toolBarResolutionManager.removeUnresolvedToolBars()) {
-                resolveToolBar(toolBarDescriptor.getEntry(), toolBarDescriptor.getContext());
-            }
+            toolBarResolutionManager.removeUnresolvedToolBarTypes().forEach(unresolvedEntry -> resolveToolBar(
+                    unresolvedEntry.getEntry(), unresolvedEntry.getContext().getBundle(), unresolvedEntry.getContext()));
+            toolBarResolutionManager.removeUnresolvedToolBars().forEach(
+                    toolBarDescriptor -> resolveToolBar(toolBarDescriptor.getEntry(), toolBarDescriptor.getContext()));
         }
     }
 }
