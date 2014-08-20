@@ -37,7 +37,6 @@ import org.osgi.framework.launch.FrameworkFactory;
 public class Main {
 
 //    private static final Logger LOG = LoggerFactory.getLogger(Main.class); // TODO: outside OSGi Framework...?
-
     public static final String USER_DIR_PROPERTY = "platform.userdir";
 
     /**
@@ -54,7 +53,7 @@ public class Main {
      * The default name used for the system properties file.
      *
      */
-    public static final String SYSTEM_PROPERTIES_FILE_VALUE = "system.properties";
+    public static final String SYSTEM_PROPERTIES_FILE_NAME = "system.properties";
     /**
      * The property name used to specify an URL to the configuration property file to be used for the created the
      * framework instance.
@@ -65,7 +64,7 @@ public class Main {
      * The default name used for the configuration properties file.
      *
      */
-    public static final String CONFIG_PROPERTIES_FILE_VALUE = "config.properties";
+    public static final String CONFIG_PROPERTIES_FILE_NAME = "config.properties";
     /**
      * Name of the configuration directory.
      */
@@ -88,7 +87,8 @@ public class Main {
         main.start(commandLineArgs);
     }
 
-    public void start(CommandLineArgs commandLineArgs) throws URISyntaxException, MalformedURLException, IOException, MissingPropertyException {
+    public void start(CommandLineArgs commandLineArgs) throws URISyntaxException, MalformedURLException, IOException,
+            MissingPropertyException {
         Path installDirPath = getInstallDirPath();
 
         loadSystemProperties(installDirPath);
@@ -97,12 +97,12 @@ public class Main {
         Properties installConfigProps = new Properties(defaultConfigProps);
         loadConfigProperties(installConfigProps, installDirPath);
         overrideInstallConfigProps(installConfigProps, commandLineArgs);
-        
+
         Path userDirPath = getUserDirPath(installConfigProps);
         if (!Files.exists(userDirPath)) {
             Files.createDirectories(userDirPath);
         }
-        System.out.println("User dir: "+ userDirPath);
+        System.out.println("User dir: " + userDirPath);
         Properties userConfigProps = new Properties(installConfigProps);
         loadConfigProperties(userConfigProps, userDirPath);
 
@@ -142,7 +142,7 @@ public class Main {
             System.exit(0);
         }
     }
-    
+
     private void registerShutdownHook(Properties userConfigProps) {
         // If enabled, register a shutdown hook to make sure the framework is
         // cleanly shutdown when the VM exits.
@@ -171,13 +171,13 @@ public class Main {
                     Util.substVars(configProps.getProperty(propertyName), propertyName, null, configProps));
         }
     }
-    
+
     private void overrideInstallConfigProps(Properties installConfigProps, CommandLineArgs commandLineArgs) {
         if (commandLineArgs.getUserDir() != null) {
             installConfigProps.setProperty(USER_DIR_PROPERTY, commandLineArgs.getUserDir());
         }
     }
-    
+
     private Path getUserDirPath(Properties installConfigProps) throws MissingPropertyException {
         String userDirName = installConfigProps.getProperty(USER_DIR_PROPERTY);
         if (userDirName == null) {
@@ -196,15 +196,16 @@ public class Main {
 
     protected void loadSystemProperties(Path rootDirPath) throws MalformedURLException, IOException {
         Properties props = new Properties();
-        loadProperties(props, SYSTEM_PROPERTIES_PROP, rootDirPath, SYSTEM_PROPERTIES_FILE_VALUE);
+        loadProperties(props, SYSTEM_PROPERTIES_PROP, rootDirPath, SYSTEM_PROPERTIES_FILE_NAME);
 
         for (String propertyName : props.stringPropertyNames()) {
             System.setProperty(propertyName, Util.substVars(props.getProperty(propertyName), propertyName, null, null));
         }
-        
+
     }
 
-    private void loadProperties(Properties props, String systemPropertyName, Path rootDirPath, String propertiesFileName) throws IOException, MalformedURLException {
+    private void loadProperties(Properties props, String systemPropertyName, Path rootDirPath, String propertiesFileName)
+            throws IOException, MalformedURLException {
         String custom = System.getProperty(systemPropertyName);
         URL propURL = custom != null ? new URL(custom) : rootDirPath.resolve(CONFIG_DIRECTORY).resolve(
                 propertiesFileName).toUri().toURL();
@@ -220,23 +221,25 @@ public class Main {
         }
     }
 
-    private void loadConfigProperties(Properties configProps, Path rootDirPath) throws MalformedURLException, IOException {
-        loadProperties(configProps, CONFIG_PROPERTIES_PROP, rootDirPath, CONFIG_PROPERTIES_FILE_VALUE);
+    private void loadConfigProperties(Properties configProps, Path rootDirPath) throws MalformedURLException,
+            IOException {
+        loadProperties(configProps, CONFIG_PROPERTIES_PROP, rootDirPath, CONFIG_PROPERTIES_FILE_NAME);
     }
 
     private void copySystemProperties(Properties configProps) {
-        for (String propertyName : System.getProperties().stringPropertyNames()) {
-            if (propertyName.startsWith("felix.") || propertyName.startsWith("org.osgi.framework.")) {
-                configProps.setProperty(propertyName, System.getProperty(propertyName));
-            }
-        }
+        System.getProperties().stringPropertyNames().stream().
+                filter((propertyName)
+                        -> (propertyName.startsWith("felix.") || propertyName.startsWith("org.osgi.framework."))).
+                forEach((propertyName) -> configProps.setProperty(propertyName, System.getProperty(propertyName)));
     }
 
     private Path getInstallDirPath() throws URISyntaxException {
         Class<Main> type = Main.class;
-        String jarResourceURIString = type.getResource("/" + type.getName().replace(".", "/") + ".class").toURI().toString();
+        String jarResourceURIString = type.getResource("/" + type.getName().replace(".", "/") + ".class").toURI().
+                toString();
         int endOfJarPathIndex = jarResourceURIString.indexOf("!/");
-        String mainJarURIString = endOfJarPathIndex >= 0 ? jarResourceURIString.substring(0, endOfJarPathIndex) : jarResourceURIString;
+        String mainJarURIString = endOfJarPathIndex >= 0 ? jarResourceURIString.substring(0, endOfJarPathIndex)
+                : jarResourceURIString;
         if (mainJarURIString.startsWith(FULL_JAR_URI_PREFIX)) {
             mainJarURIString = mainJarURIString.substring(FULL_JAR_URI_PREFIX_LENGTH);
         }
