@@ -22,7 +22,6 @@ import org.drombler.commons.client.docking.DockableEntry;
  *
  * @author puce
  * @param <D>
- * @param <DATA>
  */
 public interface DockingAreaContainerListener<D extends DockableEntry<?, ?>> extends EventListener {
 
