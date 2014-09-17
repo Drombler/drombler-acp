@@ -16,28 +16,32 @@ package org.drombler.acp.core.docking.spi.impl;
 
 import org.apache.felix.scr.annotations.Reference;
 import org.drombler.acp.core.docking.spi.DockingAreaContainerProvider;
+import org.drombler.commons.client.docking.DockableData;
+import org.drombler.commons.client.docking.DockableEntry;
 
 /**
  *
  * @author puce
  */
 @Reference(name = "dockingAreaContainerProvider", referenceInterface = DockingAreaContainerProvider.class)
-public abstract class AbstractDockingHandler<D> {
+public abstract class AbstractDockingHandler<D, DATA extends DockableData, E extends DockableEntry<D, DATA>> {
 
-    private DockingAreaContainerProvider<D> dockingAreaContainerProvider;
+    private DockingAreaContainerProvider<D, DATA, E> dockingAreaContainerProvider;
 
-    protected void bindDockingAreaContainerProvider(DockingAreaContainerProvider<D> dockingAreaContainerProvider) {
+    protected void bindDockingAreaContainerProvider(
+            DockingAreaContainerProvider<D, DATA, E> dockingAreaContainerProvider) {
         this.dockingAreaContainerProvider = dockingAreaContainerProvider;
     }
 
-    protected void unbindDockingAreaContainerProvider(DockingAreaContainerProvider<D> dockingAreaContainerProvider) {
+    protected void unbindDockingAreaContainerProvider(
+            DockingAreaContainerProvider<D, DATA, E> dockingAreaContainerProvider) {
         this.dockingAreaContainerProvider = null;
     }
 
     /**
      * @return the dockingAreaContainer
      */
-    protected DockingAreaContainerProvider<D> getDockingAreaContainerProvider() {
+    protected DockingAreaContainerProvider<D, DATA, E> getDockingAreaContainerProvider() {
         return dockingAreaContainerProvider;
     }
 

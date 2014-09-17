@@ -23,8 +23,9 @@ import org.apache.felix.scr.annotations.Reference;
 import org.apache.felix.scr.annotations.ReferenceCardinality;
 import org.apache.felix.scr.annotations.ReferencePolicy;
 import org.drombler.acp.core.docking.jaxb.DockingsType;
-import org.drombler.acp.core.docking.jaxb.EditorDockingType;
 import org.drombler.acp.core.docking.spi.EditorDockingDescriptor;
+import org.drombler.commons.client.docking.DockableData;
+import org.drombler.commons.client.docking.DockableEntry;
 import org.drombler.commons.client.docking.DockablePreferences;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
@@ -38,8 +39,8 @@ import org.slf4j.LoggerFactory;
  */
 @Component(immediate = true)
 @Reference(name = "editorDockingDescriptor", referenceInterface = EditorDockingDescriptor.class,
-cardinality = ReferenceCardinality.OPTIONAL_MULTIPLE, policy = ReferencePolicy.DYNAMIC)
-public class EditorDockingHandler<D> extends AbstractDockableDockingHandler<D> {
+        cardinality = ReferenceCardinality.OPTIONAL_MULTIPLE, policy = ReferencePolicy.DYNAMIC)
+public class EditorDockingHandler<D, DATA extends DockableData, E extends DockableEntry<D, DATA>> extends AbstractDockableDockingHandler<D, DATA, E> {
 
     private static final Logger LOG = LoggerFactory.getLogger(EditorDockingHandler.class);
 
@@ -63,7 +64,7 @@ public class EditorDockingHandler<D> extends AbstractDockableDockingHandler<D> {
 
     @Override
     protected void resolveDockingsType(DockingsType dockingsType, Bundle bundle, BundleContext context) {
-        for (EditorDockingType dockingType : dockingsType.getEditorDocking()) {
+        dockingsType.getEditorDocking().forEach(dockingType -> {
             try {
                 EditorDockingDescriptor dockingDescriptor = EditorDockingDescriptor.createEditorDockingDescriptor(
                         dockingType, bundle);
@@ -72,11 +73,14 @@ public class EditorDockingHandler<D> extends AbstractDockableDockingHandler<D> {
             } catch (Exception ex) {
                 LOG.error(ex.getMessage(), ex);
             }
-        }
+        });
     }
 
     private void resolveDockingDescriptor(EditorDockingDescriptor dockingDescriptor) {
         if (isInitialized()) {
+            DATA dockableData = getDockableDataFactory().createDockableData(dockingDescriptor);
+            registerClassDockableData(dockingDescriptor.getDockableClass(), dockableData);
+
             DockablePreferences dockablePreferences = createDockablePreferences(dockingDescriptor.getAreaId(), 0);
             registerDefaultDockablePreferences(dockingDescriptor.getDockableClass(), dockablePreferences);
         } else {
@@ -85,8 +89,7 @@ public class EditorDockingHandler<D> extends AbstractDockableDockingHandler<D> {
     }
 
     private void resolveUnresolvedDockables() {
-        for (EditorDockingDescriptor unresolvedDockingDescriptor : unresolvedDockingDescriptors) {
-            resolveDockingDescriptor(unresolvedDockingDescriptor);
-        }
+        unresolvedDockingDescriptors.forEach(unresolvedDockingDescriptor
+                -> resolveDockingDescriptor(unresolvedDockingDescriptor));
     }
 }

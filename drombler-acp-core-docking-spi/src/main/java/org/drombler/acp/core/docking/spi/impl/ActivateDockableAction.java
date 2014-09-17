@@ -14,25 +14,24 @@
  */
 package org.drombler.acp.core.docking.spi.impl;
 
-import org.drombler.commons.action.AbstractActionListener;
 import org.drombler.acp.core.docking.spi.Dockables;
-import org.drombler.commons.client.docking.Dockable;
+import org.drombler.commons.action.AbstractActionListener;
 
 /**
  *
  * @author puce
  */
-public class ActivateDockableAction extends AbstractActionListener<Object> {
+public class ActivateDockableAction<D> extends AbstractActionListener<Object> {
 
-    private final Dockable dockable;
+    private final D dockable;
 
-    public ActivateDockableAction(Dockable dockable) {
+    public ActivateDockableAction(D dockable) {
         this.dockable = dockable;
     }
 
     @Override
     public void onAction(Object event) {
         Dockables.open(dockable);
-        dockable.requestActive();
+//        dockable.requestActive();
     }
 }

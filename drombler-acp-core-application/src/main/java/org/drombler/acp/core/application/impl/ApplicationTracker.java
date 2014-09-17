@@ -56,7 +56,7 @@ public class ApplicationTracker {
     private static final Logger LOG = LoggerFactory.getLogger(ApplicationTracker.class);
 
     private BundleTracker<ApplicationType> bundleTracker;
-    private final Set<Class<?>> jaxbRootClassesSet = new HashSet<Class<?>>(Arrays.asList(ApplicationType.class));
+    private final Set<Class<?>> jaxbRootClassesSet = new HashSet<>(Arrays.asList(ApplicationType.class));
     private Class[] jaxbRootClasses = new Class[]{ApplicationType.class};
     private final Map<Long, List<ServiceRegistration<?>>> serviceRegistrations = new HashMap<>();
     // TODO: thread-safe? memory leak?

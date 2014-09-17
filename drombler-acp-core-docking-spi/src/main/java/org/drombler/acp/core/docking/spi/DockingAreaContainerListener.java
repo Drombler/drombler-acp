@@ -15,13 +15,16 @@
 package org.drombler.acp.core.docking.spi;
 
 import java.util.EventListener;
+import org.drombler.commons.client.docking.DockableEntry;
 
 /**
  * TODO: more methods might be added in future
  *
  * @author puce
+ * @param <D>
+ * @param <DATA>
  */
-public interface DockingAreaContainerListener<D> extends EventListener {
+public interface DockingAreaContainerListener<D extends DockableEntry<?, ?>> extends EventListener {
 
     void dockingAreaAdded(DockingAreaContainerDockingAreaEvent<D> event);
 

@@ -19,6 +19,7 @@ import org.drombler.commons.client.docking.DockablePreferencesManager;
 /**
  *
  * @author puce
+ * @param <D>
  */
 public interface DockablePreferencesManagerProvider<D> {
 

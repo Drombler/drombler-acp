@@ -21,6 +21,9 @@ import org.drombler.commons.client.docking.DockablePreferences;
 /**
  *
  * @author puce
+ * @param <D>
+ * @param <DATA>
+ * @param <E>
  */
 public interface DockableEntryFactory<D, DATA extends DockableData, E extends DockableEntry<D, DATA>> {
 

@@ -15,16 +15,18 @@
 package org.drombler.acp.core.docking.spi;
 
 import java.util.EventObject;
+import org.drombler.commons.client.docking.DockableEntry;
 
 /**
  *
  * @author puce
+ * @param <D>
  */
-public class DockingAreaContainerDockingAreaEvent<D> extends EventObject {
+public class DockingAreaContainerDockingAreaEvent<D extends DockableEntry<?, ?>> extends EventObject {
 
     private final String areaId;
 
-    public DockingAreaContainerDockingAreaEvent(DockingAreaContainer<D> source, String areaId) {
+    public DockingAreaContainerDockingAreaEvent(DockingAreaContainer<?, ?, D> source, String areaId) {
         super(source);
         this.areaId = areaId;
     }

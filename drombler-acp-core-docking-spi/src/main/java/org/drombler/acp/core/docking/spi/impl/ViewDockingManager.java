@@ -20,19 +20,20 @@ import java.util.List;
 import java.util.Map;
 import org.drombler.acp.core.action.spi.ActionDescriptor;
 import org.drombler.acp.core.action.spi.MenuEntryDescriptor;
+import org.drombler.acp.core.docking.spi.DockableDataFactory;
+import org.drombler.acp.core.docking.spi.DockableEntryFactory;
 import org.drombler.acp.core.docking.spi.DockableFactory;
-import org.drombler.acp.core.docking.spi.ViewDockingDescriptor;
-import org.drombler.commons.client.docking.Dockable;
-import org.drombler.commons.client.docking.DockableEntry;
-import org.drombler.commons.client.docking.DockablePreferences;
-import org.drombler.commons.client.docking.DockablePreferencesManager;
 import org.drombler.acp.core.docking.spi.DockingAreaContainer;
 import org.drombler.acp.core.docking.spi.DockingAreaContainerDockingAreaEvent;
 import org.drombler.acp.core.docking.spi.DockingAreaContainerListener;
-import org.drombler.commons.context.ActiveContextProvider;
-import org.drombler.commons.context.ActiveContextSensitive;
-import org.drombler.commons.context.ApplicationContextProvider;
-import org.drombler.commons.context.ApplicationContextSensitive;
+import org.drombler.acp.core.docking.spi.ViewDockingDescriptor;
+import org.drombler.commons.client.docking.DockableData;
+import org.drombler.commons.client.docking.DockableDataManager;
+import org.drombler.commons.client.docking.DockableEntry;
+import org.drombler.commons.client.docking.DockablePreferences;
+import org.drombler.commons.client.docking.DockablePreferencesManager;
+import org.drombler.commons.client.docking.DockingInjector;
+import org.drombler.commons.context.ContextInjector;
 import org.osgi.framework.BundleContext;
 
 /**
@@ -40,23 +41,31 @@ import org.osgi.framework.BundleContext;
  * @author puce
  */
     // access only on the application thread
-public class ViewDockingManager<D extends Dockable> implements AutoCloseable {
+public class ViewDockingManager<D, DATA extends DockableData, E extends DockableEntry<D, DATA>> implements AutoCloseable {
 
     private final Map<String, List<UnresolvedEntry<ViewDockingDescriptor>>> unresolvedDockingDescriptorsAreaId = new HashMap<>();
-    private final DockingAreaListener dockingAreaListener = new DockingAreaListener();
-    private final ActiveContextProvider activeContextProvider;
-    private final ApplicationContextProvider applicationContextProvider;
+    private final DockingAreaListener<E> dockingAreaListener = new DockingAreaListener<>();
     private final DockableFactory<D> dockableFactory;
-    private final DockingAreaContainer<D> dockingAreaContainer;
+    private final DockableDataFactory<DATA> dockableDataFactory;
+    private final DockableEntryFactory<D, DATA, E> dockableEntryFactory;
+    private final ContextInjector contextInjector;
+    private final DockingInjector<D, DATA> dockingInjector;
+    private final DockingAreaContainer<D, DATA, E> dockingAreaContainer;
+    private final DockableDataManager<D, DATA> dockableDataManager;
     private final DockablePreferencesManager<D> dockablePreferencesManager;
 
-    public ViewDockingManager(DockableFactory<D> dockableFactory, ActiveContextProvider activeContextProvider,
-            ApplicationContextProvider applicationContextProvider, DockingAreaContainer<D> dockingAreaContainer,
+    public ViewDockingManager(DockableFactory<D> dockableFactory, DockableDataFactory<DATA> dockableDataFactory,
+            DockableEntryFactory<D, DATA, E> dockableEntryFactory, ContextInjector contextInjector,
+            DockingAreaContainer<D, DATA, E> dockingAreaContainer,
+            DockableDataManager<D, DATA> dockableDataManager,
             DockablePreferencesManager<D> dockablePreferencesManager) {
         this.dockableFactory = dockableFactory;
-        this.activeContextProvider = activeContextProvider;
-        this.applicationContextProvider = applicationContextProvider;
+        this.dockableDataFactory = dockableDataFactory;
+        this.dockableEntryFactory = dockableEntryFactory;
+        this.contextInjector = contextInjector;
         this.dockingAreaContainer = dockingAreaContainer;
+        this.dockableDataManager = dockableDataManager;
+        this.dockingInjector = new DockingInjector<>(dockableDataManager);
         this.dockablePreferencesManager = dockablePreferencesManager;
 
         this.dockingAreaContainer.addDockingAreaContainerListener(dockingAreaListener);
@@ -72,29 +81,26 @@ public class ViewDockingManager<D extends Dockable> implements AutoCloseable {
             final BundleContext context) {
         D dockable = dockableFactory.createDockable(dockingDescriptor);
         if (dockable != null) {
-            if (dockable instanceof ActiveContextSensitive) {
-                ((ActiveContextSensitive) dockable).setActiveContext(
-                        activeContextProvider.getActiveContext());
-            }
-            if (dockable instanceof ApplicationContextSensitive) {
-                ((ApplicationContextSensitive) dockable).setApplicationContext(
-                        applicationContextProvider.getApplicationContext());
-            }
+            DATA dockableData = dockableDataFactory.createDockableData(dockingDescriptor);
+            dockableDataManager.registerDockableData(dockable, dockableData);
+
+            contextInjector.inject(dockable);
+            dockingInjector.inject(dockable);
+
             DockablePreferences dockablePreferences = dockablePreferencesManager.getDockablePreferences(
                     dockable);
-            if (dockingAreaContainer.addDockable(new DockableEntry<>(dockable, dockablePreferences))) {
-                dockingDescriptor.getActivateDockableActionDescriptor().setListener(new ActivateDockableAction(
+            if (dockingAreaContainer.addDockable(dockableEntryFactory.createDockableEntry(dockable, dockableData,
+                    dockablePreferences))) {
+                dockingDescriptor.getActivateDockableActionDescriptor().setListener(new ActivateDockableAction<>(
                         dockable));
-                context
-                        .registerService(ActionDescriptor.class,
-                                dockingDescriptor.getActivateDockableActionDescriptor(),
-                                null);
+                context.registerService(ActionDescriptor.class,
+                        dockingDescriptor.getActivateDockableActionDescriptor(), null);
                 context.registerService(MenuEntryDescriptor.class,
                         dockingDescriptor.getActivateDockableMenuEntryDescriptor(), null);
             } else {
+                // TODO: Does this still work?
                 if (!unresolvedDockingDescriptorsAreaId.containsKey(dockablePreferences.getAreaId())) {
-                    unresolvedDockingDescriptorsAreaId.put(dockablePreferences.getAreaId(),
-                            new ArrayList<UnresolvedEntry<ViewDockingDescriptor>>());
+                    unresolvedDockingDescriptorsAreaId.put(dockablePreferences.getAreaId(), new ArrayList<>());
                 }
                 unresolvedDockingDescriptorsAreaId.get(dockablePreferences.getAreaId()).add(new UnresolvedEntry<>(
                         dockingDescriptor, context));
@@ -104,9 +110,8 @@ public class ViewDockingManager<D extends Dockable> implements AutoCloseable {
 
     private void resolveUnresolvedDockables(String areaId) {
         if (unresolvedDockingDescriptorsAreaId.containsKey(areaId)) {
-            for (UnresolvedEntry<ViewDockingDescriptor> unresolvedEntry : unresolvedDockingDescriptorsAreaId.get(areaId)) {
-                addDockable(unresolvedEntry.getEntry(), unresolvedEntry.getContext());
-            }
+            unresolvedDockingDescriptorsAreaId.get(areaId).forEach((unresolvedEntry)
+                    -> addDockable(unresolvedEntry.getEntry(), unresolvedEntry.getContext()));
         }
     }
 
@@ -115,7 +120,7 @@ public class ViewDockingManager<D extends Dockable> implements AutoCloseable {
         dockingAreaContainer.removeDockingAreaContainerListener(dockingAreaListener);
     }
 
-    private class DockingAreaListener<D> implements DockingAreaContainerListener<D> {
+    private class DockingAreaListener<E extends DockableEntry<?, ?>> implements DockingAreaContainerListener<E> {
 
         /**
          * This method gets called from the application thread!
@@ -123,7 +128,7 @@ public class ViewDockingManager<D extends Dockable> implements AutoCloseable {
          * @param event
          */
         @Override
-        public void dockingAreaAdded(DockingAreaContainerDockingAreaEvent<D> event) {
+        public void dockingAreaAdded(DockingAreaContainerDockingAreaEvent<E> event) {
             resolveUnresolvedDockables(event.getAreaId());
         }
 
@@ -133,7 +138,7 @@ public class ViewDockingManager<D extends Dockable> implements AutoCloseable {
          * @param event
          */
         @Override
-        public void dockingAreaRemoved(DockingAreaContainerDockingAreaEvent<D> event) {
+        public void dockingAreaRemoved(DockingAreaContainerDockingAreaEvent<E> event) {
             // TODO: ???
         }
 

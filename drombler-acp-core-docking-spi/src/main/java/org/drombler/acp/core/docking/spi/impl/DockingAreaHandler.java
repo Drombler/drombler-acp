@@ -28,6 +28,8 @@ import org.drombler.acp.core.application.ApplicationExecutorProvider;
 import org.drombler.acp.core.docking.jaxb.DockingAreaType;
 import org.drombler.acp.core.docking.jaxb.DockingAreasType;
 import org.drombler.acp.core.docking.spi.DockingAreaDescriptorUtils;
+import org.drombler.commons.client.docking.DockableData;
+import org.drombler.commons.client.docking.DockableEntry;
 import org.drombler.commons.client.docking.DockingAreaDescriptor;
 import org.osgi.service.component.ComponentContext;
 import org.slf4j.Logger;
@@ -45,7 +47,7 @@ import org.slf4j.LoggerFactory;
             cardinality = ReferenceCardinality.OPTIONAL_MULTIPLE, policy = ReferencePolicy.DYNAMIC),
     @Reference(name = "applicationExecutorProvider", referenceInterface = ApplicationExecutorProvider.class)
 })
-public class DockingAreaHandler<D> extends AbstractDockingHandler<D> {
+public class DockingAreaHandler<D, DATA extends DockableData, E extends DockableEntry<D, DATA>> extends AbstractDockingHandler<D, DATA, E> {
 
     private static final Logger LOG = LoggerFactory.getLogger(DockingAreaHandler.class);
 
@@ -97,13 +99,8 @@ public class DockingAreaHandler<D> extends AbstractDockingHandler<D> {
     private void resolveDockingArea(final DockingAreaDescriptor dockingAreaDescriptor) {
         if (isInitialized()) {
             LOG.info("Adding docking area: '{}'", dockingAreaDescriptor.getId());
-            Runnable runnable = new Runnable() {
-
-                @Override
-                public void run() {
-                    getDockingAreaContainerProvider().getDockingAreaContainer().addDockingArea(dockingAreaDescriptor);
-                }
-            };
+            Runnable runnable = ()
+                    -> getDockingAreaContainerProvider().getDockingAreaContainer().addDockingArea(dockingAreaDescriptor);
             applicationExecutor.execute(runnable);
         } else {
             unresolvedDockingAreaDescriptors.add(dockingAreaDescriptor);

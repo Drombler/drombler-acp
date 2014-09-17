@@ -17,6 +17,7 @@ package org.drombler.acp.core.docking.spi;
 /**
  *
  * @author puce
+ * @param <T>
  */
 public interface DockableFactory<T> {
 
