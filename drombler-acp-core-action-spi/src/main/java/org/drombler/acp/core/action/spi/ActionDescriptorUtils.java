@@ -17,9 +17,7 @@ package org.drombler.acp.core.action.spi;
 import org.apache.commons.lang3.StringUtils;
 import org.drombler.acp.core.action.jaxb.ActionType;
 import org.drombler.commons.client.util.ResourceBundleUtils;
-import org.drombler.commons.context.ActiveContextSensitive;
-import org.drombler.commons.context.ApplicationContextSensitive;
-import org.drombler.commons.context.Context;
+import org.drombler.commons.context.ContextInjector;
 import org.osgi.framework.Bundle;
 import org.softsmithy.lib.util.ResourceLoader;
 
@@ -33,7 +31,7 @@ class ActionDescriptorUtils {
     }
 
     public static void configureActionDescriptor(ActionDescriptor actionDescriptor, ActionType actionType, Bundle bundle,
-            Context activeContext, Context applicationContext) throws ClassNotFoundException, InstantiationException,
+            ContextInjector contextInjector) throws ClassNotFoundException, InstantiationException,
             IllegalAccessException {
         Class<?> actionListenerClass = bundle.loadClass(StringUtils.stripToNull(actionType.getListenerClass()));
         actionDescriptor.setId(StringUtils.stripToNull(actionType.getId()));
@@ -44,12 +42,7 @@ class ActionDescriptorUtils {
         actionDescriptor.setIcon(StringUtils.stripToNull(actionType.getIcon()));
         actionDescriptor.setResourceLoader(new ResourceLoader(actionListenerClass));
         Object actionListener = actionListenerClass.newInstance();
-        if (actionListener instanceof ActiveContextSensitive) {
-            ((ActiveContextSensitive) actionListener).setActiveContext(activeContext);
-        }
-        if (actionListener instanceof ApplicationContextSensitive) {
-            ((ApplicationContextSensitive) actionListener).setApplicationContext(applicationContext);
-        }
+        contextInjector.inject(actionListener);
         actionDescriptor.setListener(actionListener);
     }
 }

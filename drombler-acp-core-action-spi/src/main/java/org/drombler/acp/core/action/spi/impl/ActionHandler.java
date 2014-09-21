@@ -59,12 +59,15 @@ public class ActionHandler<T> extends AbstractActionHandler<ActionType, ActionDe
     }
 
     @Activate
+    @Override
     protected void activate(ComponentContext context) {
-        resolveUnresolvedItems();
+        super.activate(context);
     }
 
     @Deactivate
+    @Override
     protected void deactivate(ComponentContext context) {
+        super.deactivate(context);
     }
 
     @Override
@@ -74,15 +77,12 @@ public class ActionHandler<T> extends AbstractActionHandler<ActionType, ActionDe
 
     @Override
     protected void registerActions(ActionsType actionsType, BundleContext context) {
-        for (ActionType actionType : actionsType.getAction()) {
-            registerActionType(actionType, context);
-        }
+        actionsType.getAction().forEach((actionType) -> registerActionType(actionType, context));
     }
 
     @Override
     protected ActionDescriptor createActionDescriptor(ActionType actionType, BundleContext context) throws IllegalAccessException, ClassNotFoundException, InstantiationException {
-        return ActionDescriptor.createActionDescriptor(actionType, context.getBundle(),
-                getActiveContextProvider().getActiveContext(), getApplicationContextProvider().getApplicationContext());
+        return ActionDescriptor.createActionDescriptor(actionType, context.getBundle(), getContextInjector());
     }
 
     @Override

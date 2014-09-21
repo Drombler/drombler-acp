@@ -20,13 +20,13 @@ import org.apache.felix.scr.annotations.Deactivate;
 import org.apache.felix.scr.annotations.Reference;
 import org.apache.felix.scr.annotations.ReferenceCardinality;
 import org.apache.felix.scr.annotations.ReferencePolicy;
-import org.osgi.framework.BundleContext;
-import org.osgi.framework.ServiceReference;
-import org.osgi.service.component.ComponentContext;
 import org.drombler.acp.core.action.jaxb.ActionsType;
 import org.drombler.acp.core.action.jaxb.ToggleActionType;
 import org.drombler.acp.core.action.spi.ToggleActionDescriptor;
 import org.drombler.acp.core.action.spi.ToggleActionFactory;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceReference;
+import org.osgi.service.component.ComponentContext;
 
 /**
  *
@@ -34,7 +34,7 @@ import org.drombler.acp.core.action.spi.ToggleActionFactory;
  */
 @Component(immediate = true)
 @Reference(name = "toggleActionDescriptor", referenceInterface = ToggleActionDescriptor.class,
-cardinality = ReferenceCardinality.OPTIONAL_MULTIPLE, policy = ReferencePolicy.DYNAMIC)
+        cardinality = ReferenceCardinality.OPTIONAL_MULTIPLE, policy = ReferencePolicy.DYNAMIC)
 public class ToggleActionHandler<T> extends AbstractActionHandler<ToggleActionType, ToggleActionDescriptor> {
 
     @Reference
@@ -59,12 +59,15 @@ public class ToggleActionHandler<T> extends AbstractActionHandler<ToggleActionTy
     }
 
     @Activate
+    @Override
     protected void activate(ComponentContext context) {
-        resolveUnresolvedItems();
+        super.activate(context);
     }
 
     @Deactivate
+    @Override
     protected void deactivate(ComponentContext context) {
+        super.deactivate(context);
     }
 
     @Override
@@ -74,9 +77,7 @@ public class ToggleActionHandler<T> extends AbstractActionHandler<ToggleActionTy
 
     @Override
     protected void registerActions(ActionsType actionsType, BundleContext context) {
-        for (ToggleActionType actionType : actionsType.getToggleAction()) {
-            registerActionType(actionType, context);
-        }
+        actionsType.getToggleAction().forEach((actionType) -> registerActionType(actionType, context));
     }
 
     @Override
@@ -94,7 +95,7 @@ public class ToggleActionHandler<T> extends AbstractActionHandler<ToggleActionTy
     @Override
     protected ToggleActionDescriptor createActionDescriptor(ToggleActionType actionType, BundleContext context) throws
             IllegalAccessException, ClassNotFoundException, InstantiationException {
-        return ToggleActionDescriptor.createToggleActionDescriptor(actionType, context.getBundle(),
-                getActiveContextProvider().getActiveContext(), getApplicationContextProvider().getApplicationContext());
+        return ToggleActionDescriptor.
+                createToggleActionDescriptor(actionType, context.getBundle(), getContextInjector());
     }
 }

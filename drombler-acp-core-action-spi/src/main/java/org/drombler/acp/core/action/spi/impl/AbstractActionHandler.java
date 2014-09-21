@@ -26,8 +26,10 @@ import org.drombler.acp.core.action.spi.ActionRegistry;
 import org.drombler.acp.core.application.ApplicationExecutorProvider;
 import org.drombler.commons.context.ActiveContextProvider;
 import org.drombler.commons.context.ApplicationContextProvider;
+import org.drombler.commons.context.ContextInjector;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
+import org.osgi.service.component.ComponentContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -49,6 +51,7 @@ public abstract class AbstractActionHandler<A, D> {
     @Reference
     private ApplicationContextProvider applicationContextProvider;
     private Executor applicationExecutor;
+    private ContextInjector contextInjector;
     private final ActionRegistry actionRegistry = new ActionRegistry();
     private final List<UnresolvedEntry<A>> unresolvedActions = new ArrayList<>();
     private final List<UnresolvedEntry<D>> unresolvedActionDescriptors = new ArrayList<>();
@@ -87,8 +90,17 @@ public abstract class AbstractActionHandler<A, D> {
         applicationExecutor = null;
     }
 
+    protected void activate(ComponentContext context) {
+        contextInjector = new ContextInjector(activeContextProvider, applicationContextProvider);
+        resolveUnresolvedItems();
+    }
+
+    protected void deactivate(ComponentContext context) {
+    }
+
     protected boolean isInitialized() {
-        return getActiveContextProvider() != null && getApplicationContextProvider() != null && applicationExecutor != null;
+        return activeContextProvider != null && applicationContextProvider != null && getContextInjector() != null
+                && applicationExecutor != null;
     }
 
     protected abstract void registerActions(ActionsType actionType, BundleContext context);
@@ -99,32 +111,23 @@ public abstract class AbstractActionHandler<A, D> {
     }
 
     private void resolveUnresolvedActions() {
-        for (UnresolvedEntry<A> entry : unresolvedActions) {
-            registerActionType(entry.getEntry(), entry.getContext());
-        }
+        unresolvedActions.forEach((entry) -> registerActionType(entry.getEntry(), entry.getContext()));
     }
 
     private void resolveUnresolvedActionDescriptors() {
-        for (UnresolvedEntry<D> entry : unresolvedActionDescriptors) {
-            registerActionDescriptor(entry.getEntry(), entry.getContext());
-        }
+        unresolvedActionDescriptors.forEach((entry) -> registerActionDescriptor(entry.getEntry(), entry.getContext()));
     }
 
     protected void registerActionType(final A actionType, final BundleContext context) {
         if (isInitialized()) {
-            Runnable runnable = new Runnable() {
-
-                @Override
-                public void run() {
-                    try {
-                        D actionDescriptor = createActionDescriptor(actionType, context);
-                        registerActionDescriptor(actionDescriptor, context);
-                    } catch (ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
-                        LOG.error(ex.getMessage(), ex);
-                    }
+            applicationExecutor.execute(() -> {
+                try {
+                    D actionDescriptor = createActionDescriptor(actionType, context);
+                    registerActionDescriptor(actionDescriptor, context);
+                } catch (ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
+                    LOG.error(ex.getMessage(), ex);
                 }
-            };
-            applicationExecutor.execute(runnable);
+            });
         } else {
             unresolvedActions.add(new UnresolvedEntry<>(actionType, context));
         }
@@ -147,16 +150,9 @@ public abstract class AbstractActionHandler<A, D> {
     }
 
     /**
-     * @return the activeContextProvider
+     * @return the contextInjector
      */
-    protected ActiveContextProvider getActiveContextProvider() {
-        return activeContextProvider;
-    }
-
-    /**
-     * @return the applicationContextProvider
-     */
-    protected ApplicationContextProvider getApplicationContextProvider() {
-        return applicationContextProvider;
+    protected ContextInjector getContextInjector() {
+        return contextInjector;
     }
 }

@@ -15,7 +15,7 @@
 package org.drombler.acp.core.action.spi;
 
 import org.drombler.acp.core.action.jaxb.ToggleActionType;
-import org.drombler.commons.context.Context;
+import org.drombler.commons.context.ContextInjector;
 import org.osgi.framework.Bundle;
 
 /**
@@ -25,11 +25,10 @@ import org.osgi.framework.Bundle;
 public class ToggleActionDescriptor extends ActionDescriptor { // TODO: extend CheckActionDescriptor or ActionDescriptor? ToggleActionListener extends CheckActionListener...
 
     public static ToggleActionDescriptor createToggleActionDescriptor(ToggleActionType actionType, Bundle bundle,
-            Context activeContext, Context applicationContext)
+            ContextInjector contextInjector)
             throws ClassNotFoundException, InstantiationException, IllegalAccessException {
         ToggleActionDescriptor actionDescriptor = new ToggleActionDescriptor();
-        ActionDescriptorUtils.configureActionDescriptor(actionDescriptor, actionType, bundle, activeContext,
-                applicationContext);
+        ActionDescriptorUtils.configureActionDescriptor(actionDescriptor, actionType, bundle, contextInjector);
         return actionDescriptor;
     }
 }

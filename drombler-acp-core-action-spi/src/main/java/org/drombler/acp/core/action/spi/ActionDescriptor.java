@@ -15,7 +15,7 @@
 package org.drombler.acp.core.action.spi;
 
 import org.drombler.acp.core.action.jaxb.ActionType;
-import org.drombler.commons.context.Context;
+import org.drombler.commons.context.ContextInjector;
 import org.osgi.framework.Bundle;
 import org.softsmithy.lib.util.ResourceLoader;
 
@@ -108,12 +108,11 @@ public class ActionDescriptor {
         this.resourceLoader = resourceLoader;
     }
 
-    public static ActionDescriptor createActionDescriptor(ActionType actionType, Bundle bundle, Context activeContext,
-            Context applicationContext)
+    public static ActionDescriptor createActionDescriptor(ActionType actionType, Bundle bundle,
+            ContextInjector contextInjector)
             throws ClassNotFoundException, InstantiationException, IllegalAccessException {
         ActionDescriptor actionDescriptor = new ActionDescriptor();
-        ActionDescriptorUtils.configureActionDescriptor(actionDescriptor, actionType, bundle, activeContext,
-                applicationContext);
+        ActionDescriptorUtils.configureActionDescriptor(actionDescriptor, actionType, bundle, contextInjector);
         return actionDescriptor;
     }
 }
