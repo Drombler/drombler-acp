@@ -23,6 +23,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
@@ -50,7 +51,7 @@ import org.slf4j.LoggerFactory;
  */
 @Component
 @Reference(name = "extensionPoint", referenceInterface = ExtensionPoint.class,
-cardinality = ReferenceCardinality.OPTIONAL_MULTIPLE, policy = ReferencePolicy.DYNAMIC)
+        cardinality = ReferenceCardinality.OPTIONAL_MULTIPLE, policy = ReferencePolicy.DYNAMIC)
 public class ApplicationTracker {
 
     private static final Logger LOG = LoggerFactory.getLogger(ApplicationTracker.class);
@@ -143,20 +144,17 @@ public class ApplicationTracker {
     }
 
     private void registerExtensions(Bundle bundle, ExtensionsType extensions) {
-        List<ServiceRegistration<?>> registrations = new ArrayList<>(extensions.getAny().size());
-        for (Object extension : extensions.getAny()) {
-            ServiceRegistration<?> serviceRegistration = bundle.getBundleContext().registerService(
-                    extension.getClass().getName(), extension, null);
-            registrations.add(serviceRegistration);
-        }
+        final List<ServiceRegistration<?>> registrations = extensions.getAny().stream().
+                map(extension
+                        -> bundle.getBundleContext().registerService(extension.getClass().getName(), extension, null)).
+                collect(Collectors.toList());
         serviceRegistrations.put(bundle.getBundleId(), registrations);
     }
 
     private void unregisterExtensions(Bundle bundle) {
         if (serviceRegistrations.containsKey(bundle.getBundleId())) {
-            for (ServiceRegistration<?> serviceRegistration : serviceRegistrations.remove(bundle.getBundleId())) {
-                serviceRegistration.unregister();
-            }
+            serviceRegistrations.remove(bundle.getBundleId()).forEach(serviceRegistration
+                    -> serviceRegistration.unregister());
         }
         if (unresolvedExtensions.contains(bundle)) {
             unresolvedExtensions.remove(bundle);
@@ -204,9 +202,7 @@ public class ApplicationTracker {
         if (!unresolvedExtensions.isEmpty()) {
             // avoid concurrent modification // TODO: needed here?
             List<Bundle> extensionBundles = new ArrayList<>(unresolvedExtensions);
-            for (Bundle extensionBundle : extensionBundles) {
-                registerExtensions(extensionBundle);
-            }
+            extensionBundles.forEach(extensionBundle -> registerExtensions(extensionBundle));
         }
     }
 
