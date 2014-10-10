@@ -53,7 +53,7 @@ import org.slf4j.LoggerFactory;
             cardinality = ReferenceCardinality.OPTIONAL_MULTIPLE, policy = ReferencePolicy.DYNAMIC),
     @Reference(name = "applicationExecutorProvider", referenceInterface = ApplicationExecutorProvider.class)
 })
-public class ViewDockingHandler<D, DATA extends DockableData, E extends DockableEntry<D, DATA>> extends AbstractDockableDockingHandler<D, DATA, E> {
+public class ViewDockingHandler<D, DATA extends DockableData, E extends DockableEntry<D>> extends AbstractDockableDockingHandler<D, DATA, E> {
 
     private static final Logger LOG = LoggerFactory.getLogger(ViewDockingHandler.class);
 
@@ -64,7 +64,7 @@ public class ViewDockingHandler<D, DATA extends DockableData, E extends Dockable
     @Reference
     private DockableFactory<D> dockableFactory;
     @Reference
-    private DockableEntryFactory<D, DATA, E> dockableEntryFactory;
+    private DockableEntryFactory<D, E> dockableEntryFactory;
     private Executor applicationExecutor;
     private ViewDockingManager<D, DATA, E> viewDockingManager;
     private final List<UnresolvedEntry<ViewDockingDescriptor>> unresolvedDockingDescriptors = new ArrayList<>();
@@ -101,11 +101,11 @@ public class ViewDockingHandler<D, DATA extends DockableData, E extends Dockable
         this.dockableFactory = null;
     }
 
-    protected void bindDockableEntryFactory(DockableEntryFactory<D, DATA, E> dockableEntryFactory) {
+    protected void bindDockableEntryFactory(DockableEntryFactory<D, E> dockableEntryFactory) {
         this.dockableEntryFactory = dockableEntryFactory;
     }
 
-    protected void unbindDockableEntryFactory(DockableEntryFactory<D, DATA, E> dockableEntryFactory) {
+    protected void unbindDockableEntryFactory(DockableEntryFactory<D, E> dockableEntryFactory) {
         this.dockableEntryFactory = null;
     }
 

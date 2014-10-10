@@ -21,12 +21,13 @@ import org.drombler.commons.client.docking.DockableEntry;
  *
  * @author puce
  * @param <D>
+ * @param <E>
  */
-public class DockingAreaContainerDockingAreaEvent<D extends DockableEntry<?, ?>> extends EventObject {
+public class DockingAreaContainerDockingAreaEvent<D, E extends DockableEntry<D>> extends EventObject {
 
     private final String areaId;
 
-    public DockingAreaContainerDockingAreaEvent(DockingAreaContainer<?, ?, D> source, String areaId) {
+    public DockingAreaContainerDockingAreaEvent(DockingAreaContainer<D, E> source, String areaId) {
         super(source);
         this.areaId = areaId;
     }

@@ -14,7 +14,6 @@
  */
 package org.drombler.acp.core.docking.spi;
 
-import org.drombler.commons.client.docking.DockableData;
 import org.drombler.commons.client.docking.DockableEntry;
 import org.drombler.commons.client.docking.DockablePreferences;
 
@@ -22,10 +21,9 @@ import org.drombler.commons.client.docking.DockablePreferences;
  *
  * @author puce
  * @param <D>
- * @param <DATA>
  * @param <E>
  */
-public interface DockableEntryFactory<D, DATA extends DockableData, E extends DockableEntry<D, DATA>> {
+public interface DockableEntryFactory<D, E extends DockableEntry<D>> {
 
-    E createDockableEntry(D dockable, DATA dockableData, DockablePreferences dockablePreferences);
+    E createDockableEntry(D dockable, DockablePreferences dockablePreferences);
 }

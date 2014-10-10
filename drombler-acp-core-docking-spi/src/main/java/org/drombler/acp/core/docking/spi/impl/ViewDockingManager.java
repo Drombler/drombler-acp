@@ -41,22 +41,22 @@ import org.osgi.framework.BundleContext;
  * @author puce
  */
     // access only on the application thread
-public class ViewDockingManager<D, DATA extends DockableData, E extends DockableEntry<D, DATA>> implements AutoCloseable {
+public class ViewDockingManager<D, DATA extends DockableData, E extends DockableEntry<D>> implements AutoCloseable {
 
     private final Map<String, List<UnresolvedEntry<ViewDockingDescriptor>>> unresolvedDockingDescriptorsAreaId = new HashMap<>();
-    private final DockingAreaListener<E> dockingAreaListener = new DockingAreaListener<>();
+    private final DockingAreaListener<D, E> dockingAreaListener = new DockingAreaListener<>();
     private final DockableFactory<D> dockableFactory;
     private final DockableDataFactory<DATA> dockableDataFactory;
-    private final DockableEntryFactory<D, DATA, E> dockableEntryFactory;
+    private final DockableEntryFactory<D, E> dockableEntryFactory;
     private final ContextInjector contextInjector;
     private final DockingInjector<D, DATA> dockingInjector;
-    private final DockingAreaContainer<D, DATA, E> dockingAreaContainer;
+    private final DockingAreaContainer<D, E> dockingAreaContainer;
     private final DockableDataManager<D, DATA> dockableDataManager;
     private final DockablePreferencesManager<D> dockablePreferencesManager;
 
     public ViewDockingManager(DockableFactory<D> dockableFactory, DockableDataFactory<DATA> dockableDataFactory,
-            DockableEntryFactory<D, DATA, E> dockableEntryFactory, ContextInjector contextInjector,
-            DockingAreaContainer<D, DATA, E> dockingAreaContainer,
+            DockableEntryFactory<D, E> dockableEntryFactory, ContextInjector contextInjector,
+            DockingAreaContainer<D, E> dockingAreaContainer,
             DockableDataManager<D, DATA> dockableDataManager,
             DockablePreferencesManager<D> dockablePreferencesManager) {
         this.dockableFactory = dockableFactory;
@@ -79,18 +79,17 @@ public class ViewDockingManager<D, DATA extends DockableData, E extends Dockable
      */
     public void addDockable(final ViewDockingDescriptor dockingDescriptor,
             final BundleContext context) {
-        D dockable = dockableFactory.createDockable(dockingDescriptor);
+        final D dockable = dockableFactory.createDockable(dockingDescriptor);
         if (dockable != null) {
-            DATA dockableData = dockableDataFactory.createDockableData(dockingDescriptor);
+            final DATA dockableData = dockableDataFactory.createDockableData(dockingDescriptor);
             dockableDataManager.registerDockableData(dockable, dockableData);
 
             contextInjector.inject(dockable);
             dockingInjector.inject(dockable);
 
-            DockablePreferences dockablePreferences = dockablePreferencesManager.getDockablePreferences(
+            final DockablePreferences dockablePreferences = dockablePreferencesManager.getDockablePreferences(
                     dockable);
-            if (dockingAreaContainer.addDockable(dockableEntryFactory.createDockableEntry(dockable, dockableData,
-                    dockablePreferences))) {
+            if (dockingAreaContainer.addDockable(dockableEntryFactory.createDockableEntry(dockable, dockablePreferences))) {
                 dockingDescriptor.getActivateDockableActionDescriptor().setListener(new ActivateDockableAction<>(
                         dockable));
                 context.registerService(ActionDescriptor.class,
@@ -120,7 +119,7 @@ public class ViewDockingManager<D, DATA extends DockableData, E extends Dockable
         dockingAreaContainer.removeDockingAreaContainerListener(dockingAreaListener);
     }
 
-    private class DockingAreaListener<E extends DockableEntry<?, ?>> implements DockingAreaContainerListener<E> {
+    private class DockingAreaListener<D, E extends DockableEntry<D>> implements DockingAreaContainerListener<D, E> {
 
         /**
          * This method gets called from the application thread!
@@ -128,7 +127,7 @@ public class ViewDockingManager<D, DATA extends DockableData, E extends Dockable
          * @param event
          */
         @Override
-        public void dockingAreaAdded(DockingAreaContainerDockingAreaEvent<E> event) {
+        public void dockingAreaAdded(DockingAreaContainerDockingAreaEvent<D, E> event) {
             resolveUnresolvedDockables(event.getAreaId());
         }
 
@@ -138,7 +137,7 @@ public class ViewDockingManager<D, DATA extends DockableData, E extends Dockable
          * @param event
          */
         @Override
-        public void dockingAreaRemoved(DockingAreaContainerDockingAreaEvent<E> event) {
+        public void dockingAreaRemoved(DockingAreaContainerDockingAreaEvent<D, E> event) {
             // TODO: ???
         }
 

@@ -28,7 +28,6 @@ import org.drombler.acp.core.application.ApplicationExecutorProvider;
 import org.drombler.acp.core.docking.jaxb.DockingAreaType;
 import org.drombler.acp.core.docking.jaxb.DockingAreasType;
 import org.drombler.acp.core.docking.spi.DockingAreaDescriptorUtils;
-import org.drombler.commons.client.docking.DockableData;
 import org.drombler.commons.client.docking.DockableEntry;
 import org.drombler.commons.client.docking.DockingAreaDescriptor;
 import org.osgi.service.component.ComponentContext;
@@ -47,7 +46,7 @@ import org.slf4j.LoggerFactory;
             cardinality = ReferenceCardinality.OPTIONAL_MULTIPLE, policy = ReferencePolicy.DYNAMIC),
     @Reference(name = "applicationExecutorProvider", referenceInterface = ApplicationExecutorProvider.class)
 })
-public class DockingAreaHandler<D, DATA extends DockableData, E extends DockableEntry<D, DATA>> extends AbstractDockingHandler<D, DATA, E> {
+public class DockingAreaHandler<D, E extends DockableEntry<D>> extends AbstractDockingHandler<D, E> {
 
     private static final Logger LOG = LoggerFactory.getLogger(DockingAreaHandler.class);
 

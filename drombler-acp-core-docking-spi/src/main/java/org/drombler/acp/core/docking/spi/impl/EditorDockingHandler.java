@@ -40,7 +40,7 @@ import org.slf4j.LoggerFactory;
 @Component(immediate = true)
 @Reference(name = "editorDockingDescriptor", referenceInterface = EditorDockingDescriptor.class,
         cardinality = ReferenceCardinality.OPTIONAL_MULTIPLE, policy = ReferencePolicy.DYNAMIC)
-public class EditorDockingHandler<D, DATA extends DockableData, E extends DockableEntry<D, DATA>> extends AbstractDockableDockingHandler<D, DATA, E> {
+public class EditorDockingHandler<D, DATA extends DockableData, E extends DockableEntry<D>> extends AbstractDockableDockingHandler<D, DATA, E> {
 
     private static final Logger LOG = LoggerFactory.getLogger(EditorDockingHandler.class);
 

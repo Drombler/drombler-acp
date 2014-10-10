@@ -35,42 +35,35 @@ public final class Dockables {
     private Dockables() {
     }
 
-    public static <D, DATA extends DockableData, E extends DockableEntry<D, DATA>> void open(D dockable) {
+    public static <D, E extends DockableEntry<D>> void open(D dockable) {
         // TODO: cache ServiceReference? or even DockingAreaContainerProvider?
         // TODO: check if the code is safe, if the services disappear
         BundleContext bundleContext = FrameworkUtil.getBundle(Dockables.class).getBundleContext();
 
+        // TODO: inject DockablePreferencesManagerProvider into DockableEntryFactory (possibly an abstract base implementation)?
         ServiceReference<DockablePreferencesManagerProvider> dockablePreferencesManagerProviderServiceReference
                 = bundleContext.getServiceReference(DockablePreferencesManagerProvider.class);
         @SuppressWarnings("unchecked")
         DockablePreferencesManagerProvider<D> dockablePreferencesManagerProvider
                 = bundleContext.getService(dockablePreferencesManagerProviderServiceReference);
 
-        ServiceReference<DockableDataManagerProvider> dockableDataManagerProviderServiceReference
-                = bundleContext.getServiceReference(DockableDataManagerProvider.class);
-        @SuppressWarnings("unchecked")
-        DockableDataManagerProvider<D, DATA> dockableDataManagerProvider
-                = bundleContext.getService(dockableDataManagerProviderServiceReference);
-
         ServiceReference<DockingAreaContainerProvider> dockingAreaContainerProviderServiceReference
                 = bundleContext.getServiceReference(DockingAreaContainerProvider.class);
         @SuppressWarnings("unchecked")
-        DockingAreaContainerProvider<D, DATA, E> dockingPaneProvider
+        DockingAreaContainerProvider<D, E> dockingPaneProvider
                 = bundleContext.getService(dockingAreaContainerProviderServiceReference);
 
         ServiceReference<DockableEntryFactory> dockableEntryFactoryServiceReference
                 = bundleContext.getServiceReference(DockableEntryFactory.class);
         @SuppressWarnings("unchecked")
-        DockableEntryFactory<D, DATA, E> dockableEntryFactory
+        DockableEntryFactory<D, E> dockableEntryFactory
                 = bundleContext.getService(dockableEntryFactoryServiceReference);
-        DATA dockableData = dockableDataManagerProvider.getDockableDataManager().getDockableData(dockable);
+        
 
         dockingPaneProvider.getDockingAreaContainer().addDockable(dockableEntryFactory.createDockableEntry(dockable,
-                dockableData,
                 dockablePreferencesManagerProvider.getDockablePreferencesManager().getDockablePreferences(dockable)));
 
         bundleContext.ungetService(dockingAreaContainerProviderServiceReference);
-        bundleContext.ungetService(dockableDataManagerProviderServiceReference);
         bundleContext.ungetService(dockablePreferencesManagerProviderServiceReference);
         bundleContext.ungetService(dockableEntryFactoryServiceReference);
     }

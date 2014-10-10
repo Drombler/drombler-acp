@@ -22,10 +22,11 @@ import org.drombler.commons.client.docking.DockableEntry;
  *
  * @author puce
  * @param <D>
+ * @param <E>
  */
-public interface DockingAreaContainerListener<D extends DockableEntry<?, ?>> extends EventListener {
+public interface DockingAreaContainerListener<D, E extends DockableEntry<D>> extends EventListener {
 
-    void dockingAreaAdded(DockingAreaContainerDockingAreaEvent<D> event);
+    void dockingAreaAdded(DockingAreaContainerDockingAreaEvent<D, E> event);
 
-    void dockingAreaRemoved(DockingAreaContainerDockingAreaEvent<D> event);
+    void dockingAreaRemoved(DockingAreaContainerDockingAreaEvent<D, E> event);
 }

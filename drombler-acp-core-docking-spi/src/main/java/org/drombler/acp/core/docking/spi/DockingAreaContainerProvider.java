@@ -14,17 +14,15 @@
  */
 package org.drombler.acp.core.docking.spi;
 
-import org.drombler.commons.client.docking.DockableData;
 import org.drombler.commons.client.docking.DockableEntry;
 
 /**
  *
  * @author puce
  * @param <D>
- * @param <DATA>
  * @param <E>
  */
-public interface DockingAreaContainerProvider<D, DATA extends DockableData, E extends DockableEntry<D, DATA>> {
+public interface DockingAreaContainerProvider<D, E extends DockableEntry<D>> {
 
-    DockingAreaContainer<D, DATA, E> getDockingAreaContainer();
+    DockingAreaContainer<D, E> getDockingAreaContainer();
 }

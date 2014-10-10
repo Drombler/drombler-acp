@@ -14,7 +14,6 @@
  */
 package org.drombler.acp.core.docking.spi;
 
-import org.drombler.commons.client.docking.DockableData;
 import org.drombler.commons.client.docking.DockableEntry;
 import org.drombler.commons.client.docking.DockingAreaDescriptor;
 
@@ -22,17 +21,16 @@ import org.drombler.commons.client.docking.DockingAreaDescriptor;
  *
  * @author puce
  * @param <D>
- * @param <DATA>
  * @param <E>
  */
-public interface DockingAreaContainer<D, DATA extends DockableData, E extends DockableEntry<D, DATA>> {
+public interface DockingAreaContainer<D, E extends DockableEntry<D>> {
 
     boolean addDockingArea(DockingAreaDescriptor dockingAreaDescriptor);
 
     boolean addDockable(E dockableEntry);
 
-    void addDockingAreaContainerListener(DockingAreaContainerListener<E> listener);
+    void addDockingAreaContainerListener(DockingAreaContainerListener<D, E> listener);
 
-    void removeDockingAreaContainerListener(DockingAreaContainerListener<E> listener);
+    void removeDockingAreaContainerListener(DockingAreaContainerListener<D, E> listener);
 
 }
