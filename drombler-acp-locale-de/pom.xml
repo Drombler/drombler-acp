@@ -19,7 +19,7 @@ Contributor(s): .
     <parent>
         <groupId>org.drombler.acp</groupId>
         <artifactId>drombler-acp-parent</artifactId>
-        <version>0.5-SNAPSHOT</version>
+        <version>0.5</version>
         <relativePath>../drombler-acp-parent/pom.xml</relativePath>
     </parent>
     <artifactId>drombler-acp-locale-de</artifactId>
@@ -35,7 +35,7 @@ Contributor(s): .
         <connection>${scm.connection}</connection>
         <developerConnection>${scm.developerConnection}</developerConnection>
         <url>${scm.url}</url>
-      <tag>HEAD</tag>
+      <tag>drombler-acp-0.5</tag>
   </scm>
 
   <distributionManagement>
