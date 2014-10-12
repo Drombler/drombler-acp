@@ -18,7 +18,7 @@ Contributor(s): .
     <parent>
         <groupId>org.drombler.acp</groupId>
         <artifactId>drombler-acp-parent</artifactId>
-        <version>0.5</version>
+        <version>0.6-SNAPSHOT</version>
         <relativePath>../drombler-acp-parent/pom.xml</relativePath>
     </parent>
     <artifactId>drombler-acp-core-docking-spi</artifactId>
@@ -34,7 +34,7 @@ Contributor(s): .
         <connection>${scm.connection}</connection>
         <developerConnection>${scm.developerConnection}</developerConnection>
         <url>${scm.url}</url>
-        <tag>drombler-acp-0.5</tag>
+        <tag>HEAD</tag>
     </scm>
 
     <distributionManagement>
