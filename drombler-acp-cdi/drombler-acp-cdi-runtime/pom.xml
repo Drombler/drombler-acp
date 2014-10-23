@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.drombler.acp</groupId>
+        <artifactId>drombler-acp-parent</artifactId>
+        <version>0.6-SNAPSHOT</version>
+        <relativePath>../../drombler-acp-parent/pom.xml</relativePath>
+    </parent>
+    <artifactId>drombler-acp-cdi-runtime</artifactId>
+    <packaging>pom</packaging>
+    
+    <name>Drombler ACP - CDI - Runtime</name>
+    <description>CDI Runtime</description>
+    <inceptionYear>2014</inceptionYear>
+    <!-- required for Javadoc (apidocs) linking -->
+    <url>http://www.drombler.org/DromblerACP/${project.version}/docs/site</url>
+    
+    <scm>
+        <connection>${scm.connection}</connection>
+        <developerConnection>${scm.developerConnection}</developerConnection>
+        <url>${scm.url}</url>
+        <tag>HEAD</tag>
+    </scm>
+    
+    <distributionManagement>
+        <site>
+            <id>drombler.sourceforge.net</id>
+            <url>${distributionManagement.parent.url}/${project.artifactId}/</url>
+        </site>
+    </distributionManagement>
+
+    <properties>
+        <scm.connection>${scm.parent.connection}</scm.connection>
+        <scm.developerConnection>${scm.parent.developerConnection}</scm.developerConnection>
+        <scm.url>${scm.parent.url}</scm.url>
+        
+        <pax.cdi.version>0.9.0</pax.cdi.version>
+    </properties>
+    
+    <!-- Not inherited!?? -->
+    <prerequisites>
+        <maven>${maven.version}</maven>
+    </prerequisites>
+    
+    <dependencies>
+        <!--        <dependency>
+            <groupId>org.ops4j.pax.cdi</groupId>
+            <artifactId>pax-cdi-api</artifactId>
+            <version>${pax.cdi.version}</version>
+        </dependency>-->
+        <dependency>
+            <groupId>org.ops4j.pax.cdi</groupId>
+            <artifactId>pax-cdi-extender</artifactId>
+            <version>${pax.cdi.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.ops4j.pax.cdi</groupId>
+            <artifactId>pax-cdi-extension</artifactId>
+            <version>${pax.cdi.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.ops4j.pax.cdi</groupId>
+            <artifactId>pax-cdi-weld</artifactId>
+            <version>${pax.cdi.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>javax.interceptor</groupId>
+            <artifactId>javax.interceptor-api</artifactId>
+            <version>1.2</version>
+        </dependency>
+        <dependency>
+            <groupId>javax.annotation</groupId>
+            <artifactId>javax.annotation-api</artifactId>
+            <version>1.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.tomcat</groupId>
+            <artifactId>el-api</artifactId>
+            <version>6.0.37</version>
+        </dependency>
+        <dependency>
+            <groupId>ch.qos.cal10n</groupId>
+            <artifactId>cal10n-api</artifactId>
+            <!--<version>0.8.1</version>-->
+            <version>0.7.4</version>
+        </dependency>
+        <!--        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-ext</artifactId>
+            <version>${dependency.slf4j.version}</version>
+            <scope>runtime</scope>
+        </dependency>-->
+    </dependencies>
+
+</project>
