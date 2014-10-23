@@ -36,6 +36,8 @@
         <scm.url>${scm.parent.url}</scm.url>
         
         <pax.cdi.version>0.9.0</pax.cdi.version>
+        <!--<javax.el.version>2.2</javax.el.version>-->
+        <!--<glassfish.el.version>2.1.2-b04</glassfish.el.version>-->
     </properties>
     
     <!-- Not inherited!?? -->
@@ -74,16 +76,32 @@
             <artifactId>javax.annotation-api</artifactId>
             <version>1.2</version>
         </dependency>
-        <dependency>
+        <!--        <dependency>
             <groupId>org.apache.tomcat</groupId>
             <artifactId>el-api</artifactId>
             <version>6.0.37</version>
-        </dependency>
+        </dependency>-->
         <dependency>
             <groupId>ch.qos.cal10n</groupId>
             <artifactId>cal10n-api</artifactId>
             <!--<version>0.8.1</version>-->
             <version>0.7.4</version>
+        </dependency>
+        <!--        <dependency>
+            <groupId>org.glassfish.web</groupId>
+            <artifactId>el-impl</artifactId>
+            <version>${glassfish.el.version}</version>
+        </dependency>-->
+        <!--        <dependency>
+            <groupId>javax.el</groupId>
+            <artifactId>el-api</artifactId>
+            <version>${javax.el.version}</version>
+        </dependency>-->
+        <dependency>
+            <!-- javax.el seems to be required by org.jboss.weld:weld-osgi-bundle, z.B. org.jboss.weld.manager.BeanManagerImpl-->
+            <groupId>org.jboss.spec.javax.el</groupId>
+            <artifactId>jboss-el-api_2.2_spec</artifactId>
+            <version>1.0.4.Final</version>
         </dependency>
         <!--        <dependency>
             <groupId>org.slf4j</groupId>

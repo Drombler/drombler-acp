@@ -65,6 +65,7 @@ Contributor(s): .
         <module>drombler-acp-core-action</module>
         <module>drombler-acp-core-action-spi</module>
         <module>drombler-acp-core-docking</module>
+        <module>drombler-acp-core-docking-cdi-extension</module>
         <module>drombler-acp-core-docking-spi</module>
         <module>drombler-acp-core-docking-spi-locale-de</module>
         <module>drombler-acp-core-standard-action</module>
@@ -100,6 +101,11 @@ Contributor(s): .
             <dependency>
                 <groupId>${project.groupId}</groupId>
                 <artifactId>drombler-acp-core-docking</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>drombler-acp-core-docking-cdi-extension</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
