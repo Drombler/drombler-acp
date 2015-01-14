@@ -32,6 +32,7 @@ import javax.tools.StandardLocation;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
+import org.drombler.acp.core.application.impl.ApplicationTracker;
 import org.drombler.acp.core.application.jaxb.ApplicationType;
 import org.drombler.acp.core.application.jaxb.ExtensionsType;
 
@@ -41,8 +42,7 @@ import org.drombler.acp.core.application.jaxb.ExtensionsType;
  */
 public abstract class AbstractApplicationAnnotationProcessor extends AbstractProcessor {
 
-    private static final String APPLICATION_XML_RELATIVE_NAME = "META-INF/platform/application.xml";
-    private static final List<Class<?>> JAXB_ROOT_CLASSES = new ArrayList<Class<?>>(Arrays.asList(ApplicationType.class));
+    private static final List<Class<?>> JAXB_ROOT_CLASSES = new ArrayList<>(Arrays.asList(ApplicationType.class));
     private static final List<Object> EXTENSION_CONFIGURATIONS = new ArrayList<>();
     private static final List<Object> ORIGINATING_ELEMENTS = new ArrayList<>();
     private static FileObject APPLICATION_FILE_OBJECT = null;
@@ -62,7 +62,6 @@ public abstract class AbstractApplicationAnnotationProcessor extends AbstractPro
         Filer filer = processingEnv.getFiler();
         Messager messager = processingEnv.getMessager();
 
-
 //            try {
 //                actionsFileObject = filer.getResource(StandardLocation.SOURCE_OUTPUT, "", APPLICATION_XML_RELATIVE_NAME);
 //            } catch (Exception ex) {
@@ -74,7 +73,7 @@ public abstract class AbstractApplicationAnnotationProcessor extends AbstractPro
             try {
                 APPLICATION_FILE_OBJECT = filer.createResource(
                         StandardLocation.SOURCE_OUTPUT,
-                        "", APPLICATION_XML_RELATIVE_NAME,
+                        "", ApplicationTracker.APPLICATION_XML_RELATIVE_NAME,
                         ORIGINATING_ELEMENTS.toArray(new Element[ORIGINATING_ELEMENTS.size()]));
                 JAXBContext jaxbContext = JAXBContext.newInstance(JAXB_ROOT_CLASSES.toArray(
                         new Class[JAXB_ROOT_CLASSES.size()]));

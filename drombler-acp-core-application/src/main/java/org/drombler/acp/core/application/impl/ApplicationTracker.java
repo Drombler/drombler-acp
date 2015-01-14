@@ -54,6 +54,8 @@ import org.slf4j.LoggerFactory;
         cardinality = ReferenceCardinality.OPTIONAL_MULTIPLE, policy = ReferencePolicy.DYNAMIC)
 public class ApplicationTracker {
 
+    public static final String APPLICATION_XML_RELATIVE_NAME = "META-INF/platform/application.xml";
+
     private static final Logger LOG = LoggerFactory.getLogger(ApplicationTracker.class);
 
     private BundleTracker<ApplicationType> bundleTracker;
@@ -100,7 +102,7 @@ public class ApplicationTracker {
     }
 
     private ApplicationType registerExtensions(Bundle bundle) {
-        URL actionsURL = bundle.getEntry("META-INF/platform/application.xml");
+        URL actionsURL = bundle.getEntry(APPLICATION_XML_RELATIVE_NAME);
         if (actionsURL != null) {
             try {
                 JAXBContext jaxbContext = JAXBContext.newInstance(jaxbRootClasses);
