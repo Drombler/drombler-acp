@@ -19,7 +19,7 @@ package org.drombler.acp.core.application;
  *
  * The returned Main Window should only be used for window positioning purposes and as a parent of dialogs.
  *
- * @param <T> the type of the GUI toolkit specific type of the Main Window
+ * @param <T> the GUI toolkit specific type of the Main Window
  * @author puce
  */
 @FunctionalInterface
