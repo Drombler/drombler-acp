@@ -57,13 +57,14 @@ public abstract class AbstractToolBarButtonHandler<ToolBar, ToolBarButton, Actio
     protected void activate(ComponentContext context) {
         tracker = createActionTracker(context);
         tracker.open();
-        getToolBarContainer().addToolBarContainerListener(new ToolBarContainerListenerAdapter<ToolBar, ToolBarButton>() {
+        getToolBarContainer().addToolBarContainerListener(
+                    new ToolBarContainerListenerAdapter<ToolBar, ToolBarButton>() {
 
-            @Override
-            public void toolBarAdded(ToolBarContainerToolBarEvent<ToolBar, ToolBarButton> event) {
-                resolveUnresolvedToolBarEntries(event.getToolBarId());
-            }
-        });
+                    @Override
+                    public void toolBarAdded(ToolBarContainerToolBarEvent<ToolBar, ToolBarButton> event) {
+                        resolveUnresolvedToolBarEntries(event.getToolBarId());
+                    }
+                });
         super.activate(context);
     }
 
@@ -87,10 +88,8 @@ public abstract class AbstractToolBarButtonHandler<ToolBar, ToolBarButton, Actio
                     public ServiceReference<Action> addingService(ServiceReference<Action> reference) {
                         String actionId = actionRegistry.getActionId(reference);
                         if (actionResolutionManager.containsUnresolvedEntries(actionId)) {
-                            for (UnresolvedEntry<D> unresolvedEntry :
-                                    actionResolutionManager.removeUnresolvedEntries(actionId)) {
-                                resolveToolBarEntry(unresolvedEntry.getEntry(), unresolvedEntry.getContext());
-                            }
+                            actionResolutionManager.removeUnresolvedEntries(actionId).forEach(unresolvedEntry
+                                    -> resolveToolBarEntry(unresolvedEntry.getEntry(), unresolvedEntry.getContext()));
                         }
                         return reference;
                     }
@@ -112,16 +111,11 @@ public abstract class AbstractToolBarButtonHandler<ToolBar, ToolBarButton, Actio
             final Action action = actionRegistry.getAction(toolBarEntryDescriptor.getActionId(), getActionClass(),
                     context);
             if (action != null) {
-                Runnable runnable = new Runnable() {
-
-                    @Override
-                    public void run() {
-                        ToolBarButton button = createToolBarButton(toolBarEntryDescriptor, action, ICON_SIZE);
-                        getToolBarContainer().addToolBarButton(toolBarEntryDescriptor.getToolBarId(),
-                                new PositionableAdapter<>(button, toolBarEntryDescriptor.getPosition()));
-                    }
-                };
-                applicationExecutor.execute(runnable);
+                applicationExecutor.execute(() -> {
+                    ToolBarButton button = createToolBarButton(toolBarEntryDescriptor, action, ICON_SIZE);
+                    getToolBarContainer().addToolBarButton(toolBarEntryDescriptor.getToolBarId(),
+                            new PositionableAdapter<>(button, toolBarEntryDescriptor.getPosition()));
+                });
             } else {
                 actionResolutionManager.addUnresolvedEntry(toolBarEntryDescriptor.getActionId(),
                         new UnresolvedEntry<>(toolBarEntryDescriptor, context));
@@ -137,18 +131,15 @@ public abstract class AbstractToolBarButtonHandler<ToolBar, ToolBarButton, Actio
 
     private void resolveUnresolvedToolBarEntries(String toolBarId) {
         if (toolBarEntryResolutionManager.containsUnresolvedToolBarEntries(toolBarId)) {
-            for (UnresolvedEntry<D> unresolvedEntry : toolBarEntryResolutionManager.removeUnresolvedToolBarEntries(
-                    toolBarId)) {
-                resolveToolBarEntry(unresolvedEntry.getEntry(), unresolvedEntry.getContext());
-            }
+            toolBarEntryResolutionManager.removeUnresolvedToolBarEntries(toolBarId).forEach(unresolvedEntry
+                    -> resolveToolBarEntry(unresolvedEntry.getEntry(), unresolvedEntry.getContext()));
         }
     }
 
     @Override
     protected void resolveUnresolvedItems() {
-        for (UnresolvedEntry<D> unresolvedEntry : toolBarEntryResolutionManager.removeUnresolvedToolBarEntries()) {
-            resolveToolBarEntry(unresolvedEntry.getEntry(), unresolvedEntry.getContext());
-        }
+        toolBarEntryResolutionManager.removeUnresolvedToolBarEntries().forEach(unresolvedEntry
+                -> resolveToolBarEntry(unresolvedEntry.getEntry(), unresolvedEntry.getContext()));
     }
 
     protected abstract Class<Action> getActionClass();

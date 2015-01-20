@@ -20,18 +20,18 @@ import org.apache.felix.scr.annotations.Reference;
 import org.apache.felix.scr.annotations.ReferenceCardinality;
 import org.apache.felix.scr.annotations.ReferencePolicy;
 import org.apache.felix.scr.annotations.References;
-import org.osgi.framework.Bundle;
-import org.osgi.framework.BundleContext;
-import org.osgi.framework.ServiceReference;
 import org.drombler.acp.core.action.jaxb.MenusType;
 import org.drombler.acp.core.action.spi.AbstractMenuEntryDescriptor;
 import org.drombler.acp.core.action.spi.MenuBarMenuContainerProvider;
 import org.drombler.acp.core.action.spi.MenuItemContainer;
-import org.drombler.acp.core.action.spi.MenuItemContainerMenuEvent;
 import org.drombler.acp.core.action.spi.MenuItemContainerListenerAdapter;
+import org.drombler.acp.core.action.spi.MenuItemContainerMenuEvent;
 import org.drombler.acp.core.action.spi.MenuItemRootContainer;
 import org.drombler.acp.core.action.spi.PositionableMenuItemAdapter;
 import org.drombler.acp.core.application.ApplicationExecutorProvider;
+import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceReference;
 
 /**
  *
@@ -132,15 +132,10 @@ public abstract class AbstractMenuItemHandler<MenuItem, Menu extends MenuItem, M
     }
 
     protected void resolveMenuItem(final Config config, final D menuEntryDescriptor, final MenuItemContainer<MenuItem, Menu> parentContainer) {
-        Runnable runnable = new Runnable() {
-
-            @Override
-            public void run() {
-                M menuItem = createMenuItem(menuEntryDescriptor, config);
-                addToContainer(parentContainer, menuItem, menuEntryDescriptor);
-            }
-        };
-        applicationExecutor.execute(runnable);
+        applicationExecutor.execute(() -> {
+            M menuItem = createMenuItem(menuEntryDescriptor, config);
+            addToContainer(parentContainer, menuItem, menuEntryDescriptor);
+        });
     }
 
     protected abstract Config createConfig(D menuEntryDescriptor, BundleContext context);
@@ -162,9 +157,8 @@ public abstract class AbstractMenuItemHandler<MenuItem, Menu extends MenuItem, M
 
     private void resolveUnresolvedItems(MenuItemResolutionManager<D> menuItemResolutionManager, String pathId) {
         if (menuItemResolutionManager.containsUnresolvedMenuEntries(pathId)) {
-            for (UnresolvedEntry<D> unresolvedEntry : menuItemResolutionManager.removeUnresolvedMenuEntries(pathId)) {
-                resolveMenuItem(unresolvedEntry.getEntry(), unresolvedEntry.getContext());
-            }
+            menuItemResolutionManager.removeUnresolvedMenuEntries(pathId).forEach(unresolvedEntry
+                    -> resolveMenuItem(unresolvedEntry.getEntry(), unresolvedEntry.getContext()));
         }
     }
 
