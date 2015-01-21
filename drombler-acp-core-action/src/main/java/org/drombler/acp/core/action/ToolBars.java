@@ -20,9 +20,23 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+/**
+ * The containing annotation type for the repeatable annotation {@link ToolBar}.
+ *
+ * Note: Since {@link ToolBar} is a {@link Repeatable} annotation, this containing annotation type is usually not needed
+ * to be declared explicitly.
+ *
+ * @author puce
+ */
 @Documented
 @Retention(RetentionPolicy.SOURCE)
 @Target(ElementType.PACKAGE)
 public @interface ToolBars {
-        ToolBar[] value();
+
+    /**
+     * An array of the repeatable annotation {@link ToolBar}.
+     *
+     * @return an array of the repeatable annotation {@link ToolBar}
+     */
+    ToolBar[] value();
 }

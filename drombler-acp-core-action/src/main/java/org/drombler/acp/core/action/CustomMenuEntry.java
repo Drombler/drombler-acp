@@ -27,7 +27,7 @@ import java.lang.annotation.Target;
 @Documented
 @Retention(RetentionPolicy.SOURCE)
 @Target(ElementType.TYPE)
-public @interface CustomMenuEntry {
+@interface CustomMenuEntry {
 
     Class<?> customMenuEntryClass();
     
