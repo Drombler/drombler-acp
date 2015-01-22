@@ -33,8 +33,7 @@ public @interface Action {
     /**
      * The id of this action.
      *
-     * An action can be referenced from other annotations such as {@link @MenuEntry} and {@link @ToolbarEntry} by its
-     * id.
+     * An action can be referenced from other annotations such as {@link MenuEntry} and {@link ToolBarEntry} by its id.
      *
      * @return the id of this action
      */
