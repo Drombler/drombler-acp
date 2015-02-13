@@ -15,8 +15,12 @@
 package org.drombler.acp.core.application;
 
 /**
+ * The Extension Point interface. Extensions can be registered in the application.xml file.
+ *
+ * Note: More method might be added in the future!
  *
  * @author puce
+ * @param <T> the type of the JAXB root class of this Extension Point.
  */
 public interface ExtensionPoint<T> {
 
