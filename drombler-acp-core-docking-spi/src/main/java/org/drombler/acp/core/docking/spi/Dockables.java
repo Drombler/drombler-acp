@@ -41,18 +41,21 @@ public final class Dockables {
         BundleContext bundleContext = FrameworkUtil.getBundle(Dockables.class).getBundleContext();
 
         // TODO: inject DockablePreferencesManagerProvider into DockableEntryFactory (possibly an abstract base implementation)?
+        @SuppressWarnings("rawtypes")
         ServiceReference<DockablePreferencesManagerProvider> dockablePreferencesManagerProviderServiceReference
                 = bundleContext.getServiceReference(DockablePreferencesManagerProvider.class);
         @SuppressWarnings("unchecked")
         DockablePreferencesManagerProvider<D> dockablePreferencesManagerProvider
                 = bundleContext.getService(dockablePreferencesManagerProviderServiceReference);
 
+        @SuppressWarnings("rawtypes")
         ServiceReference<DockingAreaContainerProvider> dockingAreaContainerProviderServiceReference
                 = bundleContext.getServiceReference(DockingAreaContainerProvider.class);
         @SuppressWarnings("unchecked")
         DockingAreaContainerProvider<D, E> dockingPaneProvider
                 = bundleContext.getService(dockingAreaContainerProviderServiceReference);
 
+        @SuppressWarnings("rawtypes")
         ServiceReference<DockableEntryFactory> dockableEntryFactoryServiceReference
                 = bundleContext.getServiceReference(DockableEntryFactory.class);
         @SuppressWarnings("unchecked")
@@ -96,12 +99,14 @@ public final class Dockables {
     }
 
     private static <D, DATA extends DockableData> void injectDocking(BundleContext bundleContext, D dockable) {
+        @SuppressWarnings("rawtypes")
         ServiceReference<DockableDataManagerProvider> dockableDataManagerProviderServiceReference
                 = bundleContext.getServiceReference(DockableDataManagerProvider.class);
         @SuppressWarnings("unchecked")
         DockableDataManagerProvider<D, DATA> dockableDataManagerProvider
                 = bundleContext.getService(dockableDataManagerProviderServiceReference);
 
+        @SuppressWarnings("rawtypes")
         ServiceReference<DockableDataFactory> dockableDataFactoryServiceReference
                 = bundleContext.getServiceReference(DockableDataFactory.class);
         @SuppressWarnings("unchecked")
