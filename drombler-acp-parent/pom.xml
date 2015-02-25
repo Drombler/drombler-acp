@@ -63,7 +63,7 @@ Contributor(s): .
         <scm.parent.url>http://sourceforge.net/p/drombler/drombler-acp</scm.parent.url>
         <distributionManagement.parent.url>scp://${username}@shell.sourceforge.net/home/project-web/drombler/htdocs/DromblerACP/${project.version}/docs/site</distributionManagement.parent.url>
         <!--<url.parent>http://www.drombler.org/DromblerACP/${project.version}/docs/site</url.parent>-->
-        <drombler-commons.version>0.6</drombler-commons.version>
+        <drombler-commons.version>0.7-SNAPSHOT</drombler-commons.version>
         <!-- Dependency Versions Defaults -->
 
     </properties>
