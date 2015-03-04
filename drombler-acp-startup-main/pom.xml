@@ -50,9 +50,6 @@ Contributor(s): .
         <scm.connection>${scm.parent.connection}</scm.connection>
         <scm.developerConnection>${scm.parent.developerConnection}</scm.developerConnection>
         <scm.url>${scm.parent.url}</scm.url>
-        
-        <!-- Dependency Versions Defaults -->
-        <dependency.felix-framework.version>4.2.1</dependency.felix-framework.version>
     </properties>
 
     <!-- Not inherited!?? -->
@@ -76,6 +73,7 @@ Contributor(s): .
                         <Bundle-Vendor>The Apache Software Foundation</Bundle-Vendor>-->
                         <Embed-Dependency>*;artifactId=org.apache.felix.framework;inline=true</Embed-Dependency>
                         <!--                        <Private-Package>org.richclientplatform.startup.main.*</Private-Package>-->
+                        <!-- TODO: Why the excludes? -->
                         <Export-Package>!org.osgi.service.log, !org.osgi.service.obr,org.osgi.*, !org.drombler.acp.startup.main.impl.*, org.drombler.acp.startup.main.*</Export-Package>
                         <Import-Package>!*</Import-Package>
                     </instructions>
@@ -101,7 +99,6 @@ Contributor(s): .
         <dependency>
             <groupId>org.apache.felix</groupId>
             <artifactId>org.apache.felix.framework</artifactId>
-            <version>${dependency.felix-framework.version}</version>
         </dependency>
     </dependencies>
 </project>
