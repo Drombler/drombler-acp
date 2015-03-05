@@ -23,7 +23,6 @@ import org.apache.felix.scr.annotations.ReferencePolicy;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.service.component.ComponentContext;
-import org.drombler.acp.core.action.jaxb.MenuType;
 import org.drombler.acp.core.action.jaxb.MenusType;
 import org.drombler.acp.core.action.spi.MenuDescriptor;
 import org.drombler.acp.core.action.spi.MenuFactory;
@@ -73,10 +72,9 @@ public class MenuHandler<MenuItem, Menu extends MenuItem> extends AbstractMenuIt
 
     @Override
     protected void resolveMenuItem(MenusType menusType, Bundle bundle, BundleContext context) {
-        for (MenuType menu : menusType.getMenu()) {
-            MenuDescriptor menuDescriptor = MenuDescriptor.createMenuDescriptor(menu, bundle);
-            resolveMenu(menuDescriptor);
-        }
+        menusType.getMenu().stream().
+                map(menu -> MenuDescriptor.createMenuDescriptor(menu, bundle)).
+                forEach(menuDescriptor -> resolveMenu(menuDescriptor));
     }
 
 //    private void resolveMenu(MenuDescriptor menuDescriptor) {

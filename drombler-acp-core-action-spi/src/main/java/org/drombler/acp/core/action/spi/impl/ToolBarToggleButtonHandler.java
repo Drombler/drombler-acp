@@ -18,7 +18,6 @@ import org.apache.felix.scr.annotations.Component;
 import org.apache.felix.scr.annotations.Reference;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
-import org.drombler.acp.core.action.jaxb.ToolBarToggleEntryType;
 import org.drombler.acp.core.action.jaxb.ToolBarsType;
 import org.drombler.acp.core.action.spi.ToggleActionFactory;
 import org.drombler.acp.core.action.spi.ToolBarToggleButtonFactory;
@@ -72,10 +71,8 @@ public class ToolBarToggleButtonHandler<ToolBar, ToolBarButton, ToolBarToggleBut
 
     @Override
     protected void resolveToolBarsType(ToolBarsType toolBarsType, Bundle bundle, BundleContext context) {
-        for (ToolBarToggleEntryType toolBarEntry : toolBarsType.getToolBarToggleEntry()) {
-            ToolBarToggleEntryDescriptor toolBarEntryDescriptor = ToolBarToggleEntryDescriptor.createToolBarToggleEntryDescriptor(
-                    toolBarEntry);
-            resolveToolBarEntry(toolBarEntryDescriptor, context);
-        }
+        toolBarsType.getToolBarToggleEntry().stream().
+                map(toolBarEntry -> ToolBarToggleEntryDescriptor.createToolBarToggleEntryDescriptor(toolBarEntry)).
+                forEach(toolBarEntryDescriptor -> resolveToolBarEntry(toolBarEntryDescriptor, context));
     }
 }

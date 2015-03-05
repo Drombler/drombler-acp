@@ -27,7 +27,6 @@ import org.osgi.service.component.ComponentContext;
 import org.osgi.util.tracker.ServiceTracker;
 import org.osgi.util.tracker.ServiceTrackerCustomizer;
 import org.drombler.acp.core.action.jaxb.MenusType;
-import org.drombler.acp.core.action.jaxb.ToggleMenuEntryType;
 import org.drombler.acp.core.action.spi.ActionRegistry;
 import org.drombler.acp.core.action.spi.ToggleActionFactory;
 import org.drombler.acp.core.action.spi.ToggleMenuEntryDescriptor;
@@ -96,10 +95,8 @@ public class ToggleMenuItemHandler<MenuItem, Menu extends MenuItem, ToggleMenuIt
                     public ServiceReference<ToggleAction> addingService(ServiceReference<ToggleAction> reference) {
                         String actionId = actionRegistry.getActionId(reference);
                         if (actionResolutionManager.containsUnresolvedEntries(actionId)) {
-                            for (UnresolvedEntry<ToggleMenuEntryDescriptor> unresolvedEntry :
-                                    actionResolutionManager.removeUnresolvedEntries(actionId)) {
-                                resolveMenuItem(unresolvedEntry.getEntry(), unresolvedEntry.getContext());
-                            }
+                            actionResolutionManager.removeUnresolvedEntries(actionId).forEach(unresolvedEntry
+                                    -> resolveMenuItem(unresolvedEntry.getEntry(), unresolvedEntry.getContext()));
                         }
                         return reference;
                     }
@@ -125,11 +122,9 @@ public class ToggleMenuItemHandler<MenuItem, Menu extends MenuItem, ToggleMenuIt
 
     @Override
     protected void resolveMenuItem(MenusType menusType, Bundle bundle, BundleContext context) {
-        for (ToggleMenuEntryType menuEntry : menusType.getToggleMenuEntry()) {
-            ToggleMenuEntryDescriptor menuEntryDescriptor = ToggleMenuEntryDescriptor.createRadioMenuEntryDescriptor(
-                    menuEntry);
-            resolveMenuItem(menuEntryDescriptor, context);
-        }
+        menusType.getToggleMenuEntry().stream().
+                map(menuEntry -> ToggleMenuEntryDescriptor.createRadioMenuEntryDescriptor(menuEntry)).
+                forEach(menuEntryDescriptor -> resolveMenuItem(menuEntryDescriptor, context));
     }
 
     @Override
