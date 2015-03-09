@@ -16,7 +16,6 @@ package org.drombler.acp.core.action.spi.impl;
 
 import org.apache.felix.scr.annotations.Component;
 import org.apache.felix.scr.annotations.Reference;
-import org.drombler.acp.core.action.jaxb.ToolBarEntryType;
 import org.drombler.acp.core.action.jaxb.ToolBarsType;
 import org.drombler.acp.core.action.spi.ActionFactory;
 import org.drombler.acp.core.action.spi.ToolBarButtonFactory;
@@ -72,9 +71,8 @@ public class ToolBarButtonHandler<ToolBar, ToolBarButton, Action>
 
     @Override
     protected void resolveToolBarsType(ToolBarsType toolBarsType, Bundle bundle, BundleContext context) {
-        for (ToolBarEntryType toolBarEntry : toolBarsType.getToolBarEntry()) {
-            ToolBarEntryDescriptor toolBarEntryDescriptor = ToolBarEntryDescriptor.createToolBarEntryDescriptor(toolBarEntry);
-            resolveToolBarEntry(toolBarEntryDescriptor, context);
-        }
+        toolBarsType.getToolBarEntry().stream().
+                map(toolBarEntry -> ToolBarEntryDescriptor.createToolBarEntryDescriptor(toolBarEntry)).
+                forEach(toolBarEntryDescriptor -> resolveToolBarEntry(toolBarEntryDescriptor, context));
     }
 }

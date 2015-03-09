@@ -21,16 +21,14 @@ import org.drombler.commons.client.docking.LayoutConstraintsDescriptor;
  *
  * @author puce
  */
-public class LayoutConstraintsDescriptorUtils {
+public final class LayoutConstraintsDescriptorUtils {
 
     private LayoutConstraintsDescriptorUtils() {
     }
 
     public static LayoutConstraintsDescriptor createLayoutConstraintsDescriptor(LayoutConstraintsType layoutConstraints) {
-        LayoutConstraintsDescriptor layoutConstraintsDescriptor = new LayoutConstraintsDescriptor();
-        layoutConstraintsDescriptor.setPrefWidth(layoutConstraints.getPrefWidth());
-        layoutConstraintsDescriptor.setPrefHeight(layoutConstraints.getPrefHeight());
-        return layoutConstraintsDescriptor;
+        return LayoutConstraintsDescriptor.getLayoutConstraints(layoutConstraints.getPrefWidth(),
+                layoutConstraints.getPrefHeight());
     }
 
 }

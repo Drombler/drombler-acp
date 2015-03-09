@@ -8,23 +8,28 @@
  *
  * The Original Code is Drombler.org. The Initial Developer of the
  * Original Code is Florian Brunner (Sourceforge.net user: puce).
- * Copyright 2012 Drombler.org. All Rights Reserved.
+ * Copyright 2014 Drombler.org. All Rights Reserved.
  *
  * Contributor(s): .
  */
 package org.drombler.acp.core.application;
 
 /**
- * The Extension Point interface. Extensions can be registered in the application.xml file.
+ * The Main Window provider.
  *
- * Note: More method might be added in the future!
+ * The returned Main Window should only be used for window positioning purposes and as a parent of dialogs.
  *
+ * @param <T> the GUI toolkit specific type of the Main Window
  * @author puce
- * @param <T> the type of the JAXB root class of this Extension Point.
  */
-public interface ExtensionPoint<T> {
+@FunctionalInterface
+public interface MainWindowProvider<T> {
 
-    Class<T> getJAXBRootClass();
+    /**
+     * Gets the Main Window. It should only be used for window positioning purposes and as a parent of dialogs.
+     *
+     * @return the Main Window
+     */
+    T getMainWindow();
 
-//    Collection<T> getExtensions();
 }

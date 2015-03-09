@@ -21,6 +21,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
+ * This annotation registers a menu item.
  *
  * @author puce
  */
@@ -29,9 +30,29 @@ import java.lang.annotation.Target;
 @Target(ElementType.TYPE)
 public @interface MenuEntry {
 
+    /**
+     * The id of the Action to be registered as a menu item. This property can be omitted, if there is an @Action
+     * annotation on the same class.
+     *
+     * @return the id of the Action to be registered as a menu item
+     */
     String actionId() default "";
 
+    /**
+     * A slash '/' delimited path of Menu IDs.
+     *
+     * TODO: return a String array of Menu IDs instead of a '/' delimited path?
+     *
+     * @return a slash '/' delimited path of Menu IDs
+     * @see Menu
+     */
     String path();
 
+    /**
+     * The position to order the menu items in a menu. It's a best practice to leave out some positions between entries
+     * to allow other bundles to register entries between some existing ones.
+     *
+     * @return the position to order the menu items in a menu
+     */
     int position();
 }
