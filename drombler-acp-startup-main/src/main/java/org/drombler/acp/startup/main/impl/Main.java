@@ -93,31 +93,24 @@ public class Main {
 
         loadSystemProperties(installDirPath);
 
-        Properties defaultConfigProps = getDefaultConfigProps();
-        Properties installConfigProps = new Properties(defaultConfigProps);
-        loadConfigProperties(installConfigProps, installDirPath);
-        overrideInstallConfigProps(installConfigProps, commandLineArgs);
+        Properties installConfigProps = getInstallConfigProps(installDirPath, commandLineArgs);
 
         Path userDirPath = getUserDirPath(installConfigProps);
-        if (!Files.exists(userDirPath)) {
-            Files.createDirectories(userDirPath);
-        }
-        System.out.println("User dir: " + userDirPath);
-        Properties userConfigProps = new Properties(installConfigProps);
-        loadConfigProperties(userConfigProps, userDirPath);
 
-        resolveProperties(userConfigProps);
-        copySystemProperties(userConfigProps);
+        Properties configProps = getConfigProps(installConfigProps, userDirPath);
 
-        registerShutdownHook(userConfigProps);
+        start(configProps, installDirPath, userDirPath);
+    }
+
+    private void start(Properties configProps, Path installDirPath, Path userDirPath) {
+        registerShutdownHook(configProps);
 
         try {
             // Create an instance of the framework.
             FrameworkFactory factory = getFrameworkFactory();
-            Map<String, String> configMap = new HashMap<>(userConfigProps.size());
-            for (String propertyName : userConfigProps.stringPropertyNames()) {
-                configMap.put(propertyName, userConfigProps.getProperty(propertyName));
-            }
+            Map<String, String> configMap = new HashMap<>(configProps.size());
+            configProps.stringPropertyNames().forEach(propertyName
+                    -> configMap.put(propertyName, configProps.getProperty(propertyName)));
             m_fwk = factory.newFramework(configMap);
             // Initialize the framework, but don't start it yet.
             m_fwk.init();
@@ -165,10 +158,66 @@ public class Main {
         }
     }
 
-    private void resolveProperties(Properties configProps) throws IllegalArgumentException {
-        for (String propertyName : configProps.stringPropertyNames()) {
-            configProps.setProperty(propertyName,
-                    Util.substVars(configProps.getProperty(propertyName), propertyName, null, configProps));
+    private void initServices() throws IOException {
+        m_fwk.getBundleContext().registerService(ApplicationConfigProvider.class, new ApplicationConfigProviderImpl(),
+                null);
+    }
+
+    private void loadSystemProperties(Path installDirPath) throws IOException, IllegalArgumentException {
+        Properties defaultSystemProps = getDefaultSystemProps();
+
+        Properties installSystemProps = new Properties(defaultSystemProps);
+        loadSystemProperties(installSystemProps, installDirPath);
+
+        Properties systemProps = new Properties(installSystemProps);
+        loadPropertiesFromSystemPropertyURL(systemProps, SYSTEM_PROPERTIES_PROP);
+
+        resolveProperties(systemProps);
+        applySystemProperties(systemProps);
+    }
+
+    private Properties getInstallConfigProps(Path installDirPath, CommandLineArgs commandLineArgs) throws IOException {
+        Properties defaultConfigProps = getDefaultConfigProps();
+
+        Properties installConfigProps = new Properties(defaultConfigProps);
+        loadConfigProperties(installConfigProps, installDirPath);
+
+        overrideInstallConfigProps(installConfigProps, commandLineArgs);
+
+        return installConfigProps;
+    }
+
+    private Properties getConfigProps(Properties installConfigProps, Path userDirPath) throws IllegalArgumentException,
+            IOException {
+        Properties userConfigProps = new Properties(installConfigProps);
+        loadConfigProperties(userConfigProps, userDirPath);
+
+        Properties configProps = new Properties(userConfigProps);
+        loadPropertiesFromSystemPropertyURL(configProps, CONFIG_PROPERTIES_PROP);
+
+        resolveProperties(configProps);
+        copySystemProperties(configProps);
+
+        return configProps;
+    }
+
+    private Path getUserDirPath(Properties installConfigProps) throws MissingPropertyException, IOException {
+        String userDirName = installConfigProps.getProperty(USER_DIR_PROPERTY);
+        if (userDirName == null) {
+            throw new MissingPropertyException("Undefined property: " + USER_DIR_PROPERTY);
+        }
+        Path userDirPath = Paths.get(userDirName);
+        if (!Files.exists(userDirPath)) {
+            Files.createDirectories(userDirPath);
+        }
+        System.out.println("User dir: " + userDirPath);
+        return userDirPath;
+    }
+
+    private void resolveProperties(Properties props) throws IllegalArgumentException {
+        for (String propertyName : props.stringPropertyNames()) {
+            props.setProperty(propertyName,
+                    Util.substVars(props.getProperty(propertyName), propertyName, null, props));
         }
     }
 
@@ -176,14 +225,6 @@ public class Main {
         if (commandLineArgs.getUserDir() != null) {
             installConfigProps.setProperty(USER_DIR_PROPERTY, commandLineArgs.getUserDir());
         }
-    }
-
-    private Path getUserDirPath(Properties installConfigProps) throws MissingPropertyException {
-        String userDirName = installConfigProps.getProperty(USER_DIR_PROPERTY);
-        if (userDirName == null) {
-            throw new MissingPropertyException("Undefined property: " + USER_DIR_PROPERTY);
-        }
-        return Paths.get(userDirName);
     }
 
     private FrameworkFactory getFrameworkFactory() throws Exception {
@@ -194,43 +235,57 @@ public class Main {
         throw new Exception("Could not find framework factory.");
     }
 
-    protected void loadSystemProperties(Path rootDirPath) throws MalformedURLException, IOException {
-        Properties props = new Properties();
-        loadProperties(props, SYSTEM_PROPERTIES_PROP, rootDirPath, SYSTEM_PROPERTIES_FILE_NAME);
-
-        for (String propertyName : props.stringPropertyNames()) {
-            System.setProperty(propertyName, Util.substVars(props.getProperty(propertyName), propertyName, null, null));
-        }
-
+    private void loadSystemProperties(Properties systemProps, Path rootDirPath) throws MalformedURLException,
+            IOException {
+        loadProperties(systemProps, rootDirPath, SYSTEM_PROPERTIES_FILE_NAME);
     }
 
-    private void loadProperties(Properties props, String systemPropertyName, Path rootDirPath, String propertiesFileName)
+    private void applySystemProperties(Properties systemProps) throws IllegalArgumentException {
+        for (String propertyName : systemProps.stringPropertyNames()) {
+            System.setProperty(propertyName, Util.substVars(systemProps.getProperty(propertyName), propertyName, null,
+                    null));
+        }
+    }
+
+    private void loadPropertiesFromSystemPropertyURL(Properties props, String systemPropertyName)
             throws IOException, MalformedURLException {
         String custom = System.getProperty(systemPropertyName);
-        URL propURL = custom != null ? new URL(custom) : rootDirPath.resolve(CONFIG_DIRECTORY).resolve(
-                propertiesFileName).toUri().toURL();
+        if (custom != null) {
+            URL propURL = new URL(custom);
 
+            loadProperties(propURL, props);
+        }
+    }
+
+    private void loadProperties(Properties props, Path rootDirPath, String propertiesFileName)
+            throws IOException, MalformedURLException {
+        URL propURL = rootDirPath.resolve(CONFIG_DIRECTORY).resolve(propertiesFileName).toUri().toURL();
+
+        loadProperties(propURL, props);
+    }
+
+    protected void loadProperties(URL propURL, Properties props) throws IOException {
         try (InputStream is = propURL.openConnection().getInputStream()) {
             props.load(is);
         } catch (FileNotFoundException ex) {
             // Ignore file not found.
         } catch (IOException ex) {
             System.err.println(
-                    "Main: Error loading system properties from " + propURL);
+                    "Main: Error loading properties from " + propURL);
             throw ex;
         }
     }
 
     private void loadConfigProperties(Properties configProps, Path rootDirPath) throws MalformedURLException,
             IOException {
-        loadProperties(configProps, CONFIG_PROPERTIES_PROP, rootDirPath, CONFIG_PROPERTIES_FILE_NAME);
+        loadProperties(configProps, rootDirPath, CONFIG_PROPERTIES_FILE_NAME);
     }
 
     private void copySystemProperties(Properties configProps) {
         System.getProperties().stringPropertyNames().stream().
-                filter((propertyName)
+                filter(propertyName
                         -> (propertyName.startsWith("felix.") || propertyName.startsWith("org.osgi.framework."))).
-                forEach((propertyName) -> configProps.setProperty(propertyName, System.getProperty(propertyName)));
+                forEach(propertyName -> configProps.setProperty(propertyName, System.getProperty(propertyName)));
     }
 
     private Path getInstallDirPath() throws URISyntaxException {
@@ -248,16 +303,18 @@ public class Main {
         return mainJarPath.getParent().getParent();
     }
 
+    protected Properties getDefaultSystemProps() throws IOException {
+        return getDefaultProps(SYSTEM_PROPERTIES_FILE_NAME);
+    }
+
     protected Properties getDefaultConfigProps() throws IOException {
+        return getDefaultProps(CONFIG_PROPERTIES_FILE_NAME);
+    }
+
+    protected Properties getDefaultProps(String propertiesFileName) throws IOException {
         Properties props = new Properties();
-        try (InputStream is = Main.class.getResourceAsStream("config.properties")) {
-            props.load(is);
-        }
+        loadProperties(Main.class.getResource(propertiesFileName), props);
         return props;
     }
 
-    private void initServices() throws IOException {
-        m_fwk.getBundleContext().registerService(ApplicationConfigProvider.class, new ApplicationConfigProviderImpl(),
-                null);
-    }
 }

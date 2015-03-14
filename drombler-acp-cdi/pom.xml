@@ -42,17 +42,64 @@
     </prerequisites>
     
     <modules>
-        <module>drombler-acp-cdi-runtime</module>
+        <module>drombler-acp-cdi-runtime-integration</module>
+        <module>drombler-acp-cdi-runtime-weld</module>
+        <module>drombler-acp-cdi-extensions</module>
     </modules>
     
     <dependencyManagement>
         <dependencies>
             <dependency>
                 <groupId>${project.groupId}</groupId>
-                <artifactId>drombler-acp-cdi-runtime</artifactId>
-                <type>pom</type>
+                <artifactId>drombler-acp-cdi-runtime-integration</artifactId>
                 <version>${project.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>drombler-acp-cdi-runtime-weld</artifactId>
+                <version>${project.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>drombler-acp-cdi-extensions</artifactId>
+                <version>${project.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
             </dependency>
         </dependencies>
     </dependencyManagement>
+    
+    <dependencies>
+        <dependency>
+            <!-- Provides CDI integration. -->
+            <groupId>${project.groupId}</groupId>
+            <artifactId>drombler-acp-cdi-runtime-integration</artifactId>
+            <!-- TODO: version not managed!?? -->
+            <version>${project.version}</version>
+            <type>pom</type>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <!-- Provides CDI integration. -->
+            <groupId>${project.groupId}</groupId>
+            <artifactId>drombler-acp-cdi-runtime-weld</artifactId>
+            <!-- TODO: version not managed!?? -->
+            <version>${project.version}</version>
+            <type>pom</type>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <!-- Provides Drombler CDI extensions -->
+            <groupId>${project.groupId}</groupId>
+            <artifactId>drombler-acp-cdi-extensions</artifactId>
+            <!-- TODO: version not managed!?? -->
+            <version>${project.version}</version>
+            <type>pom</type>
+            <scope>runtime</scope>
+        </dependency>
+    </dependencies>
 </project>

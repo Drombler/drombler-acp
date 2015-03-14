@@ -94,6 +94,11 @@ Contributor(s): .
                 <artifactId>drombler-commons-context</artifactId>
                 <version>${drombler-commons.version}</version>
             </dependency>       
+            <dependency>
+                <groupId>org.drombler.commons</groupId>
+                <artifactId>drombler-commons-logging-slf4j-cdi</artifactId>
+                <version>${drombler-commons.version}</version>
+            </dependency>       
         </dependencies>
     </dependencyManagement>
     
