@@ -45,7 +45,7 @@
         <module>drombler-acp-cdi-runtime-integration</module>
         <module>drombler-acp-cdi-runtime-weld</module>
         <module>drombler-acp-cdi-extensions</module>
-    </modules>
+  </modules>
     
     <dependencyManagement>
         <dependencies>
