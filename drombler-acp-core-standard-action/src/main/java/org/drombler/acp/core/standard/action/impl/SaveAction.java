@@ -27,8 +27,8 @@ import org.drombler.commons.context.ContextEvent;
  *
  * @author puce
  */
-@Action(id = "standard.save", category = "core", displayName = "%save.displayName", accelerator = "Shortcut+S",
-        icon = "save.gif")
+@Action(id = "standard.save", category = "core", displayName = "%save.displayName",
+        accelerator = "Shortcut+S", icon = "save.gif")
 @MenuEntry(path = "File", position = 4200)
 @ToolBarEntry(toolBarId = "file", position = 50)
 public class SaveAction extends AbstractActionListener<Object> implements ActiveContextSensitive {
