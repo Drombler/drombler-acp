@@ -25,7 +25,6 @@ import org.apache.felix.scr.annotations.ReferenceCardinality;
 import org.apache.felix.scr.annotations.ReferencePolicy;
 import org.apache.felix.scr.annotations.References;
 import org.drombler.acp.core.application.ApplicationExecutorProvider;
-import org.drombler.acp.core.docking.jaxb.DockingAreaType;
 import org.drombler.acp.core.docking.jaxb.DockingAreasType;
 import org.drombler.acp.core.docking.spi.DockingAreaDescriptorUtils;
 import org.drombler.commons.client.docking.DockableEntry;
@@ -62,12 +61,12 @@ public class DockingAreaHandler<D, E extends DockableEntry<D>> extends AbstractD
     }
 
     protected void bindDockingAreasType(DockingAreasType dockingAreasType) {
-        for (DockingAreaType dockingArea : dockingAreasType.getDockingArea()) {
-            DockingAreaDescriptor dockingAreaDescriptor = DockingAreaDescriptorUtils.createDockingAreaDescriptor(
-                    dockingArea);
-            // TODO: register DockingAreaDescriptor as service? Omit resolveDockingArea?
-            resolveDockingArea(dockingAreaDescriptor);
-        }
+        dockingAreasType.getDockingArea().stream().
+                map(dockingArea -> DockingAreaDescriptorUtils.createDockingAreaDescriptor(dockingArea)).
+                forEach(dockingAreaDescriptor -> {
+                    // TODO: register DockingAreaDescriptor as service? Omit resolveDockingArea?
+                    resolveDockingArea(dockingAreaDescriptor);
+                });
     }
 
     protected void unbindDockingAreasType(DockingAreasType dockingAreasType) {
@@ -107,8 +106,7 @@ public class DockingAreaHandler<D, E extends DockableEntry<D>> extends AbstractD
     }
 
     private void resolveUnresolvedDockingAreas() {
-        for (DockingAreaDescriptor unresolvedDockingAreaDescriptor : unresolvedDockingAreaDescriptors) {
-            resolveDockingArea(unresolvedDockingAreaDescriptor);
-        }
+        unresolvedDockingAreaDescriptors.forEach(unresolvedDockingAreaDescriptor
+                -> resolveDockingArea(unresolvedDockingAreaDescriptor));
     }
 }

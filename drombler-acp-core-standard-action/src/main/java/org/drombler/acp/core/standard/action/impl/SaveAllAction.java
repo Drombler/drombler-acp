@@ -27,9 +27,6 @@ import org.drombler.commons.context.ApplicationContextSensitive;
 import org.drombler.commons.context.Context;
 import org.drombler.commons.context.ContextEvent;
 
-/*
- * To change this template, choose Tools | Templates and open the template in the editor.
- */
 /**
  *
  * @author puce
