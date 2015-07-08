@@ -1,0 +1,16 @@
+/drombler-acp-startup-main/target/
+/drombler-acp-parent/target/
+/drombler-acp-core-commons/target/
+/drombler-acp-core-application/target/
+/drombler-acp-core-action/target/
+/drombler-acp-core-action-spi/target/
+/drombler-acp-core-docking/target/
+/drombler-acp-core-docking-spi/target/
+/drombler-acp-core-standard-docking/target/
+/drombler-acp-core-docking-spi-locale-de/target/
+/drombler-acp-core-standard-action/target/
+/drombler-acp-core-standard-action-locale-de/target/
+/drombler-acp-locale-all/target/
+/drombler-acp-locale-de/target/
+/target/
+/drombler-acp-docs/target/

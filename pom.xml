@@ -24,7 +24,7 @@ Contributor(s): .
     <artifactId>drombler-acp</artifactId>
     <packaging>pom</packaging>
     
-    <name>Drombler ACP - All</name>
+    <name>Drombler ACP</name>
     <description>Drombler ACP (Abstract Client Platform) is a GUI toolkit agnostic abstract Rich Client Platform (RCP) 
         based on Maven and OSGi. You can use this POM file e.g. in your dependencyManagement section to manage your 
         Drombler ACP dependencies.</description>
@@ -41,7 +41,7 @@ Contributor(s): .
 
     <distributionManagement>
         <site>
-            <id>drombler.sourceforge.net</id>
+            <id>github</id>
             <url>${distributionManagement.parent.url}/</url>
         </site>
     </distributionManagement>
@@ -74,6 +74,7 @@ Contributor(s): .
         <module>drombler-acp-locale-all</module>
         <module>drombler-acp-locale-de</module>
         <module>drombler-acp-cdi</module>
+        <module>drombler-acp-docs</module>
     </modules>
     
     <dependencyManagement>
