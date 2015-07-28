@@ -51,9 +51,13 @@
                 <extensions>true</extensions>
                 <configuration>
                     <instructions>
-                        <Provide-Capability>
+                        <Provide-Capability>                            
                             org.ops4j.pax.cdi.extension; extension=drombler-docking-extension
                         </Provide-Capability>
+                        <Require-Capability>
+                            osgi.extender; filter:="(osgi.extender=pax.cdi)",
+                            org.ops4j.pax.cdi.extension; filter:="(extension=pax-cdi-extension)"
+                        </Require-Capability>
                     </instructions>
                 </configuration>
             </plugin>
@@ -79,6 +83,11 @@
         <dependency>
             <groupId>org.softsmithy.lib</groupId>
             <artifactId>softsmithy-lib-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.ops4j.pax.cdi</groupId>
+            <artifactId>pax-cdi-api</artifactId>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 </project>
