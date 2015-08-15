@@ -25,7 +25,7 @@ import java.lang.annotation.Target;
  * @author puce
  */
 @Documented
-@Retention(RetentionPolicy.SOURCE)
+@Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 public @interface ViewDocking {
 

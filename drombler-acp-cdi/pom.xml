@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.drombler.acp</groupId>
+        <artifactId>drombler-acp-parent</artifactId>
+        <version>0.7-SNAPSHOT</version>
+        <relativePath>../drombler-acp-parent/pom.xml</relativePath>
+    </parent>
+    <artifactId>drombler-acp-cdi</artifactId>
+    <packaging>pom</packaging>
+    
+    <name>Drombler ACP - CDI</name>
+    <description>CDI Integration</description>
+    <inceptionYear>2014</inceptionYear>
+    <!-- required for Javadoc (apidocs) linking -->
+    <url>http://www.drombler.org/DromblerACP/${project.version}/docs/site</url>
+    
+    <scm>
+        <connection>${scm.connection}</connection>
+        <developerConnection>${scm.developerConnection}</developerConnection>
+        <url>${scm.url}</url>
+        <tag>HEAD</tag>
+    </scm>
+    
+    <distributionManagement>
+        <site>
+            <id>github</id>
+            <url>${distributionManagement.parent.url}/${project.artifactId}/</url>
+        </site>
+    </distributionManagement>
+
+    <properties>
+        <scm.connection>${scm.parent.connection}</scm.connection>
+        <scm.developerConnection>${scm.parent.developerConnection}</scm.developerConnection>
+        <scm.url>${scm.parent.url}</scm.url>
+    </properties>
+
+    <!-- Not inherited!?? -->
+    <prerequisites>
+        <maven>${maven.version}</maven>
+    </prerequisites>
+    
+    <modules>
+        <module>drombler-acp-cdi-runtime-integration</module>
+        <module>drombler-acp-cdi-runtime-weld</module>
+        <module>drombler-acp-cdi-extensions</module>
+  </modules>
+    
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>drombler-acp-cdi-runtime-integration</artifactId>
+                <version>${project.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>drombler-acp-cdi-runtime-weld</artifactId>
+                <version>${project.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>drombler-acp-cdi-extensions</artifactId>
+                <version>${project.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+    
+    <dependencies>
+        <dependency>
+            <!-- Provides CDI integration. -->
+            <groupId>${project.groupId}</groupId>
+            <artifactId>drombler-acp-cdi-runtime-integration</artifactId>
+            <!-- TODO: version not managed!?? -->
+            <version>${project.version}</version>
+            <type>pom</type>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <!-- Provides CDI integration. -->
+            <groupId>${project.groupId}</groupId>
+            <artifactId>drombler-acp-cdi-runtime-weld</artifactId>
+            <!-- TODO: version not managed!?? -->
+            <version>${project.version}</version>
+            <type>pom</type>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <!-- Provides Drombler CDI extensions -->
+            <groupId>${project.groupId}</groupId>
+            <artifactId>drombler-acp-cdi-extensions</artifactId>
+            <!-- TODO: version not managed!?? -->
+            <version>${project.version}</version>
+            <type>pom</type>
+            <scope>runtime</scope>
+        </dependency>
+    </dependencies>
+</project>

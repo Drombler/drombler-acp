@@ -41,7 +41,7 @@ Contributor(s): .
 
     <distributionManagement>
         <site>
-            <id>drombler.sourceforge.net</id>
+            <id>github</id>
             <url>${distributionManagement.parent.url}/</url>
         </site>
     </distributionManagement>
@@ -65,6 +65,7 @@ Contributor(s): .
         <module>drombler-acp-core-action</module>
         <module>drombler-acp-core-action-spi</module>
         <module>drombler-acp-core-docking</module>
+        <module>drombler-acp-core-docking-cdi-extension</module>
         <module>drombler-acp-core-docking-spi</module>
         <module>drombler-acp-core-docking-spi-locale-de</module>
         <module>drombler-acp-core-standard-action</module>
@@ -72,6 +73,8 @@ Contributor(s): .
         <module>drombler-acp-core-standard-docking</module>
         <module>drombler-acp-locale-all</module>
         <module>drombler-acp-locale-de</module>
+        <module>drombler-acp-cdi</module>
+        <module>drombler-acp-docs</module>
     </modules>
     
     <dependencyManagement>
@@ -99,6 +102,11 @@ Contributor(s): .
             <dependency>
                 <groupId>${project.groupId}</groupId>
                 <artifactId>drombler-acp-core-docking</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>drombler-acp-core-docking-cdi-extension</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
@@ -142,6 +150,13 @@ Contributor(s): .
                 <groupId>${project.groupId}</groupId>
                 <artifactId>drombler-acp-startup-main</artifactId>
                 <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>drombler-acp-cdi</artifactId>
+                <version>${project.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
             </dependency>
         </dependencies>
     </dependencyManagement>
