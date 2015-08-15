@@ -18,7 +18,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.context.spi.CreationalContext;
 import javax.enterprise.event.Observes;
 import javax.enterprise.inject.spi.AfterBeanDiscovery;
 import javax.enterprise.inject.spi.AfterDeploymentValidation;
@@ -27,14 +26,13 @@ import javax.enterprise.inject.spi.Bean;
 import javax.enterprise.inject.spi.BeanManager;
 import javax.enterprise.inject.spi.BeforeShutdown;
 import javax.enterprise.inject.spi.Extension;
-import javax.enterprise.inject.spi.InjectionTarget;
 import javax.enterprise.inject.spi.ProcessAnnotatedType;
+import javax.enterprise.inject.spi.Unmanaged;
 import javax.enterprise.inject.spi.WithAnnotations;
 import javax.inject.Inject;
 import org.drombler.acp.core.application.ApplicationExecutorProvider;
 import org.drombler.acp.core.docking.ViewDocking;
 import org.ops4j.pax.cdi.api.OsgiService;
-import org.softsmithy.lib.util.ServiceProvider;
 
 /**
  * https://docs.jboss.org/weld/reference/latest/en-US/html/extend.html
@@ -49,8 +47,7 @@ public class DockingExtension implements Extension {
     @OsgiService
     private ApplicationExecutorProvider applicationExecutorProvider;
 
-    private final List<CreationalInjectionTarget<?>> injectionTargets = new ArrayList<>();
-    private final List<NonContextualManagedBean<?>> dockables = new ArrayList<>();
+    private final List< Unmanaged.UnmanagedInstance<?>> instances = new ArrayList<>();
 
     public DockingExtension() {
         System.out.println("DockingExtension");
@@ -63,13 +60,11 @@ public class DockingExtension implements Extension {
     public <T> void processAnnotatedType(@Observes @WithAnnotations({ViewDocking.class}) ProcessAnnotatedType<T> event,
             BeanManager beanManager) {
         final AnnotatedType<T> annotatedType = event.getAnnotatedType();
-        //The extension uses an InjectionTarget to delegate instantiation, dependency injection
-//and lifecycle callbacks to the CDI container
-        InjectionTarget<T> it = beanManager.createInjectionTarget(annotatedType);
 
-//each instance needs its own CDI CreationalContext
-        CreationalContext<T> ctx = beanManager.createCreationalContext(null);
-        injectionTargets.add(new CreationalInjectionTarget<>(it, ctx));
+        Unmanaged<T> unmanaged = new Unmanaged<>(beanManager, annotatedType.getJavaClass());
+        Unmanaged.UnmanagedInstance<T> instance = unmanaged.newInstance();
+        instances.add(instance);
+
 
         if (annotatedType.isAnnotationPresent(ViewDocking.class)) {
             System.out.println(annotatedType);
@@ -91,24 +86,26 @@ public class DockingExtension implements Extension {
      * AfterDeploymentValidation: All beans are available for injection.
      */
     public void afterDeploymentValidation(@Observes AfterDeploymentValidation event, BeanManager beanManager) {
-        injectionTargets.forEach(injectionTarget -> createDockable(injectionTarget, beanManager));
+        instances.forEach(instance -> createDockable(instance, beanManager));
     }
 
-    private <T> void createDockable(CreationalInjectionTarget<T> injectionTarget, BeanManager beanManager) {
+    private <T> void createDockable(Unmanaged.UnmanagedInstance<T> instance, BeanManager beanManager) {
 
         Set<Bean<?>> beans = beanManager.getBeans(ApplicationExecutorProvider.class, new OsgiServiceLiteral());
+        Set<Bean<?>> beans2 = beanManager.getBeans(ViewDockingHandler.class, new OsgiServiceLiteral());
 
+        Unmanaged<ViewDockingHandler> u = new Unmanaged<>(beanManager, ViewDockingHandler.class);
+        Unmanaged.UnmanagedInstance<ViewDockingHandler> newInstance = u.newInstance();
+        newInstance.produce().inject().postConstruct();
 //            applicationExecutorProvider.getApplicationExecutor().execute(() -> {
-        NonContextualManagedBean<T> managedBean = new NonContextualManagedBean<>(injectionTarget);
-        managedBean.initialize();
-
-        dockables.add(managedBean);
+        instance.produce().inject().postConstruct();
 
 //            });
     }
 
     //destroy the framework component instance and clean up dependent objects
     public void beforeShutdown(@Observes BeforeShutdown event) {
-        dockables.forEach(dockable -> dockable.destroy());
+        instances.forEach(instance -> instance.preDestroy().dispose());
     }
+
 }

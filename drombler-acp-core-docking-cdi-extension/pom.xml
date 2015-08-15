@@ -56,7 +56,8 @@
                         </Provide-Capability>
                         <Require-Capability>
                             osgi.extender; filter:="(osgi.extender=pax.cdi)",
-                            org.ops4j.pax.cdi.extension; filter:="(extension=pax-cdi-extension)"
+                            org.ops4j.pax.cdi.extension; filter:="(extension=pax-cdi-extension)",                          
+                            drombler-acp.gui-toolkit-launcher
                         </Require-Capability>
                     </instructions>
                 </configuration>
@@ -70,6 +71,17 @@
             <artifactId>drombler-acp-core-docking</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.drombler.acp</groupId>
+            <artifactId>drombler-acp-core-docking-spi</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.drombler.commons</groupId>
+            <artifactId>drombler-commons-client-docking</artifactId>
+        </dependency>
+        
         <dependency>
             <groupId>javax.enterprise</groupId>
             <artifactId>cdi-api</artifactId>
