@@ -21,7 +21,7 @@ import java.util.List;
 import org.drombler.acp.core.action.Action;
 import org.drombler.acp.core.action.MenuEntry;
 import org.drombler.acp.core.action.ToolBarEntry;
-import org.drombler.acp.core.standard.action.Savable;
+import org.drombler.commons.action.command.Savable;
 import org.drombler.commons.action.AbstractActionListener;
 import org.drombler.commons.context.ApplicationContextSensitive;
 import org.drombler.commons.context.Context;

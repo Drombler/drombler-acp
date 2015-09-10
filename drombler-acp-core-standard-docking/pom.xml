@@ -87,5 +87,9 @@ Contributor(s): .
             <artifactId>drombler-acp-core-commons</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.drombler.commons</groupId>
+            <artifactId>drombler-commons-client-docking</artifactId>
+        </dependency>
     </dependencies>
 </project>

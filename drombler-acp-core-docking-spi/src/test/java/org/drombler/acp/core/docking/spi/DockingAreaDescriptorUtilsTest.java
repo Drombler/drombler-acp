@@ -1,3 +1,5 @@
+package org.drombler.acp.core.docking.spi;
+
 /*
  *         COMMON DEVELOPMENT AND DISTRIBUTION LICENSE (CDDL) Notice
  *
@@ -12,16 +14,19 @@
  *
  * Contributor(s): .
  */
-package org.drombler.acp.core.docking;
+import static org.junit.Assert.assertNotNull;
+import org.junit.Test;
 
 /**
- * Not supported yet!
  *
  * @author puce
  */
-//@XmlType(name = "DockingAreaKindType")//namespace="http://www.richclientplatform.org/schema/dockingAreas"
-//@XmlEnum
-public enum DockingAreaKind {
+public class DockingAreaDescriptorUtilsTest {
 
-    VIEW, EDITOR;
+    @Test
+    public void testClassLoading() {
+        // Test class loading: tests if all mappings are provided
+        Class<DockingAreaDescriptorUtils> type = DockingAreaDescriptorUtils.class;
+        assertNotNull(type);
+    }
 }

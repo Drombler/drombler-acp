@@ -17,7 +17,7 @@ package org.drombler.acp.core.standard.action.impl;
 import org.drombler.acp.core.action.Action;
 import org.drombler.acp.core.action.MenuEntry;
 import org.drombler.acp.core.action.ToolBarEntry;
-import org.drombler.acp.core.standard.action.Savable;
+import org.drombler.commons.action.command.Savable;
 import org.drombler.commons.action.AbstractActionListener;
 import org.drombler.commons.context.ActiveContextSensitive;
 import org.drombler.commons.context.Context;

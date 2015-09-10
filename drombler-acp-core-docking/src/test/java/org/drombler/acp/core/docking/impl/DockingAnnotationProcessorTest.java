@@ -14,7 +14,6 @@
  */
 package org.drombler.acp.core.docking.impl;
 
-import org.drombler.acp.core.docking.impl.DockingAnnotationProcessor;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
