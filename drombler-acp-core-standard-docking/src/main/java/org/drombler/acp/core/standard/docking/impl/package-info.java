@@ -25,5 +25,5 @@
 package org.drombler.acp.core.standard.docking.impl;
 
 import org.drombler.acp.core.docking.DockingArea;
-import org.drombler.acp.core.docking.DockingAreaKind;
 import org.drombler.acp.core.docking.LayoutConstraints;
+import org.drombler.commons.client.docking.DockingAreaKind;
