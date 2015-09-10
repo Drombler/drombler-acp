@@ -26,7 +26,7 @@ import javax.lang.model.element.TypeElement;
 import org.apache.commons.lang3.StringUtils;
 import org.drombler.acp.core.application.AbstractApplicationAnnotationProcessor;
 import org.drombler.acp.core.docking.DockingArea;
-import org.drombler.acp.core.docking.DockingAreaKind;
+import org.drombler.commons.client.docking.DockingAreaKind;
 import org.drombler.acp.core.docking.DockingAreas;
 import org.drombler.acp.core.docking.jaxb.DockingAreaKindType;
 import org.drombler.acp.core.docking.jaxb.DockingAreaPathsType;
