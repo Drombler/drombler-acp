@@ -49,6 +49,8 @@ Contributor(s): .
         <scm.connection>${scm.parent.connection}</scm.connection>
         <scm.developerConnection>${scm.parent.developerConnection}</scm.developerConnection>
         <scm.url>${scm.parent.url}</scm.url>
+        
+        <reporting.javadoc.skip>true</reporting.javadoc.skip>
     </properties>
 
     <!-- Not inherited!?? -->
@@ -74,6 +76,13 @@ Contributor(s): .
                         </goals>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <configuration>
+                    <!-- No published classes. -->
+                    <skip>true</skip>
+                </configuration>
             </plugin>
         </plugins>
     </build>
