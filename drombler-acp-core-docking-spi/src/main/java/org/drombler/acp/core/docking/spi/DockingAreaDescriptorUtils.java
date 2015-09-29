@@ -20,8 +20,8 @@ import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 import org.drombler.acp.core.docking.jaxb.DockingAreaKindType;
 import org.drombler.acp.core.docking.jaxb.DockingAreaType;
-import org.drombler.commons.client.docking.DockingAreaDescriptor;
-import org.drombler.commons.client.docking.DockingAreaKind;
+import org.drombler.commons.docking.DockingAreaDescriptor;
+import org.drombler.commons.docking.DockingAreaKind;
 
 /**
  *

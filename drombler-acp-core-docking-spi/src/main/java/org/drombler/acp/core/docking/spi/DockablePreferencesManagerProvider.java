@@ -14,7 +14,7 @@
  */
 package org.drombler.acp.core.docking.spi;
 
-import org.drombler.commons.client.docking.DockablePreferencesManager;
+import org.drombler.commons.docking.DockablePreferencesManager;
 
 /**
  *

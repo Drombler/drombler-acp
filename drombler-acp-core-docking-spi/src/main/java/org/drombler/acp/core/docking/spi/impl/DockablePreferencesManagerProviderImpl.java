@@ -17,8 +17,8 @@ package org.drombler.acp.core.docking.spi.impl;
 import org.apache.felix.scr.annotations.Component;
 import org.apache.felix.scr.annotations.Service;
 import org.drombler.acp.core.docking.spi.DockablePreferencesManagerProvider;
-import org.drombler.commons.client.docking.DockablePreferencesManager;
-import org.drombler.commons.client.docking.SimpleDockablePreferencesManager;
+import org.drombler.commons.docking.DockablePreferencesManager;
+import org.drombler.commons.docking.SimpleDockablePreferencesManager;
 
 /**
  *

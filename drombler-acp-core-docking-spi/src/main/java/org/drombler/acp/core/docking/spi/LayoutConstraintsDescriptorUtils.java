@@ -15,7 +15,7 @@
 package org.drombler.acp.core.docking.spi;
 
 import org.drombler.acp.core.docking.jaxb.LayoutConstraintsType;
-import org.drombler.commons.client.docking.LayoutConstraintsDescriptor;
+import org.drombler.commons.docking.LayoutConstraintsDescriptor;
 
 /**
  *

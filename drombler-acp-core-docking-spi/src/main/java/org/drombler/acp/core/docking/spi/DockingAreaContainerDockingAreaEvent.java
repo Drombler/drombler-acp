@@ -15,7 +15,7 @@
 package org.drombler.acp.core.docking.spi;
 
 import java.util.EventObject;
-import org.drombler.commons.client.docking.DockableEntry;
+import org.drombler.commons.docking.DockableEntry;
 
 /**
  *

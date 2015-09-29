@@ -14,8 +14,8 @@
  */
 package org.drombler.acp.core.docking.spi;
 
-import org.drombler.commons.client.docking.DockableData;
-import org.drombler.commons.client.docking.DockableDataManager;
+import org.drombler.commons.docking.DockableData;
+import org.drombler.commons.docking.DockableDataManager;
 
 /**
  *
