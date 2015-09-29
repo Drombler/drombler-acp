@@ -16,7 +16,7 @@ package org.drombler.acp.core.docking.spi.impl;
 
 import org.apache.felix.scr.annotations.Reference;
 import org.drombler.acp.core.docking.spi.DockingAreaContainerProvider;
-import org.drombler.commons.client.docking.DockableEntry;
+import org.drombler.commons.docking.DockableEntry;
 
 /**
  *

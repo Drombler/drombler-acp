@@ -114,7 +114,7 @@ Contributor(s): .
         </dependency>
         <dependency>
             <groupId>org.drombler.commons</groupId>
-            <artifactId>drombler-commons-client-docking</artifactId>
+            <artifactId>drombler-commons-docking-core</artifactId>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>

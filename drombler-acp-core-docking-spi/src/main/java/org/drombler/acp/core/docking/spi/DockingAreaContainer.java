@@ -14,8 +14,8 @@
  */
 package org.drombler.acp.core.docking.spi;
 
-import org.drombler.commons.client.docking.DockableEntry;
-import org.drombler.commons.client.docking.DockingAreaDescriptor;
+import org.drombler.commons.docking.DockableEntry;
+import org.drombler.commons.docking.DockingAreaDescriptor;
 
 /**
  *

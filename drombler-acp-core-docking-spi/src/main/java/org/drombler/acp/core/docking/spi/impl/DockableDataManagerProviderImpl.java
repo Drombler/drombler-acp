@@ -17,9 +17,9 @@ package org.drombler.acp.core.docking.spi.impl;
 import org.apache.felix.scr.annotations.Component;
 import org.apache.felix.scr.annotations.Service;
 import org.drombler.acp.core.docking.spi.DockableDataManagerProvider;
-import org.drombler.commons.client.docking.DockableData;
-import org.drombler.commons.client.docking.DockableDataManager;
-import org.drombler.commons.client.docking.SimpleDockableDataManager;
+import org.drombler.commons.docking.DockableData;
+import org.drombler.commons.docking.DockableDataManager;
+import org.drombler.commons.docking.SimpleDockableDataManager;
 
 /**
  *

@@ -14,10 +14,10 @@
  */
 package org.drombler.acp.core.docking.spi;
 
-import org.drombler.commons.client.docking.DockableData;
-import org.drombler.commons.client.docking.DockableDataManager;
-import org.drombler.commons.client.docking.DockableEntry;
-import org.drombler.commons.client.docking.DockingInjector;
+import org.drombler.commons.docking.DockableData;
+import org.drombler.commons.docking.DockableDataManager;
+import org.drombler.commons.docking.DockableEntry;
+import org.drombler.commons.docking.DockingInjector;
 import org.drombler.commons.context.ActiveContextProvider;
 import org.drombler.commons.context.ApplicationContextProvider;
 import org.drombler.commons.context.ContextInjector;

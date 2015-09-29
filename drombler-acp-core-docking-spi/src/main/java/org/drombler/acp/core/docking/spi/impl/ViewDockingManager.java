@@ -27,12 +27,12 @@ import org.drombler.acp.core.docking.spi.DockingAreaContainer;
 import org.drombler.acp.core.docking.spi.DockingAreaContainerDockingAreaEvent;
 import org.drombler.acp.core.docking.spi.DockingAreaContainerListener;
 import org.drombler.acp.core.docking.spi.ViewDockingDescriptor;
-import org.drombler.commons.client.docking.DockableData;
-import org.drombler.commons.client.docking.DockableDataManager;
-import org.drombler.commons.client.docking.DockableEntry;
-import org.drombler.commons.client.docking.DockablePreferences;
-import org.drombler.commons.client.docking.DockablePreferencesManager;
-import org.drombler.commons.client.docking.DockingInjector;
+import org.drombler.commons.docking.DockableData;
+import org.drombler.commons.docking.DockableDataManager;
+import org.drombler.commons.docking.DockableEntry;
+import org.drombler.commons.docking.DockablePreferences;
+import org.drombler.commons.docking.DockablePreferencesManager;
+import org.drombler.commons.docking.DockingInjector;
 import org.drombler.commons.context.ContextInjector;
 import org.osgi.framework.BundleContext;
 
