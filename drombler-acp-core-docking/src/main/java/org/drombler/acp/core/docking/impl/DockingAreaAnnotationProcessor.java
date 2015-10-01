@@ -26,13 +26,13 @@ import javax.lang.model.element.TypeElement;
 import org.apache.commons.lang3.StringUtils;
 import org.drombler.acp.core.application.AbstractApplicationAnnotationProcessor;
 import org.drombler.acp.core.docking.DockingArea;
-import org.drombler.commons.docking.DockingAreaKind;
 import org.drombler.acp.core.docking.DockingAreas;
 import org.drombler.acp.core.docking.jaxb.DockingAreaKindType;
 import org.drombler.acp.core.docking.jaxb.DockingAreaPathsType;
 import org.drombler.acp.core.docking.jaxb.DockingAreaType;
 import org.drombler.acp.core.docking.jaxb.DockingAreasType;
 import org.drombler.acp.core.docking.jaxb.LayoutConstraintsType;
+import org.drombler.commons.docking.DockingAreaKind;
 
 /**
  *
