@@ -17,7 +17,6 @@ package org.drombler.acp.startup.main.impl;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 import org.drombler.acp.startup.main.ApplicationConfigProvider;
@@ -41,11 +40,7 @@ public class ApplicationConfigProviderImpl implements ApplicationConfigProvider 
             System.err.println("ApplicationConfigProviderImpl: Error loading applicationConfig.properties!");
         }
 
-        Map<String, String> config = new HashMap<>(configProperties.size());
-        for (String propertyName : configProperties.stringPropertyNames()) {
-            config.put(propertyName, configProperties.getProperty(propertyName));
-        }
-        applicationConfig = Collections.unmodifiableMap(config);
+        applicationConfig = Collections.unmodifiableMap(PropertiesUtils.toMap(configProperties));
     }
 
     @Override

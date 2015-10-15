@@ -15,15 +15,13 @@
 package org.drombler.acp.startup.main.impl.osgi;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.Map;
-import java.util.Properties;
 import java.util.ServiceLoader;
 import org.drombler.acp.startup.main.ApplicationConfigProvider;
 import org.drombler.acp.startup.main.ApplicationConfiguration;
-import static org.drombler.acp.startup.main.Main.SHUTDOWN_HOOK_PROP;
 import org.drombler.acp.startup.main.ServiceLoaderException;
 import org.drombler.acp.startup.main.impl.ApplicationConfigProviderImpl;
+import org.drombler.acp.startup.main.impl.PropertiesUtils;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.FrameworkEvent;
 import org.osgi.framework.launch.Framework;
@@ -47,7 +45,7 @@ public class OSGiStarter {
      */
     public OSGiStarter(ApplicationConfiguration configuration) {
         this.configuration = configuration;
-        this.configMap = toMap(configuration.getUserConfigProps());
+        this.configMap = PropertiesUtils.toMap(configuration.getUserConfigProps());
         FrameworkFactory factory = getFrameworkFactory();
         this.framework = factory.newFramework(configMap);
     }
@@ -60,27 +58,16 @@ public class OSGiStarter {
         throw new ServiceLoaderException("Could not find framework factory.");
     }
 
-    public void start() {
-        try {
-            FrameworkEvent event;
-            do {
-                // Start the framework.
-                framework.start();
-                // Wait for framework to stop to exit the VM.
-                event = framework.waitForStop(0);
-            } // If the framework was updated, then restart it.
-            while (event.getType() == FrameworkEvent.STOPPED_UPDATE);
-            // Otherwise, exit.
-            System.exit(0);
-        } catch (Exception ex) {
-            System.err.println("Could not create framework: " + ex);
-            ex.printStackTrace();
-            System.exit(-1);
-        }
+    public void start() throws BundleException, InterruptedException {
+        FrameworkEvent event;
+        do {
+            framework.start();
+            event = framework.waitForStop(0);
+        } while (event.getType() == FrameworkEvent.STOPPED_UPDATE);
     }
 
     public void init() throws BundleException, IOException {
-        registerShutdownHook(configuration.getUserConfigProps());
+        registerShutdownHook();
         // Create an instance of the framework.
         // Initialize the framework, but don't start it yet.
         framework.init();
@@ -92,31 +79,18 @@ public class OSGiStarter {
                 configuration.getUserDirPath());
     }
 
-    private Map<String, String> toMap(Properties properties) {
-        Map<String, String> map = new HashMap<>(properties.size());
-        for (String propertyName : properties.stringPropertyNames()) {
-            map.put(propertyName, properties.getProperty(propertyName));
-        }
-        return map;
-    }
+    private void registerShutdownHook() {
+        Runtime.getRuntime().addShutdownHook(new Thread("Felix Shutdown Hook") {
 
-    private void registerShutdownHook(Properties userConfigProps) {
-        // If enabled, register a shutdown hook to make sure the framework is
-        // cleanly shutdown when the VM exits.
-        String enableHook = userConfigProps.getProperty(SHUTDOWN_HOOK_PROP);
-        if ((enableHook == null) || !enableHook.equalsIgnoreCase("false")) {
-            Runtime.getRuntime().addShutdownHook(new Thread("Felix Shutdown Hook") {
-
-                @Override
-                public void run() {
-                    try {
-                        OSGiStarter.this.stop();
-                    } catch (Exception ex) {
-                        System.err.println("Error stopping framework: " + ex);
-                    }
+            @Override
+            public void run() {
+                try {
+                    OSGiStarter.this.stop();
+                } catch (Exception ex) {
+                    System.err.println("Error stopping framework: " + ex);
                 }
-            });
-        }
+            }
+        });
     }
 
     private void initServices() {
@@ -131,6 +105,5 @@ public class OSGiStarter {
             framework.waitForStop(0);
         }
     }
-
 
 }

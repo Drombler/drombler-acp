@@ -15,7 +15,6 @@
 package org.drombler.acp.startup.main;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import org.drombler.acp.startup.main.impl.CommandLineArgs;
 import org.drombler.acp.startup.main.impl.osgi.OSGiStarter;
@@ -26,16 +25,12 @@ public class Main {
 //    private static final Logger LOG = LoggerFactory.getLogger(Main.class); // TODO: outside OSGi Framework...?
     public static final String USER_DIR_PROPERTY = "platform.userdir";
 
-    /**
-     * The property name used to specify whether the launcher should install a shutdown hook.
-     *
-     */
-    public static final String SHUTDOWN_HOOK_PROP = "felix.shutdown.hook";
 
-    public static void main(String[] args) throws URISyntaxException, MalformedURLException, IOException,
-            MissingPropertyException {
+    public static void main(String[] args) throws URISyntaxException, IOException,
+            MissingPropertyException, BundleException, InterruptedException {
         CommandLineArgs commandLineArgs = CommandLineArgs.parseCommandLineArgs(args);
         Main main = new Main(commandLineArgs);
+        main.init();
         main.start();
     }
 
@@ -50,9 +45,8 @@ public class Main {
         osgiStarter.init();
     }
 
-    public void start() {
+    public void start() throws BundleException, InterruptedException {
         osgiStarter.start();
-
     }
 
 }
