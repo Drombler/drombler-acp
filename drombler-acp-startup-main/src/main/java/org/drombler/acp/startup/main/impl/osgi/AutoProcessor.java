@@ -12,7 +12,7 @@
  *
  * Contributor(s): .
  */
-package org.drombler.acp.startup.main.impl;
+package org.drombler.acp.startup.main.impl.osgi;
 
 import java.io.IOException;
 import java.nio.file.FileVisitResult;
@@ -37,7 +37,7 @@ import org.osgi.framework.launch.Framework;
 import org.osgi.framework.startlevel.BundleStartLevel;
 import org.osgi.framework.startlevel.FrameworkStartLevel;
 
-public class AutoProcessor {
+class AutoProcessor {
 
     /**
      * The property name used for the bundle directory.
@@ -284,8 +284,15 @@ public class AutoProcessor {
         if (action == null) {
             action = "";
         }
+        return getBundleActions(action);
+    }
+
+    private Set<BundleAction> getBundleActions(String action) {
+        return getBundleActions(new StringTokenizer(action, ","));
+    }
+
+    private Set<BundleAction> getBundleActions(StringTokenizer st) {
         Set<BundleAction> bundleActions = EnumSet.noneOf(BundleAction.class);
-        StringTokenizer st = new StringTokenizer(action, ",");
         while (st.hasMoreTokens()) {
             BundleAction bundleAction = BundleAction.getBundleAction(st.nextToken().trim().toLowerCase());
             if (bundleAction != null) {

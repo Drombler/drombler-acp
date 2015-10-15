@@ -12,13 +12,13 @@
  *
  * Contributor(s): .
  */
-package org.drombler.acp.startup.main.impl;
+package org.drombler.acp.startup.main;
 
 /**
  *
  * @author puce
  */
-class MissingPropertyException extends Exception {
+public class MissingPropertyException extends Exception {
 
     public MissingPropertyException() {
     }
