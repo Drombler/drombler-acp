@@ -23,7 +23,7 @@ import org.osgi.framework.BundleException;
 public class Main {
 
 //    private static final Logger LOG = LoggerFactory.getLogger(Main.class); // TODO: outside OSGi Framework...?
-    public static final String USER_DIR_PROPERTY = "platform.userdir";
+
 
 
     public static void main(String[] args) throws URISyntaxException, IOException,

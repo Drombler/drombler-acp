@@ -26,7 +26,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Properties;
 import org.apache.felix.framework.util.Util;
-import static org.drombler.acp.startup.main.Main.USER_DIR_PROPERTY;
 import org.drombler.acp.startup.main.impl.CommandLineArgs;
 
 /**
@@ -72,6 +71,8 @@ public class ApplicationConfiguration {
      *
      */
     public static final String CONFIG_PROPERTIES_FILE_NAME = "config.properties";
+
+    public static final String USER_DIR_PROPERTY = "platform.userdir";
 
     private final Path installDirPath;
     private final Path userDirPath;
