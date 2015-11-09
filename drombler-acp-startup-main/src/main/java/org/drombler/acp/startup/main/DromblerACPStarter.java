@@ -16,28 +16,27 @@ package org.drombler.acp.startup.main;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
-import org.drombler.acp.startup.main.impl.CommandLineArgs;
 import org.drombler.acp.startup.main.impl.osgi.OSGiStarter;
 import org.osgi.framework.BundleException;
+import org.osgi.framework.launch.Framework;
 
-public class Main {
+public class DromblerACPStarter {
 
-//    private static final Logger LOG = LoggerFactory.getLogger(Main.class); // TODO: outside OSGi Framework...?
+//    private static final Logger LOG = LoggerFactory.getLogger(DromblerACPStarter.class); // TODO: outside OSGi Framework...?
 
 
 
     public static void main(String[] args) throws URISyntaxException, IOException,
             MissingPropertyException, BundleException, InterruptedException {
         CommandLineArgs commandLineArgs = CommandLineArgs.parseCommandLineArgs(args);
-        Main main = new Main(commandLineArgs);
+        DromblerACPStarter main = new DromblerACPStarter(new DromblerACPConfiguration(commandLineArgs));
         main.init();
-        main.start();
+        main.startAndWait();
     }
 
     private final OSGiStarter osgiStarter;
 
-    public Main(CommandLineArgs commandLineArgs) throws URISyntaxException, IOException, MissingPropertyException {
-        ApplicationConfiguration configuration = new ApplicationConfiguration(commandLineArgs);
+    public DromblerACPStarter(DromblerACPConfiguration configuration){
         osgiStarter = new OSGiStarter(configuration);
     }
 
@@ -45,8 +44,15 @@ public class Main {
         osgiStarter.init();
     }
 
-    public void start() throws BundleException, InterruptedException {
-        osgiStarter.start();
+    public void startAndWait() throws BundleException, InterruptedException {
+        osgiStarter.startAndWait();
     }
 
+    public void stop() throws BundleException, InterruptedException {
+        osgiStarter.stop();
+    }
+
+    public Framework getFramework() {
+        return osgiStarter.getFramework();
+    }
 }

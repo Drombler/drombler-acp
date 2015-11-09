@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
  * @author puce
  */
 // TODO: move to SoftSmithy
-public class PropertiesUtils {
+public final class PropertiesUtils {
 
     private PropertiesUtils() {
     }

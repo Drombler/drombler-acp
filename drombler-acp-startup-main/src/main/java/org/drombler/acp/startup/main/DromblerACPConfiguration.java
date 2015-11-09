@@ -24,15 +24,17 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Collections;
+import java.util.Map;
 import java.util.Properties;
 import org.apache.felix.framework.util.Util;
-import org.drombler.acp.startup.main.impl.CommandLineArgs;
+import org.drombler.acp.startup.main.impl.PropertiesUtils;
 
 /**
  *
  * @author puce
  */
-public class ApplicationConfiguration {
+public class DromblerACPConfiguration {
 
     /**
      * The jar URI prefix "jar:"
@@ -74,11 +76,14 @@ public class ApplicationConfiguration {
 
     public static final String USER_DIR_PROPERTY = "platform.userdir";
 
+    public static final String APPLICATION_PROPERTIES_FILE_PATH = "/applicationConfig.properties";
+
     private final Path installDirPath;
     private final Path userDirPath;
     private final Properties userConfigProps;
+    private final Map<String, String> applicationConfig;
 
-    public ApplicationConfiguration(CommandLineArgs commandLineArgs) throws URISyntaxException, IOException,
+    public DromblerACPConfiguration(CommandLineArgs commandLineArgs) throws URISyntaxException, IOException,
             MissingPropertyException {
         this.installDirPath = determineInstallDirPath();
 
@@ -97,6 +102,8 @@ public class ApplicationConfiguration {
 
         resolveProperties(userConfigProps);
         copySystemProperties(userConfigProps);
+
+        applicationConfig = loadApplicationConfig();
     }
 
     private Properties createInstallConfigProps(Properties defaultConfigProps, CommandLineArgs commandLineArgs) throws
@@ -108,7 +115,7 @@ public class ApplicationConfiguration {
     }
 
     private Path determineInstallDirPath() throws URISyntaxException {
-        Class<Main> type = Main.class;
+        Class<DromblerACPStarter> type = DromblerACPStarter.class;
         String jarResourceURIString = type.getResource("/" + type.getName().replace(".", "/") + ".class").toURI().
                 toString();
         int endOfJarPathIndex = jarResourceURIString.indexOf("!/");
@@ -156,7 +163,7 @@ public class ApplicationConfiguration {
 
     protected Properties loadDefaultConfigProps() throws IOException {
         Properties props = new Properties();
-        try (InputStream is = Main.class.getResourceAsStream("config.properties")) {
+        try (InputStream is = DromblerACPConfiguration.class.getResourceAsStream("config.properties")) {
             props.load(is);
         }
         return props;
@@ -194,7 +201,7 @@ public class ApplicationConfiguration {
     /**
      * @return the installDirPath
      */
-    public Path getInstallDirPath() {
+    public final Path getInstallDirPath() {
         return installDirPath;
     }
 
@@ -211,4 +218,48 @@ public class ApplicationConfiguration {
     public Properties getUserConfigProps() {
         return userConfigProps;
     }
+
+    /**
+     * The Application Configuration gets generated at build time of the application and packaged into the final JAR
+     */
+    private Map<String, String> loadApplicationConfig() {
+        Properties configProperties = new Properties();
+
+        try (InputStream is = DromblerACPConfiguration.class.getResourceAsStream(APPLICATION_PROPERTIES_FILE_PATH)) {
+            if (is != null) {
+                configProperties.load(is);
+            }
+        } catch (IOException ex) {
+            System.err.println("ApplicationConfigProviderImpl: Error loading applicationConfig.properties!");
+        }
+
+        return Collections.unmodifiableMap(PropertiesUtils.toMap(configProperties));
+    }
+
+    protected final double getApplicationConfigDouble(String key, double defaultValue, String errorMessageFormat) {
+        double value = defaultValue;
+        if (applicationConfig.containsKey(key)) {
+            try {
+                value = Double.parseDouble(applicationConfig.get(key));
+            } catch (NumberFormatException ex) {
+                System.err.println("ApplicationConfigProviderImpl: Error loading applicationConfig.properties!");
+
+//                LOG.error(errorMessageFormat, applicationConfig.get(key));
+            }
+        }
+        return value;
+    }
+
+    protected final double getApplicationPositiveDouble(String key, double defaultValue, String errorMessageFormat) {
+        double value = getApplicationConfigDouble(key, -1, errorMessageFormat);
+        if (value <= 0) {
+            value = defaultValue;
+        }
+        return value;
+    }
+
+    protected final String getApplicationConfig(String key) {
+        return applicationConfig.get(key);
+    }
+
 }

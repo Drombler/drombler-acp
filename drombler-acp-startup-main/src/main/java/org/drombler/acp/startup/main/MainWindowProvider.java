@@ -12,7 +12,7 @@
  *
  * Contributor(s): .
  */
-package org.drombler.acp.core.application;
+package org.drombler.acp.startup.main;
 
 /**
  * The Main Window provider.

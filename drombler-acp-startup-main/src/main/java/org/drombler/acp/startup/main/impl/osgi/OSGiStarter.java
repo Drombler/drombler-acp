@@ -17,10 +17,8 @@ package org.drombler.acp.startup.main.impl.osgi;
 import java.io.IOException;
 import java.util.Map;
 import java.util.ServiceLoader;
-import org.drombler.acp.startup.main.ApplicationConfigProvider;
-import org.drombler.acp.startup.main.ApplicationConfiguration;
+import org.drombler.acp.startup.main.DromblerACPConfiguration;
 import org.drombler.acp.startup.main.ServiceLoaderException;
-import org.drombler.acp.startup.main.impl.ApplicationConfigProviderImpl;
 import org.drombler.acp.startup.main.impl.PropertiesUtils;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.FrameworkEvent;
@@ -35,7 +33,7 @@ public class OSGiStarter {
 
     private static final ServiceLoader<FrameworkFactory> FRAMEWORK_FACTORY_LOADER = ServiceLoader.load(
             FrameworkFactory.class);
-    private final ApplicationConfiguration configuration;
+    private final DromblerACPConfiguration configuration;
     private final Map<String, String> configMap;
     private final Framework framework;
 
@@ -43,7 +41,7 @@ public class OSGiStarter {
      *
      * @param configuration
      */
-    public OSGiStarter(ApplicationConfiguration configuration) {
+    public OSGiStarter(DromblerACPConfiguration configuration) {
         this.configuration = configuration;
         this.configMap = PropertiesUtils.toMap(configuration.getUserConfigProps());
         FrameworkFactory factory = getFrameworkFactory();
@@ -58,25 +56,25 @@ public class OSGiStarter {
         throw new ServiceLoaderException("Could not find framework factory.");
     }
 
-    public void start() throws BundleException, InterruptedException {
-        FrameworkEvent event;
-        do {
-            framework.start();
-            event = framework.waitForStop(0);
-        } while (event.getType() == FrameworkEvent.STOPPED_UPDATE);
-    }
 
     public void init() throws BundleException, IOException {
         registerShutdownHook();
         // Create an instance of the framework.
         // Initialize the framework, but don't start it yet.
-        framework.init();
-        initServices();
+        getFramework().init();
         // Use the system bundle context to process the auto-deploy
         // and auto-install/auto-start properties.
         AutoProcessor autoProcessor = new AutoProcessor();
-        autoProcessor.process(framework, configMap, configuration.getInstallDirPath(),
+        autoProcessor.process(getFramework(), configMap, configuration.getInstallDirPath(),
                 configuration.getUserDirPath());
+    }
+
+    public void startAndWait() throws BundleException, InterruptedException {
+        FrameworkEvent event;
+        do {
+            getFramework().start();
+            event = getFramework().waitForStop(0);
+        } while (event.getType() == FrameworkEvent.STOPPED_UPDATE);
     }
 
     private void registerShutdownHook() {
@@ -93,17 +91,18 @@ public class OSGiStarter {
         });
     }
 
-    private void initServices() {
-        framework.getBundleContext().registerService(ApplicationConfigProvider.class,
-                new ApplicationConfigProviderImpl(),
-                null);
+    public void stop() throws BundleException, InterruptedException {
+        if (getFramework() != null) {
+            getFramework().stop();
+            getFramework().waitForStop(0);
+        }
     }
 
-    public void stop() throws BundleException, InterruptedException {
-        if (framework != null) {
-            framework.stop();
-            framework.waitForStop(0);
-        }
+    /**
+     * @return the framework
+     */
+    public Framework getFramework() {
+        return framework;
     }
 
 }
