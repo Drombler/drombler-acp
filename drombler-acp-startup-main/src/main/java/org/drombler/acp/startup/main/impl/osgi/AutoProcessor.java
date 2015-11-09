@@ -12,7 +12,7 @@
  *
  * Contributor(s): .
  */
-package org.drombler.acp.startup.main.impl;
+package org.drombler.acp.startup.main.impl.osgi;
 
 import java.io.IOException;
 import java.nio.file.FileVisitResult;
@@ -21,6 +21,7 @@ import java.nio.file.Path;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.EnumSet;
@@ -29,6 +30,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
+import java.util.stream.Collectors;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
@@ -37,7 +39,7 @@ import org.osgi.framework.launch.Framework;
 import org.osgi.framework.startlevel.BundleStartLevel;
 import org.osgi.framework.startlevel.FrameworkStartLevel;
 
-public class AutoProcessor {
+class AutoProcessor {
 
     /**
      * The property name used for the bundle directory.
@@ -90,7 +92,8 @@ public class AutoProcessor {
      */
     public static final String AUTO_START_PROP = "felix.auto.start";
 
-    public void process(Framework framework, Map<String, String> configMap, Path installDirPath, Path userDirPath) throws IOException {
+    public void process(Framework framework, Map<String, String> configMap, Path installDirPath, Path userDirPath)
+            throws IOException {
         if (configMap == null) {
             configMap = new HashMap<>();
         }
@@ -115,7 +118,8 @@ public class AutoProcessor {
         }
     }
 
-    private void processAutoDeploy(Map<String, String> configMap, BundleContext frameworkContext, FrameworkStartLevel fsl,
+    private void processAutoDeploy(Map<String, String> configMap, BundleContext frameworkContext,
+            FrameworkStartLevel fsl,
             Path installDirPath, Path userDirPath) throws IOException {
         Set<BundleAction> bundleActions = getBundleActions(configMap);
 
@@ -165,37 +169,42 @@ public class AutoProcessor {
         }
     }
 
-    private void processAutoProperties(Map<String, String> configMap, BundleContext frameworkContext, FrameworkStartLevel fsl) {
+    private void processAutoProperties(Map<String, String> configMap, BundleContext frameworkContext,
+            FrameworkStartLevel fsl) {
         installAutoInstallBundles(configMap, frameworkContext, fsl);
         startAutoStartBundles(configMap, frameworkContext);
 
     }
 
-    private void installAutoInstallBundles(Map<String, String> configMap, BundleContext frameworkContext, FrameworkStartLevel fsl) {
-        for (String key : configMap.keySet()) {
-            key = key.toLowerCase();
+    private void installAutoInstallBundles(Map<String, String> configMap, BundleContext frameworkContext,
+            FrameworkStartLevel fsl) {
+        configMap.keySet().stream().
+                map(key -> key.toLowerCase()).
+                filter(key -> (key.startsWith(AUTO_INSTALL_PROP) || key.startsWith(AUTO_START_PROP))).
+                forEach(key -> {
+                    int startLevel = getAutoStartLevel(fsl, key);
 
-            if (key.startsWith(AUTO_INSTALL_PROP) || key.startsWith(AUTO_START_PROP)) {
-                int startLevel = getAutoStartLevel(fsl, key);
-
-                StringTokenizer st = new StringTokenizer(configMap.get(key), "\" ", true);
-                for (String location = nextLocation(st); location != null; location = nextLocation(st)) {
-                    installBundle(location, frameworkContext, startLevel);
-                }
-            }
-        }
+            StringTokenizer st = createStringTokenizer(configMap.get(key));
+                    for (String location = nextLocation(st); location != null; location = nextLocation(st)) {
+                        installBundle(location, frameworkContext, startLevel);
+                    }
+                });
     }
 
     private void startAutoStartBundles(Map<String, String> configMap, BundleContext frameworkContext) {
-        for (String key : configMap.keySet()) {
-            key = key.toLowerCase();
-            if (key.startsWith(AUTO_START_PROP)) {
-                StringTokenizer st = new StringTokenizer(configMap.get(key), "\" ", true);
-                for (String location = nextLocation(st); location != null; location = nextLocation(st)) {
-                    startBundle(frameworkContext, location);
-                }
-            }
-        }
+        configMap.keySet().stream().
+                map(key -> key.toLowerCase()).
+                filter(key -> (key.startsWith(AUTO_START_PROP))).
+                map(key -> createStringTokenizer(configMap.get(key))).
+                forEach(st -> {
+                    for (String location = nextLocation(st); location != null; location = nextLocation(st)) {
+                        startBundle(frameworkContext, location);
+                    }
+                });
+    }
+
+    private static StringTokenizer createStringTokenizer(String value) {
+        return new StringTokenizer(value, "\" ", true);
     }
 
     private int getAutoStartLevel(FrameworkStartLevel fsl, String key) {
@@ -225,27 +234,27 @@ public class AutoProcessor {
     }
 
     private void uninstallBundles(Collection<Bundle> bundles) {
-        for (Bundle bundle : bundles) {
-            if (bundle.getBundleId() != 0) {
-                try {
-                    bundle.uninstall();
-                } catch (BundleException ex) {
-                    System.err.println("Auto-deploy uninstall: "
-                            + ex + ((ex.getCause() != null) ? " - " + ex.getCause() : ""));
-                }
-            }
-        }
+        bundles.stream().
+                filter(bundle -> (bundle.getBundleId() != 0)).
+                forEach(bundle -> {
+                    try {
+                        bundle.uninstall();
+                    } catch (BundleException ex) {
+                        System.err.println("Auto-deploy uninstall: "
+                                + ex + ((ex.getCause() != null) ? " - " + ex.getCause() : ""));
+                    }
+                });
     }
 
     private void startBundles(List<Bundle> startBundleList) {
-        for (Bundle bundle : startBundleList) {
+        startBundleList.forEach(bundle -> {
             try {
                 bundle.start();
             } catch (Exception ex) {
                 System.err.println("Auto-deploy start: "
                         + ex + ((ex.getCause() != null) ? " - " + ex.getCause() : ""));
             }
-        }
+        });
     }
 
     private void setStartLevel(Bundle bundle, int startLevel) {
@@ -284,8 +293,15 @@ public class AutoProcessor {
         if (action == null) {
             action = "";
         }
+        return getBundleActions(action);
+    }
+
+    private Set<BundleAction> getBundleActions(String action) {
+        return getBundleActions(new StringTokenizer(action, ","));
+    }
+
+    private Set<BundleAction> getBundleActions(StringTokenizer st) {
         Set<BundleAction> bundleActions = EnumSet.noneOf(BundleAction.class);
-        StringTokenizer st = new StringTokenizer(action, ",");
         while (st.hasMoreTokens()) {
             BundleAction bundleAction = BundleAction.getBundleAction(st.nextToken().trim().toLowerCase());
             if (bundleAction != null) {
@@ -295,7 +311,8 @@ public class AutoProcessor {
         return bundleActions;
     }
 
-    private List<Path> getAutoDeployBundlePaths(Map<String, String> configMap, Path installDirPath, Path userDirPath) throws IOException {
+    private List<Path> getAutoDeployBundlePaths(Map<String, String> configMap, Path installDirPath, Path userDirPath)
+            throws IOException {
         String autoDir = getAutoDeployDir(configMap);
         final List<Path> jarPaths = new ArrayList<>();
 
@@ -315,14 +332,8 @@ public class AutoProcessor {
     }
 
     private Map<String, Bundle> getInstalledBundlesMap(BundleContext frameworkContext) {
-        Bundle[] bundles = frameworkContext.getBundles();
-        Map<String, Bundle> installedBundleMap = new HashMap<>(bundles.length);
-        for (Bundle bundle : bundles) {
-            installedBundleMap.put(bundle.getLocation(), bundle);
-        }
-        return installedBundleMap;
-
-
+        return Arrays.stream(frameworkContext.getBundles()).
+                collect(Collectors.toMap(bundle -> bundle.getLocation(), bundle -> bundle));
     }
 
     private String nextLocation(StringTokenizer st) {

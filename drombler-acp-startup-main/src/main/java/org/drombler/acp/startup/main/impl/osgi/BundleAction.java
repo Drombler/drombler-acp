@@ -12,7 +12,7 @@
  *
  * Contributor(s): .
  */
-package org.drombler.acp.startup.main.impl;
+package org.drombler.acp.startup.main.impl.osgi;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -21,7 +21,7 @@ import java.util.Map;
  *
  * @author puce
  */
-public enum BundleAction {
+enum BundleAction {
 
     INSTALL("install"),
     START("start"),

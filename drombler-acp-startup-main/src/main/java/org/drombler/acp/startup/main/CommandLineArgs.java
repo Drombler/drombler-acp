@@ -12,7 +12,7 @@
  *
  * Contributor(s): .
  */
-package org.drombler.acp.startup.main.impl;
+package org.drombler.acp.startup.main;
 
 /**
  *

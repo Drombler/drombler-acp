@@ -14,13 +14,23 @@
  */
 package org.drombler.acp.startup.main;
 
-import java.util.Map;
+import java.util.concurrent.Executor;
 
 /**
+ * A provider which provides an {@link Executor}, which makes sure a given command gets executed on the GUI-toolkit
+ * specific application thread.
  *
  * @author puce
  */
-public interface ApplicationConfigProvider {
+@FunctionalInterface
+public interface ApplicationExecutorProvider {
 
-    Map<String, String> getApplicationConfig();
+    /**
+     * Gets an {@link Executor}, which makes sure a given command gets executed on the GUI-toolkit specific application
+     * thread
+     *
+     * @return an {@link Executor}, which makes sure a given command gets executed on the GUI-toolkit specific
+     * application thread
+     */
+    Executor getApplicationExecutor();
 }
