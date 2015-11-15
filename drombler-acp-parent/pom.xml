@@ -23,7 +23,7 @@ Contributor(s): .
     </parent>
     <groupId>org.drombler.acp</groupId>
     <artifactId>drombler-acp-parent</artifactId>
-    <version>0.8-SNAPSHOT</version>
+    <version>0.7</version>
     <packaging>pom</packaging>
     
     <name>Drombler ACP - Parent</name>
