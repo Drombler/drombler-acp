@@ -49,11 +49,15 @@ public class DromblerACPStarter {
                 .collect(Collectors.toList());
     }
 
-    public void init() throws Exception {
+    public boolean init() throws Exception {
+        boolean initialized = true;
         for (BootServiceStarter starter : starters) {
             registerShutdownHook(starter);
-            starter.init();
+            if (!starter.init()) {
+                initialized = false;
+            }
         }
+        return initialized;
     }
 
     private void registerShutdownHook(BootServiceStarter starter) {
@@ -71,22 +75,21 @@ public class DromblerACPStarter {
     }
 
     public void start() {
-        for (BootServiceStarter starter : starters) {
-            Thread starterThread = Executors.defaultThreadFactory().newThread(() -> {
-                try {
-                    starter.startAndWait();
-                } catch (Exception ex) {
-                    logError(ex);
+        starters.stream().
+                map(starter -> Executors.defaultThreadFactory().newThread(() -> {
+                    try {
+                        starter.startAndWait();
+                    } catch (Exception ex) {
+                        logError(ex);
 //                } finally {
 //                    try {
 //                        DromblerFXApplication.this.stopStarter();
 //                    } catch (BundleException | InterruptedException ex) {
 //                        logError(ex);
 //                    }
-                }
-            });
-            starterThread.start();
-        }
+                    }
+                })).
+                forEach(Thread::start);
     }
 
     public synchronized void stop() {

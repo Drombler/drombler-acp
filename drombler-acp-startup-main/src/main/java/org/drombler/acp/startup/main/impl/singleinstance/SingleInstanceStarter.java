@@ -61,8 +61,7 @@ public class SingleInstanceStarter implements BootServiceStarter {
     /**
      * Randomly chosen, but static, high socket number
      */
-    public static final int SINGLE_INSTANCE_NETWORK_SOCKET = 44331;
-
+//    public static final int SINGLE_INSTANCE_NETWORK_SOCKET = 44331;
     /**
      * Must end with newline
      */
@@ -93,7 +92,8 @@ public class SingleInstanceStarter implements BootServiceStarter {
 //        return true;
 //    }
     @Override
-    public void init() throws IOException {
+    public boolean init() throws IOException {
+        boolean initialized;
         Path userConfigDir = configuration.getUserDirPath().resolve(DromblerACPConfiguration.CONFIG_DIRECTORY);
         if (!Files.exists(userConfigDir)) {
             Files.createDirectories(userConfigDir);
@@ -101,12 +101,21 @@ public class SingleInstanceStarter implements BootServiceStarter {
         Path singleInstancePropertiesPath = userConfigDir.resolve(SINGLE_INSTANCE_PROPERTIES_FILE_NAME);
         if (Files.exists(singleInstancePropertiesPath)) {
             Properties singleInstanceProperties = loadSingleInstanceProperties(singleInstancePropertiesPath);
-            initServerSocket(Integer.parseInt(singleInstanceProperties.getProperty(PORT_PROPERTY_NAME)));
+            int port = Integer.parseInt(singleInstanceProperties.getProperty(PORT_PROPERTY_NAME));
+            try {
+                tryInitServerSocket(port);
+                initialized = true;
+            } catch (IOException ex) {
+                notifySingleInstance(port);
+                initialized = false;
+            }
         } else {
             Files.createFile(singleInstancePropertiesPath);
             int port = initialInitServerSocket(configuration.getApplicationConfig().getDefaultSingleInstancePort());
             storeSingleInstanceProperties(singleInstancePropertiesPath, port);
+            initialized = true;
         }
+        return initialized;
     }
 
     private int initialInitServerSocket(int defaultPort) {
@@ -114,7 +123,7 @@ public class SingleInstanceStarter implements BootServiceStarter {
         boolean retry = true;
         while (retry) {
             try {
-                initServerSocket(port);
+                tryInitServerSocket(port);
                 retry = false;
             } catch (IOException ex) {
                 port++;
@@ -139,7 +148,7 @@ public class SingleInstanceStarter implements BootServiceStarter {
         }
     }
 
-    private void initServerSocket(int port) throws IOException {
+    private void tryInitServerSocket(int port) throws IOException {
         this.serverSocket = new ServerSocket(port, 10, getInetAddress());
     }
 
@@ -174,9 +183,9 @@ public class SingleInstanceStarter implements BootServiceStarter {
         }
     }
 
-    public void notifySingleInstance() {
+    public void notifySingleInstance(int port) {
         System.out.println("Port is already taken.  Notifying first instance.");
-        try (Socket socket = new Socket(getInetAddress(), SINGLE_INSTANCE_NETWORK_SOCKET);
+        try (Socket socket = new Socket(getInetAddress(), port);
                 OutputStream out = socket.getOutputStream()) {
             out.write(SINGLE_INSTANCE_SHARED_KEY.getBytes());
             System.out.println("Successfully notified first instance.");

@@ -72,7 +72,7 @@ public class OSGiStarter implements BootServiceStarter {
     }
 
     @Override
-    public void init() throws BundleException, IOException {
+    public boolean init() throws BundleException, IOException {
         // Create an instance of the framework.
         // Initialize the framework, but don't start it yet.
         getFramework().init();
@@ -81,6 +81,7 @@ public class OSGiStarter implements BootServiceStarter {
         AutoProcessor autoProcessor = new AutoProcessor();
         autoProcessor.process(getFramework(), configMap, configuration.getInstallDirPath(),
                 configuration.getUserDirPath());
+        return true;
     }
 
     @Override

@@ -16,7 +16,7 @@ package org.drombler.acp.startup.main.impl;
 
 public interface BootServiceStarter {
 
-    void init() throws Exception;
+    boolean init() throws Exception;
 
     void startAndWait() throws Exception;
 
