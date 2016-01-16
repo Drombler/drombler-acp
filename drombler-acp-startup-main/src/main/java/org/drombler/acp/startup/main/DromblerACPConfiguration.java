@@ -24,11 +24,8 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Collections;
-import java.util.Map;
 import java.util.Properties;
 import org.apache.felix.framework.util.Util;
-import org.drombler.acp.startup.main.impl.PropertiesUtils;
 
 /**
  *
@@ -76,12 +73,10 @@ public class DromblerACPConfiguration {
 
     public static final String USER_DIR_PROPERTY = "platform.userdir";
 
-    public static final String APPLICATION_PROPERTIES_FILE_PATH = "/applicationConfig.properties";
-
     private final Path installDirPath;
     private final Path userDirPath;
     private final Properties userConfigProps;
-    private final Map<String, String> applicationConfig;
+    private final ApplicationConfiguration applicationConfig;
 
     public DromblerACPConfiguration(CommandLineArgs commandLineArgs) throws URISyntaxException, IOException,
             MissingPropertyException {
@@ -103,7 +98,7 @@ public class DromblerACPConfiguration {
         resolveProperties(userConfigProps);
         copySystemProperties(userConfigProps);
 
-        applicationConfig = loadApplicationConfig();
+        this.applicationConfig = new ApplicationConfiguration();
     }
 
     private Properties createInstallConfigProps(Properties defaultConfigProps, CommandLineArgs commandLineArgs) throws
@@ -220,46 +215,10 @@ public class DromblerACPConfiguration {
     }
 
     /**
-     * The Application Configuration gets generated at build time of the application and packaged into the final JAR
+     * @return the applicationConfig
      */
-    private Map<String, String> loadApplicationConfig() {
-        Properties configProperties = new Properties();
-
-        try (InputStream is = DromblerACPConfiguration.class.getResourceAsStream(APPLICATION_PROPERTIES_FILE_PATH)) {
-            if (is != null) {
-                configProperties.load(is);
-            }
-        } catch (IOException ex) {
-            System.err.println("ApplicationConfigProviderImpl: Error loading applicationConfig.properties!");
-        }
-
-        return Collections.unmodifiableMap(PropertiesUtils.toMap(configProperties));
-    }
-
-    protected final double getApplicationConfigDouble(String key, double defaultValue, String errorMessageFormat) {
-        double value = defaultValue;
-        if (applicationConfig.containsKey(key)) {
-            try {
-                value = Double.parseDouble(applicationConfig.get(key));
-            } catch (NumberFormatException ex) {
-                System.err.println("ApplicationConfigProviderImpl: Error loading applicationConfig.properties!");
-
-//                LOG.error(errorMessageFormat, applicationConfig.get(key));
-            }
-        }
-        return value;
-    }
-
-    protected final double getApplicationPositiveDouble(String key, double defaultValue, String errorMessageFormat) {
-        double value = getApplicationConfigDouble(key, -1, errorMessageFormat);
-        if (value <= 0) {
-            value = defaultValue;
-        }
-        return value;
-    }
-
-    protected final String getApplicationConfig(String key) {
-        return applicationConfig.get(key);
+    public ApplicationConfiguration getApplicationConfig() {
+        return applicationConfig;
     }
 
 }

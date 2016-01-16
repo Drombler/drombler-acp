@@ -16,43 +16,107 @@ package org.drombler.acp.startup.main;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.text.MessageFormat;
+import java.util.Arrays;
+import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.stream.Collectors;
+import org.drombler.acp.startup.main.impl.BootServiceStarter;
 import org.drombler.acp.startup.main.impl.osgi.OSGiStarter;
+import org.drombler.acp.startup.main.impl.singleinstance.SingleInstanceStarter;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.launch.Framework;
 
 public class DromblerACPStarter {
 
 //    private static final Logger LOG = LoggerFactory.getLogger(DromblerACPStarter.class); // TODO: outside OSGi Framework...?
-
-
-
     public static void main(String[] args) throws URISyntaxException, IOException,
-            MissingPropertyException, BundleException, InterruptedException {
+            MissingPropertyException, BundleException, InterruptedException, Exception {
         CommandLineArgs commandLineArgs = CommandLineArgs.parseCommandLineArgs(args);
         DromblerACPStarter main = new DromblerACPStarter(new DromblerACPConfiguration(commandLineArgs));
         main.init();
-        main.startAndWait();
+        main.start();
     }
 
     private final OSGiStarter osgiStarter;
+    private final List<BootServiceStarter> starters;
+    private boolean stopped = false;
 
-    public DromblerACPStarter(DromblerACPConfiguration configuration){
-        osgiStarter = new OSGiStarter(configuration);
+    public DromblerACPStarter(DromblerACPConfiguration configuration) {
+        this.osgiStarter = new OSGiStarter(configuration, true);
+        this.starters = Arrays.asList(osgiStarter, new SingleInstanceStarter(configuration)).stream()
+                .filter(BootServiceStarter::isActive)
+                .collect(Collectors.toList());
     }
 
-    public void init() throws BundleException, IOException {
-        osgiStarter.init();
+    public void init() throws Exception {
+        for (BootServiceStarter starter : starters) {
+            registerShutdownHook(starter);
+            starter.init();
+        }
     }
 
-    public void startAndWait() throws BundleException, InterruptedException {
-        osgiStarter.startAndWait();
+    private void registerShutdownHook(BootServiceStarter starter) {
+        Runtime.getRuntime().addShutdownHook(new Thread(starter.getName() + " Shutdown Hook") {
+
+            @Override
+            public void run() {
+                try {
+                    starter.stop();
+                } catch (Exception ex) {
+                    System.err.println("Error stopping starter " + starter.getName() + ": " + ex);
+                }
+            }
+        });
     }
 
-    public void stop() throws BundleException, InterruptedException {
-        osgiStarter.stop();
+    public void start() {
+        for (BootServiceStarter starter : starters) {
+            Thread starterThread = Executors.defaultThreadFactory().newThread(() -> {
+                try {
+                    starter.startAndWait();
+                } catch (Exception ex) {
+                    logError(ex);
+//                } finally {
+//                    try {
+//                        DromblerFXApplication.this.stopStarter();
+//                    } catch (BundleException | InterruptedException ex) {
+//                        logError(ex);
+//                    }
+                }
+            });
+            starterThread.start();
+        }
+    }
+
+    public synchronized void stop() {
+        if (!stopped) {
+            stopped = true;
+            starters.stream()
+                    .forEach(starter -> {
+                        try {
+                            starter.stop();
+                        } catch (Exception ex) {
+                            logError(ex);
+                        }
+                    });
+        }
+
     }
 
     public Framework getFramework() {
         return osgiStarter.getFramework();
+    }
+
+    private void logInfo(String messageFormat, Object... arguments) {
+        // TODO: replace with SLF4J Logger once available on classpath
+        // Note: the message format is different!
+        System.out.println(MessageFormat.format(messageFormat, arguments));
+    }
+
+    private void logError(Exception ex) {
+        // TODO: replace with SLF4J Logger once available on classpath
+        // Note: the message format is different!
+        ex.printStackTrace();
     }
 }
