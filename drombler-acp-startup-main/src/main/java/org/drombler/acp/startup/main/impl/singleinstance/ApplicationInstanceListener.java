@@ -14,6 +14,8 @@
  */
 package org.drombler.acp.startup.main.impl.singleinstance;
 
+import java.util.List;
+
 /**
  *
  * @author puce
@@ -21,5 +23,5 @@ package org.drombler.acp.startup.main.impl.singleinstance;
 
 public interface ApplicationInstanceListener {
 
-    void newInstanceCreated();
+    void newInstanceCreated(List<String> additionalArgs);
 }

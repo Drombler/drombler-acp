@@ -39,12 +39,20 @@ public class DromblerACPStarter {
     }
 
     private final OSGiStarter osgiStarter;
+    private final SingleInstanceStarter singleInstanceStarter;
     private final List<BootServiceStarter> starters;
+    private final DromblerACPConfiguration configuration;
     private boolean stopped = false;
 
+    /**
+     *
+     * @param configuration
+     */
     public DromblerACPStarter(DromblerACPConfiguration configuration) {
+        this.configuration = configuration;
         this.osgiStarter = new OSGiStarter(configuration, true);
-        this.starters = Arrays.asList(osgiStarter, new SingleInstanceStarter(configuration)).stream()
+        this.singleInstanceStarter = new SingleInstanceStarter(configuration);
+        this.starters = Arrays.asList(singleInstanceStarter, osgiStarter).stream()
                 .filter(BootServiceStarter::isActive)
                 .collect(Collectors.toList());
     }
@@ -90,6 +98,10 @@ public class DromblerACPStarter {
                     }
                 })).
                 forEach(Thread::start);
+        fireAdditionalArguments(configuration.getCommandLineArgs().getAdditionalArguments());
+        if (singleInstanceStarter.isActive()) {
+            singleInstanceStarter.setApplicationInstanceListener(this::fireAdditionalArguments);
+        }
     }
 
     public synchronized void stop() {
@@ -107,6 +119,13 @@ public class DromblerACPStarter {
 
     }
 
+    private void fireAdditionalArguments(List<String> additionalArguments) {
+//        for (String additionalArg : additionalArguments) {
+//            osgiStarter.getFramework().getBundleContext().registerService(ApplicationExecutorProvider.class,
+//                    additionalArg, null);
+//        }
+    }
+
     public Framework getFramework() {
         return osgiStarter.getFramework();
     }
@@ -122,4 +141,5 @@ public class DromblerACPStarter {
         // Note: the message format is different!
         ex.printStackTrace();
     }
+
 }

@@ -19,14 +19,21 @@ import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.net.UnknownHostException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Properties;
+import java.util.stream.Collectors;
 import org.drombler.acp.startup.main.DromblerACPConfiguration;
 import org.drombler.acp.startup.main.impl.BootServiceStarter;
 
@@ -38,6 +45,8 @@ public class SingleInstanceStarter implements BootServiceStarter {
 
     private static final String SINGLE_INSTANCE_PROPERTIES_FILE_NAME = "singleInstance.properties";
     private static final String PORT_PROPERTY_NAME = "port";
+    private static final String DELIMITER = " ";
+    private static final String ENCODING = "UTF-8";
 
     private final DromblerACPConfiguration configuration;
     private ServerSocket serverSocket;
@@ -56,7 +65,7 @@ public class SingleInstanceStarter implements BootServiceStarter {
         return configuration.getApplicationConfig().isSingleInstanceApplication();
     }
 
-    private static ApplicationInstanceListener subListener;
+    private ApplicationInstanceListener applicationInstanceListener;
 
     /**
      * Randomly chosen, but static, high socket number
@@ -65,7 +74,7 @@ public class SingleInstanceStarter implements BootServiceStarter {
     /**
      * Must end with newline
      */
-    public static final String SINGLE_INSTANCE_SHARED_KEY = "$$NewInstance$$\n";
+//    public static final String SINGLE_INSTANCE_SHARED_KEY = "$$NewInstance$$\n";
 
 //    /**
 //     * Registers this instance of the application.
@@ -168,14 +177,22 @@ public class SingleInstanceStarter implements BootServiceStarter {
                 socketClosed = true;
             } else {
                 try (Socket socket = serverSocket.accept();
-                        BufferedReader in = new BufferedReader(
-                                new InputStreamReader(socket.getInputStream()))) {
+                        BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()))) {
                     String message = in.readLine();
-                    if (SINGLE_INSTANCE_SHARED_KEY.trim().equals(message.trim())) {
-                        System.out.println("Shared key matched - new application instance found");
-                        fireNewInstance();
-                    }
-
+                    List<String> additionalArgs = Arrays.stream(message.split(DELIMITER))
+                            .map(additionalArg -> {
+                                try {
+                                    return URLDecoder.decode(additionalArg, ENCODING);
+                                } catch (UnsupportedEncodingException ex) {
+                                    // Should not happen here
+                                    throw new RuntimeException(ex);
+                                }
+                            })
+                            .collect(Collectors.toList());
+                    fireNewInstance(additionalArgs);
+                } catch (UnsupportedEncodingException ex) {
+                    System.err.println("Error connecting to local port for single instance notification");
+                    ex.printStackTrace();
                 } catch (IOException e) {
                     socketClosed = true;
                 }
@@ -186,24 +203,30 @@ public class SingleInstanceStarter implements BootServiceStarter {
     public void notifySingleInstance(int port) {
         System.out.println("Port is already taken.  Notifying first instance.");
         try (Socket socket = new Socket(getInetAddress(), port);
-                OutputStream out = socket.getOutputStream()) {
-            out.write(SINGLE_INSTANCE_SHARED_KEY.getBytes());
+                OutputStreamWriter writer = new OutputStreamWriter(socket.getOutputStream(), "UTF-8")) {
+            for (Iterator<String> argIterator = configuration.getCommandLineArgs().getAdditionalArguments().iterator();
+                    argIterator.hasNext();) {
+                String additionalArg = argIterator.next();
+                writer.write(URLEncoder.encode(additionalArg, ENCODING));
+                if (argIterator.hasNext()) {
+                    writer.write(DELIMITER);
+                }
+            }
+            writer.write("\n");
             System.out.println("Successfully notified first instance.");
-        } catch (UnknownHostException e1) {
-            e1.printStackTrace();
         } catch (IOException e1) {
             System.err.println("Error connecting to local port for single instance notification");
             e1.printStackTrace();
         }
     }
 
-    public static void setApplicationInstanceListener(ApplicationInstanceListener listener) {
-        subListener = listener;
+    public void setApplicationInstanceListener(ApplicationInstanceListener applicationInstanceListener) {
+        this.applicationInstanceListener = applicationInstanceListener;
     }
 
-    private static void fireNewInstance() {
-        if (subListener != null) {
-            subListener.newInstanceCreated();
+    private void fireNewInstance(List<String> additionalArgs) {
+        if (applicationInstanceListener != null) {
+            applicationInstanceListener.newInstanceCreated(additionalArgs);
         }
     }
 

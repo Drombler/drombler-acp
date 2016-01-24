@@ -77,9 +77,18 @@ public class DromblerACPConfiguration {
     private final Path userDirPath;
     private final Properties userConfigProps;
     private final ApplicationConfiguration applicationConfig;
+    private final CommandLineArgs commandLineArgs;
 
+    /**
+     *
+     * @param commandLineArgs
+     * @throws URISyntaxException
+     * @throws IOException
+     * @throws MissingPropertyException
+     */
     public DromblerACPConfiguration(CommandLineArgs commandLineArgs) throws URISyntaxException, IOException,
             MissingPropertyException {
+        this.commandLineArgs = commandLineArgs;
         this.installDirPath = determineInstallDirPath();
 
         loadSystemProperties(getInstallDirPath());
@@ -219,6 +228,13 @@ public class DromblerACPConfiguration {
      */
     public ApplicationConfiguration getApplicationConfig() {
         return applicationConfig;
+    }
+
+    /**
+     * @return the commandLineArgs
+     */
+    public CommandLineArgs getCommandLineArgs() {
+        return commandLineArgs;
     }
 
 }
