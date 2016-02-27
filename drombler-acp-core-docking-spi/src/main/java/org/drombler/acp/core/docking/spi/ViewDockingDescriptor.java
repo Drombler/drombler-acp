@@ -15,9 +15,11 @@
 package org.drombler.acp.core.docking.spi;
 
 import java.util.ResourceBundle;
+import org.apache.commons.lang3.StringUtils;
 import org.drombler.acp.core.action.spi.ActionDescriptor;
 import org.drombler.acp.core.action.spi.MenuEntryDescriptor;
 import org.drombler.acp.core.docking.jaxb.ViewDockingType;
+import org.drombler.acp.core.docking.spi.impl.ActivateDockableAction;
 import org.drombler.commons.client.util.MnemonicUtils;
 import org.drombler.commons.client.util.ResourceBundleUtils;
 import org.osgi.framework.Bundle;
@@ -25,14 +27,19 @@ import org.osgi.framework.Bundle;
 /**
  *
  * @author puce
+ * @param <D>
  */
-public class ViewDockingDescriptor extends AbstractDockableDockingDescriptor {
+public class ViewDockingDescriptor<D> extends AbstractDockableDockingDescriptor<D> {
 
     private String displayName;
     private int position;
-    private ActionDescriptor activateDockableActionDescriptor;
+    private ActionDescriptor<ActivateDockableAction<D>> activateDockableActionDescriptor;
     private MenuEntryDescriptor activateDockableMenuEntryDescriptor;
     private ResourceBundle resourceBundle;
+
+    public ViewDockingDescriptor(Class<D> dockableClass) {
+        super(dockableClass);
+    }
 
     /**
      * @return the displayName
@@ -65,20 +72,23 @@ public class ViewDockingDescriptor extends AbstractDockableDockingDescriptor {
     /**
      * @return the activateDockableActionDescriptor
      */
-    public ActionDescriptor getActivateDockableActionDescriptor() {
+    public ActionDescriptor<?> getActivateDockableActionDescriptor() {
         return activateDockableActionDescriptor;
     }
 
-    /**
-     * @param activateDockableActionDescriptor the activateDockableActionDescriptor to set
-     */
-    public void setActivateDockableActionDescriptor(ActionDescriptor activateDockableActionDescriptor) {
-        this.activateDockableActionDescriptor = activateDockableActionDescriptor;
+    public void setDockable(D dockable) {
+        this.activateDockableActionDescriptor.setListener(new ActivateDockableAction<>(dockable));
     }
 
-    public static ViewDockingDescriptor createViewDockingDescriptor(ViewDockingType docking, Bundle bundle) throws
+    public static ViewDockingDescriptor<?> createViewDockingDescriptor(ViewDockingType docking, Bundle bundle) throws
             ClassNotFoundException, InstantiationException, IllegalAccessException {
-        ViewDockingDescriptor dockingDescriptor = new ViewDockingDescriptor();
+        final Class<?> dockableClass = bundle.loadClass(StringUtils.stripToNull(docking.getDockableClass()));
+        return createViewDockingDescriptor(docking, dockableClass, bundle);
+    }
+
+    private static <D> ViewDockingDescriptor<D> createViewDockingDescriptor(ViewDockingType docking,
+            Class<D> dockableClass, Bundle bundle) throws ClassNotFoundException {
+        ViewDockingDescriptor<D> dockingDescriptor = new ViewDockingDescriptor<>(dockableClass);
 
         DockingDescriptorUtils.configureDockingDescriptor(dockingDescriptor, docking, bundle);
         dockingDescriptor.setResourceBundle(ResourceBundleUtils.getResourceBundle(dockingDescriptor.getDockableClass(),
@@ -87,8 +97,8 @@ public class ViewDockingDescriptor extends AbstractDockableDockingDescriptor {
                 getResourceBundle());
         dockingDescriptor.setDisplayName(MnemonicUtils.removeMnemonicChar(displayName));
         dockingDescriptor.setPosition(docking.getPosition());
-        dockingDescriptor.setActivateDockableActionDescriptor(createActivateDockableActionDescriptor(dockingDescriptor,
-                displayName, docking.getAccelerator()));
+        dockingDescriptor.activateDockableActionDescriptor = createActivateDockableActionDescriptor(dockingDescriptor,
+                displayName, docking.getAccelerator());
         dockingDescriptor.setActivateDockableMenuEntryDescriptor(new MenuEntryDescriptor(dockingDescriptor.getId(),
                 getWindowPath(docking), docking.getMenuEntry().getPosition()));
         return dockingDescriptor;
@@ -103,14 +113,15 @@ public class ViewDockingDescriptor extends AbstractDockableDockingDescriptor {
         return sb.toString();
     }
 
-    private static ActionDescriptor createActivateDockableActionDescriptor(ViewDockingDescriptor dockingDescriptor,
-            String displayName, String accelerator) {
-        ActionDescriptor actionDescriptor = new ActionDescriptor();
+    private static <D> ActionDescriptor<ActivateDockableAction<D>> createActivateDockableActionDescriptor(
+            ViewDockingDescriptor<D> dockingDescriptor, String displayName, String accelerator) {
+        ActionDescriptor<ActivateDockableAction<D>> actionDescriptor
+                = new ActionDescriptor<>((Class<ActivateDockableAction<D>>) (Class<?>) ActivateDockableAction.class,
+                        dockingDescriptor.getResourceLoader());
         actionDescriptor.setId(dockingDescriptor.getId());
         actionDescriptor.setDisplayName(displayName);
         actionDescriptor.setAccelerator(accelerator);
         actionDescriptor.setIcon(dockingDescriptor.getIcon());
-        actionDescriptor.setResourceLoader(dockingDescriptor.getResourceLoader());
 //        actionDescriptor.setListener(new ActivateDockableAction(dockingDescriptor.getDockable()));
         return actionDescriptor;
     }

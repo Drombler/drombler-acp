@@ -27,13 +27,13 @@ import org.drombler.acp.core.docking.spi.DockingAreaContainer;
 import org.drombler.acp.core.docking.spi.DockingAreaContainerDockingAreaEvent;
 import org.drombler.acp.core.docking.spi.DockingAreaContainerListener;
 import org.drombler.acp.core.docking.spi.ViewDockingDescriptor;
+import org.drombler.commons.context.ContextInjector;
 import org.drombler.commons.docking.DockableData;
 import org.drombler.commons.docking.DockableDataManager;
 import org.drombler.commons.docking.DockableEntry;
 import org.drombler.commons.docking.DockablePreferences;
 import org.drombler.commons.docking.DockablePreferencesManager;
 import org.drombler.commons.docking.DockingInjector;
-import org.drombler.commons.context.ContextInjector;
 import org.osgi.framework.BundleContext;
 
 /**
@@ -43,7 +43,7 @@ import org.osgi.framework.BundleContext;
     // access only on the application thread
 public class ViewDockingManager<D, DATA extends DockableData, E extends DockableEntry<D>> implements AutoCloseable {
 
-    private final Map<String, List<UnresolvedEntry<ViewDockingDescriptor>>> unresolvedDockingDescriptorsAreaId = new HashMap<>();
+    private final Map<String, List<UnresolvedEntry<ViewDockingDescriptor<? extends D>>>> unresolvedDockingDescriptorsAreaId = new HashMap<>();
     private final DockingAreaListener<D, E> dockingAreaListener = new DockingAreaListener<>();
     private final DockableFactory<D> dockableFactory;
     private final DockableDataFactory<DATA> dockableDataFactory;
@@ -77,9 +77,9 @@ public class ViewDockingManager<D, DATA extends DockableData, E extends Dockable
      * @param dockingDescriptor
      * @param context
      */
-    public void addDockable(final ViewDockingDescriptor dockingDescriptor,
+    public <T extends D> void addDockable(final ViewDockingDescriptor<T> dockingDescriptor,
             final BundleContext context) {
-        final D dockable = dockableFactory.createDockable(dockingDescriptor);
+        final T dockable = dockableFactory.createDockable(dockingDescriptor);
         if (dockable != null) {
             final DATA dockableData = dockableDataFactory.createDockableData(dockingDescriptor);
             dockableDataManager.registerDockableData(dockable, dockableData);
@@ -90,8 +90,7 @@ public class ViewDockingManager<D, DATA extends DockableData, E extends Dockable
             final DockablePreferences dockablePreferences = dockablePreferencesManager.getDockablePreferences(
                     dockable);
             if (dockingAreaContainer.addDockable(dockableEntryFactory.createDockableEntry(dockable, dockablePreferences))) {
-                dockingDescriptor.getActivateDockableActionDescriptor().setListener(new ActivateDockableAction<>(
-                        dockable));
+                dockingDescriptor.setDockable(dockable);
                 context.registerService(ActionDescriptor.class,
                         dockingDescriptor.getActivateDockableActionDescriptor(), null);
                 context.registerService(MenuEntryDescriptor.class,
@@ -109,7 +108,7 @@ public class ViewDockingManager<D, DATA extends DockableData, E extends Dockable
 
     private void resolveUnresolvedDockables(String areaId) {
         if (unresolvedDockingDescriptorsAreaId.containsKey(areaId)) {
-            unresolvedDockingDescriptorsAreaId.get(areaId).forEach((unresolvedEntry)
+            unresolvedDockingDescriptorsAreaId.get(areaId).forEach(unresolvedEntry
                     -> addDockable(unresolvedEntry.getEntry(), unresolvedEntry.getContext()));
         }
     }

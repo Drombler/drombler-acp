@@ -14,6 +14,7 @@
  */
 package org.drombler.acp.core.action.spi;
 
+import org.apache.commons.lang3.StringUtils;
 import org.drombler.acp.core.action.jaxb.ActionType;
 import org.drombler.commons.context.ContextInjector;
 import org.osgi.framework.Bundle;
@@ -22,16 +23,29 @@ import org.softsmithy.lib.util.ResourceLoader;
 /**
  *
  * @author puce
+ * @param <T> the listener type
  */
-public class ActionDescriptor {
+public class ActionDescriptor<T> {
 
     public static String ID_KEY = "id";
+
+    private final Class<T> listenerType;
+
     private String id;
     private String displayName;
     private String accelerator;
     private String icon;
-    private Object listener;
-    private ResourceLoader resourceLoader;
+    private T listener;
+    private final ResourceLoader resourceLoader;
+
+    public ActionDescriptor(Class<T> listenerType) {
+        this(listenerType, new ResourceLoader(listenerType));
+    }
+
+    public ActionDescriptor(Class<T> listenerType, ResourceLoader resourceLoader) {
+        this.listenerType = listenerType;
+        this.resourceLoader = resourceLoader;
+    }
 
     /**
      * @return the id
@@ -89,29 +103,39 @@ public class ActionDescriptor {
         this.icon = icon;
     }
 
-    public Object getListener() {
+    public T getListener() {
         return listener;
     }
 
     /**
      * @param listener the listener to set
      */
-    public void setListener(Object listener) {
+    public void setListener(T listener) {
         this.listener = listener;
+    }
+
+    /**
+     * @return the listenerType
+     */
+    public Class<T> getListenerType() {
+        return listenerType;
     }
 
     public ResourceLoader getResourceLoader() {
         return resourceLoader;
     }
 
-    public void setResourceLoader(ResourceLoader resourceLoader) {
-        this.resourceLoader = resourceLoader;
+    public static ActionDescriptor<?> createActionDescriptor(ActionType actionType, Bundle bundle,
+            ContextInjector contextInjector) throws ClassNotFoundException, InstantiationException,
+            IllegalAccessException {
+        Class<?> actionListenerClass = bundle.loadClass(StringUtils.stripToNull(actionType.getListenerClass()));
+        return createActionDescriptor(actionListenerClass, actionType, bundle, contextInjector);
     }
 
-    public static ActionDescriptor createActionDescriptor(ActionType actionType, Bundle bundle,
-            ContextInjector contextInjector)
-            throws ClassNotFoundException, InstantiationException, IllegalAccessException {
-        ActionDescriptor actionDescriptor = new ActionDescriptor();
+    private static <T> ActionDescriptor<T> createActionDescriptor(Class<T> actionListenerClass, ActionType actionType,
+            Bundle bundle, ContextInjector contextInjector) throws ClassNotFoundException, InstantiationException,
+            IllegalAccessException {
+        ActionDescriptor<T> actionDescriptor = new ActionDescriptor<>(actionListenerClass);
         ActionDescriptorUtils.configureActionDescriptor(actionDescriptor, actionType, bundle, contextInjector);
         return actionDescriptor;
     }

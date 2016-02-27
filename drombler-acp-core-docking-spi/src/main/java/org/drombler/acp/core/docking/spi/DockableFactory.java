@@ -17,9 +17,9 @@ package org.drombler.acp.core.docking.spi;
 /**
  *
  * @author puce
- * @param <T>
+ * @param <T> the GUI toolkit specific base type of the Dockables
  */
 public interface DockableFactory<T> {
 
-    T createDockable(ViewDockingDescriptor dockingDescriptor);
+    <D extends T> D createDockable(ViewDockingDescriptor<D> dockingDescriptor);
 }
