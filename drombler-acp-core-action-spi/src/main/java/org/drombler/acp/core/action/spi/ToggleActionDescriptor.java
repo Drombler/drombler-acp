@@ -19,15 +19,21 @@ import org.drombler.acp.core.action.jaxb.ActionType;
 import org.drombler.acp.core.action.jaxb.ToggleActionType;
 import org.drombler.commons.context.ContextInjector;
 import org.osgi.framework.Bundle;
+import org.softsmithy.lib.util.ResourceLoader;
 
 /**
  *
  * @author puce
+ * @param <T> the listener type
  */
 public class ToggleActionDescriptor<T> extends ActionDescriptor<T> { // TODO: extend CheckActionDescriptor or ActionDescriptor? ToggleActionListener extends CheckActionListener...
 
     public ToggleActionDescriptor(Class<T> actionListenerClass) {
         super(actionListenerClass);
+    }
+
+    public ToggleActionDescriptor(Class<T> listenerType, ResourceLoader resourceLoader) {
+        super(listenerType, resourceLoader);
     }
 
     public static ToggleActionDescriptor<?> createToggleActionDescriptor(
