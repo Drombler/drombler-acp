@@ -21,9 +21,9 @@ package org.drombler.acp.core.docking.spi;
  */
 public interface DockableDataFactory<DATA> {
 
-    DATA createDockableData(ViewDockingDescriptor dockingDescriptor);
+    DATA createDockableData(ViewDockingDescriptor<?> dockingDescriptor);
 
-    DATA createDockableData(EditorDockingDescriptor dockingDescriptor);
+    DATA createDockableData(EditorDockingDescriptor<?> dockingDescriptor);
 
     DATA copyDockableData(DATA dockableData);
 }

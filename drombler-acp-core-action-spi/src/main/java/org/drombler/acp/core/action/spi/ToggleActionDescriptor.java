@@ -14,6 +14,8 @@
  */
 package org.drombler.acp.core.action.spi;
 
+import org.apache.commons.lang3.StringUtils;
+import org.drombler.acp.core.action.jaxb.ActionType;
 import org.drombler.acp.core.action.jaxb.ToggleActionType;
 import org.drombler.commons.context.ContextInjector;
 import org.osgi.framework.Bundle;
@@ -22,12 +24,23 @@ import org.osgi.framework.Bundle;
  *
  * @author puce
  */
-public class ToggleActionDescriptor extends ActionDescriptor { // TODO: extend CheckActionDescriptor or ActionDescriptor? ToggleActionListener extends CheckActionListener...
+public class ToggleActionDescriptor<T> extends ActionDescriptor<T> { // TODO: extend CheckActionDescriptor or ActionDescriptor? ToggleActionListener extends CheckActionListener...
 
-    public static ToggleActionDescriptor createToggleActionDescriptor(ToggleActionType actionType, Bundle bundle,
-            ContextInjector contextInjector)
-            throws ClassNotFoundException, InstantiationException, IllegalAccessException {
-        ToggleActionDescriptor actionDescriptor = new ToggleActionDescriptor();
+    public ToggleActionDescriptor(Class<T> actionListenerClass) {
+        super(actionListenerClass);
+    }
+
+    public static ToggleActionDescriptor<?> createToggleActionDescriptor(
+            ToggleActionType actionType, Bundle bundle, ContextInjector contextInjector) throws
+            ClassNotFoundException, InstantiationException, IllegalAccessException {
+        Class<?> actionListenerClass = bundle.loadClass(StringUtils.stripToNull(actionType.getListenerClass()));
+        return createToggleActionDescriptor(actionListenerClass, actionType, bundle, contextInjector);
+    }
+
+    private static <T> ToggleActionDescriptor<T> createToggleActionDescriptor(Class<T> actionListenerClass,
+            ActionType actionType, Bundle bundle, ContextInjector contextInjector) throws ClassNotFoundException,
+            InstantiationException, IllegalAccessException {
+        ToggleActionDescriptor<T> actionDescriptor = new ToggleActionDescriptor<>(actionListenerClass);
         ActionDescriptorUtils.configureActionDescriptor(actionDescriptor, actionType, bundle, contextInjector);
         return actionDescriptor;
     }
