@@ -44,13 +44,13 @@ public class EditorDockingHandler<D, DATA extends DockableData, E extends Dockab
 
     private static final Logger LOG = LoggerFactory.getLogger(EditorDockingHandler.class);
 
-    private final List<EditorDockingDescriptor> unresolvedDockingDescriptors = new ArrayList<>();
+    private final List<EditorDockingDescriptor<?>> unresolvedDockingDescriptors = new ArrayList<>();
 
-    protected void bindEditorDockingDescriptor(EditorDockingDescriptor dockingDescriptor) {
+    protected void bindEditorDockingDescriptor(EditorDockingDescriptor<?> dockingDescriptor) {
         resolveDockingDescriptor(dockingDescriptor);
     }
 
-    protected void unbindEditorDockingDescriptor(EditorDockingDescriptor dockingDescriptor) {
+    protected void unbindEditorDockingDescriptor(EditorDockingDescriptor<?> dockingDescriptor) {
     }
 
     @Activate
@@ -66,7 +66,7 @@ public class EditorDockingHandler<D, DATA extends DockableData, E extends Dockab
     protected void resolveDockingsType(DockingsType dockingsType, Bundle bundle, BundleContext context) {
         dockingsType.getEditorDocking().forEach(dockingType -> {
             try {
-                EditorDockingDescriptor dockingDescriptor = EditorDockingDescriptor.createEditorDockingDescriptor(
+                EditorDockingDescriptor<?> dockingDescriptor = EditorDockingDescriptor.createEditorDockingDescriptor(
                         dockingType, bundle);
                 // TODO: register EditorDockingDescriptor as service? Omit resolveDockingDescriptor?
                 resolveDockingDescriptor(dockingDescriptor);
@@ -76,7 +76,7 @@ public class EditorDockingHandler<D, DATA extends DockableData, E extends Dockab
         });
     }
 
-    private void resolveDockingDescriptor(EditorDockingDescriptor dockingDescriptor) {
+    private void resolveDockingDescriptor(EditorDockingDescriptor<?> dockingDescriptor) {
         if (isInitialized()) {
             DATA dockableData = getDockableDataFactory().createDockableData(dockingDescriptor);
             registerClassDockableData(dockingDescriptor.getDockableClass(), dockableData);
@@ -89,7 +89,6 @@ public class EditorDockingHandler<D, DATA extends DockableData, E extends Dockab
     }
 
     private void resolveUnresolvedDockables() {
-        unresolvedDockingDescriptors.forEach(unresolvedDockingDescriptor
-                -> resolveDockingDescriptor(unresolvedDockingDescriptor));
+        unresolvedDockingDescriptors.forEach(this::resolveDockingDescriptor);
     }
 }

@@ -31,7 +31,7 @@ public class ToolBarDescriptor implements Positionable {
     private String displayName;
     private int position;
     private boolean visible;
-    private ToggleActionDescriptor showToolBarActionDescriptor;
+    private ToggleActionDescriptor<?> showToolBarActionDescriptor;
     private ToggleMenuEntryDescriptor showToolBarCheckMenuEntryDescriptor;
 
     public String getId() {
@@ -93,29 +93,33 @@ public class ToolBarDescriptor implements Positionable {
                 toolBarType.getDisplayName(), bundle));
         toolBarDescriptor.setPosition(toolBarType.getPosition());
         toolBarDescriptor.setVisible(toolBarType.isVisible());
-        ToggleActionDescriptor actionDescriptor = createShowToolBarActionDescriptor(toolBarDescriptor, toolBarContainer);
+        ToggleActionDescriptor<ShowToolBarAction<T, B>> actionDescriptor = createShowToolBarActionDescriptor(
+                toolBarDescriptor,
+                toolBarContainer);
         toolBarDescriptor.setShowToolBarActionDescriptor(actionDescriptor);
         toolBarDescriptor.setShowToolBarCheckMenuEntryDescriptor(new ToggleMenuEntryDescriptor(actionDescriptor.getId(),
                 "View/Toolbars", toolBarType.getPosition()));
         return toolBarDescriptor;
     }
 
-    private static <T, B> ToggleActionDescriptor createShowToolBarActionDescriptor(ToolBarDescriptor toolBarDescriptor, ToolBarContainer<T, B> toolBarContainer) {
-        ToggleActionDescriptor actionDescriptor = new ToggleActionDescriptor();
+    private static <T, B> ToggleActionDescriptor<ShowToolBarAction<T, B>> createShowToolBarActionDescriptor(
+            ToolBarDescriptor toolBarDescriptor, ToolBarContainer<T, B> toolBarContainer) {
+        ToggleActionDescriptor<ShowToolBarAction<T, B>> actionDescriptor = new ToggleActionDescriptor<>(
+                (Class<ShowToolBarAction<T, B>>) (Class<?>) ShowToolBarAction.class);
         actionDescriptor.setId(ShowToolBarAction.class.getName() + "#" + toolBarDescriptor.getId()); // TODO: ok?
         actionDescriptor.setDisplayName(toolBarDescriptor.getDisplayName());
         actionDescriptor.setListener(new ShowToolBarAction<>(toolBarDescriptor.getId(), toolBarContainer));
         return actionDescriptor;
     }
 
-    public ToggleActionDescriptor getShowToolBarActionDescriptor() {
+    public ToggleActionDescriptor<?> getShowToolBarActionDescriptor() {
         return showToolBarActionDescriptor;
     }
 
     /**
      * @param showToolBarActionDescriptor the showToolBarActionDescriptor to set
      */
-    public void setShowToolBarActionDescriptor(ToggleActionDescriptor showToolBarActionDescriptor) {
+    public void setShowToolBarActionDescriptor(ToggleActionDescriptor<?> showToolBarActionDescriptor) {
         this.showToolBarActionDescriptor = showToolBarActionDescriptor;
     }
 
