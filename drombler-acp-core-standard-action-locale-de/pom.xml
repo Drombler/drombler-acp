@@ -86,7 +86,7 @@ Contributor(s): .
     <dependencies>
         <dependency>
             <groupId>org.drombler.acp</groupId>
-            <artifactId>drombler-acp-core-action</artifactId>
+            <artifactId>drombler-acp-core-standard-action</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>
