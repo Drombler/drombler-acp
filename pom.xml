@@ -65,10 +65,13 @@ Contributor(s): .
         <module>drombler-acp-core-action</module>
         <module>drombler-acp-core-action-spi</module>
         <module>drombler-acp-core-data</module>
+        <module>drombler-acp-core-data-spi</module>
         <module>drombler-acp-core-docking</module>
         <module>drombler-acp-core-docking-spi</module>
         <module>drombler-acp-core-docking-spi-locale-de</module>
         <module>drombler-acp-core-standard-action</module>
+        <module>drombler-acp-core-standard-action-data-file-i18n-de</module>
+        <module>drombler-acp-core-standard-action-data-file</module>
         <module>drombler-acp-core-standard-action-locale-de</module>
         <module>drombler-acp-core-standard-docking</module>
         <module>drombler-acp-locale-all</module>
@@ -105,6 +108,11 @@ Contributor(s): .
             </dependency>
             <dependency>
                 <groupId>${project.groupId}</groupId>
+                <artifactId>drombler-acp-core-data-spi</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
                 <artifactId>drombler-acp-core-docking</artifactId>
                 <version>${project.version}</version>
             </dependency>
@@ -121,6 +129,16 @@ Contributor(s): .
             <dependency>
                 <groupId>${project.groupId}</groupId>
                 <artifactId>drombler-acp-core-standard-action</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>drombler-acp-core-standard-action-data-file</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>drombler-acp-core-standard-action-data-file-i18n-de</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>

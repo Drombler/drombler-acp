@@ -15,19 +15,19 @@ Contributor(s): .
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-  
     <parent>
         <groupId>org.drombler.acp</groupId>
         <artifactId>drombler-acp-parent</artifactId>
         <version>0.8-SNAPSHOT</version>
         <relativePath>../drombler-acp-parent/pom.xml</relativePath>
     </parent>
-    <artifactId>drombler-acp-locale-de</artifactId>
-    <packaging>pom</packaging>
 
-    <name>Drombler ACP - Locale - German</name>
-    <description>L10n (German) of Drombler ACP.</description>
-    <inceptionYear>2012</inceptionYear>
+    <artifactId>drombler-acp-core-standard-action-data-file-i18n-de</artifactId>
+    <packaging>bundle</packaging>
+
+    <name>Drombler ACP - Core - Standard - Action - Data - File - I18N - German</name>
+    <description>L10n (German) for the standard core Actions.</description>
+    <inceptionYear>2016</inceptionYear>
     <!-- required for Javadoc (apidocs) linking -->
     <url>http://www.drombler.org/DromblerACP/${project.version}/docs/site</url>
 
@@ -35,16 +35,16 @@ Contributor(s): .
         <connection>${scm.connection}</connection>
         <developerConnection>${scm.developerConnection}</developerConnection>
         <url>${scm.url}</url>
-      <tag>HEAD</tag>
-  </scm>
+        <tag>HEAD</tag>
+    </scm>
+  
+    <distributionManagement>
+        <site>
+            <id>github</id>
+            <url>${distributionManagement.parent.url}/${project.artifactId}/</url>
+        </site>
+    </distributionManagement>
 
-  <distributionManagement>
-      <site>
-          <id>github</id>
-          <url>${distributionManagement.parent.url}/${project.artifactId}/</url>
-      </site>
-  </distributionManagement>
-    
     <properties>
         <scm.connection>${scm.parent.connection}</scm.connection>
         <scm.developerConnection>${scm.parent.developerConnection}</scm.developerConnection>
@@ -55,21 +55,38 @@ Contributor(s): .
     <prerequisites>
         <maven>${maven.version}</maven>
     </prerequisites>
-       
+    
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>maven-bundle-plugin</artifactId>
+                <extensions>true</extensions>
+                <configuration>
+                    <instructions>
+                        <Fragment-Host>org.drombler.acp.drombler-acp-core-standard-action-data-file;bundle-version=${drombler.acp.osgi.version.clean}</Fragment-Host>
+                    </instructions>
+                    <versions>
+                        <drombler.acp.osgi.version.clean>${project.version}</drombler.acp.osgi.version.clean>
+                    </versions>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>cleanVersions</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+   
     <dependencies>
         <dependency>
             <groupId>org.drombler.acp</groupId>
-            <artifactId>drombler-acp-core-docking-spi-locale-de</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.drombler.acp</groupId>
-            <artifactId>drombler-acp-core-standard-action-locale-de</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.drombler.acp</groupId>
-            <artifactId>drombler-acp-core-standard-action-data-file-i18n-de</artifactId>
+            <artifactId>drombler-acp-core-standard-action</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>

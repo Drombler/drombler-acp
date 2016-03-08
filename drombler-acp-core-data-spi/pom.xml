@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.drombler.acp</groupId>
+        <artifactId>drombler-acp-parent</artifactId>
+        <version>0.8-SNAPSHOT</version>
+        <relativePath>../drombler-acp-parent/pom.xml</relativePath>
+    </parent>
+
+    <artifactId>drombler-acp-core-data-spi</artifactId>
+    <packaging>bundle</packaging>
+
+    <name>Drombler ACP - Core - Data - SPI</name>
+
+    <description>Declarative data support for Drombler ACP.</description>
+    <inceptionYear>2016</inceptionYear>
+    <!-- required for Javadoc (apidocs) linking -->
+    <url>http://www.drombler.org/DromblerACP/${project.version}/docs/site</url>
+    
+    <scm>
+        <connection>${scm.connection}</connection>
+        <developerConnection>${scm.developerConnection}</developerConnection>
+        <url>${scm.url}</url>
+        <tag>HEAD</tag>
+    </scm>
+    
+    <distributionManagement>
+        <site>
+            <id>github</id>
+            <url>${distributionManagement.parent.url}/${project.artifactId}/</url>
+        </site>
+    </distributionManagement>
+
+    <properties>
+        <scm.connection>${scm.parent.connection}</scm.connection>
+        <scm.developerConnection>${scm.parent.developerConnection}</scm.developerConnection>
+        <scm.url>${scm.parent.url}</scm.url>
+        <!--  Doesn't work!?  Error: javac: invalid flag: -Xlint:all -proc:none -->
+        <!--        <java.compiler.compilerArgument>-Xlint:all -proc:none</java.compiler.compilerArgument>-->
+        <java.compiler.compilerArgument>-proc:none</java.compiler.compilerArgument>
+    </properties>
+
+    <!-- Not inherited!?? -->
+    <prerequisites>
+        <maven>${maven.version}</maven>
+    </prerequisites>
+    
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>maven-bundle-plugin</artifactId>
+                <extensions>true</extensions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>maven-scr-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>generate-scr-scrdescriptor</id>
+                        <goals>
+                            <goal>scr</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+    <dependencies>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>drombler-acp-core-data</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>drombler-acp-startup-main</artifactId>
+            <version>${project.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.softsmithy.lib</groupId>
+            <artifactId>softsmithy-lib-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.osgi</groupId>
+            <artifactId>org.osgi.compendium</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.felix</groupId>
+            <artifactId>org.apache.felix.scr.annotations</artifactId>
+            <!-- only needed during compile-time -->
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.felix</groupId>
+            <artifactId>org.apache.felix.scr</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+    </dependencies>
+
+</project>

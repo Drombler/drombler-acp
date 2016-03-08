@@ -17,17 +17,34 @@ package org.drombler.acp.core.data;
 import java.nio.file.Path;
 import java.util.Locale;
 
+public abstract class AbstractPathHandler {
 
+    private Path path;
 
-public abstract class AbstractPathData {
-    private final Path path;
+    public AbstractPathHandler() {
+        this(null);
+    }
 
-    public AbstractPathData(Path path) {
+    public AbstractPathHandler(Path path) {
         this.path = path;
     }
 
     public String getDisplayString(Locale inLocale) {
-        return path.getFileName().toString();
+        return getPath() != null ? getPath().getFileName().toString() : "???";
+    }
+
+    /**
+     * @return the path
+     */
+    public Path getPath() {
+        return path;
+    }
+
+    /**
+     * @param path the path to set
+     */
+    public void setPath(Path path) {
+        this.path = path;
     }
 
 }
