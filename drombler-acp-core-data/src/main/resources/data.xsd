@@ -17,15 +17,15 @@ Contributor(s): .
         xmlns:tns="http://www.drombler.org/schema/acp/data" elementFormDefault="qualified" 
         version="${project.version}">
 
-    <element name="fileTypeHandlers">
+    <element name="documentHandlers">
         <complexType>
             <sequence>
-                <element name="fileTypeHandler" type="tns:FileTypeHandlerType" minOccurs="0" maxOccurs="unbounded" />
+                <element name="documentHandler" type="tns:DocumentHandlerType" minOccurs="0" maxOccurs="unbounded" />
             </sequence>
         </complexType>
     </element>
 
-    <complexType name="FileTypeHandlerType">
+    <complexType name="DocumentHandlerType">
         <sequence>
             <element name="mimeType" type="string" />
             <element name="displayName" type="string" />

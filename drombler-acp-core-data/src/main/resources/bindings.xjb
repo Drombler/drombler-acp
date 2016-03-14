@@ -17,8 +17,8 @@ Contributor(s): .
               xmlns:jxb="http://java.sun.com/xml/ns/jaxb"
               xmlns:xs="http://www.w3.org/2001/XMLSchema">
     <jxb:bindings schemaLocation="data.xsd" node="/xs:schema">
-        <jxb:bindings  node="//xs:element[@name='fileTypeHandlers']">
-            <jxb:class name="FileTypeHandlersType"/>
+        <jxb:bindings  node="//xs:element[@name='documentHandlers']">
+            <jxb:class name="DocumentHandlersType"/>
         </jxb:bindings> 
     </jxb:bindings>
 </jxb:bindings>

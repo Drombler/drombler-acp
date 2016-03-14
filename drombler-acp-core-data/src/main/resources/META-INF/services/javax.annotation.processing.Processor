@@ -10,4 +10,4 @@
 # Copyright 2015 Drombler.org. All Rights Reserved.
 #
 # Contributor(s): .
-org.drombler.acp.core.data.impl.FileTypeHandlerAnnotationProcessor
+org.drombler.acp.core.data.impl.DocumentHandlerAnnotationProcessor

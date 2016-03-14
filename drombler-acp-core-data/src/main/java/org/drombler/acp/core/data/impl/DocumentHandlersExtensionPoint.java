@@ -17,7 +17,7 @@ package org.drombler.acp.core.data.impl;
 import org.apache.felix.scr.annotations.Component;
 import org.apache.felix.scr.annotations.Service;
 import org.drombler.acp.core.application.ExtensionPoint;
-import org.drombler.acp.core.data.jaxb.FileTypeHandlersType;
+import org.drombler.acp.core.data.jaxb.DocumentHandlersType;
 
 /**
  *
@@ -25,22 +25,11 @@ import org.drombler.acp.core.data.jaxb.FileTypeHandlersType;
  */
 @Component
 @Service
-public class FileTypeHandlersExtensionPoint implements ExtensionPoint<FileTypeHandlersType> {
+public class DocumentHandlersExtensionPoint implements ExtensionPoint<DocumentHandlersType> {
 
-//    private final List<ActionsType> actionsList = new ArrayList<>();
     @Override
-    public Class<FileTypeHandlersType> getJAXBRootClass() {
-        return FileTypeHandlersType.class;
+    public Class<DocumentHandlersType> getJAXBRootClass() {
+        return DocumentHandlersType.class;
     }
-
-//    @Override
-//    public void addingExtension(Bundle bundle, BundleEvent event, ActionsType extension) {
-//        actionsList.add(extension);
-//    }
-//
-//    @Override
-//    public void removedExtension(Bundle bundle, BundleEvent event, ActionsType extension) {
-//        actionsList.remove(extension);
-//    }
     
 }

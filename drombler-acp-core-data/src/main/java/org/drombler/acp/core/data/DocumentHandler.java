@@ -18,14 +18,14 @@ package org.drombler.acp.core.data;
  *
  * @author puce
  */
-public @interface FileTypeHandler {
+public @interface DocumentHandler {
 
     String mimeType();
 
     /**
      * The text to be displayed, e.g. as the text for filters in file dialogs. If the value starts with '%' the rest of
-     * the     * value is interpreted as a property key and the value gets looked-up in the Bundle.properties file (or a locale
-     * specific derivation of this file), which has to be in the same package as the annotated data type.
+     * the value is interpreted as a property key and the value gets looked-up in the Bundle.properties file (or a
+     * locale * specific derivation of this file), which has to be in the same package as the annotated data type.
      *
      * @return the text to be displayed for this action
      */
