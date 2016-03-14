@@ -15,7 +15,7 @@
 package org.drombler.acp.core.data.spi;
 
 import org.apache.commons.lang3.StringUtils;
-import org.drombler.acp.core.data.jaxb.FileTypeHandlerType;
+import org.drombler.acp.core.data.jaxb.DocumentHandlerType;
 import org.drombler.commons.client.util.ResourceBundleUtils;
 import org.osgi.framework.Bundle;
 import org.softsmithy.lib.util.ResourceLoader;
@@ -24,12 +24,12 @@ import org.softsmithy.lib.util.ResourceLoader;
  *
  * @author puce
  */
-public class FileTypeHandlerDescriptor {
+public class DocumentHandlerDescriptor {
 
     private String mimeType;
     private String displayName;
     private String icon;
-    private Object handler;
+    private Object documentHandler;
     private ResourceLoader resourceLoader;
 
     /**
@@ -74,15 +74,15 @@ public class FileTypeHandlerDescriptor {
         this.icon = icon;
     }
 
-    public Object getHandler() {
-        return handler;
+    public Object getDocumentHandler() {
+        return documentHandler;
     }
 
     /**
-     * @param handler the handler to set
+     * @param documentHandler the documentHandler to set
      */
-    public void setHandler(Object handler) {
-        this.handler = handler;
+    public void setDocumentHandler(Object documentHandler) {
+        this.documentHandler = documentHandler;
     }
 
     public ResourceLoader getResourceLoader() {
@@ -93,19 +93,19 @@ public class FileTypeHandlerDescriptor {
         this.resourceLoader = resourceLoader;
     }
 
-    public static FileTypeHandlerDescriptor createFileTypeHandlerDescriptor(FileTypeHandlerType fileTypeHandlerType,
+    public static DocumentHandlerDescriptor createFileTypeHandlerDescriptor(DocumentHandlerType documentHandlerType,
             Bundle bundle)
             throws ClassNotFoundException, InstantiationException, IllegalAccessException {
-        Class<?> handlerClass = bundle.loadClass(StringUtils.stripToNull(fileTypeHandlerType.getHandlerClass()));
-        FileTypeHandlerDescriptor fileTypeHandlerDescriptor = new FileTypeHandlerDescriptor();
-        fileTypeHandlerDescriptor.setMimeType(StringUtils.stripToNull(fileTypeHandlerType.getMimeType()));
+        Class<?> handlerClass = bundle.loadClass(StringUtils.stripToNull(documentHandlerType.getHandlerClass()));
+        DocumentHandlerDescriptor fileTypeHandlerDescriptor = new DocumentHandlerDescriptor();
+        fileTypeHandlerDescriptor.setMimeType(StringUtils.stripToNull(documentHandlerType.getMimeType()));
         fileTypeHandlerDescriptor.setDisplayName(ResourceBundleUtils.getPackageResourceStringPrefixed(handlerClass,
-                fileTypeHandlerType.getDisplayName()));
-        fileTypeHandlerDescriptor.setIcon(StringUtils.stripToNull(fileTypeHandlerType.getIcon()));
+                documentHandlerType.getDisplayName()));
+        fileTypeHandlerDescriptor.setIcon(StringUtils.stripToNull(documentHandlerType.getIcon()));
         fileTypeHandlerDescriptor.setResourceLoader(new ResourceLoader(handlerClass));
         Object handler = handlerClass.newInstance();
-//        contextInjector.inject(handler);
-        fileTypeHandlerDescriptor.setHandler(handler);
+//        contextInjector.inject(documentHandler);
+        fileTypeHandlerDescriptor.setDocumentHandler(handler);
         return fileTypeHandlerDescriptor;
     }
 }
