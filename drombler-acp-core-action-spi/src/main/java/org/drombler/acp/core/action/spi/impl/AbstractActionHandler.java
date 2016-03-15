@@ -16,14 +16,12 @@ package org.drombler.acp.core.action.spi.impl;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Executor;
 import org.apache.felix.scr.annotations.Reference;
 import org.apache.felix.scr.annotations.ReferenceCardinality;
 import org.apache.felix.scr.annotations.ReferencePolicy;
 import org.apache.felix.scr.annotations.References;
 import org.drombler.acp.core.action.jaxb.ActionsType;
 import org.drombler.acp.core.action.spi.ActionRegistry;
-import org.drombler.acp.startup.main.ApplicationExecutorProvider;
 import org.drombler.commons.context.ActiveContextProvider;
 import org.drombler.commons.context.ApplicationContextProvider;
 import org.drombler.commons.context.ContextInjector;
@@ -39,8 +37,7 @@ import org.slf4j.LoggerFactory;
  */
 @References({
     @Reference(name = "actionsType", referenceInterface = ActionsType.class,
-            cardinality = ReferenceCardinality.OPTIONAL_MULTIPLE, policy = ReferencePolicy.DYNAMIC),
-    @Reference(name = "applicationExecutorProvider", referenceInterface = ApplicationExecutorProvider.class)
+            cardinality = ReferenceCardinality.OPTIONAL_MULTIPLE, policy = ReferencePolicy.DYNAMIC)
 })
 public abstract class AbstractActionHandler<A, D> {
 
@@ -50,7 +47,6 @@ public abstract class AbstractActionHandler<A, D> {
     private ActiveContextProvider activeContextProvider;
     @Reference
     private ApplicationContextProvider applicationContextProvider;
-    private Executor applicationExecutor;
     private ContextInjector contextInjector;
     private final ActionRegistry actionRegistry = new ActionRegistry();
     private final List<UnresolvedEntry<A>> unresolvedActions = new ArrayList<>();
@@ -82,14 +78,6 @@ public abstract class AbstractActionHandler<A, D> {
         // TODO
     }
 
-    protected void bindApplicationExecutorProvider(ApplicationExecutorProvider applicationExecutorProvider) {
-        applicationExecutor = applicationExecutorProvider.getApplicationExecutor();
-    }
-
-    protected void unbindApplicationExecutorProvider(ApplicationExecutorProvider applicationExecutorProvider) {
-        applicationExecutor = null;
-    }
-
     protected void activate(ComponentContext context) {
         contextInjector = new ContextInjector(activeContextProvider, applicationContextProvider);
         resolveUnresolvedItems();
@@ -99,8 +87,7 @@ public abstract class AbstractActionHandler<A, D> {
     }
 
     protected boolean isInitialized() {
-        return activeContextProvider != null && applicationContextProvider != null && getContextInjector() != null
-                && applicationExecutor != null;
+        return activeContextProvider != null && applicationContextProvider != null && getContextInjector() != null;
     }
 
     protected abstract void registerActions(ActionsType actionType, BundleContext context);
@@ -120,14 +107,12 @@ public abstract class AbstractActionHandler<A, D> {
 
     protected void registerActionType(final A actionType, final BundleContext context) {
         if (isInitialized()) {
-            applicationExecutor.execute(() -> {
-                try {
-                    D actionDescriptor = createActionDescriptor(actionType, context);
-                    registerActionDescriptor(actionDescriptor, context);
-                } catch (ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
-                    LOG.error(ex.getMessage(), ex);
-                }
-            });
+            try {
+                D actionDescriptor = createActionDescriptor(actionType, context);
+                registerActionDescriptor(actionDescriptor, context);
+            } catch (ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
+                LOG.error(ex.getMessage(), ex);
+            }
         } else {
             unresolvedActions.add(new UnresolvedEntry<>(actionType, context));
         }
