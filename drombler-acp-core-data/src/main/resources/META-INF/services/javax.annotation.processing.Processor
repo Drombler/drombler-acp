@@ -11,3 +11,4 @@
 #
 # Contributor(s): .
 org.drombler.acp.core.data.impl.DocumentHandlerAnnotationProcessor
+org.drombler.acp.core.data.impl.FileExtensionAnnotationProcessor

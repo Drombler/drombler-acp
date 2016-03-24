@@ -24,13 +24,31 @@ Contributor(s): .
             </sequence>
         </complexType>
     </element>
+    
+    <element name="fileExtensions">
+        <complexType>
+            <sequence>
+                <element name="fileExtension" type="tns:FileExtensionType" minOccurs="0" maxOccurs="unbounded" />
+            </sequence>
+        </complexType>
+    </element>
 
     <complexType name="DocumentHandlerType">
         <sequence>
             <element name="mimeType" type="string" />
-            <element name="displayName" type="string" />
             <element name="icon" type="string" minOccurs="0" />
             <element name="handlerClass" type="string"/>
+        </sequence>
+    </complexType>
+    
+    <complexType name="FileExtensionType">
+        <sequence>
+            <element name="displayName" type="string" />
+            <element name="mimeType" type="string" />
+            <sequence>
+                <element name="fileExtension" type="string" maxOccurs="unbounded"/>
+            </sequence>
+            <element name="package" type="string"/>
         </sequence>
     </complexType>
     

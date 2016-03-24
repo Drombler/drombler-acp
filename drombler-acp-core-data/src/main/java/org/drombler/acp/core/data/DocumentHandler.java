@@ -14,22 +14,22 @@
  */
 package org.drombler.acp.core.data;
 
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
 /**
  *
  * @author puce
  */
+@Documented
+@Retention(RetentionPolicy.SOURCE)
+@Target(ElementType.TYPE)
 public @interface DocumentHandler {
 
     String mimeType();
-
-    /**
-     * The text to be displayed, e.g. as the text for filters in file dialogs. If the value starts with '%' the rest of
-     * the value is interpreted as a property key and the value gets looked-up in the Bundle.properties file (or a
-     * locale * specific derivation of this file), which has to be in the same package as the annotated data type.
-     *
-     * @return the text to be displayed for this action
-     */
-    String displayName();
 
     /**
      * The icon name pattern to resolve the icons to be used for this file type handler.

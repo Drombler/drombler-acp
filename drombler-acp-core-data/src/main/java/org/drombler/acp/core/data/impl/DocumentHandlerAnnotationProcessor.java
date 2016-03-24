@@ -65,16 +65,13 @@ public class DocumentHandlerAnnotationProcessor extends AbstractApplicationAnnot
         init(element);
 
         DocumentHandlerType documentTypeHandler = new DocumentHandlerType();
-        configureFileTypeHandler(documentTypeHandler, documentTypeHandlerAnnotation.mimeType(),
-                documentTypeHandlerAnnotation.displayName(), documentTypeHandlerAnnotation.icon(), element);
+        configureDocumentTypeHandler(documentTypeHandler, documentTypeHandlerAnnotation.mimeType(), documentTypeHandlerAnnotation.icon(), element);
         documentHandlers.getDocumentHandler().add(documentTypeHandler);
     }
 
-    private void configureFileTypeHandler(DocumentHandlerType documentHandler, String mimeType,
-            String displayName,
+    private void configureDocumentTypeHandler(DocumentHandlerType documentHandler, String mimeType,
             String icon, Element element) {
         documentHandler.setMimeType(StringUtils.stripToNull(mimeType));
-        documentHandler.setDisplayName(StringUtils.stripToNull(displayName));
         documentHandler.setIcon(StringUtils.stripToNull(icon));
         documentHandler.setHandlerClass(element.asType().toString());
     }
