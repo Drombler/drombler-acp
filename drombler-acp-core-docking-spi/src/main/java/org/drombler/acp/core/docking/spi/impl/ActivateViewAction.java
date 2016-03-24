@@ -21,17 +21,17 @@ import org.drombler.commons.action.AbstractActionListener;
  *
  * @author puce
  */
-public class ActivateDockableAction<D> extends AbstractActionListener<Object> {
+public class ActivateViewAction<D> extends AbstractActionListener<Object> {
 
-    private final D dockable;
+    private final D view;
 
-    public ActivateDockableAction(D dockable) {
-        this.dockable = dockable;
+    public ActivateViewAction(D view) {
+        this.view = view;
     }
 
     @Override
     public void onAction(Object event) {
-        Dockables.open(dockable);
+        Dockables.openView(view);
 //        dockable.requestActive();
     }
 }

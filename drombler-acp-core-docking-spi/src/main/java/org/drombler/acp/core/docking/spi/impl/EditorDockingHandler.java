@@ -23,7 +23,10 @@ import org.apache.felix.scr.annotations.Reference;
 import org.apache.felix.scr.annotations.ReferenceCardinality;
 import org.apache.felix.scr.annotations.ReferencePolicy;
 import org.drombler.acp.core.docking.jaxb.DockingsType;
+import org.drombler.acp.core.docking.spi.DockingAreaContainerDockingAreaEvent;
+import org.drombler.acp.core.docking.spi.DockingAreaContainerListener;
 import org.drombler.acp.core.docking.spi.EditorDockingDescriptor;
+import org.drombler.acp.core.docking.spi.EditorRegistry;
 import org.drombler.commons.docking.DockableData;
 import org.drombler.commons.docking.DockableEntry;
 import org.drombler.commons.docking.DockablePreferences;
@@ -44,9 +47,13 @@ public class EditorDockingHandler<D, DATA extends DockableData, E extends Dockab
 
     private static final Logger LOG = LoggerFactory.getLogger(EditorDockingHandler.class);
 
-    private final List<EditorDockingDescriptor<?>> unresolvedDockingDescriptors = new ArrayList<>();
+    private final List<EditorDockingDescriptor<? extends D>> unresolvedDockingDescriptors = new ArrayList<>();
+    private final DockingAreaListener<D, E> dockingAreaListener = new DockingAreaListener<>();
 
-    protected void bindEditorDockingDescriptor(EditorDockingDescriptor<?> dockingDescriptor) {
+    @Reference
+    private EditorRegistry<D> editorRegistry;
+
+    protected void bindEditorDockingDescriptor(EditorDockingDescriptor<? extends D> dockingDescriptor) {
         resolveDockingDescriptor(dockingDescriptor);
     }
 
@@ -55,6 +62,7 @@ public class EditorDockingHandler<D, DATA extends DockableData, E extends Dockab
 
     @Activate
     protected void activate(ComponentContext context) {
+        getDockingAreaContainerProvider().getDockingAreaContainer().addDockingAreaContainerListener(dockingAreaListener);
         resolveUnresolvedDockables();
     }
 
@@ -63,11 +71,17 @@ public class EditorDockingHandler<D, DATA extends DockableData, E extends Dockab
     }
 
     @Override
+    protected boolean isInitialized() {
+        return super.isInitialized()
+                && getDockingAreaContainerProvider().getDockingAreaContainer().getDefaultEditorAreaId() != null;
+    }
+
+    @Override
     protected void resolveDockingsType(DockingsType dockingsType, Bundle bundle, BundleContext context) {
         dockingsType.getEditorDocking().forEach(dockingType -> {
             try {
-                EditorDockingDescriptor<?> dockingDescriptor = EditorDockingDescriptor.createEditorDockingDescriptor(
-                        dockingType, bundle);
+                EditorDockingDescriptor<? extends D> dockingDescriptor
+                        = (EditorDockingDescriptor<? extends D>) EditorDockingDescriptor.createEditorDockingDescriptor(dockingType, bundle);
                 // TODO: register EditorDockingDescriptor as service? Omit resolveDockingDescriptor?
                 resolveDockingDescriptor(dockingDescriptor);
             } catch (Exception ex) {
@@ -76,12 +90,14 @@ public class EditorDockingHandler<D, DATA extends DockableData, E extends Dockab
         });
     }
 
-    private void resolveDockingDescriptor(EditorDockingDescriptor<?> dockingDescriptor) {
+    private void resolveDockingDescriptor(EditorDockingDescriptor<? extends D> dockingDescriptor) {
         if (isInitialized()) {
-            DATA dockableData = getDockableDataFactory().createDockableData(dockingDescriptor);
-            registerClassDockableData(dockingDescriptor.getDockableClass(), dockableData);
-
-            DockablePreferences dockablePreferences = createDockablePreferences(dockingDescriptor.getAreaId(), 0);
+            editorRegistry.registerEditorClass(dockingDescriptor.getContentType(), dockingDescriptor.getDockableClass());
+//            DATA dockableData = getDockableDataFactory().createDockableData(dockingDescriptor);
+//            registerClassDockableData(dockingDescriptor.getDockableClass(), dockableData);
+//
+            String defaultEditorAreaId = getDockingAreaContainerProvider().getDockingAreaContainer().getDefaultEditorAreaId();
+            DockablePreferences dockablePreferences = createDockablePreferences(defaultEditorAreaId, 0);
             registerDefaultDockablePreferences(dockingDescriptor.getDockableClass(), dockablePreferences);
         } else {
             unresolvedDockingDescriptors.add(dockingDescriptor);
@@ -89,6 +105,32 @@ public class EditorDockingHandler<D, DATA extends DockableData, E extends Dockab
     }
 
     private void resolveUnresolvedDockables() {
-        unresolvedDockingDescriptors.forEach(this::resolveDockingDescriptor);
+        List<EditorDockingDescriptor<? extends D>> unresolvedDockingDescriptorsCopy = new ArrayList<>(unresolvedDockingDescriptors);
+        unresolvedDockingDescriptors.clear();
+        unresolvedDockingDescriptorsCopy.forEach(this::resolveDockingDescriptor);
+    }
+
+    private class DockingAreaListener<D, E extends DockableEntry<D>> implements DockingAreaContainerListener<D, E> {
+
+        /**
+         * This method gets called from the application thread!
+         *
+         * @param event
+         */
+        @Override
+        public void dockingAreaAdded(DockingAreaContainerDockingAreaEvent<D, E> event) {
+            resolveUnresolvedDockables();
+        }
+
+        /**
+         * This method gets called from the application thread!
+         *
+         * @param event
+         */
+        @Override
+        public void dockingAreaRemoved(DockingAreaContainerDockingAreaEvent<D, E> event) {
+            // TODO: ???
+        }
+
     }
 }

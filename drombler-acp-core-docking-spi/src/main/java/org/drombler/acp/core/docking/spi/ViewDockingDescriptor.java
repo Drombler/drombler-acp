@@ -19,10 +19,11 @@ import org.apache.commons.lang3.StringUtils;
 import org.drombler.acp.core.action.spi.ActionDescriptor;
 import org.drombler.acp.core.action.spi.MenuEntryDescriptor;
 import org.drombler.acp.core.docking.jaxb.ViewDockingType;
-import org.drombler.acp.core.docking.spi.impl.ActivateDockableAction;
+import org.drombler.acp.core.docking.spi.impl.ActivateViewAction;
 import org.drombler.commons.client.util.MnemonicUtils;
 import org.drombler.commons.client.util.ResourceBundleUtils;
 import org.osgi.framework.Bundle;
+import org.softsmithy.lib.util.ResourceLoader;
 
 /**
  *
@@ -33,12 +34,48 @@ public class ViewDockingDescriptor<D> extends AbstractDockableDockingDescriptor<
 
     private String displayName;
     private int position;
-    private ActionDescriptor<ActivateDockableAction<D>> activateDockableActionDescriptor;
+    private ActionDescriptor<ActivateViewAction<D>> activateDockableActionDescriptor;
     private MenuEntryDescriptor activateDockableMenuEntryDescriptor;
     private ResourceBundle resourceBundle;
+    private final ResourceLoader resourceLoader;
+    private String areaId;
+    private String icon;
 
     public ViewDockingDescriptor(Class<D> dockableClass) {
         super(dockableClass);
+        this.resourceLoader = new ResourceLoader(dockableClass);
+    }
+
+    /**
+     * @return the icon
+     */
+    public String getIcon() {
+        return icon;
+    }
+
+    /**
+     * @param icon the icon to set
+     */
+    public void setIcon(String icon) {
+        this.icon = icon;
+    }
+
+    /**
+     * @return the areaId
+     */
+    public String getAreaId() {
+        return areaId;
+    }
+
+    /**
+     * @param areaId the areaId to set
+     */
+    public void setAreaId(String areaId) {
+        this.areaId = areaId;
+    }
+
+    public ResourceLoader getResourceLoader() {
+        return resourceLoader;
     }
 
     /**
@@ -77,7 +114,7 @@ public class ViewDockingDescriptor<D> extends AbstractDockableDockingDescriptor<
     }
 
     public void setDockable(D dockable) {
-        this.activateDockableActionDescriptor.setListener(new ActivateDockableAction<>(dockable));
+        this.activateDockableActionDescriptor.setListener(new ActivateViewAction<>(dockable));
     }
 
     public static ViewDockingDescriptor<?> createViewDockingDescriptor(ViewDockingType docking, Bundle bundle) throws
@@ -91,6 +128,8 @@ public class ViewDockingDescriptor<D> extends AbstractDockableDockingDescriptor<
         ViewDockingDescriptor<D> dockingDescriptor = new ViewDockingDescriptor<>(dockableClass);
 
         DockingDescriptorUtils.configureDockingDescriptor(dockingDescriptor, docking, bundle);
+        dockingDescriptor.setIcon(StringUtils.stripToNull(docking.getIcon()));
+        dockingDescriptor.setAreaId(StringUtils.stripToNull(docking.getAreaId()));
         dockingDescriptor.setResourceBundle(ResourceBundleUtils.getResourceBundle(dockingDescriptor.getDockableClass(),
                 docking.getResourceBundleBaseName(), docking.getDisplayName()));
         String displayName = ResourceBundleUtils.getResourceStringPrefixed(docking.getDisplayName(), dockingDescriptor.
@@ -113,16 +152,16 @@ public class ViewDockingDescriptor<D> extends AbstractDockableDockingDescriptor<
         return sb.toString();
     }
 
-    private static <D> ActionDescriptor<ActivateDockableAction<D>> createActivateDockableActionDescriptor(
+    private static <D> ActionDescriptor<ActivateViewAction<D>> createActivateDockableActionDescriptor(
             ViewDockingDescriptor<D> dockingDescriptor, String displayName, String accelerator) {
-        ActionDescriptor<ActivateDockableAction<D>> actionDescriptor
-                = new ActionDescriptor<>((Class<ActivateDockableAction<D>>) (Class<?>) ActivateDockableAction.class,
+        ActionDescriptor<ActivateViewAction<D>> actionDescriptor
+                = new ActionDescriptor<>((Class<ActivateViewAction<D>>) (Class<?>) ActivateViewAction.class,
                         dockingDescriptor.getResourceLoader());
         actionDescriptor.setId(dockingDescriptor.getId());
         actionDescriptor.setDisplayName(displayName);
         actionDescriptor.setAccelerator(accelerator);
         actionDescriptor.setIcon(dockingDescriptor.getIcon());
-//        actionDescriptor.setListener(new ActivateDockableAction(dockingDescriptor.getDockable()));
+//        actionDescriptor.setListener(new ActivateViewAction(dockingDescriptor.getDockable()));
         return actionDescriptor;
     }
 

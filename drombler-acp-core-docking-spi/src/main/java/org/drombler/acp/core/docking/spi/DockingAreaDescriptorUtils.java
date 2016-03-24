@@ -61,6 +61,7 @@ public class DockingAreaDescriptorUtils {
         dockingAreaDescriptor.setPermanent(dockingArea.isPermanent());
         dockingAreaDescriptor.setLayoutConstraints(LayoutConstraintsDescriptorUtils.createLayoutConstraintsDescriptor(
                 dockingArea.getLayoutConstraints()));
+        dockingAreaDescriptor.setAdHoc(false);
         return dockingAreaDescriptor;
     }
 }

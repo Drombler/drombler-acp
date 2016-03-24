@@ -84,6 +84,11 @@ Contributor(s): .
             <version>${project.version}</version>
             <scope>provided</scope>
         </dependency>
+        <!--        <dependency>
+            <groupId>org.drombler.acp</groupId>
+            <artifactId>drombler-acp-core-data-spi</artifactId>
+            <version>${project.version}</version>
+        </dependency>-->
         <dependency>
             <groupId>org.drombler.acp</groupId>
             <artifactId>drombler-acp-core-docking</artifactId>
@@ -141,6 +146,11 @@ Contributor(s): .
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.drombler.acp</groupId>
+            <artifactId>drombler-acp-core-data</artifactId>
+            <version>${project.version}</version>
         </dependency>
     </dependencies>
    
