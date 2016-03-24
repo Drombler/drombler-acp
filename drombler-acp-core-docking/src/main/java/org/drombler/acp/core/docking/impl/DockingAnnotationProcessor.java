@@ -23,6 +23,7 @@ import javax.annotation.processing.SupportedSourceVersion;
 import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
+import javax.lang.model.type.MirroredTypeException;
 import org.apache.commons.lang3.StringUtils;
 import org.drombler.acp.core.application.AbstractApplicationAnnotationProcessor;
 import org.drombler.acp.core.docking.DockingState;
@@ -69,20 +70,19 @@ public class DockingAnnotationProcessor extends AbstractApplicationAnnotationPro
 
     @Override
     protected boolean handleProcess(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
-        for (Element element : roundEnv.getElementsAnnotatedWith(ViewDocking.class)) {
+        roundEnv.getElementsAnnotatedWith(ViewDocking.class).forEach(element -> {
             ViewDocking dockingAnnotation = element.getAnnotation(ViewDocking.class);
             if (dockingAnnotation != null) {
                 registerViewDocking(dockingAnnotation, element);
             }
-        }
+        });
 
-        for (Element element : roundEnv.getElementsAnnotatedWith(EditorDocking.class)) {
+        roundEnv.getElementsAnnotatedWith(EditorDocking.class).forEach(element -> {
             EditorDocking dockingAnnotation = element.getAnnotation(EditorDocking.class);
             if (dockingAnnotation != null) {
                 registerEditorDocking(dockingAnnotation, element);
             }
-        }
-
+        });
 
         return false;
     }
@@ -91,9 +91,11 @@ public class DockingAnnotationProcessor extends AbstractApplicationAnnotationPro
         init(element);
 
         ViewDockingType docking = new ViewDockingType();
-        configureDocking(docking, element, dockingAnnotation.areaId(), dockingAnnotation.icon(),
-                dockingAnnotation.state());
+        configureDocking(docking, element);
 
+        docking.setAreaId(StringUtils.stripToNull(dockingAnnotation.areaId()));
+        docking.setIcon(StringUtils.stripToNull(dockingAnnotation.icon()));
+        docking.setState(DOCKING_STATES.get(dockingAnnotation.state()));
         docking.setPosition(dockingAnnotation.position());
 //        docking.setSingleton(dockingAnnotation.singleton());
         docking.setDisplayName(StringUtils.stripToNull(dockingAnnotation.displayName()));
@@ -108,12 +110,8 @@ public class DockingAnnotationProcessor extends AbstractApplicationAnnotationPro
         dockings.getViewDocking().add(docking);
     }
 
-    private void configureDocking(AbstractDockingType docking, Element element, String areaId, String icon,
-            DockingState dockingState) {
+    private void configureDocking(AbstractDockingType docking, Element element) {
         docking.setId(element.asType().toString());
-        docking.setAreaId(StringUtils.stripToNull(areaId));
-        docking.setIcon(StringUtils.stripToNull(icon));
-        docking.setState(DOCKING_STATES.get(dockingState));
         docking.setDockableClass(element.asType().toString());
     }
 
@@ -130,8 +128,12 @@ public class DockingAnnotationProcessor extends AbstractApplicationAnnotationPro
         init(element);
 
         EditorDockingType docking = new EditorDockingType();
-        configureDocking(docking, element, dockingAnnotation.areaId(), dockingAnnotation.icon(),
-                dockingAnnotation.state());
+        configureDocking(docking, element);
+        try {
+            dockingAnnotation.contentType();
+        } catch (MirroredTypeException ex) {
+            docking.setContentType(ex.getTypeMirror().toString());
+        }
         dockings.getEditorDocking().add(docking);
     }
 }
