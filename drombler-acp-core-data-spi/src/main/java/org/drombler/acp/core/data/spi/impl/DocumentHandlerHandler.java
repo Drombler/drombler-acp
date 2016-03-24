@@ -26,12 +26,12 @@ import org.apache.felix.scr.annotations.References;
 import org.drombler.acp.core.data.jaxb.DocumentHandlerType;
 import org.drombler.acp.core.data.jaxb.DocumentHandlersType;
 import org.drombler.acp.core.data.spi.DocumentHandlerDescriptor;
-import org.drombler.acp.core.data.spi.DocumentHandlerRegistry;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.component.ComponentContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.drombler.acp.core.data.spi.DocumentHandlerDescriptorRegistry;
 
 /**
  *
@@ -51,7 +51,7 @@ public class DocumentHandlerHandler {
     private final List<DocumentHandlerDescriptor> unresolvedDocumentHandlerDescriptors = new ArrayList<>();
 
     @Reference
-    private DocumentHandlerRegistry documentHandlersTypeRegistry;
+    private DocumentHandlerDescriptorRegistry documentHandlersTypeRegistry;
 
     protected void bindDocumentHandlersType(ServiceReference<DocumentHandlersType> serviceReference) {
         BundleContext context = serviceReference.getBundle().getBundleContext();
@@ -70,11 +70,11 @@ public class DocumentHandlerHandler {
     protected void unbindDocumentHandlerDescriptor(DocumentHandlerDescriptor handlerDescriptor) {
     }
 
-    protected void bindDocumentHandlerRegistry(DocumentHandlerRegistry documentHandlerRegistry) {
+    protected void bindDocumentHandlerRegistry(DocumentHandlerDescriptorRegistry documentHandlerRegistry) {
         this.documentHandlersTypeRegistry = documentHandlerRegistry;
     }
 
-    protected void unbindDocumentHandlerRegistry(DocumentHandlerRegistry documentHandlerRegistry) {
+    protected void unbindDocumentHandlerRegistry(DocumentHandlerDescriptorRegistry documentHandlerRegistry) {
         // TODO
     }
 
@@ -95,7 +95,7 @@ public class DocumentHandlerHandler {
     private void registerDocumentHandler(DocumentHandlerType documentHandlerType, BundleContext context) {
         try {
             // TODO: register DocumentHandlerDescriptor as service?
-            DocumentHandlerDescriptor documentHandlerDescriptor = DocumentHandlerDescriptor.createFileTypeHandlerDescriptor(
+            DocumentHandlerDescriptor documentHandlerDescriptor = DocumentHandlerDescriptor.createDocumentTypeHandlerDescriptor(
                     documentHandlerType, context.getBundle());
             resolveDocumentHandlerDescriptor(documentHandlerDescriptor);
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
@@ -117,7 +117,7 @@ public class DocumentHandlerHandler {
 
     private void resolveDocumentHandlerDescriptor(DocumentHandlerDescriptor handlerDescriptor) {
         if (isInitialized()) {
-            documentHandlersTypeRegistry.registerDocumentHandler(handlerDescriptor);
+            documentHandlersTypeRegistry.registerDocumentHandlerDescriptor(handlerDescriptor);
         } else {
             unresolvedDocumentHandlerDescriptors.add(handlerDescriptor);
         }

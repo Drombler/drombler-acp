@@ -16,7 +16,6 @@ package org.drombler.acp.core.data.spi;
 
 import org.apache.commons.lang3.StringUtils;
 import org.drombler.acp.core.data.jaxb.DocumentHandlerType;
-import org.drombler.commons.client.util.ResourceBundleUtils;
 import org.osgi.framework.Bundle;
 import org.softsmithy.lib.util.ResourceLoader;
 
@@ -27,7 +26,6 @@ import org.softsmithy.lib.util.ResourceLoader;
 public class DocumentHandlerDescriptor {
 
     private String mimeType;
-    private String displayName;
     private String icon;
     private Object documentHandler;
     private ResourceLoader resourceLoader;
@@ -44,20 +42,6 @@ public class DocumentHandlerDescriptor {
      */
     public void setMimeType(String mimeType) {
         this.mimeType = mimeType;
-    }
-
-    /**
-     * @return the displayName
-     */
-    public String getDisplayName() {
-        return displayName;
-    }
-
-    /**
-     * @param displayName the displayName to set
-     */
-    public void setDisplayName(String displayName) {
-        this.displayName = displayName;
     }
 
     /**
@@ -93,15 +77,13 @@ public class DocumentHandlerDescriptor {
         this.resourceLoader = resourceLoader;
     }
 
-    public static DocumentHandlerDescriptor createFileTypeHandlerDescriptor(DocumentHandlerType documentHandlerType,
+    public static DocumentHandlerDescriptor createDocumentTypeHandlerDescriptor(DocumentHandlerType documentHandler,
             Bundle bundle)
             throws ClassNotFoundException, InstantiationException, IllegalAccessException {
-        Class<?> handlerClass = bundle.loadClass(StringUtils.stripToNull(documentHandlerType.getHandlerClass()));
+        Class<?> handlerClass = bundle.loadClass(StringUtils.stripToNull(documentHandler.getHandlerClass()));
         DocumentHandlerDescriptor fileTypeHandlerDescriptor = new DocumentHandlerDescriptor();
-        fileTypeHandlerDescriptor.setMimeType(StringUtils.stripToNull(documentHandlerType.getMimeType()));
-        fileTypeHandlerDescriptor.setDisplayName(ResourceBundleUtils.getPackageResourceStringPrefixed(handlerClass,
-                documentHandlerType.getDisplayName()));
-        fileTypeHandlerDescriptor.setIcon(StringUtils.stripToNull(documentHandlerType.getIcon()));
+        fileTypeHandlerDescriptor.setMimeType(StringUtils.stripToNull(documentHandler.getMimeType()));
+        fileTypeHandlerDescriptor.setIcon(StringUtils.stripToNull(documentHandler.getIcon()));
         fileTypeHandlerDescriptor.setResourceLoader(new ResourceLoader(handlerClass));
         Object handler = handlerClass.newInstance();
 //        contextInjector.inject(documentHandler);
