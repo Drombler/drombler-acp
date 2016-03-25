@@ -14,8 +14,9 @@
  */
 package org.drombler.acp.core.docking.spi;
 
-import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import org.drombler.acp.core.data.spi.DocumentHandlerDescriptor;
+import org.drombler.acp.core.data.spi.DocumentHandlerDescriptorRegistry;
 import org.drombler.commons.context.ActiveContextProvider;
 import org.drombler.commons.context.ApplicationContextProvider;
 import org.drombler.commons.context.ContextInjector;
@@ -77,7 +78,7 @@ public final class Dockables {
         bundleContext.ungetService(dockableEntryFactoryServiceReference);
     }
 
-    public static <D, E extends DockableEntry<D>> void openEditor(Object content) {
+    public static <D, E extends DockableEntry<D>, DATA extends DockableData> void openEditorForContent(Object content) {
         // TODO: cache ServiceReference? or even DockingAreaContainerProvider?
         // TODO: check if the code is safe, if the services disappear
         BundleContext bundleContext = FrameworkUtil.getBundle(Dockables.class).getBundleContext();
@@ -89,6 +90,27 @@ public final class Dockables {
         @SuppressWarnings("unchecked")
         DockablePreferencesManagerProvider<D> dockablePreferencesManagerProvider
                 = bundleContext.getService(dockablePreferencesManagerProviderServiceReference);
+
+        @SuppressWarnings("rawtypes")
+        ServiceReference<DocumentHandlerDescriptorRegistry> documentHandlerDescriptorRegistryServiceReference
+                = bundleContext.getServiceReference(DocumentHandlerDescriptorRegistry.class);
+        @SuppressWarnings("unchecked")
+        DocumentHandlerDescriptorRegistry documentHandlerDescriptorRegistry
+                = bundleContext.getService(documentHandlerDescriptorRegistryServiceReference);
+
+        @SuppressWarnings("rawtypes")
+        ServiceReference<DockableDataFactory> dockableDataFactoryServiceReference
+                = bundleContext.getServiceReference(DockableDataFactory.class);
+        @SuppressWarnings("unchecked")
+        DockableDataFactory<DATA> dockableDataFactory
+                = bundleContext.getService(dockableDataFactoryServiceReference);
+
+        @SuppressWarnings("rawtypes")
+        ServiceReference<DockableDataManagerProvider> dockableDataManagerProviderServiceReference
+                = bundleContext.getServiceReference(DockableDataManagerProvider.class);
+        @SuppressWarnings("unchecked")
+        DockableDataManagerProvider<D, DATA> dockableDataManagerProvider
+                = bundleContext.getService(dockableDataManagerProviderServiceReference);
 
         @SuppressWarnings("rawtypes")
         ServiceReference<DockingAreaContainerProvider> dockingAreaContainerProviderServiceReference
@@ -105,16 +127,21 @@ public final class Dockables {
                 = bundleContext.getService(dockableEntryFactoryServiceReference);
 
         @SuppressWarnings("rawtypes")
-        ServiceReference<EditorRegistry> editorRegistryServiceReference
-                = bundleContext.getServiceReference(EditorRegistry.class);
+        ServiceReference<EditorDockingDescriptorRegistry> editorRegistryServiceReference
+                = bundleContext.getServiceReference(EditorDockingDescriptorRegistry.class);
         @SuppressWarnings("unchecked")
-        EditorRegistry<D> editorRegistry
+        EditorDockingDescriptorRegistry<D> editorDockingDescriptorRegistry
                 = bundleContext.getService(editorRegistryServiceReference);
 
-        Class<? extends D> editorClass = editorRegistry.getEditorClass(content.getClass());
-        if (editorClass != null) {
+        EditorDockingDescriptor<? extends D> editorDockingDescriptor = editorDockingDescriptorRegistry.getEditorDockingDescriptor(content.getClass());
+        DocumentHandlerDescriptor<?> documentHandlerDescriptor = documentHandlerDescriptorRegistry.getDocumentHandlerDescriptor(content);
+        if (editorDockingDescriptor != null && documentHandlerDescriptor != null) {
             try {
-                D editor = createEditor(editorClass, content);
+                D editor = editorDockingDescriptor.createEditor(content);
+                DATA dockableData = dockableDataFactory.createDockableData(documentHandlerDescriptor.getIcon(), documentHandlerDescriptor.getResourceLoader());
+                dockableDataManagerProvider.getDockableDataManager().registerDockableData(editor, dockableData);
+
+                inject(editor);
 
                 dockingAreaContainerProvider.getDockingAreaContainer().addDockable(
                         dockableEntryFactory.createDockableEntry(editor,
@@ -122,19 +149,16 @@ public final class Dockables {
             } catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
                 LOG.error(ex.getMessage(), ex);
             }
+        } else {
+
         }
         bundleContext.ungetService(editorRegistryServiceReference);
         bundleContext.ungetService(dockingAreaContainerProviderServiceReference);
+        bundleContext.ungetService(dockableDataManagerProviderServiceReference);
+        bundleContext.ungetService(dockableDataFactoryServiceReference);
+        bundleContext.ungetService(documentHandlerDescriptorRegistryServiceReference);
         bundleContext.ungetService(dockablePreferencesManagerProviderServiceReference);
         bundleContext.ungetService(dockableEntryFactoryServiceReference);
-    }
-
-    private static <D> D createEditor(Class<? extends D> editorClass, Object content)
-            throws IllegalAccessException, SecurityException, InvocationTargetException, InstantiationException, IllegalArgumentException, NoSuchMethodException {
-        Constructor<? extends D> editorConstructor = editorClass.getConstructor(content.getClass());
-        D editor = editorConstructor.newInstance(content);
-        inject(editor);
-        return editor;
     }
 
     public static <D> void inject(D dockable) {
@@ -172,26 +196,25 @@ public final class Dockables {
         DockableDataManagerProvider<D, DATA> dockableDataManagerProvider
                 = bundleContext.getService(dockableDataManagerProviderServiceReference);
 
-        @SuppressWarnings("rawtypes")
-        ServiceReference<DockableDataFactory> dockableDataFactoryServiceReference
-                = bundleContext.getServiceReference(DockableDataFactory.class);
-        @SuppressWarnings("unchecked")
-        DockableDataFactory<DATA> dockableDataFactory
-                = bundleContext.getService(dockableDataFactoryServiceReference);
-
+//        @SuppressWarnings("rawtypes")
+//        ServiceReference<DockableDataFactory> dockableDataFactoryServiceReference
+//                = bundleContext.getServiceReference(DockableDataFactory.class);
+//        @SuppressWarnings("unchecked")
+//        DockableDataFactory<DATA> dockableDataFactory
+//                = bundleContext.getService(dockableDataFactoryServiceReference);
         final DockableDataManager<D, DATA> dockableDataManager = dockableDataManagerProvider.getDockableDataManager();
-        if (dockableDataManager.getDockableData(dockable) == null) {
-            DATA classDockableData = dockableDataManager.getClassDockableData(dockable);
-            if (classDockableData != null) {
-                DATA copyDockableData = dockableDataFactory.copyDockableData(classDockableData);
-                dockableDataManager.registerDockableData(dockable, copyDockableData);
-            }
-        }
+//        if (dockableDataManager.getDockableData(dockable) == null) {
+//            DATA classDockableData = dockableDataManager.getClassDockableData(dockable);
+//            if (classDockableData != null) {
+//                DATA copyDockableData = dockableDataFactory.copyDockableData(classDockableData);
+//                dockableDataManager.registerDockableData(dockable, copyDockableData);
+//            }
+//        }
 
         DockingInjector<D, DATA> dockingInjector = new DockingInjector<>(dockableDataManager);
         dockingInjector.inject(dockable);
 
-        bundleContext.ungetService(dockableDataFactoryServiceReference);
+//        bundleContext.ungetService(dockableDataFactoryServiceReference);
         bundleContext.ungetService(dockableDataManagerProviderServiceReference);
     }
 }

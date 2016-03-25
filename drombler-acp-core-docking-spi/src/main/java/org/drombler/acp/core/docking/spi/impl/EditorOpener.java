@@ -12,7 +12,7 @@ public class EditorOpener implements DataCapabilityProvider<Openable> {
 
     @Override
     public Openable getDataCapability(Object content) {
-        return () -> Dockables.openEditor(content);
+        return () -> Dockables.openEditorForContent(content);
     }
 
 }

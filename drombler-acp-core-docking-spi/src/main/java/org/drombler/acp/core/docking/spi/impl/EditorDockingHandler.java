@@ -26,7 +26,7 @@ import org.drombler.acp.core.docking.jaxb.DockingsType;
 import org.drombler.acp.core.docking.spi.DockingAreaContainerDockingAreaEvent;
 import org.drombler.acp.core.docking.spi.DockingAreaContainerListener;
 import org.drombler.acp.core.docking.spi.EditorDockingDescriptor;
-import org.drombler.acp.core.docking.spi.EditorRegistry;
+import org.drombler.acp.core.docking.spi.EditorDockingDescriptorRegistry;
 import org.drombler.commons.docking.DockableData;
 import org.drombler.commons.docking.DockableEntry;
 import org.drombler.commons.docking.DockablePreferences;
@@ -51,7 +51,7 @@ public class EditorDockingHandler<D, DATA extends DockableData, E extends Dockab
     private final DockingAreaListener<D, E> dockingAreaListener = new DockingAreaListener<>();
 
     @Reference
-    private EditorRegistry<D> editorRegistry;
+    private EditorDockingDescriptorRegistry<D> editorRegistry;
 
     protected void bindEditorDockingDescriptor(EditorDockingDescriptor<? extends D> dockingDescriptor) {
         resolveDockingDescriptor(dockingDescriptor);
@@ -92,7 +92,7 @@ public class EditorDockingHandler<D, DATA extends DockableData, E extends Dockab
 
     private void resolveDockingDescriptor(EditorDockingDescriptor<? extends D> dockingDescriptor) {
         if (isInitialized()) {
-            editorRegistry.registerEditorClass(dockingDescriptor.getContentType(), dockingDescriptor.getDockableClass());
+            editorRegistry.registerEditorDockingDescriptor(dockingDescriptor.getContentType(), dockingDescriptor);
 //            DATA dockableData = getDockableDataFactory().createDockableData(dockingDescriptor);
 //            registerClassDockableData(dockingDescriptor.getDockableClass(), dockableData);
 //

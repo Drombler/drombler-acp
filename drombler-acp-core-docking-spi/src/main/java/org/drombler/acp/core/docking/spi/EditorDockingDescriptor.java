@@ -14,6 +14,8 @@
  */
 package org.drombler.acp.core.docking.spi;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import org.apache.commons.lang3.StringUtils;
 import org.drombler.acp.core.docking.jaxb.EditorDockingType;
 import org.osgi.framework.Bundle;
@@ -21,6 +23,7 @@ import org.osgi.framework.Bundle;
 /**
  *
  * @author puce
+ * @param <D> the type of the dockable
  */
 public class EditorDockingDescriptor<D> extends AbstractDockableDockingDescriptor<D> {
 
@@ -54,4 +57,9 @@ public class EditorDockingDescriptor<D> extends AbstractDockableDockingDescripto
         return dockingDescriptor;
     }
 
+    public D createEditor(Object content)
+            throws IllegalAccessException, SecurityException, InvocationTargetException, InstantiationException, IllegalArgumentException, NoSuchMethodException {
+        Constructor<? extends D> editorConstructor = getDockableClass().getConstructor(content.getClass());
+        return editorConstructor.newInstance(content);
+    }
 }

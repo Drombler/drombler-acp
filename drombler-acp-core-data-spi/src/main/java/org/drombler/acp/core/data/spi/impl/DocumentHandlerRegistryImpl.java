@@ -16,16 +16,29 @@ import org.drombler.acp.core.data.spi.DocumentHandlerDescriptorRegistry;
 @Service
 public class DocumentHandlerRegistryImpl implements DocumentHandlerDescriptorRegistry {
 
-    private final Map<String, DocumentHandlerDescriptor> documentHandlerDescriptors = new HashMap<>();
+    private final Map<String, DocumentHandlerDescriptor<?>> mimeTypes = new HashMap<>();
+    private final Map<Class<?>, DocumentHandlerDescriptor<?>> documentHandlerClasses = new HashMap<>();
 
     @Override
-    public void registerDocumentHandlerDescriptor(DocumentHandlerDescriptor documentHandlerDescriptor) {
-        documentHandlerDescriptors.put(documentHandlerDescriptor.getMimeType().toLowerCase(), documentHandlerDescriptor);
+    public void registerDocumentHandlerDescriptor(DocumentHandlerDescriptor<?> documentHandlerDescriptor) {
+        mimeTypes.put(documentHandlerDescriptor.getMimeType().toLowerCase(), documentHandlerDescriptor);
+        documentHandlerClasses.put(documentHandlerDescriptor.getDocumentHandlerClass(), documentHandlerDescriptor);
     }
 
     @Override
-    public DocumentHandlerDescriptor getDocumentHandlerDescriptor(String mimeType) {
-        return documentHandlerDescriptors.get(mimeType.toLowerCase());
+    public void unregisterDocumentHandlerDescriptor(DocumentHandlerDescriptor<?> documentHandlerDescriptor) {
+        mimeTypes.remove(documentHandlerDescriptor.getMimeType().toLowerCase(), documentHandlerDescriptor);
+        documentHandlerClasses.remove(documentHandlerDescriptor.getDocumentHandlerClass(), documentHandlerDescriptor);
+    }
+
+    @Override
+    public DocumentHandlerDescriptor<?> getDocumentHandlerDescriptor(String mimeType) {
+        return mimeTypes.get(mimeType.toLowerCase());
+    }
+
+    @Override
+    public DocumentHandlerDescriptor<?> getDocumentHandlerDescriptor(Object documentHandler) {
+        return documentHandlerClasses.get(documentHandler.getClass());
     }
 
     @Override
@@ -37,4 +50,5 @@ public class DocumentHandlerRegistryImpl implements DocumentHandlerDescriptorReg
     public void unregisterListener() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+
 }

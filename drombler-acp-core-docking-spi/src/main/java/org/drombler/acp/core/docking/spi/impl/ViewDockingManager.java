@@ -40,7 +40,7 @@ import org.osgi.framework.BundleContext;
  *
  * @author puce
  */
-    // access only on the application thread
+// access only on the application thread
 public class ViewDockingManager<D, DATA extends DockableData, E extends DockableEntry<D>> implements AutoCloseable {
 
     private final Map<String, List<UnresolvedEntry<ViewDockingDescriptor<? extends D>>>> unresolvedDockingDescriptorsAreaId = new HashMap<>();
@@ -77,8 +77,7 @@ public class ViewDockingManager<D, DATA extends DockableData, E extends Dockable
      * @param dockingDescriptor
      * @param context
      */
-    public <T extends D> void addDockable(final ViewDockingDescriptor<T> dockingDescriptor,
-            final BundleContext context) {
+    public <T extends D> void addDockable(final ViewDockingDescriptor<T> dockingDescriptor, final BundleContext context) {
         final T dockable = dockableFactory.createDockable(dockingDescriptor);
         if (dockable != null) {
             final DATA dockableData = dockableDataFactory.createDockableData(dockingDescriptor);
@@ -87,8 +86,7 @@ public class ViewDockingManager<D, DATA extends DockableData, E extends Dockable
             contextInjector.inject(dockable);
             dockingInjector.inject(dockable);
 
-            final DockablePreferences dockablePreferences = dockablePreferencesManager.getDockablePreferences(
-                    dockable);
+            DockablePreferences dockablePreferences = dockablePreferencesManager.getDockablePreferences(dockable);
             if (dockingAreaContainer.addDockable(dockableEntryFactory.createDockableEntry(dockable, dockablePreferences))) {
                 dockingDescriptor.setDockable(dockable);
                 context.registerService(ActionDescriptor.class,
@@ -100,8 +98,7 @@ public class ViewDockingManager<D, DATA extends DockableData, E extends Dockable
                 if (!unresolvedDockingDescriptorsAreaId.containsKey(dockablePreferences.getAreaId())) {
                     unresolvedDockingDescriptorsAreaId.put(dockablePreferences.getAreaId(), new ArrayList<>());
                 }
-                unresolvedDockingDescriptorsAreaId.get(dockablePreferences.getAreaId()).add(new UnresolvedEntry<>(
-                        dockingDescriptor, context));
+                unresolvedDockingDescriptorsAreaId.get(dockablePreferences.getAreaId()).add(new UnresolvedEntry<>(dockingDescriptor, context));
             }
         }
     }

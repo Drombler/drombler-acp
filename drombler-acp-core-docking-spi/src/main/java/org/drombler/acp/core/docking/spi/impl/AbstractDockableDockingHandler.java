@@ -101,9 +101,9 @@ public abstract class AbstractDockableDockingHandler<D, DATA extends DockableDat
         getDockablePreferencesManager().registerDefaultDockablePreferences(dockableClass, dockablePreferences);
     }
 
-    protected void registerClassDockableData(Class<?> dockableClass, DATA dockableData) {
-        getDockableDataManager().registerClassDockableData(dockableClass, dockableData);
-    }
+//    protected void registerClassDockableData(Class<?> dockableClass, DATA dockableData) {
+//        getDockableDataManager().registerClassDockableData(dockableClass, dockableData);
+//    }
 
     protected DockablePreferencesManager<D> getDockablePreferencesManager() {
         return dockablePreferencesManagerProvider.getDockablePreferencesManager();

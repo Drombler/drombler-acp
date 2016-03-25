@@ -14,6 +14,9 @@
  */
 package org.drombler.acp.core.data.spi;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.nio.file.Path;
 import org.apache.commons.lang3.StringUtils;
 import org.drombler.acp.core.data.jaxb.DocumentHandlerType;
 import org.osgi.framework.Bundle;
@@ -23,11 +26,11 @@ import org.softsmithy.lib.util.ResourceLoader;
  *
  * @author puce
  */
-public class DocumentHandlerDescriptor {
+public class DocumentHandlerDescriptor<D> {
 
     private String mimeType;
     private String icon;
-    private Object documentHandler;
+    private Class<D> documentHandlerClass;
     private ResourceLoader resourceLoader;
 
     /**
@@ -58,15 +61,15 @@ public class DocumentHandlerDescriptor {
         this.icon = icon;
     }
 
-    public Object getDocumentHandler() {
-        return documentHandler;
+    public Class<D> getDocumentHandlerClass() {
+        return documentHandlerClass;
     }
 
     /**
-     * @param documentHandler the documentHandler to set
+     * @param documentHandlerClass the documentHandlerClass to set
      */
-    public void setDocumentHandler(Object documentHandler) {
-        this.documentHandler = documentHandler;
+    public void setDocumentHandlerClass(Class<D> documentHandlerClass) {
+        this.documentHandlerClass = documentHandlerClass;
     }
 
     public ResourceLoader getResourceLoader() {
@@ -77,17 +80,25 @@ public class DocumentHandlerDescriptor {
         this.resourceLoader = resourceLoader;
     }
 
-    public static DocumentHandlerDescriptor createDocumentTypeHandlerDescriptor(DocumentHandlerType documentHandler,
-            Bundle bundle)
+    public static DocumentHandlerDescriptor<?> createDocumentTypeHandlerDescriptor(DocumentHandlerType documentHandler, Bundle bundle)
             throws ClassNotFoundException, InstantiationException, IllegalAccessException {
         Class<?> handlerClass = bundle.loadClass(StringUtils.stripToNull(documentHandler.getHandlerClass()));
-        DocumentHandlerDescriptor fileTypeHandlerDescriptor = new DocumentHandlerDescriptor();
-        fileTypeHandlerDescriptor.setMimeType(StringUtils.stripToNull(documentHandler.getMimeType()));
-        fileTypeHandlerDescriptor.setIcon(StringUtils.stripToNull(documentHandler.getIcon()));
-        fileTypeHandlerDescriptor.setResourceLoader(new ResourceLoader(handlerClass));
-        Object handler = handlerClass.newInstance();
-//        contextInjector.inject(documentHandler);
-        fileTypeHandlerDescriptor.setDocumentHandler(handler);
-        return fileTypeHandlerDescriptor;
+        return createDocumentTypeHandlerDescriptor(documentHandler, handlerClass);
+    }
+
+    private static <D> DocumentHandlerDescriptor<D> createDocumentTypeHandlerDescriptor(DocumentHandlerType documentHandler,
+            Class<D> handlerClass) throws ClassNotFoundException {
+        DocumentHandlerDescriptor<D> documentHandlerDescriptor = new DocumentHandlerDescriptor<>();
+        documentHandlerDescriptor.setMimeType(StringUtils.stripToNull(documentHandler.getMimeType()));
+        documentHandlerDescriptor.setIcon(StringUtils.stripToNull(documentHandler.getIcon()));
+        documentHandlerDescriptor.setResourceLoader(new ResourceLoader(handlerClass));
+        documentHandlerDescriptor.setDocumentHandlerClass(handlerClass);
+        return documentHandlerDescriptor;
+    }
+
+    public D createDocumentHandler(Path filePath)
+            throws IllegalAccessException, SecurityException, InvocationTargetException, InstantiationException, IllegalArgumentException, NoSuchMethodException {
+        Constructor<? extends D> documentHandlerConstructor = getDocumentHandlerClass().getConstructor(Path.class);
+        return documentHandlerConstructor.newInstance(filePath);
     }
 }

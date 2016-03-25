@@ -27,5 +27,5 @@ public interface DockableDataFactory<DATA> {
 
     DATA createDockableData(String icon, ResourceLoader resourceLoader);
 
-    DATA copyDockableData(DATA dockableData);
+//    DATA copyDockableData(DATA dockableData);
 }
