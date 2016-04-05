@@ -23,6 +23,7 @@ import org.drombler.commons.context.ContextInjector;
 import org.drombler.commons.docking.DockableData;
 import org.drombler.commons.docking.DockableDataManager;
 import org.drombler.commons.docking.DockableEntry;
+import org.drombler.commons.docking.DockableKind;
 import org.drombler.commons.docking.DockingInjector;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
@@ -70,7 +71,7 @@ public final class Dockables {
                 = bundleContext.getService(dockableEntryFactoryServiceReference);
 
         dockingAreaContainerProvider.getDockingAreaContainer().addDockable(dockableEntryFactory.createDockableEntry(
-                dockable,
+                dockable, DockableKind.VIEW,
                 dockablePreferencesManagerProvider.getDockablePreferencesManager().getDockablePreferences(dockable)));
 
         bundleContext.ungetService(dockingAreaContainerProviderServiceReference);
@@ -144,7 +145,7 @@ public final class Dockables {
                 inject(editor);
 
                 dockingAreaContainerProvider.getDockingAreaContainer().addDockable(
-                        dockableEntryFactory.createDockableEntry(editor,
+                        dockableEntryFactory.createDockableEntry(editor, DockableKind.EDITOR,
                                 dockablePreferencesManagerProvider.getDockablePreferencesManager().getDockablePreferences(editor)));
             } catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
                 LOG.error(ex.getMessage(), ex);

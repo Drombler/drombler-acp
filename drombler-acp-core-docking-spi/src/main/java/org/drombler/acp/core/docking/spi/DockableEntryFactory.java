@@ -15,6 +15,7 @@
 package org.drombler.acp.core.docking.spi;
 
 import org.drombler.commons.docking.DockableEntry;
+import org.drombler.commons.docking.DockableKind;
 import org.drombler.commons.docking.DockablePreferences;
 
 /**
@@ -25,5 +26,5 @@ import org.drombler.commons.docking.DockablePreferences;
  */
 public interface DockableEntryFactory<D, E extends DockableEntry<D>> {
 
-    E createDockableEntry(D dockable, DockablePreferences dockablePreferences);
+    E createDockableEntry(D dockable, DockableKind kind, DockablePreferences dockablePreferences);
 }
