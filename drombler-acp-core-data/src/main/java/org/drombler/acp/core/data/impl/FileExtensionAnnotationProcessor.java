@@ -76,7 +76,7 @@ public class FileExtensionAnnotationProcessor extends AbstractApplicationAnnotat
         init(element);
 
         FileExtensionType fileExtension = new FileExtensionType();
-        configureFileExtension(fileExtension, fileExtensionAnnotation.displayName(), fileExtensionAnnotation.mimeType(),
+        configureFileExtension(fileExtension, fileExtensionAnnotation.mimeType(), fileExtensionAnnotation.displayName(),
                 fileExtensionAnnotation.fileExtensions(), element);
         fileExtensions.getFileExtension().add(fileExtension);
     }
