@@ -34,11 +34,11 @@ public class CommandLineArgs {
     public static CommandLineArgs parseCommandLineArgs(String[] args) {
         String userDir = null;
         boolean expectUserDir = false;
-        for (int i = 0; i < args.length; i++) {
-            if (args[i].equals(USER_DIR_SWITCH)) {
+        for (String arg : args) {
+            if (arg.equals(USER_DIR_SWITCH)) {
                 expectUserDir = true;
             } else if (expectUserDir) {
-                userDir = args[i];
+                userDir = arg;
                 expectUserDir = false;
             } else {
                 wrongArguments();
