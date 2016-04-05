@@ -14,23 +14,31 @@
  */
 package org.drombler.acp.core.docking.spi;
 
-import java.util.EventListener;
+import java.util.EventObject;
 import org.drombler.commons.docking.DockableEntry;
 
 /**
- * TODO: more methods might be added in future
  *
  * @author puce
  * @param <D>
  * @param <E>
  */
-public interface DockingAreaContainerListener<D, E extends DockableEntry<D>> extends EventListener {
+public class DockingAreaContainerDockableEvent<D, E extends DockableEntry<D>> extends EventObject {
 
-    void dockingAreaAdded(DockingAreaContainerDockingAreaEvent<D, E> event);
+    private static final long serialVersionUID = -888760518227930671L;
 
-    void dockingAreaRemoved(DockingAreaContainerDockingAreaEvent<D, E> event);
+    private final E dockableEntry;
 
-    void dockableAdded(DockingAreaContainerDockableEvent<D, E> event);
+    public DockingAreaContainerDockableEvent(DockingAreaContainer<D, E> source, E dockableEntry) {
+        super(source);
+        this.dockableEntry = dockableEntry;
+    }
 
-    void dockableRemoved(DockingAreaContainerDockableEvent<D, E> event);
+    /**
+     * @return the dockableEntry
+     */
+    public E getDockableEntry() {
+        return dockableEntry;
+    }
+
 }
