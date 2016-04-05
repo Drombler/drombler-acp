@@ -19,7 +19,6 @@ import org.apache.felix.scr.annotations.ReferenceCardinality;
 import org.apache.felix.scr.annotations.ReferencePolicy;
 import org.apache.felix.scr.annotations.References;
 import org.drombler.acp.core.docking.jaxb.DockingsType;
-import org.drombler.acp.core.docking.spi.DockableDataFactory;
 import org.drombler.acp.core.docking.spi.DockableDataManagerProvider;
 import org.drombler.acp.core.docking.spi.DockablePreferencesManagerProvider;
 import org.drombler.commons.docking.DockableData;
@@ -47,35 +46,20 @@ public abstract class AbstractDockableDockingHandler<D, DATA extends DockableDat
     @Reference
     private DockableDataManagerProvider<D, DATA> dockableDataManagerProvider;
 
-    @Reference
-    private DockableDataFactory<DATA> dockableDataFactory;
-
-    protected void bindDockablePreferencesManagerProvider(
-            DockablePreferencesManagerProvider<D> dockablePreferencesManagerProvider) {
+    protected void bindDockablePreferencesManagerProvider(DockablePreferencesManagerProvider<D> dockablePreferencesManagerProvider) {
         this.dockablePreferencesManagerProvider = dockablePreferencesManagerProvider;
     }
 
-    protected void unbindDockablePreferencesManagerProvider(
-            DockablePreferencesManagerProvider<D> dockablePreferencesManagerProvider) {
+    protected void unbindDockablePreferencesManagerProvider(DockablePreferencesManagerProvider<D> dockablePreferencesManagerProvider) {
         this.dockablePreferencesManagerProvider = null;
     }
 
-    protected void bindDockableDataManagerProvider(
-            DockableDataManagerProvider<D, DATA> dockableDataManagerProvider) {
+    protected void bindDockableDataManagerProvider(DockableDataManagerProvider<D, DATA> dockableDataManagerProvider) {
         this.dockableDataManagerProvider = dockableDataManagerProvider;
     }
 
-    protected void unbindDockableDataManagerProvider(
-            DockableDataManagerProvider<D, DATA> dockableDataManagerProvider) {
+    protected void unbindDockableDataManagerProvider(DockableDataManagerProvider<D, DATA> dockableDataManagerProvider) {
         this.dockableDataManagerProvider = null;
-    }
-
-    protected void bindDockableDataFactory(DockableDataFactory<DATA> dockableDataFactory) {
-        this.dockableDataFactory = dockableDataFactory;
-    }
-
-    protected void unbindDockableDataFactory(DockableDataFactory<D> dockableDataFactory) {
-        this.dockableDataFactory = null;
     }
 
     protected void bindDockingsType(ServiceReference<DockingsType> serviceReference) {
@@ -93,8 +77,7 @@ public abstract class AbstractDockableDockingHandler<D, DATA extends DockableDat
 
     @Override
     protected boolean isInitialized() {
-        return super.isInitialized() && dockablePreferencesManagerProvider != null
-                && dockableDataManagerProvider != null && dockableDataFactory != null;
+        return super.isInitialized() && dockablePreferencesManagerProvider != null && dockableDataManagerProvider != null;
     }
 
     protected void registerDefaultDockablePreferences(Class<?> dockableClass, DockablePreferences dockablePreferences) {
@@ -104,17 +87,12 @@ public abstract class AbstractDockableDockingHandler<D, DATA extends DockableDat
 //    protected void registerClassDockableData(Class<?> dockableClass, DATA dockableData) {
 //        getDockableDataManager().registerClassDockableData(dockableClass, dockableData);
 //    }
-
     protected DockablePreferencesManager<D> getDockablePreferencesManager() {
         return dockablePreferencesManagerProvider.getDockablePreferencesManager();
     }
 
     protected DockableDataManager<D, DATA> getDockableDataManager() {
         return dockableDataManagerProvider.getDockableDataManager();
-    }
-
-    protected DockableDataFactory<DATA> getDockableDataFactory() {
-        return dockableDataFactory;
     }
 
     protected DockablePreferences createDockablePreferences(String areaId, int position) {

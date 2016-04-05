@@ -24,6 +24,7 @@ import org.drombler.acp.core.docking.spi.DockableDataFactory;
 import org.drombler.acp.core.docking.spi.DockableEntryFactory;
 import org.drombler.acp.core.docking.spi.DockableFactory;
 import org.drombler.acp.core.docking.spi.DockingAreaContainer;
+import org.drombler.acp.core.docking.spi.DockingAreaContainerDockableEvent;
 import org.drombler.acp.core.docking.spi.DockingAreaContainerDockingAreaEvent;
 import org.drombler.acp.core.docking.spi.DockingAreaContainerListener;
 import org.drombler.acp.core.docking.spi.ViewDockingDescriptor;
@@ -31,6 +32,7 @@ import org.drombler.commons.context.ContextInjector;
 import org.drombler.commons.docking.DockableData;
 import org.drombler.commons.docking.DockableDataManager;
 import org.drombler.commons.docking.DockableEntry;
+import org.drombler.commons.docking.DockableKind;
 import org.drombler.commons.docking.DockablePreferences;
 import org.drombler.commons.docking.DockablePreferencesManager;
 import org.drombler.commons.docking.DockingInjector;
@@ -87,7 +89,7 @@ public class ViewDockingManager<D, DATA extends DockableData, E extends Dockable
             dockingInjector.inject(dockable);
 
             DockablePreferences dockablePreferences = dockablePreferencesManager.getDockablePreferences(dockable);
-            if (dockingAreaContainer.addDockable(dockableEntryFactory.createDockableEntry(dockable, dockablePreferences))) {
+            if (dockingAreaContainer.addDockable(dockableEntryFactory.createDockableEntry(dockable, DockableKind.VIEW, dockablePreferences))) {
                 dockingDescriptor.setDockable(dockable);
                 context.registerService(ActionDescriptor.class,
                         dockingDescriptor.getActivateDockableActionDescriptor(), null);
@@ -135,6 +137,16 @@ public class ViewDockingManager<D, DATA extends DockableData, E extends Dockable
         @Override
         public void dockingAreaRemoved(DockingAreaContainerDockingAreaEvent<D, E> event) {
             // TODO: ???
+        }
+
+        @Override
+        public void dockableAdded(DockingAreaContainerDockableEvent<D, E> event) {
+            // do nothing
+        }
+
+        @Override
+        public void dockableRemoved(DockingAreaContainerDockableEvent<D, E> event) {
+            // do nothing
         }
 
     }

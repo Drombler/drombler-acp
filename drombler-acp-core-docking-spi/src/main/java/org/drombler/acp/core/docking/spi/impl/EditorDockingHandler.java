@@ -23,12 +23,14 @@ import org.apache.felix.scr.annotations.Reference;
 import org.apache.felix.scr.annotations.ReferenceCardinality;
 import org.apache.felix.scr.annotations.ReferencePolicy;
 import org.drombler.acp.core.docking.jaxb.DockingsType;
+import org.drombler.acp.core.docking.spi.DockingAreaContainerDockableEvent;
 import org.drombler.acp.core.docking.spi.DockingAreaContainerDockingAreaEvent;
 import org.drombler.acp.core.docking.spi.DockingAreaContainerListener;
 import org.drombler.acp.core.docking.spi.EditorDockingDescriptor;
 import org.drombler.acp.core.docking.spi.EditorDockingDescriptorRegistry;
 import org.drombler.commons.docking.DockableData;
 import org.drombler.commons.docking.DockableEntry;
+import org.drombler.commons.docking.DockableKind;
 import org.drombler.commons.docking.DockablePreferences;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
@@ -48,7 +50,7 @@ public class EditorDockingHandler<D, DATA extends DockableData, E extends Dockab
     private static final Logger LOG = LoggerFactory.getLogger(EditorDockingHandler.class);
 
     private final List<EditorDockingDescriptor<? extends D>> unresolvedDockingDescriptors = new ArrayList<>();
-    private final DockingAreaListener<D, E> dockingAreaListener = new DockingAreaListener<>();
+    private final DockingAreaListener dockingAreaListener = new DockingAreaListener();
 
     @Reference
     private EditorDockingDescriptorRegistry<D> editorRegistry;
@@ -110,7 +112,7 @@ public class EditorDockingHandler<D, DATA extends DockableData, E extends Dockab
         unresolvedDockingDescriptorsCopy.forEach(this::resolveDockingDescriptor);
     }
 
-    private class DockingAreaListener<D, E extends DockableEntry<D>> implements DockingAreaContainerListener<D, E> {
+    private class DockingAreaListener implements DockingAreaContainerListener<D, E> {
 
         /**
          * This method gets called from the application thread!
@@ -130,6 +132,21 @@ public class EditorDockingHandler<D, DATA extends DockableData, E extends Dockab
         @Override
         public void dockingAreaRemoved(DockingAreaContainerDockingAreaEvent<D, E> event) {
             // TODO: ???
+        }
+
+        @Override
+        public void dockableAdded(DockingAreaContainerDockableEvent<D, E> event) {
+            // do nothing
+        }
+
+        @Override
+        public void dockableRemoved(DockingAreaContainerDockableEvent<D, E> event) {
+            // TODO: better place for this code?
+            if (event.getDockableEntry().getKind() == DockableKind.EDITOR) {
+                final D dockable = event.getDockableEntry().getDockable();
+                getDockableDataManager().unregisterDockableData(dockable);
+                getDockablePreferencesManager().unregisterDockablePreferences(dockable);
+            }
         }
 
     }

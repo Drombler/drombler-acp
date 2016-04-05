@@ -25,6 +25,7 @@ import org.apache.felix.scr.annotations.ReferenceCardinality;
 import org.apache.felix.scr.annotations.ReferencePolicy;
 import org.apache.felix.scr.annotations.References;
 import org.drombler.acp.core.docking.jaxb.DockingsType;
+import org.drombler.acp.core.docking.spi.DockableDataFactory;
 import org.drombler.acp.core.docking.spi.DockableEntryFactory;
 import org.drombler.acp.core.docking.spi.DockableFactory;
 import org.drombler.acp.core.docking.spi.ViewDockingDescriptor;
@@ -65,6 +66,8 @@ public class ViewDockingHandler<D, DATA extends DockableData, E extends Dockable
     private DockableFactory<D> dockableFactory;
     @Reference
     private DockableEntryFactory<D, E> dockableEntryFactory;
+    @Reference
+    private DockableDataFactory<DATA> dockableDataFactory;
     private Executor applicationExecutor;
     private ViewDockingManager<D, DATA, E> viewDockingManager;
     private final List<UnresolvedEntry<ViewDockingDescriptor<? extends D>>> unresolvedDockingDescriptors = new ArrayList<>();
@@ -118,9 +121,17 @@ public class ViewDockingHandler<D, DATA extends DockableData, E extends Dockable
     protected void unbindViewDockingDescriptor(ViewDockingDescriptor<?> dockingDescriptor) {
     }
 
+    protected void bindDockableDataFactory(DockableDataFactory<DATA> dockableDataFactory) {
+        this.dockableDataFactory = dockableDataFactory;
+    }
+
+    protected void unbindDockableDataFactory(DockableDataFactory<D> dockableDataFactory) {
+        this.dockableDataFactory = null;
+    }
+
     @Activate
     protected void activate(ComponentContext context) {
-        viewDockingManager = new ViewDockingManager<>(dockableFactory, getDockableDataFactory(), dockableEntryFactory,
+        viewDockingManager = new ViewDockingManager<>(dockableFactory, dockableDataFactory, dockableEntryFactory,
                 new ContextInjector(activeContextProvider, applicationContextProvider),
                 getDockingAreaContainerProvider().getDockingAreaContainer(), getDockableDataManager(),
                 getDockablePreferencesManager());
@@ -136,7 +147,8 @@ public class ViewDockingHandler<D, DATA extends DockableData, E extends Dockable
     @Override
     protected boolean isInitialized() {
         return super.isInitialized() && dockableFactory != null && dockableEntryFactory != null
-                && applicationExecutor != null && activeContextProvider != null && applicationContextProvider != null;
+                && applicationExecutor != null && activeContextProvider != null && applicationContextProvider != null
+                && dockableDataFactory != null;
     }
 
     @Override
@@ -179,8 +191,7 @@ public class ViewDockingHandler<D, DATA extends DockableData, E extends Dockable
     }
 
     private void registerDefaultDockablePreferences(ViewDockingDescriptor<?> dockingDescriptor) {
-        DockablePreferences dockablePreferences = createDockablePreferences(dockingDescriptor.
-                getAreaId(), dockingDescriptor.getPosition());
+        DockablePreferences dockablePreferences = createDockablePreferences(dockingDescriptor.getAreaId(), dockingDescriptor.getPosition());
         registerDefaultDockablePreferences(dockingDescriptor.getDockableClass(), dockablePreferences);
     }
 
