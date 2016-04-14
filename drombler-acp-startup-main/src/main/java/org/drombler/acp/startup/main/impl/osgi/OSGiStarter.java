@@ -22,6 +22,7 @@ import org.drombler.acp.startup.main.DromblerACPConfiguration;
 import org.drombler.acp.startup.main.ServiceLoaderException;
 import org.drombler.acp.startup.main.impl.BootServiceStarter;
 import org.drombler.acp.startup.main.impl.PropertiesUtils;
+import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.FrameworkEvent;
 import org.osgi.framework.launch.Framework;
@@ -96,7 +97,7 @@ public class OSGiStarter implements BootServiceStarter {
 
     @Override
     public void stop() throws BundleException, InterruptedException {
-        if (getFramework() != null) {
+        if (isRunning()) {
             getFramework().stop();
             getFramework().waitForStop(0);
         }
@@ -113,6 +114,11 @@ public class OSGiStarter implements BootServiceStarter {
         // TODO: replace with SLF4J Logger once available on classpath
         // Note: the message format is different!
         System.out.println(MessageFormat.format(messageFormat, arguments));
+    }
+
+    @Override
+    public boolean isRunning() {
+        return getFramework().getState() == Bundle.ACTIVE;
     }
 
 }

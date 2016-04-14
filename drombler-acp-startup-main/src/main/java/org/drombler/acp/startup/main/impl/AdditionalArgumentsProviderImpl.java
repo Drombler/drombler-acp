@@ -8,24 +8,30 @@
  *
  * The Original Code is Drombler.org. The Initial Developer of the
  * Original Code is Florian Brunner (GitHub user: puce77).
- * Copyright 2015 Drombler.org. All Rights Reserved.
+ * Copyright 2016 Drombler.org. All Rights Reserved.
  *
  * Contributor(s): .
  */
 package org.drombler.acp.startup.main.impl;
 
-public interface BootServiceStarter {
+import java.util.List;
+import org.drombler.acp.startup.main.AdditionalArgumentsProvider;
 
-    boolean init() throws Exception;
+/**
+ *
+ * @author puce
+ */
+public class AdditionalArgumentsProviderImpl implements AdditionalArgumentsProvider {
 
-    void startAndWait() throws Exception;
+    private final List<String> additionalArguments;
 
-    void stop() throws Exception;
+    public AdditionalArgumentsProviderImpl(List<String> additionalArguments) {
+        this.additionalArguments = additionalArguments;
+    }
 
-    boolean isActive();
-
-    public String getName();
-
-    public boolean isRunning();
+    @Override
+    public List<String> getAdditionalArguments() {
+        return additionalArguments;
+    }
 
 }

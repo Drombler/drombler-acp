@@ -75,7 +75,6 @@ public class SingleInstanceStarter implements BootServiceStarter {
      * Must end with newline
      */
 //    public static final String SINGLE_INSTANCE_SHARED_KEY = "$$NewInstance$$\n";
-
 //    /**
 //     * Registers this instance of the application.
 //     *
@@ -232,7 +231,14 @@ public class SingleInstanceStarter implements BootServiceStarter {
 
     @Override
     public void stop() throws Exception {
-        serverSocket.close();
+        if (isRunning()) {
+            serverSocket.close();
+        }
+    }
+
+    @Override
+    public boolean isRunning() {
+        return serverSocket != null && !serverSocket.isClosed();
     }
 
 }

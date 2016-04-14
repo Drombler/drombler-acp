@@ -21,6 +21,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
+import org.drombler.acp.startup.main.impl.AdditionalArgumentsProviderImpl;
 import org.drombler.acp.startup.main.impl.BootServiceStarter;
 import org.drombler.acp.startup.main.impl.osgi.OSGiStarter;
 import org.drombler.acp.startup.main.impl.singleinstance.SingleInstanceStarter;
@@ -60,32 +61,19 @@ public class DromblerACPStarter {
     public boolean init() throws Exception {
         boolean initialized = true;
         for (BootServiceStarter starter : starters) {
-            registerShutdownHook(starter);
             if (!starter.init()) {
                 initialized = false;
+                break;
             }
         }
         return initialized;
-    }
-
-    private void registerShutdownHook(BootServiceStarter starter) {
-        Runtime.getRuntime().addShutdownHook(new Thread(starter.getName() + " Shutdown Hook") {
-
-            @Override
-            public void run() {
-                try {
-                    starter.stop();
-                } catch (Exception ex) {
-                    System.err.println("Error stopping starter " + starter.getName() + ": " + ex);
-                }
-            }
-        });
     }
 
     public void start() {
         starters.stream().
                 map(starter -> Executors.defaultThreadFactory().newThread(() -> {
                     try {
+                        registerShutdownHook(starter);
                         starter.startAndWait();
                     } catch (Exception ex) {
                         logError(ex);
@@ -104,6 +92,22 @@ public class DromblerACPStarter {
         }
     }
 
+    private void registerShutdownHook(BootServiceStarter starter) {
+        Runtime.getRuntime().addShutdownHook(new Thread(starter.getName() + " Shutdown Hook") {
+
+            @Override
+            public void run() {
+                try {
+                    if (starter.isRunning()) {
+                        starter.stop();
+                    }
+                } catch (Exception ex) {
+                    System.err.println("Error stopping starter " + starter.getName() + ": " + ex);
+                }
+            }
+        });
+    }
+
     public synchronized void stop() {
         if (!stopped) {
             stopped = true;
@@ -120,10 +124,9 @@ public class DromblerACPStarter {
     }
 
     private void fireAdditionalArguments(List<String> additionalArguments) {
-//        for (String additionalArg : additionalArguments) {
-//            osgiStarter.getFramework().getBundleContext().registerService(ApplicationExecutorProvider.class,
-//                    additionalArg, null);
-//        }
+        osgiStarter.getFramework().getBundleContext().registerService(AdditionalArgumentsProvider.class,
+                new AdditionalArgumentsProviderImpl(additionalArguments), null);
+
     }
 
     public Framework getFramework() {
