@@ -67,38 +67,6 @@ public class SingleInstanceStarter implements BootServiceStarter {
 
     private ApplicationInstanceListener applicationInstanceListener;
 
-    /**
-     * Randomly chosen, but static, high socket number
-     */
-//    public static final int SINGLE_INSTANCE_NETWORK_SOCKET = 44331;
-    /**
-     * Must end with newline
-     */
-//    public static final String SINGLE_INSTANCE_SHARED_KEY = "$$NewInstance$$\n";
-//    /**
-//     * Registers this instance of the application.
-//     *
-//     * @return true if first instance, false if not.
-//     */
-//    public boolean registerInstance() {
-//        // try to open network socket
-//        // if success, listen to socket for new instance message, return true
-//        // if unable to open, connect to existing and send new instance message, return false
-//        try {
-//            final ServerSocket serverSocket = new ServerSocket(SINGLE_INSTANCE_NETWORK_SOCKET, 10, getInetAddress());
-//            System.out.println("Listening for application instances on socket " + SINGLE_INSTANCE_NETWORK_SOCKET);
-//            Thread instanceListenerThread = new Thread(() -> listenForOtherInstances(serverSocket));
-//            instanceListenerThread.start();
-//            // listen
-//        } catch (UnknownHostException e) {
-//            e.printStackTrace();
-//            // allow app to run on network error
-//            return true;
-//        } catch (IOException e) {
-//            return false;
-//        }
-//        return true;
-//    }
     @Override
     public boolean init() throws IOException {
         boolean initialized;
