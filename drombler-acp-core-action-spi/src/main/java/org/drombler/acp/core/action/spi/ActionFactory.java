@@ -17,10 +17,11 @@ package org.drombler.acp.core.action.spi;
 /**
  *
  * @author puce
+ * @param <T> the action type
  */
 public interface ActionFactory<T> {
 
-    T createAction(ActionDescriptor actionDescriptor);
+    T createAction(ActionDescriptor<?> actionDescriptor);
     
     Class<T> getActionClass();
 }

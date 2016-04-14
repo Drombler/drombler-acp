@@ -22,6 +22,7 @@ import org.apache.felix.scr.annotations.ReferenceCardinality;
 import org.apache.felix.scr.annotations.ReferencePolicy;
 import org.drombler.acp.core.action.jaxb.ActionsType;
 import org.drombler.acp.core.action.jaxb.ToggleActionType;
+import org.drombler.acp.core.action.spi.ActionDescriptor;
 import org.drombler.acp.core.action.spi.ToggleActionDescriptor;
 import org.drombler.acp.core.action.spi.ToggleActionFactory;
 import org.osgi.framework.BundleContext;
@@ -35,18 +36,18 @@ import org.osgi.service.component.ComponentContext;
 @Component(immediate = true)
 @Reference(name = "toggleActionDescriptor", referenceInterface = ToggleActionDescriptor.class,
         cardinality = ReferenceCardinality.OPTIONAL_MULTIPLE, policy = ReferencePolicy.DYNAMIC)
-public class ToggleActionHandler<T> extends AbstractActionHandler<ToggleActionType, ToggleActionDescriptor> {
+public class ToggleActionHandler<T> extends AbstractActionHandler<ToggleActionType, ToggleActionDescriptor<?>> {
 
     @Reference
     private ToggleActionFactory<T> toggleActionFactory;
 
-    protected void bindToggleActionDescriptor(ServiceReference<ToggleActionDescriptor> serviceReference) {
+    protected void bindToggleActionDescriptor(ServiceReference<ToggleActionDescriptor<?>> serviceReference) {
         BundleContext context = serviceReference.getBundle().getBundleContext();
-        ToggleActionDescriptor actionDescriptor = context.getService(serviceReference);
+        ToggleActionDescriptor<?> actionDescriptor = context.getService(serviceReference);
         registerActionDescriptor(actionDescriptor, context);
     }
 
-    protected void unbindToggleActionDescriptor(ToggleActionDescriptor actionDescriptor) {
+    protected void unbindToggleActionDescriptor(ToggleActionDescriptor<?> actionDescriptor) {
         // TODO
     }
 
@@ -81,19 +82,24 @@ public class ToggleActionHandler<T> extends AbstractActionHandler<ToggleActionTy
     }
 
     @Override
-    protected void registerActionDescriptor(ToggleActionDescriptor actionDescriptor, BundleContext context) {
+    protected void registerActionDescriptor(ToggleActionDescriptor<?> actionDescriptor, BundleContext context) {
         if (isInitialized()) {
             T action = toggleActionFactory.createToggleAction(actionDescriptor);
+            registerActionListener(context, actionDescriptor);
             getActionRegistry().registerAction(actionDescriptor.getId(), toggleActionFactory.getToggleActionClass(),
-                    action,
-                    context);
+                    action, context);
         } else {
             registerUnresolvedActionDescriptor(actionDescriptor, context);
         }
     }
 
+    private <T> void registerActionListener(BundleContext context, ActionDescriptor<T> actionDescriptor) {
+        context.registerService(actionDescriptor.getListenerType(), actionDescriptor.getListener(), null);
+    }
+
     @Override
-    protected ToggleActionDescriptor createActionDescriptor(ToggleActionType actionType, BundleContext context) throws
+    protected ToggleActionDescriptor<?> createActionDescriptor(ToggleActionType actionType, BundleContext context)
+            throws
             IllegalAccessException, ClassNotFoundException, InstantiationException {
         return ToggleActionDescriptor.
                 createToggleActionDescriptor(actionType, context.getBundle(), getContextInjector());

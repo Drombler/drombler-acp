@@ -20,13 +20,18 @@ import org.softsmithy.lib.util.ResourceLoader;
  *
  * @author puce
  */
-public class AbstractDockableDockingDescriptor {
+public class AbstractDockableDockingDescriptor<D> {
 
+    private final Class<D> dockableClass;
+    private final ResourceLoader resourceLoader;
     private String id;
     private String areaId;
     private String icon;
-    private Class<?> dockableClass;
-    private ResourceLoader resourceLoader;
+
+    public AbstractDockableDockingDescriptor(Class<D> dockableClass) {
+        this.dockableClass = dockableClass;
+        this.resourceLoader = new ResourceLoader(dockableClass);
+    }
 
     /**
      * @return the areaId
@@ -73,22 +78,12 @@ public class AbstractDockableDockingDescriptor {
     /**
      * @return the dockableClass
      */
-    public Class<?> getDockableClass() {
+    public Class<D> getDockableClass() {
         return dockableClass;
-    }
-
-    /**
-     * @param dockableClass the dockableClass to set
-     */
-    public void setDockableClass(Class<?> dockableClass) {
-        this.dockableClass = dockableClass;
     }
 
     public ResourceLoader getResourceLoader() {
         return resourceLoader;
     }
 
-    public void setResourceLoader(ResourceLoader resourceLoader) {
-        this.resourceLoader = resourceLoader;
-    }
 }
