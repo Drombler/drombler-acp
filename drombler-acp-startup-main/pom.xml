@@ -66,7 +66,7 @@ Contributor(s): .
                 <configuration>
                     <instructions>
                         <_donotcopy>(CVS|.svn|config.properties)</_donotcopy>
-                        <Main-Class>org.drombler.acp.startup.main.impl.Main</Main-Class>
+                        <Main-Class>org.drombler.acp.startup.main.DromblerACPStarter</Main-Class>
                         <!--                        <Bundle-SymbolicName>org.apache.felix.main</Bundle-SymbolicName>
                         <Bundle-Name>Apache Felix</Bundle-Name>
                         <Bundle-Description>OSGi R4 framework.</Bundle-Description>
