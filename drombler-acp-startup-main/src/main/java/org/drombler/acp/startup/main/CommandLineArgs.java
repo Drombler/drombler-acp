@@ -14,6 +14,9 @@
  */
 package org.drombler.acp.startup.main;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  *
  * @author puce
@@ -26,12 +29,15 @@ public class CommandLineArgs {
      */
     public static final String USER_DIR_SWITCH = "--userdir";
     private final String userDir;
+    private final List<String> additionalArguments;
 
-    private CommandLineArgs(String userDir) {
+    private CommandLineArgs(String userDir, List<String> additionalArguments) {
         this.userDir = userDir;
+        this.additionalArguments = additionalArguments;
     }
 
     public static CommandLineArgs parseCommandLineArgs(String[] args) {
+        List<String> additionalArguments = new ArrayList<>();
         String userDir = null;
         boolean expectUserDir = false;
         for (String arg : args) {
@@ -40,21 +46,23 @@ public class CommandLineArgs {
             } else if (expectUserDir) {
                 userDir = arg;
                 expectUserDir = false;
+            } else if (arg.startsWith("-")) {
+                wrongArgument(arg);
             } else {
-                wrongArguments();
+                additionalArguments.add(arg);
             }
         }
 
-        if ((args.length > 2) || (expectUserDir && userDir == null)) {
-            wrongArguments();
+        if (expectUserDir && userDir == null) {
+            wrongArgument(null);
         }
 
-        return new CommandLineArgs(userDir);
+        return new CommandLineArgs(userDir, additionalArguments);
     }
 
-    private static void wrongArguments() {
-        System.out.println("Usage: [--userdir <user-directory>]");
-        System.exit(0);
+    private static void wrongArgument(String arg) {
+        System.out.println("Usage: [--userdir <user-directory>] [filename 1] .. [filenam n]");
+        throw new IllegalArgumentException("Unsupported command line argument: " + arg);
     }
 
     /**
@@ -62,6 +70,13 @@ public class CommandLineArgs {
      */
     public String getUserDir() {
         return userDir;
+    }
+
+    /**
+     * @return the additionalArguments
+     */
+    public List<String> getAdditionalArguments() {
+        return additionalArguments;
     }
 
 }
