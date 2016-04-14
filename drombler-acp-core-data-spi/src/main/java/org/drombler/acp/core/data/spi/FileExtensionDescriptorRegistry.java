@@ -1,13 +1,19 @@
 package org.drombler.acp.core.data.spi;
 
+import java.util.Set;
+
 public interface FileExtensionDescriptorRegistry {
 
     void registerFileExtensionDescriptor(FileExtensionDescriptor fileExtensionDescriptor);
 
+    void unregisterFileExtensionDescriptor(FileExtensionDescriptor fileExtensionDescriptor);
+
     FileExtensionDescriptor getFileExtensionDescriptor(String fileExtension);
 
-    void registerListener();
+    Set<FileExtensionDescriptor> getAllFileExtensionDescriptors();
 
-    void unregisterListener();
+    void registerFileExtensionListener(FileExtensionListener listener);
+
+    void unregisterFileExtensionListener(FileExtensionListener listener);
 
 }

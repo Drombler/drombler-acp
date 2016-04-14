@@ -16,6 +16,7 @@ import java.lang.annotation.Target;
 @Target(ElementType.PACKAGE)
 @Repeatable(FileExtensions.class)
 public @interface FileExtension {
+
     /**
      * The text to be displayed, e.g. as the text for filters in file dialogs. If the value starts with '%' the rest of the value is interpreted as a property key and the value gets looked-up in the
      * Bundle.properties file (or a locale * specific derivation of this file), which has to be in the same package as the annotated data type.
@@ -27,4 +28,12 @@ public @interface FileExtension {
     String mimeType();
 
     String[] fileExtensions();
+
+    /**
+     * The position, e.g. to order the file extensions in filters of file dialogs. It's a best practice to leave out some positions between entries to allow other bundles to register entries between
+     * some existing ones.
+     *
+     * @return the position
+     */
+    int position();
 }
