@@ -210,20 +210,3 @@ public class SingleInstanceStarter implements BootServiceStarter {
     }
 
 }
-
-//public class MyApplication {
-//    public static void main(String[] args) {
-//       if (!ApplicationInstanceManager.registerInstance()) {
-//                    // instance already running.
-//                    System.out.println("Another instance of this application is already running.  Exiting.");
-//                    System.exit(0);
-//       }
-//       ApplicationInstanceManager.setApplicationInstanceListener(new ApplicationInstanceListener() {
-//          public void newInstanceCreated() {
-//             System.out.println("New instance detected...");
-//             // this is where your handler code goes...
-//          }
-//       });
-//    }
-//}
-
