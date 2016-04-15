@@ -10,8 +10,8 @@ public interface DocumentHandlerDescriptorRegistry {
 
     DocumentHandlerDescriptor<?> getDocumentHandlerDescriptor(Object documentHandler);
 
-    void registerListener();
+    void registerDocumentHandlerListener(DocumentHandlerListener listener);
 
-    void unregisterListener();
+    void unregisterDocumentHandlerListener(DocumentHandlerListener listener);
 
 }
