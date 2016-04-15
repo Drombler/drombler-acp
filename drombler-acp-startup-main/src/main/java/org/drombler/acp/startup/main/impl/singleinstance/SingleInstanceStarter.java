@@ -24,14 +24,20 @@ import java.io.UnsupportedEncodingException;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.net.UnknownHostException;
+import java.nio.file.FileSystemNotFoundException;
 import java.nio.file.Files;
+import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 import java.util.Properties;
 import java.util.stream.Collectors;
 import org.drombler.acp.startup.main.DromblerACPConfiguration;
@@ -174,6 +180,12 @@ public class SingleInstanceStarter implements BootServiceStarter {
             for (Iterator<String> argIterator = configuration.getCommandLineArgs().getAdditionalArguments().iterator();
                     argIterator.hasNext();) {
                 String additionalArg = argIterator.next();
+
+                Optional<Path> pathArg = toPath(additionalArg);
+                if (pathArg.isPresent()) {
+                    additionalArg = pathArg.get().toAbsolutePath().toString();
+                }
+
                 writer.write(URLEncoder.encode(additionalArg, ENCODING));
                 if (argIterator.hasNext()) {
                     writer.write(DELIMITER);
@@ -184,6 +196,19 @@ public class SingleInstanceStarter implements BootServiceStarter {
         } catch (IOException e1) {
             System.err.println("Error connecting to local port for single instance notification");
             e1.printStackTrace();
+        }
+    }
+
+    private Optional<Path> toPath(String pathString) {
+        try {
+            return Optional.of(Paths.get(pathString));
+        } catch (InvalidPathException ex1) {
+            try {
+                URI uri = new URI(pathString);
+                return Optional.of(Paths.get(uri));
+            } catch (URISyntaxException | NullPointerException | IllegalArgumentException | FileSystemNotFoundException | SecurityException ex2) {
+                return Optional.empty();
+            }
         }
     }
 
