@@ -1,21 +1,15 @@
 package org.drombler.acp.core.standard.action.data.file.impl;
 
-import java.lang.reflect.InvocationTargetException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 import org.drombler.acp.core.action.Action;
 import org.drombler.acp.core.action.MenuEntry;
 import org.drombler.acp.core.commons.util.SimpleServiceTrackerCustomizer;
-import org.drombler.acp.core.data.Openable;
-import org.drombler.acp.core.data.spi.DocumentHandlerDescriptor;
 import org.drombler.acp.core.data.spi.DocumentHandlerDescriptorRegistry;
 import org.drombler.acp.core.data.spi.FileChooserProvider;
-import org.drombler.acp.core.data.spi.FileExtensionDescriptor;
 import org.drombler.acp.core.data.spi.FileExtensionDescriptorRegistry;
+import org.drombler.acp.core.data.spi.FileUtils;
 import org.drombler.commons.action.AbstractActionListener;
-import org.drombler.commons.context.Context;
-import org.drombler.commons.context.LocalContextProvider;
 import org.osgi.util.tracker.ServiceTracker;
 
 /**
@@ -56,54 +50,12 @@ public class OpenFilesAction extends AbstractActionListener<Object> implements A
         }
     }
 
-    private void openFile(Path fileToOpen) {
-        String extension = getExtension(fileToOpen);
-        FileExtensionDescriptor fileExtensionDescriptor = getFileExtensionDescriptorRegistry().getFileExtensionDescriptor(extension);
-        if (fileExtensionDescriptor != null) {
-            String mimeType = fileExtensionDescriptor.getMimeType();
-            DocumentHandlerDescriptor documentHandlerDescriptor = getDocumentHandlerDescriptorRegistry().getDocumentHandlerDescriptor(mimeType);
-            if (documentHandlerDescriptor != null) {
-                try {
-                    Object documentHandler = documentHandlerDescriptor.createDocumentHandler(fileToOpen);
-                    if (documentHandler instanceof LocalContextProvider) {
-                        Context localContext = ((LocalContextProvider) documentHandler).getLocalContext();
-                        Openable openable = localContext.find(Openable.class);
-                        if (openable != null) {
-                            openable.open(); // TODO: load them in background
-                        } else {
-// TODO
-                        }
-                    } else {
-
-                    }// TODO
-                } catch (IllegalAccessException | SecurityException | InvocationTargetException | InstantiationException | IllegalArgumentException | NoSuchMethodException ex) {
-                    // TODO
-                }
-            } else {
-// TODO
-            }
-        } else {
-// TODO
-        }
-    }
-
     private boolean isInitialized() {
         return fileChooserProvider != null && fileExtensionDescriptorRegistry != null && documentHandlerDescriptorRegistry != null;
     }
 
-    // TODO: use PathUtils from SoftSmithy
-    public String getExtension(Path path) {
-        if (!Files.isRegularFile(path)) {
-            throw new IllegalArgumentException("Not a regular file: " + path.toString());
-        }
-        String extension = "";
-        String fileName = path.getFileName().toString();
-        int index = fileName.lastIndexOf('.');
-
-        if (index > 0 && index < fileName.length() - 1) {
-            extension = fileName.substring(index + 1).toLowerCase();
-        }
-        return "." + extension;
+    private void openFile(Path fileToOpen) {
+        FileUtils.openFile(fileToOpen, fileExtensionDescriptorRegistry, documentHandlerDescriptorRegistry);
     }
 
     /**
