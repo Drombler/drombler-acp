@@ -17,6 +17,7 @@ package org.drombler.acp.core.docking.spi;
 import java.lang.reflect.InvocationTargetException;
 import org.drombler.acp.core.data.spi.DocumentHandlerDescriptor;
 import org.drombler.acp.core.data.spi.DocumentHandlerDescriptorRegistry;
+import org.drombler.acp.startup.main.ApplicationExecutorProvider;
 import org.drombler.commons.context.ActiveContextProvider;
 import org.drombler.commons.context.ApplicationContextProvider;
 import org.drombler.commons.context.ContextInjector;
@@ -70,10 +71,17 @@ public final class Dockables {
         DockableEntryFactory<D, E> dockableEntryFactory
                 = bundleContext.getService(dockableEntryFactoryServiceReference);
 
-        dockingAreaContainerProvider.getDockingAreaContainer().addDockable(dockableEntryFactory.createDockableEntry(
-                dockable, DockableKind.VIEW,
-                dockablePreferencesManagerProvider.getDockablePreferencesManager().getDockablePreferences(dockable)));
+        ServiceReference<ApplicationExecutorProvider> applicationExecutorProviderServiceReference
+                = bundleContext.getServiceReference(ApplicationExecutorProvider.class);
+        ApplicationExecutorProvider applicationExecutorProvider
+                = bundleContext.getService(applicationExecutorProviderServiceReference);
 
+        final E dockableEntry = dockableEntryFactory.createDockableEntry(dockable, DockableKind.VIEW,
+                dockablePreferencesManagerProvider.getDockablePreferencesManager().getDockablePreferences(dockable));
+
+        addDockable(applicationExecutorProvider, dockingAreaContainerProvider, dockableEntry);
+
+        bundleContext.ungetService(applicationExecutorProviderServiceReference);
         bundleContext.ungetService(dockingAreaContainerProviderServiceReference);
         bundleContext.ungetService(dockablePreferencesManagerProviderServiceReference);
         bundleContext.ungetService(dockableEntryFactoryServiceReference);
@@ -134,6 +142,11 @@ public final class Dockables {
         EditorDockingDescriptorRegistry<D> editorDockingDescriptorRegistry
                 = bundleContext.getService(editorRegistryServiceReference);
 
+        ServiceReference<ApplicationExecutorProvider> applicationExecutorProviderServiceReference
+                = bundleContext.getServiceReference(ApplicationExecutorProvider.class);
+        ApplicationExecutorProvider applicationExecutorProvider
+                = bundleContext.getService(applicationExecutorProviderServiceReference);
+
         EditorDockingDescriptor<? extends D> editorDockingDescriptor = editorDockingDescriptorRegistry.getEditorDockingDescriptor(content.getClass());
         DocumentHandlerDescriptor<?> documentHandlerDescriptor = documentHandlerDescriptorRegistry.getDocumentHandlerDescriptor(content);
         if (editorDockingDescriptor != null && documentHandlerDescriptor != null) {
@@ -144,15 +157,17 @@ public final class Dockables {
 
                 inject(editor);
 
-                dockingAreaContainerProvider.getDockingAreaContainer().addDockable(
-                        dockableEntryFactory.createDockableEntry(editor, DockableKind.EDITOR,
-                                dockablePreferencesManagerProvider.getDockablePreferencesManager().getDockablePreferences(editor)));
+                E dockableEntry = dockableEntryFactory.createDockableEntry(editor, DockableKind.EDITOR,
+                        dockablePreferencesManagerProvider.getDockablePreferencesManager().getDockablePreferences(editor));
+
+                addDockable(applicationExecutorProvider, dockingAreaContainerProvider, dockableEntry);
             } catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
                 LOG.error(ex.getMessage(), ex);
             }
         } else {
 
         }
+        bundleContext.ungetService(applicationExecutorProviderServiceReference);
         bundleContext.ungetService(editorRegistryServiceReference);
         bundleContext.ungetService(dockingAreaContainerProviderServiceReference);
         bundleContext.ungetService(dockableDataManagerProviderServiceReference);
@@ -160,6 +175,11 @@ public final class Dockables {
         bundleContext.ungetService(documentHandlerDescriptorRegistryServiceReference);
         bundleContext.ungetService(dockablePreferencesManagerProviderServiceReference);
         bundleContext.ungetService(dockableEntryFactoryServiceReference);
+    }
+
+    private static <D, E extends DockableEntry<D>> void addDockable(ApplicationExecutorProvider applicationExecutorProvider, DockingAreaContainerProvider<D, E> dockingAreaContainerProvider,
+            E dockableEntry) {
+        applicationExecutorProvider.getApplicationExecutor().execute(() -> dockingAreaContainerProvider.getDockingAreaContainer().addDockable(dockableEntry));
     }
 
     public static <D> void inject(D dockable) {
