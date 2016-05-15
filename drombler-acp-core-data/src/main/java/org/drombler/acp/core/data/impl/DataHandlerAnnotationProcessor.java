@@ -23,21 +23,25 @@ import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
 import org.apache.commons.lang3.StringUtils;
 import org.drombler.acp.core.application.AbstractApplicationAnnotationProcessor;
+import org.drombler.acp.core.data.BusinessObjectHandler;
 import org.drombler.acp.core.data.DocumentHandler;
+import org.drombler.acp.core.data.jaxb.BusinessObjectHandlerType;
+import org.drombler.acp.core.data.jaxb.DataHandlerType;
+import org.drombler.acp.core.data.jaxb.DataHandlersType;
 import org.drombler.acp.core.data.jaxb.DocumentHandlerType;
-import org.drombler.acp.core.data.jaxb.DocumentHandlersType;
 
 /**
  *
  * @author puce
  */
 @SupportedAnnotationTypes({
-    "org.drombler.acp.core.data.DocumentHandler"
+    "org.drombler.acp.core.data.DocumentHandler",
+    "org.drombler.acp.core.data.BusinessObjectHandler"
 })
 @SupportedSourceVersion(SourceVersion.RELEASE_8)
-public class DocumentHandlerAnnotationProcessor extends AbstractApplicationAnnotationProcessor {
+public class DataHandlerAnnotationProcessor extends AbstractApplicationAnnotationProcessor {
 
-    private DocumentHandlersType documentHandlers;
+    private DataHandlersType dataHandlers;
 
     @Override
     protected boolean handleProcess(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
@@ -48,31 +52,48 @@ public class DocumentHandlerAnnotationProcessor extends AbstractApplicationAnnot
             }
         });
 
+        roundEnv.getElementsAnnotatedWith(BusinessObjectHandler.class).forEach(element -> {
+            BusinessObjectHandler businessObjectHandlerAnnotation = element.getAnnotation(BusinessObjectHandler.class);
+            if (businessObjectHandlerAnnotation != null) {
+                registerDocumentTypeHandlerAnnotation(element, businessObjectHandlerAnnotation);
+            }
+        });
+
         return false;
     }
 
     private void init(Element element) {
-        if (documentHandlers == null) {
-            documentHandlers = new DocumentHandlersType();
-            addExtensionConfigurations(documentHandlers);
-            addJAXBRootClasses(DocumentHandlersType.class);
+        if (dataHandlers == null) {
+            dataHandlers = new DataHandlersType();
+            addExtensionConfigurations(dataHandlers);
+            addJAXBRootClasses(DataHandlersType.class);
         }
         addOriginatingElements(element); // TODO: needed?
     }
 
-    private void registerDocumentTypeHandlerAnnotation(Element element,
-            DocumentHandler documentTypeHandlerAnnotation) {
+    private void registerDocumentTypeHandlerAnnotation(Element element, DocumentHandler documentTypeHandlerAnnotation) {
         init(element);
 
         DocumentHandlerType documentTypeHandler = new DocumentHandlerType();
         configureDocumentTypeHandler(documentTypeHandler, documentTypeHandlerAnnotation.mimeType(), documentTypeHandlerAnnotation.icon(), element);
-        documentHandlers.getDocumentHandler().add(documentTypeHandler);
+        dataHandlers.getDocumentHandler().add(documentTypeHandler);
     }
 
-    private void configureDocumentTypeHandler(DocumentHandlerType documentHandler, String mimeType,
-            String icon, Element element) {
+    private void configureDocumentTypeHandler(DocumentHandlerType documentHandler, String mimeType, String icon, Element element) {
         documentHandler.setMimeType(StringUtils.stripToNull(mimeType));
-        documentHandler.setIcon(StringUtils.stripToNull(icon));
-        documentHandler.setHandlerClass(element.asType().toString());
+        configureDataTypeHandler(documentHandler, icon, element);
+    }
+
+    private void registerDocumentTypeHandlerAnnotation(Element element, BusinessObjectHandler businessObjectHandlerAnnotation) {
+        init(element);
+
+        BusinessObjectHandlerType businessObjectHandler = new BusinessObjectHandlerType();
+        configureDataTypeHandler(businessObjectHandler, businessObjectHandlerAnnotation.icon(), element);
+        dataHandlers.getBusinessObjectHandler().add(businessObjectHandler);
+    }
+
+    private void configureDataTypeHandler(DataHandlerType dataHandlerType, String icon, Element element) {
+        dataHandlerType.setIcon(StringUtils.stripToNull(icon));
+        dataHandlerType.setHandlerClass(element.asType().toString());
     }
 }

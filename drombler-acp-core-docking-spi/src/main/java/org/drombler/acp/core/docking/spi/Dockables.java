@@ -15,8 +15,8 @@
 package org.drombler.acp.core.docking.spi;
 
 import java.lang.reflect.InvocationTargetException;
-import org.drombler.acp.core.data.spi.DocumentHandlerDescriptor;
-import org.drombler.acp.core.data.spi.DocumentHandlerDescriptorRegistry;
+import org.drombler.acp.core.data.spi.AbstractDataHandlerDescriptor;
+import org.drombler.acp.core.data.spi.DataHandlerDescriptorRegistry;
 import org.drombler.acp.startup.main.ApplicationExecutorProvider;
 import org.drombler.commons.context.ActiveContextProvider;
 import org.drombler.commons.context.ApplicationContextProvider;
@@ -100,12 +100,10 @@ public final class Dockables {
         DockablePreferencesManagerProvider<D> dockablePreferencesManagerProvider
                 = bundleContext.getService(dockablePreferencesManagerProviderServiceReference);
 
-        @SuppressWarnings("rawtypes")
-        ServiceReference<DocumentHandlerDescriptorRegistry> documentHandlerDescriptorRegistryServiceReference
-                = bundleContext.getServiceReference(DocumentHandlerDescriptorRegistry.class);
-        @SuppressWarnings("unchecked")
-        DocumentHandlerDescriptorRegistry documentHandlerDescriptorRegistry
-                = bundleContext.getService(documentHandlerDescriptorRegistryServiceReference);
+        ServiceReference<DataHandlerDescriptorRegistry> dataHandlerDescriptorRegistryServiceReference
+                = bundleContext.getServiceReference(DataHandlerDescriptorRegistry.class);
+        DataHandlerDescriptorRegistry dataHandlerDescriptorRegistry
+                = bundleContext.getService(dataHandlerDescriptorRegistryServiceReference);
 
         @SuppressWarnings("rawtypes")
         ServiceReference<DockableDataFactory> dockableDataFactoryServiceReference
@@ -148,11 +146,11 @@ public final class Dockables {
                 = bundleContext.getService(applicationExecutorProviderServiceReference);
 
         EditorDockingDescriptor<? extends D> editorDockingDescriptor = editorDockingDescriptorRegistry.getEditorDockingDescriptor(content.getClass());
-        DocumentHandlerDescriptor<?> documentHandlerDescriptor = documentHandlerDescriptorRegistry.getDocumentHandlerDescriptor(content);
-        if (editorDockingDescriptor != null && documentHandlerDescriptor != null) {
+        AbstractDataHandlerDescriptor<?> dataHandlerDescriptor = dataHandlerDescriptorRegistry.getDataHandlerDescriptor(content);
+        if (editorDockingDescriptor != null && dataHandlerDescriptor != null) {
             try {
                 D editor = editorDockingDescriptor.createEditor(content);
-                DATA dockableData = dockableDataFactory.createDockableData(documentHandlerDescriptor.getIcon(), documentHandlerDescriptor.getResourceLoader());
+                DATA dockableData = dockableDataFactory.createDockableData(dataHandlerDescriptor.getIcon(), dataHandlerDescriptor.getResourceLoader());
                 dockableDataManagerProvider.getDockableDataManager().registerDockableData(editor, dockableData);
 
                 inject(editor);
@@ -165,14 +163,14 @@ public final class Dockables {
                 LOG.error(ex.getMessage(), ex);
             }
         } else {
-
+            LOG.error("No editor or no data handler registered for the provided content!"); // TODO: better message
         }
         bundleContext.ungetService(applicationExecutorProviderServiceReference);
         bundleContext.ungetService(editorRegistryServiceReference);
         bundleContext.ungetService(dockingAreaContainerProviderServiceReference);
         bundleContext.ungetService(dockableDataManagerProviderServiceReference);
         bundleContext.ungetService(dockableDataFactoryServiceReference);
-        bundleContext.ungetService(documentHandlerDescriptorRegistryServiceReference);
+        bundleContext.ungetService(dataHandlerDescriptorRegistryServiceReference);
         bundleContext.ungetService(dockablePreferencesManagerProviderServiceReference);
         bundleContext.ungetService(dockableEntryFactoryServiceReference);
     }

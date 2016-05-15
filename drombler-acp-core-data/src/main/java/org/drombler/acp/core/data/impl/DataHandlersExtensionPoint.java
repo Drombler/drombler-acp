@@ -17,7 +17,7 @@ package org.drombler.acp.core.data.impl;
 import org.apache.felix.scr.annotations.Component;
 import org.apache.felix.scr.annotations.Service;
 import org.drombler.acp.core.application.ExtensionPoint;
-import org.drombler.acp.core.data.jaxb.DocumentHandlersType;
+import org.drombler.acp.core.data.jaxb.DataHandlersType;
 
 /**
  *
@@ -25,11 +25,11 @@ import org.drombler.acp.core.data.jaxb.DocumentHandlersType;
  */
 @Component
 @Service
-public class DocumentHandlersExtensionPoint implements ExtensionPoint<DocumentHandlersType> {
+public class DataHandlersExtensionPoint implements ExtensionPoint<DataHandlersType> {
 
     @Override
-    public Class<DocumentHandlersType> getJAXBRootClass() {
-        return DocumentHandlersType.class;
+    public Class<DataHandlersType> getJAXBRootClass() {
+        return DataHandlersType.class;
     }
     
 }

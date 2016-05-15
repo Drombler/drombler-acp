@@ -8,10 +8,8 @@ public interface DocumentHandlerDescriptorRegistry {
 
     DocumentHandlerDescriptor<?> getDocumentHandlerDescriptor(String mimeType);
 
-    DocumentHandlerDescriptor<?> getDocumentHandlerDescriptor(Object documentHandler);
+    void registerDocumentHandlerDescriptorListener(DocumentHandlerDescriptorListener listener);
 
-    void registerDocumentHandlerListener(DocumentHandlerListener listener);
-
-    void unregisterDocumentHandlerListener(DocumentHandlerListener listener);
+    void unregisterDocumentHandlerDescriptorListener(DocumentHandlerDescriptorListener listener);
 
 }

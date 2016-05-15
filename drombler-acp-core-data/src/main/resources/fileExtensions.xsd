@@ -17,14 +17,6 @@ Contributor(s): .
         xmlns:tns="http://www.drombler.org/schema/acp/data" elementFormDefault="qualified" 
         version="${project.version}">
 
-    <element name="documentHandlers">
-        <complexType>
-            <sequence>
-                <element name="documentHandler" type="tns:DocumentHandlerType" minOccurs="0" maxOccurs="unbounded" />
-            </sequence>
-        </complexType>
-    </element>
-    
     <element name="fileExtensions">
         <complexType>
             <sequence>
@@ -33,14 +25,6 @@ Contributor(s): .
         </complexType>
     </element>
 
-    <complexType name="DocumentHandlerType">
-        <sequence>
-            <element name="mimeType" type="string" />
-            <element name="icon" type="string" minOccurs="0" />
-            <element name="handlerClass" type="string"/>
-        </sequence>
-    </complexType>
-    
     <complexType name="FileExtensionType">
         <sequence>
             <element name="displayName" type="string" />

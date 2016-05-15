@@ -20,18 +20,14 @@ import java.nio.file.Path;
 import org.apache.commons.lang3.StringUtils;
 import org.drombler.acp.core.data.jaxb.DocumentHandlerType;
 import org.osgi.framework.Bundle;
-import org.softsmithy.lib.util.ResourceLoader;
 
 /**
  *
  * @author puce
  */
-public class DocumentHandlerDescriptor<D> {
+public class DocumentHandlerDescriptor<D> extends AbstractDataHandlerDescriptor<D> {
 
     private String mimeType;
-    private String icon;
-    private Class<D> documentHandlerClass;
-    private ResourceLoader resourceLoader;
 
     /**
      * @return the mimeType
@@ -47,58 +43,20 @@ public class DocumentHandlerDescriptor<D> {
         this.mimeType = mimeType;
     }
 
-    /**
-     * @return the icon
-     */
-    public String getIcon() {
-        return icon;
+    public static DocumentHandlerDescriptor<?> createDocumentHandlerDescriptor(DocumentHandlerType documentHandler, Bundle bundle) throws ClassNotFoundException {
+        Class<?> handlerClass = loadHandlerClass(documentHandler, bundle);
+        return createDocumentHandlerDescriptor(documentHandler, handlerClass);
     }
 
-    /**
-     * @param icon the icon to set
-     */
-    public void setIcon(String icon) {
-        this.icon = icon;
-    }
-
-    public Class<D> getDocumentHandlerClass() {
-        return documentHandlerClass;
-    }
-
-    /**
-     * @param documentHandlerClass the documentHandlerClass to set
-     */
-    public void setDocumentHandlerClass(Class<D> documentHandlerClass) {
-        this.documentHandlerClass = documentHandlerClass;
-    }
-
-    public ResourceLoader getResourceLoader() {
-        return resourceLoader;
-    }
-
-    public void setResourceLoader(ResourceLoader resourceLoader) {
-        this.resourceLoader = resourceLoader;
-    }
-
-    public static DocumentHandlerDescriptor<?> createDocumentTypeHandlerDescriptor(DocumentHandlerType documentHandler, Bundle bundle)
-            throws ClassNotFoundException, InstantiationException, IllegalAccessException {
-        Class<?> handlerClass = bundle.loadClass(StringUtils.stripToNull(documentHandler.getHandlerClass()));
-        return createDocumentTypeHandlerDescriptor(documentHandler, handlerClass);
-    }
-
-    private static <D> DocumentHandlerDescriptor<D> createDocumentTypeHandlerDescriptor(DocumentHandlerType documentHandler,
-            Class<D> handlerClass) throws ClassNotFoundException {
+    private static <D> DocumentHandlerDescriptor<D> createDocumentHandlerDescriptor(DocumentHandlerType documentHandler, Class<D> handlerClass) throws ClassNotFoundException {
         DocumentHandlerDescriptor<D> documentHandlerDescriptor = new DocumentHandlerDescriptor<>();
         documentHandlerDescriptor.setMimeType(StringUtils.stripToNull(documentHandler.getMimeType()));
-        documentHandlerDescriptor.setIcon(StringUtils.stripToNull(documentHandler.getIcon()));
-        documentHandlerDescriptor.setResourceLoader(new ResourceLoader(handlerClass));
-        documentHandlerDescriptor.setDocumentHandlerClass(handlerClass);
+        configureDataHandlerDescriptor(documentHandlerDescriptor, documentHandler, handlerClass);
         return documentHandlerDescriptor;
     }
 
-    public D createDocumentHandler(Path filePath)
-            throws IllegalAccessException, SecurityException, InvocationTargetException, InstantiationException, IllegalArgumentException, NoSuchMethodException {
-        Constructor<? extends D> documentHandlerConstructor = getDocumentHandlerClass().getConstructor(Path.class);
+    public D createDocumentHandler(Path filePath) throws NoSuchMethodException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+        Constructor<? extends D> documentHandlerConstructor = getDataHandlerClass().getConstructor(Path.class);
         return documentHandlerConstructor.newInstance(filePath);
     }
 }

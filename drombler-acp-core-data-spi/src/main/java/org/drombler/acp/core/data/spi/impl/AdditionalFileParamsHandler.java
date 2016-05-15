@@ -31,14 +31,14 @@ import org.apache.felix.scr.annotations.Reference;
 import org.apache.felix.scr.annotations.ReferenceCardinality;
 import org.apache.felix.scr.annotations.ReferencePolicy;
 import org.drombler.acp.core.data.spi.DocumentHandlerDescriptorRegistry;
-import org.drombler.acp.core.data.spi.DocumentHandlerEvent;
-import org.drombler.acp.core.data.spi.DocumentHandlerListener;
+import org.drombler.acp.core.data.spi.DocumentHandlerDescriptorEvent;
 import org.drombler.acp.core.data.spi.FileExtensionDescriptorRegistry;
 import org.drombler.acp.core.data.spi.FileExtensionEvent;
 import org.drombler.acp.core.data.spi.FileExtensionListener;
 import org.drombler.acp.core.data.spi.FileUtils;
 import org.drombler.acp.startup.main.AdditionalArgumentsProvider;
 import org.osgi.service.component.ComponentContext;
+import org.drombler.acp.core.data.spi.DocumentHandlerDescriptorListener;
 
 /**
  *
@@ -57,7 +57,7 @@ public class AdditionalFileParamsHandler {
     private final List<String> unresolvedArguments = new ArrayList<>();
     private final List<Path> unresolvedPaths = new ArrayList<>();
     private final FileExtensionListener fileExtensionListener = new OpenFileListener();
-    private final DocumentHandlerListener documentHandlerListener = new OpenDocumentListener();
+    private final DocumentHandlerDescriptorListener documentHandlerListener = new OpenDocumentListener();
 
     protected void bindAdditionalArgumentsProvider(AdditionalArgumentsProvider additionalArgumentsProvider) {
         handleAdditionalArguments(additionalArgumentsProvider.getAdditionalArguments());
@@ -86,13 +86,13 @@ public class AdditionalFileParamsHandler {
     @Activate
     protected void activate(ComponentContext context) {
         fileExtensionDescriptorRegistry.registerFileExtensionListener(fileExtensionListener);
-        documentHandlerDescriptorRegistry.registerDocumentHandlerListener(documentHandlerListener);
+        documentHandlerDescriptorRegistry.registerDocumentHandlerDescriptorListener(documentHandlerListener);
         resolveUnresolvedArguments();
     }
 
     @Deactivate
     protected void deactivate(ComponentContext context) {
-        documentHandlerDescriptorRegistry.unregisterDocumentHandlerListener(documentHandlerListener);
+        documentHandlerDescriptorRegistry.unregisterDocumentHandlerDescriptorListener(documentHandlerListener);
         fileExtensionDescriptorRegistry.unregisterFileExtensionListener(fileExtensionListener);
     }
 
@@ -160,15 +160,15 @@ public class AdditionalFileParamsHandler {
 
     }
 
-    private class OpenDocumentListener implements DocumentHandlerListener {
+    private class OpenDocumentListener implements DocumentHandlerDescriptorListener {
 
         @Override
-        public void documentHandlerAdded(DocumentHandlerEvent<?> event) {
+        public void documentHandlerDescriptorAdded(DocumentHandlerDescriptorEvent<?> event) {
             resolveUnresolvedPaths();
         }
 
         @Override
-        public void documentHandlerRemoved(DocumentHandlerEvent<?> event) {
+        public void documentHandlerDescriptorRemoved(DocumentHandlerDescriptorEvent<?> event) {
             // nothing to do
         }
 

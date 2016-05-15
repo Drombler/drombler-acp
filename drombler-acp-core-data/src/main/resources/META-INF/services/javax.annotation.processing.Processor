@@ -10,5 +10,5 @@
 # Copyright 2015 Drombler.org. All Rights Reserved.
 #
 # Contributor(s): .
-org.drombler.acp.core.data.impl.DocumentHandlerAnnotationProcessor
+org.drombler.acp.core.data.impl.DataHandlerAnnotationProcessor
 org.drombler.acp.core.data.impl.FileExtensionAnnotationProcessor
