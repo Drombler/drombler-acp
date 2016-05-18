@@ -12,7 +12,7 @@
  *
  * Contributor(s): .
  */
-@DockingArea(id = "center", kind = DockingAreaKind.EDITOR, position = 20,
+@DockingArea(id = "editor", kind = DockingAreaKind.EDITOR, position = 20,
         path = {20, 40, 50}, permanent = true)
 @DockingArea(id = "top", kind = DockingAreaKind.VIEW, position = 20,
         path = {20, 40, 20}, layoutConstraints = @LayoutConstraints(prefHeight = 100))
