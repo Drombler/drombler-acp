@@ -21,7 +21,7 @@ import java.util.List;
  *
  * Note: If this is a single instance application an new instance of this service is registered for every application start notification.
  *
- * With the Felix SCR annotations (Declarative Services) you can listen for multiplie instances with the following class annotation:
+ * With the Felix SCR annotations (Declarative Services) you can listen for multiple instances with the following class annotation:
  *
  * {@code @Reference(name = "additionalArgumentsProvider", referenceInterface = AdditionalArgumentsProvider.class,
  * cardinality = ReferenceCardinality.OPTIONAL_MULTIPLE, policy = ReferencePolicy.DYNAMIC)}
