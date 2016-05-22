@@ -26,6 +26,4 @@ public interface DockableDataFactory<DATA> {
     DATA createDockableData(ViewDockingDescriptor<?> dockingDescriptor);
 
     DATA createDockableData(String icon, ResourceLoader resourceLoader);
-
-//    DATA copyDockableData(DATA dockableData);
 }
