@@ -36,9 +36,6 @@
         <scm.connection>${scm.parent.connection}</scm.connection>
         <scm.developerConnection>${scm.parent.developerConnection}</scm.developerConnection>
         <scm.url>${scm.parent.url}</scm.url>
-        <!--  Doesn't work!?  Error: javac: invalid flag: -Xlint:all -proc:none -->
-        <!--        <java.compiler.compilerArgument>-Xlint:all -proc:none</java.compiler.compilerArgument>-->
-        <java.compiler.compilerArgument>-proc:none</java.compiler.compilerArgument>
     </properties>
 
     <!-- Not inherited!?? -->
