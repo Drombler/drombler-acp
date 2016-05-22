@@ -95,9 +95,6 @@ public class EditorDockingHandler<D, DATA extends DockableData, E extends Dockab
     private void resolveDockingDescriptor(EditorDockingDescriptor<? extends D> dockingDescriptor) {
         if (isInitialized()) {
             editorRegistry.registerEditorDockingDescriptor(dockingDescriptor.getContentType(), dockingDescriptor);
-//            DATA dockableData = getDockableDataFactory().createDockableData(dockingDescriptor);
-//            registerClassDockableData(dockingDescriptor.getDockableClass(), dockableData);
-//
             String defaultEditorAreaId = getDockingAreaContainerProvider().getDockingAreaContainer().getDefaultEditorAreaId();
             DockablePreferences dockablePreferences = createDockablePreferences(defaultEditorAreaId, 0);
             registerDefaultDockablePreferences(dockingDescriptor.getDockableClass(), dockablePreferences);
