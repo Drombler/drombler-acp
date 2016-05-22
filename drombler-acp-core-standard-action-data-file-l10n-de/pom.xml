@@ -22,12 +22,12 @@ Contributor(s): .
         <relativePath>../drombler-acp-parent/pom.xml</relativePath>
     </parent>
 
-    <artifactId>drombler-acp-core-standard-action-locale-de</artifactId>
+    <artifactId>drombler-acp-core-standard-action-data-file-l10n-de</artifactId>
     <packaging>bundle</packaging>
 
-    <name>Drombler ACP - Core - Standard - Action - Locale - German</name>
+    <name>Drombler ACP - Core - Standard - Action - Data - File - L10N - German</name>
     <description>L10n (German) for the standard core Actions.</description>
-    <inceptionYear>2012</inceptionYear>
+    <inceptionYear>2016</inceptionYear>
     <!-- required for Javadoc (apidocs) linking -->
     <url>http://www.drombler.org/drombler-acp/${project.version}/docs/site</url>
 
@@ -64,7 +64,7 @@ Contributor(s): .
                 <extensions>true</extensions>
                 <configuration>
                     <instructions>
-                        <Fragment-Host>org.drombler.acp.drombler-acp-core-standard-action;bundle-version=${drombler.acp.osgi.version.clean}</Fragment-Host>
+                        <Fragment-Host>org.drombler.acp.drombler-acp-core-standard-action-data-file;bundle-version=${drombler.acp.osgi.version.clean}</Fragment-Host>
                     </instructions>
                     <versions>
                         <drombler.acp.osgi.version.clean>${project.version}</drombler.acp.osgi.version.clean>
