@@ -77,7 +77,7 @@ public class ActionHandler<T> extends AbstractActionHandler<ActionType, ActionDe
 
     @Override
     protected void registerActions(ActionsType actionsType, BundleContext context) {
-        actionsType.getAction().forEach((actionType) -> registerActionType(actionType, context));
+        actionsType.getAction().forEach(actionType -> registerActionType(actionType, context));
     }
 
     @Override
