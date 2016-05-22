@@ -32,7 +32,7 @@ Contributor(s): .
     <description>Standard core Docking Framework configurations.</description>
     <inceptionYear>2012</inceptionYear>
     <!-- required for Javadoc (apidocs) linking -->
-    <url>http://www.drombler.org/DromblerACP/${project.version}/docs/site</url>
+    <url>http://www.drombler.org/drombler-acp/${project.version}/docs/site</url>
 
     <scm>
         <connection>${scm.connection}</connection>
