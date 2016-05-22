@@ -55,7 +55,7 @@ public class DataHandlerAnnotationProcessor extends AbstractApplicationAnnotatio
         roundEnv.getElementsAnnotatedWith(BusinessObjectHandler.class).forEach(element -> {
             BusinessObjectHandler businessObjectHandlerAnnotation = element.getAnnotation(BusinessObjectHandler.class);
             if (businessObjectHandlerAnnotation != null) {
-                registerDocumentTypeHandlerAnnotation(element, businessObjectHandlerAnnotation);
+                registerBusinessObjectHandlerAnnotation(element, businessObjectHandlerAnnotation);
             }
         });
 
@@ -84,7 +84,7 @@ public class DataHandlerAnnotationProcessor extends AbstractApplicationAnnotatio
         configureDataTypeHandler(documentHandler, icon, element);
     }
 
-    private void registerDocumentTypeHandlerAnnotation(Element element, BusinessObjectHandler businessObjectHandlerAnnotation) {
+    private void registerBusinessObjectHandlerAnnotation(Element element, BusinessObjectHandler businessObjectHandlerAnnotation) {
         init(element);
 
         BusinessObjectHandlerType businessObjectHandler = new BusinessObjectHandlerType();
