@@ -14,6 +14,8 @@
  */
 package org.drombler.acp.core.docking.spi;
 
+import org.softsmithy.lib.util.ResourceLoader;
+
 /**
  *
  * @author puce
@@ -23,7 +25,5 @@ public interface DockableDataFactory<DATA> {
 
     DATA createDockableData(ViewDockingDescriptor<?> dockingDescriptor);
 
-    DATA createDockableData(EditorDockingDescriptor<?> dockingDescriptor);
-
-    DATA copyDockableData(DATA dockableData);
+    DATA createDockableData(String icon, ResourceLoader resourceLoader);
 }

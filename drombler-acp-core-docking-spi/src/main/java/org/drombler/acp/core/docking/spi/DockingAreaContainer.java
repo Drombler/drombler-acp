@@ -33,4 +33,6 @@ public interface DockingAreaContainer<D, E extends DockableEntry<D>> {
 
     void removeDockingAreaContainerListener(DockingAreaContainerListener<D, E> listener);
 
+    String getDefaultEditorAreaId();
+
 }

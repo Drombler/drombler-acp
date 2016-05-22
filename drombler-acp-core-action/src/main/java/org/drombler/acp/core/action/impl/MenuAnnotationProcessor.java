@@ -50,38 +50,37 @@ public class MenuAnnotationProcessor extends AbstractApplicationAnnotationProces
 
     @Override
     protected boolean handleProcess(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
-        for (Element element : roundEnv.getElementsAnnotatedWith(Menus.class)) {
+        roundEnv.getElementsAnnotatedWith(Menus.class).forEach(element -> {
             Menus menusAnnotation = element.getAnnotation(Menus.class);
             if (menusAnnotation != null) {
                 for (Menu menuAnnotation : menusAnnotation.value()) {
                     registerMenu(menuAnnotation, element);
                 }
             }
-        }
+        });
 
-        for (Element element : roundEnv.getElementsAnnotatedWith(Menu.class)) {
+        roundEnv.getElementsAnnotatedWith(Menu.class).forEach(element -> {
             Menu menuAnnotation = element.getAnnotation(Menu.class);
             if (menuAnnotation != null) {
                 registerMenu(menuAnnotation, element);
             }
-        }
+        });
 
-        for (Element element : roundEnv.getElementsAnnotatedWith(MenuEntry.class)) {
+        roundEnv.getElementsAnnotatedWith(MenuEntry.class).forEach(element -> {
             MenuEntry menuEntryAnnotation = element.getAnnotation(MenuEntry.class);
             if (menuEntryAnnotation != null) {
                 Action actionAnnotation = element.getAnnotation(Action.class);
                 registerMenuEntry(menuEntryAnnotation, actionAnnotation, element);
             }
-        }
+        });
 
-        for (Element element : roundEnv.getElementsAnnotatedWith(ToggleMenuEntry.class)) {
+        roundEnv.getElementsAnnotatedWith(ToggleMenuEntry.class).forEach(element -> {
             ToggleMenuEntry toggleMenuEntryAnnotation = element.getAnnotation(ToggleMenuEntry.class);
             if (toggleMenuEntryAnnotation != null) {
                 ToggleAction actionAnnotation = element.getAnnotation(ToggleAction.class);
                 registerToggleMenuEntry(toggleMenuEntryAnnotation, actionAnnotation, element);
             }
-        }
-
+        });
 
         return false;
     }

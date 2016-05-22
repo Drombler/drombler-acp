@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+        COMMON DEVELOPMENT AND DISTRIBUTION LICENSE (CDDL) Notice
+
+The contents of this file are subject to the COMMON DEVELOPMENT AND DISTRIBUTION LICENSE (CDDL)
+Version 1.0 (the "License"); you may not use this file except in
+compliance with the License. A copy of the License is available at
+http://www.opensource.org/licenses/cddl1.txt
+
+The Original Code is Drombler.org. The Initial Developer of the
+Original Code is Florian Brunner (GitHub user: puce77).
+Copyright 2016 Drombler.org. All Rights Reserved.
+
+Contributor(s): .
+-->
+<schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.drombler.org/schema/acp/data" 
+        xmlns:tns="http://www.drombler.org/schema/acp/data" elementFormDefault="qualified" 
+        version="${project.version}">
+
+    <element name="dataHandlers">
+        <complexType>
+            <sequence>
+                <element name="businessObjectHandler" type="tns:BusinessObjectHandlerType" minOccurs="0" maxOccurs="unbounded" />
+                <element name="documentHandler" type="tns:DocumentHandlerType" minOccurs="0" maxOccurs="unbounded" />
+            </sequence>
+        </complexType>
+    </element>
+
+    <complexType name="DataHandlerType">
+        <sequence>
+            <element name="icon" type="string" minOccurs="0" />
+            <element name="handlerClass" type="string"/>
+        </sequence>
+    </complexType>
+    
+    <complexType name="DocumentHandlerType">
+        <complexContent>
+            <extension base="tns:DataHandlerType">
+                <sequence>
+                    <element name="mimeType" type="string" />
+                </sequence>
+            </extension>
+        </complexContent>
+    </complexType>
+    
+    <complexType name="BusinessObjectHandlerType">
+        <complexContent>
+            <extension base="tns:DataHandlerType"/>
+        </complexContent>
+    </complexType>
+    
+</schema>

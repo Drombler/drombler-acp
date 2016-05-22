@@ -27,7 +27,5 @@ public class DockingDescriptorUtils {
     public static void configureDockingDescriptor(AbstractDockableDockingDescriptor<?> dockingDescriptor,
             AbstractDockingType dockingType, Bundle bundle) throws ClassNotFoundException {
         dockingDescriptor.setId(StringUtils.stripToNull(dockingType.getId()));
-        dockingDescriptor.setIcon(StringUtils.stripToNull(dockingType.getIcon()));
-        dockingDescriptor.setAreaId(StringUtils.stripToNull(dockingType.getAreaId()));
     }
 }

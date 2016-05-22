@@ -29,4 +29,8 @@ public interface DockingAreaContainerListener<D, E extends DockableEntry<D>> ext
     void dockingAreaAdded(DockingAreaContainerDockingAreaEvent<D, E> event);
 
     void dockingAreaRemoved(DockingAreaContainerDockingAreaEvent<D, E> event);
+
+    void dockableAdded(DockingAreaContainerDockableEvent<D, E> event);
+
+    void dockableRemoved(DockingAreaContainerDockableEvent<D, E> event);
 }

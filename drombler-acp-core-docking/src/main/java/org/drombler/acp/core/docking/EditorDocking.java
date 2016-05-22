@@ -29,13 +29,6 @@ import java.lang.annotation.Target;
 @Target(ElementType.TYPE)
 public @interface EditorDocking {
 
-//    String id();
-    String areaId();
-
-//    boolean singleton() default true;
-
-    String icon() default "";
-
-    DockingState state() default DockingState.DOCKED;
+    Class<?> contentType();
 
 }

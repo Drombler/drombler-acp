@@ -24,10 +24,10 @@ import org.apache.felix.scr.annotations.Reference;
 import org.apache.felix.scr.annotations.ReferenceCardinality;
 import org.apache.felix.scr.annotations.ReferencePolicy;
 import org.apache.felix.scr.annotations.References;
-import org.drombler.acp.startup.main.ApplicationExecutorProvider;
 import org.drombler.acp.core.docking.jaxb.DockingAreaType;
 import org.drombler.acp.core.docking.jaxb.DockingAreasType;
 import org.drombler.acp.core.docking.spi.DockingAreaDescriptorUtils;
+import org.drombler.acp.startup.main.ApplicationExecutorProvider;
 import org.drombler.commons.docking.DockableEntry;
 import org.drombler.commons.docking.DockingAreaDescriptor;
 import org.osgi.service.component.ComponentContext;
@@ -97,7 +97,7 @@ public class DockingAreaHandler<D, E extends DockableEntry<D>> extends AbstractD
 
     private void resolveDockingArea(final DockingAreaDescriptor dockingAreaDescriptor) {
         if (isInitialized()) {
-            LOG.info("Adding docking area: '{}'", dockingAreaDescriptor.getId());
+            LOG.info("Adding docking area ({}): '{}'", dockingAreaDescriptor.getKind(), dockingAreaDescriptor.getId());
             Runnable runnable = ()
                     -> getDockingAreaContainerProvider().getDockingAreaContainer().addDockingArea(dockingAreaDescriptor);
             applicationExecutor.execute(runnable);

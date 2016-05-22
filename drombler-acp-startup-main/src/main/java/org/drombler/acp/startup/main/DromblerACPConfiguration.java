@@ -95,6 +95,7 @@ public class DromblerACPConfiguration {
 
         Properties defaultConfigProps = loadDefaultConfigProps();
         Properties installConfigProps = createInstallConfigProps(defaultConfigProps, commandLineArgs);
+        resolveProperties(installConfigProps);
 
         this.userDirPath = determineUserDirPath(installConfigProps);
         if (!Files.exists(userDirPath)) {

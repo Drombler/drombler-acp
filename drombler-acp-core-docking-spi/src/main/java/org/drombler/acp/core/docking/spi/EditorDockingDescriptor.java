@@ -14,6 +14,8 @@
  */
 package org.drombler.acp.core.docking.spi;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import org.apache.commons.lang3.StringUtils;
 import org.drombler.acp.core.docking.jaxb.EditorDockingType;
 import org.osgi.framework.Bundle;
@@ -21,11 +23,22 @@ import org.osgi.framework.Bundle;
 /**
  *
  * @author puce
+ * @param <D> the type of the dockable
  */
 public class EditorDockingDescriptor<D> extends AbstractDockableDockingDescriptor<D> {
 
-    public EditorDockingDescriptor(Class<D> dockableClass) {
+    private final Class<?> contentType;
+
+    public EditorDockingDescriptor(Class<D> dockableClass, Class<?> contentType) {
         super(dockableClass);
+        this.contentType = contentType;
+    }
+
+    /**
+     * @return the contentType
+     */
+    public Class<?> getContentType() {
+        return contentType;
     }
 
     public static EditorDockingDescriptor<?> createEditorDockingDescriptor(EditorDockingType docking, Bundle bundle)
@@ -36,10 +49,17 @@ public class EditorDockingDescriptor<D> extends AbstractDockableDockingDescripto
 
     private static <D> EditorDockingDescriptor<D> createEditorDockingDescriptor(EditorDockingType docking,
             Class<D> dockableClass, Bundle bundle) throws ClassNotFoundException {
-        EditorDockingDescriptor<D> dockingDescriptor = new EditorDockingDescriptor<>(dockableClass);
+        Class<?> contentType = bundle.loadClass(StringUtils.stripToNull(docking.getContentType()));
+        EditorDockingDescriptor<D> dockingDescriptor = new EditorDockingDescriptor<>(dockableClass, contentType);
 
         DockingDescriptorUtils.configureDockingDescriptor(dockingDescriptor, docking, bundle);
 
         return dockingDescriptor;
+    }
+
+    public D createEditor(Object content)
+            throws IllegalAccessException, SecurityException, InvocationTargetException, InstantiationException, IllegalArgumentException, NoSuchMethodException {
+        Constructor<? extends D> editorConstructor = getDockableClass().getConstructor(content.getClass());
+        return editorConstructor.newInstance(content);
     }
 }

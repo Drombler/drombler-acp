@@ -29,7 +29,7 @@ Contributor(s): .
     <description>L10n (German) for the standard core Actions.</description>
     <inceptionYear>2012</inceptionYear>
     <!-- required for Javadoc (apidocs) linking -->
-    <url>http://www.drombler.org/DromblerACP/${project.version}/docs/site</url>
+    <url>http://www.drombler.org/drombler-acp/${project.version}/docs/site</url>
 
     <scm>
         <connection>${scm.connection}</connection>
@@ -86,7 +86,7 @@ Contributor(s): .
     <dependencies>
         <dependency>
             <groupId>org.drombler.acp</groupId>
-            <artifactId>drombler-acp-core-action</artifactId>
+            <artifactId>drombler-acp-core-standard-action</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>

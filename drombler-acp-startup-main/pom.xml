@@ -28,7 +28,7 @@ Contributor(s): .
     <description>The main classes to startup a Drombler ACP based application.</description>
     <inceptionYear>2012</inceptionYear>
     <!-- required for Javadoc (apidocs) linking -->
-    <url>http://www.drombler.org/DromblerACP/${project.version}/docs/site</url>
+    <url>http://www.drombler.org/drombler-acp/${project.version}/docs/site</url>
     
     <scm>
         <connection>${scm.connection}</connection>

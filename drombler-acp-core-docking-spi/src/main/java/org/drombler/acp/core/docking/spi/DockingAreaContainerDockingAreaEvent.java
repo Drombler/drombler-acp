@@ -25,6 +25,8 @@ import org.drombler.commons.docking.DockableEntry;
  */
 public class DockingAreaContainerDockingAreaEvent<D, E extends DockableEntry<D>> extends EventObject {
 
+    private static final long serialVersionUID = 3793017833508157560L;
+
     private final String areaId;
 
     public DockingAreaContainerDockingAreaEvent(DockingAreaContainer<D, E> source, String areaId) {

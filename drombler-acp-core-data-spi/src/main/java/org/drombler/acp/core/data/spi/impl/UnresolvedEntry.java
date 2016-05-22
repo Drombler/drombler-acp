@@ -12,26 +12,35 @@
  *
  * Contributor(s): .
  */
-package org.drombler.acp.core.docking.spi.impl;
+package org.drombler.acp.core.data.spi.impl;
 
-import org.drombler.acp.core.docking.spi.Dockables;
-import org.drombler.commons.action.AbstractActionListener;
+import org.osgi.framework.BundleContext;
 
 /**
  *
  * @author puce
  */
-public class ActivateDockableAction<D> extends AbstractActionListener<Object> {
+public class UnresolvedEntry<T> {
+    private final T entry;
+    private final BundleContext context;
 
-    private final D dockable;
-
-    public ActivateDockableAction(D dockable) {
-        this.dockable = dockable;
+    public UnresolvedEntry(T entry, BundleContext context) {
+        this.entry = entry;
+        this.context = context;
     }
 
-    @Override
-    public void onAction(Object event) {
-        Dockables.open(dockable);
-//        dockable.requestActive();
+    /**
+     * @return the entry
+     */
+    public T getEntry() {
+        return entry;
     }
+
+    /**
+     * @return the context
+     */
+    public BundleContext getContext() {
+        return context;
+    }
+    
 }
