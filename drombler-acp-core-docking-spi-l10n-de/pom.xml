@@ -22,12 +22,12 @@ Contributor(s): .
         <relativePath>../drombler-acp-parent/pom.xml</relativePath>
     </parent>
 
-    <artifactId>drombler-acp-core-standard-action-data-file-i18n-de</artifactId>
+    <artifactId>drombler-acp-core-docking-spi-l10n-de</artifactId>
     <packaging>bundle</packaging>
 
-    <name>Drombler ACP - Core - Standard - Action - Data - File - I18N - German</name>
-    <description>L10n (German) for the standard core Actions.</description>
-    <inceptionYear>2016</inceptionYear>
+    <name>Drombler ACP - Core - Docking - SPI - L10N - German</name>
+    <description>L10n (German) for the SPI for building a declarative and modular Docking Framework.</description>
+    <inceptionYear>2012</inceptionYear>
     <!-- required for Javadoc (apidocs) linking -->
     <url>http://www.drombler.org/drombler-acp/${project.version}/docs/site</url>
 
@@ -37,14 +37,14 @@ Contributor(s): .
         <url>${scm.url}</url>
         <tag>HEAD</tag>
     </scm>
-  
+
     <distributionManagement>
         <site>
             <id>github</id>
             <url>${distributionManagement.parent.url}/${project.artifactId}/</url>
         </site>
     </distributionManagement>
-
+    
     <properties>
         <scm.connection>${scm.parent.connection}</scm.connection>
         <scm.developerConnection>${scm.parent.developerConnection}</scm.developerConnection>
@@ -64,7 +64,7 @@ Contributor(s): .
                 <extensions>true</extensions>
                 <configuration>
                     <instructions>
-                        <Fragment-Host>org.drombler.acp.drombler-acp-core-standard-action-data-file;bundle-version=${drombler.acp.osgi.version.clean}</Fragment-Host>
+                        <Fragment-Host>org.drombler.acp.drombler-acp-core-docking-spi;bundle-version=${drombler.acp.osgi.version.clean}</Fragment-Host>
                     </instructions>
                     <versions>
                         <drombler.acp.osgi.version.clean>${project.version}</drombler.acp.osgi.version.clean>
@@ -86,7 +86,7 @@ Contributor(s): .
     <dependencies>
         <dependency>
             <groupId>org.drombler.acp</groupId>
-            <artifactId>drombler-acp-core-standard-action</artifactId>
+            <artifactId>drombler-acp-core-docking-spi</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>

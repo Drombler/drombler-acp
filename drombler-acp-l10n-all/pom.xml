@@ -15,36 +15,37 @@ Contributor(s): .
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-  
+    
     <parent>
         <groupId>org.drombler.acp</groupId>
         <artifactId>drombler-acp-parent</artifactId>
         <version>0.8-SNAPSHOT</version>
         <relativePath>../drombler-acp-parent/pom.xml</relativePath>
     </parent>
-    <artifactId>drombler-acp-locale-de</artifactId>
+    <artifactId>drombler-acp-l10n-all</artifactId>
     <packaging>pom</packaging>
 
-    <name>Drombler ACP - Locale - German</name>
-    <description>L10n (German) of Drombler ACP.</description>
+    <name>Drombler ACP - L10N - All</name>
+    <description>L10n of Drombler ACP. You can use this POM file e.g. in your dependencies section to manage your 
+        Drombler ACP L10n dependencies.</description>
     <inceptionYear>2012</inceptionYear>
     <!-- required for Javadoc (apidocs) linking -->
     <url>http://www.drombler.org/drombler-acp/${project.version}/docs/site</url>
-
-    <scm>
+    
+        <scm>
         <connection>${scm.connection}</connection>
         <developerConnection>${scm.developerConnection}</developerConnection>
         <url>${scm.url}</url>
       <tag>HEAD</tag>
-  </scm>
+        </scm>
+  
+        <distributionManagement>
+            <site>
+                <id>github</id>
+                <url>${distributionManagement.parent.url}/${project.artifactId}/</url>
+            </site>
+        </distributionManagement>
 
-  <distributionManagement>
-      <site>
-          <id>github</id>
-          <url>${distributionManagement.parent.url}/${project.artifactId}/</url>
-      </site>
-  </distributionManagement>
-    
     <properties>
         <scm.connection>${scm.parent.connection}</scm.connection>
         <scm.developerConnection>${scm.parent.developerConnection}</scm.developerConnection>
@@ -55,22 +56,13 @@ Contributor(s): .
     <prerequisites>
         <maven>${maven.version}</maven>
     </prerequisites>
-       
+    
     <dependencies>
         <dependency>
             <groupId>org.drombler.acp</groupId>
-            <artifactId>drombler-acp-core-docking-spi-locale-de</artifactId>
+            <artifactId>drombler-acp-l10n-de</artifactId>
             <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.drombler.acp</groupId>
-            <artifactId>drombler-acp-core-standard-action-locale-de</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.drombler.acp</groupId>
-            <artifactId>drombler-acp-core-standard-action-data-file-i18n-de</artifactId>
-            <version>${project.version}</version>
+            <type>pom</type>
         </dependency>
     </dependencies>
 </project>

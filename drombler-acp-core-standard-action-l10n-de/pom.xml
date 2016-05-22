@@ -15,36 +15,35 @@ Contributor(s): .
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    
     <parent>
         <groupId>org.drombler.acp</groupId>
         <artifactId>drombler-acp-parent</artifactId>
         <version>0.8-SNAPSHOT</version>
         <relativePath>../drombler-acp-parent/pom.xml</relativePath>
     </parent>
-    <artifactId>drombler-acp-locale-all</artifactId>
-    <packaging>pom</packaging>
 
-    <name>Drombler ACP - Locale - All</name>
-    <description>L10n of Drombler ACP. You can use this POM file e.g. in your dependencies section to manage your 
-        Drombler ACP L10n dependencies.</description>
+    <artifactId>drombler-acp-core-standard-action-l10n-de</artifactId>
+    <packaging>bundle</packaging>
+
+    <name>Drombler ACP - Core - Standard - Action - L10N - German</name>
+    <description>L10n (German) for the standard core Actions.</description>
     <inceptionYear>2012</inceptionYear>
     <!-- required for Javadoc (apidocs) linking -->
     <url>http://www.drombler.org/drombler-acp/${project.version}/docs/site</url>
-    
-        <scm>
+
+    <scm>
         <connection>${scm.connection}</connection>
         <developerConnection>${scm.developerConnection}</developerConnection>
         <url>${scm.url}</url>
-      <tag>HEAD</tag>
-        </scm>
+        <tag>HEAD</tag>
+    </scm>
   
-        <distributionManagement>
-            <site>
-                <id>github</id>
-                <url>${distributionManagement.parent.url}/${project.artifactId}/</url>
-            </site>
-        </distributionManagement>
+    <distributionManagement>
+        <site>
+            <id>github</id>
+            <url>${distributionManagement.parent.url}/${project.artifactId}/</url>
+        </site>
+    </distributionManagement>
 
     <properties>
         <scm.connection>${scm.parent.connection}</scm.connection>
@@ -57,12 +56,38 @@ Contributor(s): .
         <maven>${maven.version}</maven>
     </prerequisites>
     
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>maven-bundle-plugin</artifactId>
+                <extensions>true</extensions>
+                <configuration>
+                    <instructions>
+                        <Fragment-Host>org.drombler.acp.drombler-acp-core-standard-action;bundle-version=${drombler.acp.osgi.version.clean}</Fragment-Host>
+                    </instructions>
+                    <versions>
+                        <drombler.acp.osgi.version.clean>${project.version}</drombler.acp.osgi.version.clean>
+                    </versions>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>cleanVersions</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+   
     <dependencies>
         <dependency>
             <groupId>org.drombler.acp</groupId>
-            <artifactId>drombler-acp-locale-de</artifactId>
+            <artifactId>drombler-acp-core-standard-action</artifactId>
             <version>${project.version}</version>
-            <type>pom</type>
         </dependency>
     </dependencies>
 </project>
