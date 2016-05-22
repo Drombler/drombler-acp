@@ -215,25 +215,11 @@ public final class Dockables {
         DockableDataManagerProvider<D, DATA> dockableDataManagerProvider
                 = bundleContext.getService(dockableDataManagerProviderServiceReference);
 
-//        @SuppressWarnings("rawtypes")
-//        ServiceReference<DockableDataFactory> dockableDataFactoryServiceReference
-//                = bundleContext.getServiceReference(DockableDataFactory.class);
-//        @SuppressWarnings("unchecked")
-//        DockableDataFactory<DATA> dockableDataFactory
-//                = bundleContext.getService(dockableDataFactoryServiceReference);
         final DockableDataManager<D, DATA> dockableDataManager = dockableDataManagerProvider.getDockableDataManager();
-//        if (dockableDataManager.getDockableData(dockable) == null) {
-//            DATA classDockableData = dockableDataManager.getClassDockableData(dockable);
-//            if (classDockableData != null) {
-//                DATA copyDockableData = dockableDataFactory.copyDockableData(classDockableData);
-//                dockableDataManager.registerDockableData(dockable, copyDockableData);
-//            }
-//        }
 
         DockingInjector<D, DATA> dockingInjector = new DockingInjector<>(dockableDataManager);
         dockingInjector.inject(dockable);
 
-//        bundleContext.ungetService(dockableDataFactoryServiceReference);
         bundleContext.ungetService(dockableDataManagerProviderServiceReference);
     }
 }
