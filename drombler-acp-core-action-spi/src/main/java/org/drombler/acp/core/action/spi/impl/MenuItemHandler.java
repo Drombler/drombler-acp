@@ -39,7 +39,7 @@ import org.osgi.util.tracker.ServiceTrackerCustomizer;
  */
 @Component(immediate = true)
 @Reference(name = "menuEntryDescriptor", referenceInterface = MenuEntryDescriptor.class,
-cardinality = ReferenceCardinality.OPTIONAL_MULTIPLE, policy = ReferencePolicy.DYNAMIC)
+        cardinality = ReferenceCardinality.OPTIONAL_MULTIPLE, policy = ReferencePolicy.DYNAMIC)
 public class MenuItemHandler<MenuItem, Menu extends MenuItem, Action> extends AbstractMenuItemHandler<MenuItem, Menu, MenuItem, MenuEntryDescriptor, MenuItemConfig<Action>> {
 
     @Reference
@@ -96,10 +96,8 @@ public class MenuItemHandler<MenuItem, Menu extends MenuItem, Action> extends Ab
                     public ServiceReference<Action> addingService(ServiceReference<Action> reference) {
                         String actionId = actionRegistry.getActionId(reference);
                         if (actionResolutionManager.containsUnresolvedEntries(actionId)) {
-                            for (UnresolvedEntry<MenuEntryDescriptor> unresolvedEntry :
-                                    actionResolutionManager.removeUnresolvedEntries(actionId)) {
-                                resolveMenuItem(unresolvedEntry.getEntry(), unresolvedEntry.getContext());
-                            }
+                            actionResolutionManager.removeUnresolvedEntries(actionId).forEach(unresolvedEntry
+                                    -> resolveMenuItem(unresolvedEntry.getEntry(), unresolvedEntry.getContext()));
                         }
                         return reference;
                     }
@@ -109,11 +107,11 @@ public class MenuItemHandler<MenuItem, Menu extends MenuItem, Action> extends Ab
                         // TODO ???
                     }
 
-                    @Override
-                    public void removedService(ServiceReference<Action> reference, ServiceReference<Action> service) {
-                        // TODO ???
-                    }
-                });
+            @Override
+            public void removedService(ServiceReference<Action> reference, ServiceReference<Action> service) {
+                // TODO ???
+            }
+        });
     }
 
     @Override
