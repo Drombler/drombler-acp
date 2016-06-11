@@ -17,6 +17,7 @@ package org.drombler.acp.core.action.spi;
 import java.util.Collection;
 import java.util.Dictionary;
 import java.util.Hashtable;
+import java.util.regex.Matcher;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
@@ -53,7 +54,7 @@ public class ActionRegistry {
         }
         if (actionId.contains(NUL)) {
             actionId = actionId.replaceAll(NUL, "\\00");
-        }
+       }
         if (actionId.contains("(")) {
             actionId = actionId.replaceAll("\\(", "\\28");
         }

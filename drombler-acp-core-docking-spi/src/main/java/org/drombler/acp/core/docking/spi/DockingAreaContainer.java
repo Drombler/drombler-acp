@@ -14,6 +14,7 @@
  */
 package org.drombler.acp.core.docking.spi;
 
+import java.util.Set;
 import org.drombler.commons.docking.DockableEntry;
 import org.drombler.commons.docking.DockingAreaDescriptor;
 
@@ -34,5 +35,7 @@ public interface DockingAreaContainer<D, E extends DockableEntry<D>> {
     void removeDockingAreaContainerListener(DockingAreaContainerListener<D, E> listener);
 
     String getDefaultEditorAreaId();
+
+    Set<E> getDockables();
 
 }
