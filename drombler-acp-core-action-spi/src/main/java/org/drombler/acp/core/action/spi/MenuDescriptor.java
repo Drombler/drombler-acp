@@ -28,7 +28,7 @@ public class MenuDescriptor extends AbstractMenuEntryDescriptor {
     private final String id;
     private final String displayName;
 
-    private MenuDescriptor(String id, String displayName, String path, int position) {
+    public MenuDescriptor(String id, String displayName, String path, int position) {
         super(path, position);
         this.id = id;
         this.displayName = displayName;

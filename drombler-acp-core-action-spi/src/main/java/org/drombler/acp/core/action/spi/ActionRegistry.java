@@ -17,6 +17,7 @@ package org.drombler.acp.core.action.spi;
 import java.util.Collection;
 import java.util.Dictionary;
 import java.util.Hashtable;
+import java.util.regex.Matcher;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
@@ -30,12 +31,14 @@ import org.slf4j.LoggerFactory;
 public class ActionRegistry {
 
     private static final Logger LOG = LoggerFactory.getLogger(ActionRegistry.class);
+    private static final String BACKSLASH = "\\";
+    private static final String NUL = Character.toString((char) 0);
 
 //    private final Map<String, ActionDescriptor> actionDescriptors = new HashMap<>();
     public <T> T getAction(String actionId, Class<T> actionClass, BundleContext context) {
         try {
             Collection<ServiceReference<T>> serviceReferences = context.getServiceReferences(
-                    actionClass, "(" + ActionDescriptor.ID_KEY + "=" + actionId + ")");
+                    actionClass, "(" + ActionDescriptor.ID_KEY + "=" + escapeLDAPFilter(actionId) + ")");
             if (!serviceReferences.isEmpty()) {
                 return context.getService(serviceReferences.iterator().next());
             }
@@ -45,9 +48,28 @@ public class ActionRegistry {
         return null;
     }
 
+    private String escapeLDAPFilter(String actionId) {
+        if (actionId.contains(BACKSLASH)) {
+            actionId = actionId.replaceAll(Matcher.quoteReplacement(BACKSLASH), "\\5C");
+        }
+        if (actionId.contains(NUL)) {
+            actionId = actionId.replaceAll(NUL, "\\00");
+       }
+        if (actionId.contains("(")) {
+            actionId = actionId.replaceAll("\\(", "\\28");
+        }
+        if (actionId.contains(")")) {
+            actionId = actionId.replaceAll("\\)", "\\29");
+        }
+        if (actionId.contains("*")) {
+            actionId = actionId.replaceAll("\\*", "\\5C");
+        }
+        return actionId;
+    }
+
     public <T> void registerAction(String actionId, Class<T> actionClass, T action, BundleContext context) {
         Dictionary<String, String> properties = new Hashtable<>(1);
-        properties.put(ActionDescriptor.ID_KEY, actionId);
+        properties.put(ActionDescriptor.ID_KEY, escapeLDAPFilter(actionId));
         context.registerService(actionClass, action, properties);
     }
 //    public ActionDescriptor putAction(String actionId, ActionDescriptor action) {

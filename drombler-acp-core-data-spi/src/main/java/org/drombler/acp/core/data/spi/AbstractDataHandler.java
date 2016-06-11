@@ -1,6 +1,7 @@
-package org.drombler.acp.core.data;
+package org.drombler.acp.core.data.spi;
 
 import org.drombler.acp.core.commons.util.SimpleServiceTrackerCustomizer;
+import org.drombler.acp.core.data.DataCapabilityProvider;
 import org.drombler.commons.context.Context;
 import org.drombler.commons.context.LocalContextProvider;
 import org.drombler.commons.context.SimpleContext;
@@ -11,11 +12,11 @@ public abstract class AbstractDataHandler implements AutoCloseable, LocalContext
 
     private final SimpleContextContent contextContent = new SimpleContextContent();
     private final Context localContext = new SimpleContext(contextContent);
-    private final ServiceTracker<DataCapabilityProvider, DataCapabilityProvider> serviceTracker;
+    private final ServiceTracker<DataCapabilityProvider, DataCapabilityProvider> dataCapabilityProviderTracker;
 
     public AbstractDataHandler() {
-        this.serviceTracker = SimpleServiceTrackerCustomizer.createServiceTracker(DataCapabilityProvider.class, this::addDataCapabilityProvider, this::removeDataCapabilityProvider);
-        serviceTracker.open(true);
+        this.dataCapabilityProviderTracker = SimpleServiceTrackerCustomizer.createServiceTracker(DataCapabilityProvider.class, this::addDataCapabilityProvider, this::removeDataCapabilityProvider);
+        dataCapabilityProviderTracker.open(true);
     }
 
     @Override
@@ -33,6 +34,6 @@ public abstract class AbstractDataHandler implements AutoCloseable, LocalContext
 
     @Override
     public void close() {
-        serviceTracker.close();
+        dataCapabilityProviderTracker.close();
     }
 }

@@ -90,7 +90,9 @@ public class ActionHandler<T> extends AbstractActionHandler<ActionType, ActionDe
     protected void registerActionDescriptor(ActionDescriptor<?> actionDescriptor, BundleContext context) {
         if (isInitialized()) {
             T action = actionFactory.createAction(actionDescriptor);
-            registerActionListener(context, actionDescriptor);
+            if (!actionDescriptor.getListenerType().equals(actionFactory.getActionClass())) {
+                registerActionListener(context, actionDescriptor);
+            }
             getActionRegistry().
                     registerAction(actionDescriptor.getId(), actionFactory.getActionClass(), action, context);
         } else {

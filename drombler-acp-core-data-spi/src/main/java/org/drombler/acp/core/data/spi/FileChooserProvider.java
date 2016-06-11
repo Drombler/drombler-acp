@@ -14,5 +14,5 @@ public interface FileChooserProvider {
 
     Path showOpenDialog();
 
-    Path showSaveAsDialog();
+    Path showSaveAsDialog(String initialFileName);
 }

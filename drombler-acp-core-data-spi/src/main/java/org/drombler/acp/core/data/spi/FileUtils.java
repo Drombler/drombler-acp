@@ -4,8 +4,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import org.drombler.acp.core.data.Openable;
-import org.drombler.commons.context.Context;
-import org.drombler.commons.context.LocalContextProvider;
+import org.drombler.commons.context.Contexts;
 
 /**
  *
@@ -22,17 +21,12 @@ public class FileUtils {
             if (documentHandlerDescriptor != null) {
                 try {
                     Object documentHandler = documentHandlerDescriptor.createDocumentHandler(fileToOpen);
-                    if (documentHandler instanceof LocalContextProvider) {
-                        Context localContext = ((LocalContextProvider) documentHandler).getLocalContext();
-                        Openable openable = localContext.find(Openable.class);
-                        if (openable != null) {
-                            openable.open(); // TODO: load them in background
-                        } else {
-// TODO
-                        }
+                    Openable openable = Contexts.find(documentHandler, Openable.class);
+                    if (openable != null) {
+                        openable.open(); // TODO: load them in background
                     } else {
-
-                    }// TODO
+// TODO
+                    }
                 } catch (IllegalAccessException | SecurityException | InvocationTargetException | InstantiationException | IllegalArgumentException | NoSuchMethodException ex) {
                     // TODO
                 }
