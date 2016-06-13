@@ -14,6 +14,7 @@
  */
 package org.drombler.acp.core.docking.impl;
 
+import java.util.Collections;
 import java.util.EnumMap;
 import java.util.Map;
 import java.util.Set;
@@ -22,8 +23,13 @@ import javax.annotation.processing.SupportedAnnotationTypes;
 import javax.annotation.processing.SupportedSourceVersion;
 import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Element;
+import javax.lang.model.element.ExecutableElement;
+import javax.lang.model.element.Modifier;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.type.MirroredTypeException;
+import javax.lang.model.type.TypeMirror;
+import javax.lang.model.util.ElementFilter;
+import javax.tools.Diagnostic;
 import org.apache.commons.lang3.StringUtils;
 import org.drombler.acp.core.application.AbstractApplicationAnnotationProcessor;
 import org.drombler.acp.core.docking.DockingState;
@@ -87,6 +93,47 @@ public class DockingAnnotationProcessor extends AbstractApplicationAnnotationPro
         return false;
     }
 
+    private void registerEditorDocking(EditorDocking dockingAnnotation, Element element) {
+        TypeMirror contentType = getContentType(dockingAnnotation);
+        if (contentType != null) {
+            if (ElementFilter.typesIn(Collections.singletonList(element)).stream()
+                    .anyMatch(typeElement -> checkForContentTypeConstructor(typeElement, contentType))) {
+                registerEditorDockingOnly(dockingAnnotation, element);
+            } else {
+                // Couldn't find any matching constructor
+                processingEnv.getMessager().printMessage(
+                        Diagnostic.Kind.ERROR, "Missing a public constructor with a single parameter of type: " + contentType,
+                        element);
+            }
+        } else {
+            // should not happen here
+            processingEnv.getMessager().printMessage(
+                    Diagnostic.Kind.ERROR, "Couldn't retrieve the contentType information.",
+                    element);
+        }
+    }
+
+    private TypeMirror getContentType(EditorDocking dockingAnnotation) {
+        TypeMirror contentType = null;
+        try {
+            dockingAnnotation.contentType();
+        } catch (MirroredTypeException mte) {
+            contentType = mte.getTypeMirror();
+        }
+        return contentType;
+    }
+
+    private boolean checkForContentTypeConstructor(TypeElement type, TypeMirror contentType) {
+        return ElementFilter.constructorsIn(type.getEnclosedElements()).stream().
+                anyMatch(constructor -> isContentTypeConstructor(constructor, contentType));
+    }
+
+    private static boolean isContentTypeConstructor(ExecutableElement cons, TypeMirror contentType) {
+        return cons.getModifiers().contains(Modifier.PUBLIC)
+                && cons.getParameters().size() == 1
+                && cons.getParameters().get(0).asType().equals(contentType);
+    }
+
     private void registerViewDocking(ViewDocking dockingAnnotation, Element element) {
         init(element);
 
@@ -124,7 +171,7 @@ public class DockingAnnotationProcessor extends AbstractApplicationAnnotationPro
         addOriginatingElements(element); // TODO: needed?
     }
 
-    private void registerEditorDocking(EditorDocking dockingAnnotation, Element element) {
+    private void registerEditorDockingOnly(EditorDocking dockingAnnotation, Element element) {
         init(element);
 
         EditorDockingType docking = new EditorDockingType();
