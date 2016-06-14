@@ -177,7 +177,7 @@ public final class Dockables {
 
     private static <D, E extends DockableEntry<D>> void addDockable(ApplicationExecutorProvider applicationExecutorProvider, DockingAreaContainerProvider<D, E> dockingAreaContainerProvider,
             E dockableEntry) {
-        applicationExecutorProvider.getApplicationExecutor().execute(() -> dockingAreaContainerProvider.getDockingAreaContainer().addDockable(dockableEntry));
+        applicationExecutorProvider.getApplicationExecutor().execute(() -> dockingAreaContainerProvider.getDockingAreaContainer().addDockable(dockableEntry, true));
     }
 
     public static <D> void inject(D dockable) {
