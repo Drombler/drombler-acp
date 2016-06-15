@@ -27,8 +27,9 @@ import org.drombler.commons.context.LocalContextProvider;
  *
  * To fully integrate with the framework it should implement {@link LocalContextProvider}, observe registered {@link DataCapabilityProvider}s and add the found data capabilities to it's local context.
  *
- * The easiest way to implement a document handler is to extend AbstractDocumentHandler, but it's not required.
+ * The easiest way to implement a document handler is to extend {@link AbstractDocumentHandler}, but it's not required.
  *
+ * @see AbstractDocumentHandler
  * @author puce
  */
 @Documented
