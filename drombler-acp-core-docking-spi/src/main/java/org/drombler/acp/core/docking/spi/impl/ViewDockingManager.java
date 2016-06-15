@@ -89,7 +89,7 @@ public class ViewDockingManager<D, DATA extends DockableData, E extends Dockable
             dockingInjector.inject(dockable);
 
             DockablePreferences dockablePreferences = dockablePreferencesManager.getDockablePreferences(dockable);
-            if (dockingAreaContainer.addDockable(dockableEntryFactory.createDockableEntry(dockable, DockableKind.VIEW, dockablePreferences))) {
+            if (dockingAreaContainer.addDockable(dockableEntryFactory.createDockableEntry(dockable, DockableKind.VIEW, dockablePreferences), false)) {
                 dockingDescriptor.setDockable(dockable);
                 context.registerService(ActionDescriptor.class,
                         dockingDescriptor.getActivateDockableActionDescriptor(), null);

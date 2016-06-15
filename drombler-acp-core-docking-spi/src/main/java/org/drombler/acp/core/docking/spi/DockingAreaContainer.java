@@ -28,7 +28,7 @@ public interface DockingAreaContainer<D, E extends DockableEntry<D>> {
 
     boolean addDockingArea(DockingAreaDescriptor dockingAreaDescriptor);
 
-    boolean addDockable(E dockableEntry);
+    boolean addDockable(E dockableEntry, boolean active);
 
     void addDockingAreaContainerListener(DockingAreaContainerListener<D, E> listener);
 
