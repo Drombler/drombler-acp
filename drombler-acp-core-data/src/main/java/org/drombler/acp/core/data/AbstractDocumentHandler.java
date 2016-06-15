@@ -12,13 +12,12 @@
  *
  * Contributor(s): .
  */
-package org.drombler.acp.core.data.spi;
+package org.drombler.acp.core.data;
 
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Locale;
 import org.drombler.acp.core.commons.util.SimpleServiceTrackerCustomizer;
-import org.drombler.acp.core.data.DocumentHandler;
 import org.osgi.util.tracker.ServiceTracker;
 
 /**

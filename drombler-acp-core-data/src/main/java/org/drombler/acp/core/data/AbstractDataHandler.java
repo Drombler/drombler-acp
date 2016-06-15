@@ -1,4 +1,4 @@
-package org.drombler.acp.core.data.spi;
+package org.drombler.acp.core.data;
 
 import org.drombler.acp.core.commons.util.SimpleServiceTrackerCustomizer;
 import org.drombler.acp.core.data.DataCapabilityProvider;
