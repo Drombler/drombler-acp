@@ -6,7 +6,7 @@ import org.drombler.acp.core.action.Action;
 import org.drombler.acp.core.action.MenuEntry;
 import org.drombler.acp.core.commons.util.SimpleServiceTrackerCustomizer;
 import org.drombler.acp.core.data.spi.DocumentHandlerDescriptorRegistry;
-import org.drombler.acp.core.data.spi.FileChooserProvider;
+import org.drombler.acp.core.data.FileChooserProvider;
 import org.drombler.acp.core.data.spi.FileExtensionDescriptorRegistry;
 import org.drombler.acp.core.data.spi.FileUtils;
 import org.drombler.commons.action.AbstractActionListener;

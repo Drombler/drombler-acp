@@ -21,6 +21,9 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
+ * Registers an editor dockable.
+ *
+ * The annotated editor requires a constructor with a single parameter of type {@link #contentType() }. The contentType is usually a data handler.
  *
  * @author puce
  */
@@ -29,6 +32,11 @@ import java.lang.annotation.Target;
 @Target(ElementType.TYPE)
 public @interface EditorDocking {
 
+    /**
+     * The content type of this editor. This is usually a data handler.
+     *
+     * @return the content type of this editor
+     */
     Class<?> contentType();
 
 }

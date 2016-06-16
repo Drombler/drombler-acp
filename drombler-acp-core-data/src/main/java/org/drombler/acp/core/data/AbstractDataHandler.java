@@ -1,6 +1,7 @@
 package org.drombler.acp.core.data;
 
 import org.drombler.acp.core.commons.util.SimpleServiceTrackerCustomizer;
+import org.drombler.acp.core.data.DataCapabilityProvider;
 import org.drombler.commons.context.Context;
 import org.drombler.commons.context.LocalContextProvider;
 import org.drombler.commons.context.SimpleContext;
