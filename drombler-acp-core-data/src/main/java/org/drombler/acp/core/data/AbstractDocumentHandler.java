@@ -32,21 +32,26 @@ public abstract class AbstractDocumentHandler extends AbstractDataHandler {
     private final ServiceTracker<FileChooserProvider, FileChooserProvider> fileChooserProviderTracker;
     private Path path;
     private FileChooserProvider fileChooserProvider;
+    private final String defaultFileExtenion;
 
     /**
      * Creates a new instance of this class with an unkown (null) document path.
+     *
+     * @param defaultFileExtenion the default file extension for the document type
      */
-    public AbstractDocumentHandler() {
-        this(null);
+    public AbstractDocumentHandler(String defaultFileExtenion) {
+        this(defaultFileExtenion, null);
     }
 
     /**
      * Creates a new instance of this class.
      *
      * @param path the path to the document or null if unknown/ the document does not exist yet.
+     * @param defaultFileExtenion the default file extension for the document type
      */
-    public AbstractDocumentHandler(Path path) {
+    public AbstractDocumentHandler(String defaultFileExtenion, Path path) {
         this.path = path;
+        this.defaultFileExtenion = defaultFileExtenion;
         this.fileChooserProviderTracker = SimpleServiceTrackerCustomizer.createServiceTracker(FileChooserProvider.class, this::setFileChooserProvider);
 
         this.fileChooserProviderTracker.open(true);
@@ -70,6 +75,15 @@ public abstract class AbstractDocumentHandler extends AbstractDataHandler {
      */
     protected void setPath(Path path) {
         this.path = path;
+    }
+
+    /**
+     * Gets the default file extension for the document type.
+     *
+     * @return the defaultFileExtenion the default file extension for the document type
+     */
+    public String getDefaultFileExtenion() {
+        return defaultFileExtenion;
     }
 
     /**
