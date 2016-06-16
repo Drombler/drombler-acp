@@ -100,12 +100,12 @@ Contributor(s): .
 
     <dependencies>
         <dependency>
-            <groupId>org.drombler.acp</groupId>
+            <groupId>${project.groupId}</groupId>
             <artifactId>drombler-acp-core-application</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.drombler.acp</groupId>
+            <groupId>${project.groupId}</groupId>
             <artifactId>drombler-acp-core-commons</artifactId>
             <version>${project.version}</version>
         </dependency>
