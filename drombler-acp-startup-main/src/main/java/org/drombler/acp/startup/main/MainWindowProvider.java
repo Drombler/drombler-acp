@@ -31,6 +31,4 @@ public interface MainWindowProvider<T> {
      */
     T getMainWindow();
 
-    void showMainWindow();
-
 }
