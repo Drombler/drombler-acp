@@ -26,6 +26,7 @@ import org.drombler.acp.startup.main.impl.BootServiceStarter;
 import org.drombler.acp.startup.main.impl.osgi.OSGiStarter;
 import org.drombler.acp.startup.main.impl.singleinstance.SingleInstanceStarter;
 import org.osgi.framework.BundleException;
+import org.osgi.framework.FrameworkEvent;
 import org.osgi.framework.launch.Framework;
 
 public class DromblerACPStarter {
@@ -80,7 +81,11 @@ public class DromblerACPStarter {
                     }
                 })).
                 forEach(Thread::start);
-        fireAdditionalArguments(configuration.getCommandLineArgs().getAdditionalArguments());
+        osgiStarter.getFramework().getBundleContext().addFrameworkListener(event -> {
+            if (event.getType() == FrameworkEvent.STARTED) {
+                fireAdditionalArguments(configuration.getCommandLineArgs().getAdditionalArguments());
+            }
+        });
         if (singleInstanceStarter.isActive()) {
             singleInstanceStarter.setApplicationInstanceListener(this::fireAdditionalArguments);
         }

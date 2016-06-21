@@ -5,6 +5,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import org.drombler.acp.core.data.Openable;
 import org.drombler.commons.context.Contexts;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -12,7 +14,10 @@ import org.drombler.commons.context.Contexts;
  */
 public class FileUtils {
 
+    private static final Logger LOG = LoggerFactory.getLogger(FileUtils.class);
+
     public static void openFile(Path fileToOpen, FileExtensionDescriptorRegistry fileExtensionDescriptorRegistry, DocumentHandlerDescriptorRegistry documentHandlerDescriptorRegistry) {
+        LOG.debug("Start opening file {}...", fileToOpen);
         String extension = getExtension(fileToOpen);
         FileExtensionDescriptor fileExtensionDescriptor = fileExtensionDescriptorRegistry.getFileExtensionDescriptor(extension);
         if (fileExtensionDescriptor != null) {
@@ -25,16 +30,17 @@ public class FileUtils {
                     if (openable != null) {
                         openable.open(); // TODO: load them in background
                     } else {
-// TODO
+                        LOG.warn("No Openable found for " + documentHandler + "! "
+                                + "The document handler either does not implement LocalContextProvider or does not observe registered DataCapabilityProvider.");
                     }
                 } catch (IllegalAccessException | SecurityException | InvocationTargetException | InstantiationException | IllegalArgumentException | NoSuchMethodException ex) {
-                    // TODO
+                    LOG.error("Could not create a document handler for " + fileToOpen + "!", ex);
                 }
             } else {
-// TODO
+                LOG.warn("No DocumentHandlerDescriptor found for:" + mimeType + "!");
             }
         } else {
-// TODO
+            LOG.warn("No FileExtensionDescriptor found for:" + extension + "!");
         }
     }
 
