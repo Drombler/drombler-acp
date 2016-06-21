@@ -3,16 +3,23 @@ package org.drombler.acp.core.data;
 /**
  * A data capability provider.
  *
- * @author puce
+ * This class can be used to register generic data capabilities to data handlers. Eg. {@link Openable} is a generic data capability which provides a mechanism to open a data handler in an editor.
+ *
  * @param <T> the data capability type
+ * @see Openable
+ * @see DocumentHandler
+ * @see BusinessObjectHandler
+ * @author puce
  */
 public interface DataCapabilityProvider<T> {
 
     /**
-     * Gets a capability for the given data.
+     * Gets a data capability for the given data handler.
      *
-     * @param data the data
-     * @return a data capability
+     * @param dataHandler the data handler
+     * @return a data capability for the given data handler
+     * @see DocumentHandler
+     * @see BusinessObjectHandler
      */
-    T getDataCapability(Object data);
+    T getDataCapability(Object dataHandler);
 }

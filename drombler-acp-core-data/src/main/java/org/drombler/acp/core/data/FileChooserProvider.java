@@ -1,4 +1,4 @@
-package org.drombler.acp.core.data.spi;
+package org.drombler.acp.core.data;
 
 import java.nio.file.Path;
 import java.util.List;
