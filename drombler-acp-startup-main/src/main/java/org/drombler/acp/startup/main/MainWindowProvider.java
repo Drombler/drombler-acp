@@ -22,6 +22,7 @@ package org.drombler.acp.startup.main;
  * @param <T> the GUI toolkit specific type of the Main Window
  * @author puce
  */
+@FunctionalInterface
 public interface MainWindowProvider<T> {
 
     /**
