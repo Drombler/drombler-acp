@@ -5,6 +5,7 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+import org.drombler.commons.context.LocalContextProvider;
 
 /**
  * Registers a business object handler. A business object handler usually knows how to read, save etc. a particular kind of business object.
