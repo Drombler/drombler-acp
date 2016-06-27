@@ -15,6 +15,7 @@
 package org.drombler.acp.core.application;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -32,6 +33,7 @@ import javax.tools.StandardLocation;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
+import javax.xml.bind.Unmarshaller;
 import org.drombler.acp.core.application.impl.ApplicationTracker;
 import org.drombler.acp.core.application.jaxb.ApplicationType;
 import org.drombler.acp.core.application.jaxb.ExtensionsType;
@@ -59,51 +61,55 @@ public abstract class AbstractApplicationAnnotationProcessor extends AbstractPro
     protected abstract boolean handleProcess(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv);
 
     private void writeApplicationFile() {
-        Filer filer = processingEnv.getFiler();
-        Messager messager = processingEnv.getMessager();
-
-//            try {
-//                actionsFileObject = filer.getResource(StandardLocation.SOURCE_OUTPUT, "", APPLICATION_XML_RELATIVE_NAME);
-//            } catch (Exception ex) {
-//                // TODO: needed?
-//                // The Javadoc says an IOException should be thrown, if the file does not exist, but it isn't thrown currently. 
-//                //Bug which might be fixed in a future Java version?
-//            }
         if (APPLICATION_FILE_OBJECT == null) {
+            Filer filer = processingEnv.getFiler();
+            Messager messager = processingEnv.getMessager();
             try {
-                APPLICATION_FILE_OBJECT = filer.createResource(
-                        StandardLocation.SOURCE_OUTPUT,
-                        "", ApplicationTracker.APPLICATION_XML_RELATIVE_NAME,
-                        ORIGINATING_ELEMENTS.toArray(new Element[ORIGINATING_ELEMENTS.size()]));
                 JAXBContext jaxbContext = JAXBContext.newInstance(JAXB_ROOT_CLASSES.toArray(
                         new Class[JAXB_ROOT_CLASSES.size()]));
-                Marshaller marshaller = jaxbContext.createMarshaller();
-                marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-                ApplicationType application = new ApplicationType();
-                ExtensionsType extensions = new ExtensionsType();
-                extensions.getAny().addAll(EXTENSION_CONFIGURATIONS);
-                application.setExtensions(extensions);
-                try (Writer writer = APPLICATION_FILE_OBJECT.openWriter()) {
-                    marshaller.marshal(application, writer);
+                ApplicationType application = readManualApplicationFile(filer, jaxbContext);
+                if (application == null) {
+                    application = new ApplicationType();
                 }
-
-//                 try {
-//                String packageName = Action.class.getPackage().getName() + ".gen";
-//                String className = "Actions";
-//                JavaFileObject javaFileObject = filer.createSourceFile(packageName + "." + className,
-//                        elements.toArray(new Element[elements.size()]));
-//                try (Writer writer = javaFileObject.openWriter()) {
-//                    writer.write("package " + packageName + ";\n");
-//                    writer.write("import " + Application.class.getName() + ";\n");
-//                    writer.write("@" + Application.class.getSimpleName() + "(\""+actionsFileObject.toUri() +"\")\n");
-//                    writer.write("public class " + className + "{}\n");
-//                }
-//        } catch (IOException ex) {
-//            Logger.getLogger(ActionAnnotationProcessor.class.getName()).log(Level.SEVERE, null, ex);
-//        }
+                if (application.getExtensions() == null) {
+                    ExtensionsType extensions = new ExtensionsType();
+                    application.setExtensions(extensions);
+                }
+                application.getExtensions().getAny().addAll(EXTENSION_CONFIGURATIONS);
+                writeApplicationFile(filer, jaxbContext, application);
             } catch (JAXBException | IOException ex) {
                 messager.printMessage(Diagnostic.Kind.ERROR, ex.getMessage());
             }
+        }
+    }
+
+    private void writeApplicationFile(Filer filer, JAXBContext jaxbContext, ApplicationType application) throws JAXBException, IOException {
+        APPLICATION_FILE_OBJECT = filer.createResource(StandardLocation.SOURCE_OUTPUT, "", ApplicationTracker.APPLICATION_XML_RELATIVE_NAME,
+                ORIGINATING_ELEMENTS.toArray(new Element[ORIGINATING_ELEMENTS.size()]));
+        Marshaller marshaller = jaxbContext.createMarshaller();
+        marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+        try (Writer writer = APPLICATION_FILE_OBJECT.openWriter()) {
+            marshaller.marshal(application, writer);
+        }
+    }
+
+    private ApplicationType readManualApplicationFile(Filer filer, JAXBContext jaxbContext) throws IOException, JAXBException {
+        FileObject applicationXmlFileObject = getManualApplicationXml(filer);
+        if (applicationXmlFileObject != null) {
+            Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
+            try (InputStream is = applicationXmlFileObject.openInputStream()) {
+                return (ApplicationType) unmarshaller.unmarshal(is);
+            }
+        } else {
+            return null;
+        }
+    }
+
+    private FileObject getManualApplicationXml(Filer filer) {
+        try {
+            return filer.getResource(StandardLocation.CLASS_PATH, "", ApplicationTracker.APPLICATION_XML_RELATIVE_NAME);
+        } catch (IOException ex) {
+            return null;
         }
     }
 
