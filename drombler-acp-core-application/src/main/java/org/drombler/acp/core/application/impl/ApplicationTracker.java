@@ -54,7 +54,7 @@ import org.slf4j.LoggerFactory;
         cardinality = ReferenceCardinality.OPTIONAL_MULTIPLE, policy = ReferencePolicy.DYNAMIC)
 public class ApplicationTracker {
 
-    public static final String APPLICATION_XML_RELATIVE_NAME = "META-INF/platform/application.xml";
+    public static final String APPLICATION_XML_RELATIVE_NAME = "META-INF/drombler/application.xml";
 
     private static final Logger LOG = LoggerFactory.getLogger(ApplicationTracker.class);
 
