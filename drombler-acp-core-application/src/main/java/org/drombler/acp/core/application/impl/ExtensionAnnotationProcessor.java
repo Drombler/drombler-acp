@@ -98,13 +98,13 @@ public class ExtensionAnnotationProcessor extends AbstractApplicationAnnotationP
     }
 
     private TypeMirror getExtensionJAXBRootClass(Extension extensionAnnotation) {
-        TypeMirror contentType = null;
+        TypeMirror extensionJAXBRootType = null;
         try {
             extensionAnnotation.extensionJAXBRootClass();
         } catch (MirroredTypeException mte) {
-            contentType = mte.getTypeMirror();
+            extensionJAXBRootType = mte.getTypeMirror();
         }
-        return contentType;
+        return extensionJAXBRootType;
     }
 
 }
