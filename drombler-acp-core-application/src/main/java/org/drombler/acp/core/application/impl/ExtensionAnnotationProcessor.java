@@ -90,24 +90,11 @@ public class ExtensionAnnotationProcessor extends AbstractApplicationAnnotationP
 
     private Object readExtensionFile(String extensionFile) throws JAXBException, IOException {
         JAXBContext jaxbContext = createJAXBContext();
-//        FileObject extensionFileObject = processingEnv.getFiler().getResource(StandardLocation.CLASS_PATH, getPackageName(extensionFile), getRelativeName(extensionFile));
         FileObject extensionFileObject = processingEnv.getFiler().getResource(StandardLocation.CLASS_PATH, "", extensionFile);
         Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
         try (InputStream is = extensionFileObject.openInputStream()) {
             return unmarshaller.unmarshal(is);
         }
-    }
-
-    private String getPackageName(String extensionFile) {
-        int startIndex = 0;
-        if (extensionFile.startsWith("/")) {
-            startIndex = 1;
-        }
-        return extensionFile.substring(startIndex, extensionFile.lastIndexOf("/")).replace("/", ".");
-    }
-
-    private CharSequence getRelativeName(String extensionFile) {
-        return extensionFile.substring(extensionFile.lastIndexOf("/") + 1);
     }
 
     private TypeMirror getExtensionJAXBRootClass(Extension extensionAnnotation) {
