@@ -19,6 +19,7 @@ import java.io.InputStream;
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import javax.annotation.processing.AbstractProcessor;
@@ -44,10 +45,14 @@ import org.drombler.acp.core.application.jaxb.ExtensionsType;
  */
 public abstract class AbstractApplicationAnnotationProcessor extends AbstractProcessor {
 
-    private static final List<Class<?>> JAXB_ROOT_CLASSES = new ArrayList<>(Arrays.asList(ApplicationType.class));
+    private static final Set<String> JAXB_PACKAGES = new HashSet<>();
     private static final List<Object> EXTENSION_CONFIGURATIONS = new ArrayList<>();
-    private static final List<Object> ORIGINATING_ELEMENTS = new ArrayList<>();
+    private static final List<Element> ORIGINATING_ELEMENTS = new ArrayList<>();
     private static FileObject APPLICATION_FILE_OBJECT = null;
+
+    static {
+        addJAXBRootClasses(ApplicationType.class);
+    }
 
     @Override
     public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
@@ -65,8 +70,7 @@ public abstract class AbstractApplicationAnnotationProcessor extends AbstractPro
             Filer filer = processingEnv.getFiler();
             Messager messager = processingEnv.getMessager();
             try {
-                JAXBContext jaxbContext = JAXBContext.newInstance(JAXB_ROOT_CLASSES.toArray(
-                        new Class[JAXB_ROOT_CLASSES.size()]));
+                JAXBContext jaxbContext = createJAXBContext();
                 ApplicationType application = readManualApplicationFile(filer, jaxbContext);
                 if (application == null) {
                     application = new ApplicationType();
@@ -81,6 +85,10 @@ public abstract class AbstractApplicationAnnotationProcessor extends AbstractPro
                 messager.printMessage(Diagnostic.Kind.ERROR, ex.getMessage());
             }
         }
+    }
+
+    protected JAXBContext createJAXBContext() throws JAXBException {
+        return JAXBContext.newInstance(String.join(":", JAXB_PACKAGES.toArray(new String[JAXB_PACKAGES.size()])), ApplicationType.class.getClassLoader());
     }
 
     private void writeApplicationFile(Filer filer, JAXBContext jaxbContext, ApplicationType application) throws JAXBException, IOException {
@@ -114,7 +122,11 @@ public abstract class AbstractApplicationAnnotationProcessor extends AbstractPro
     }
 
     protected static void addJAXBRootClasses(Class<?> jaxbRootClasses) {
-        JAXB_ROOT_CLASSES.add(jaxbRootClasses);
+        JAXB_PACKAGES.add(jaxbRootClasses.getPackage().getName());
+    }
+
+    protected static void addJAXBPackage(String jaxbPackageName) {
+        JAXB_PACKAGES.add(jaxbPackageName);
     }
 
     protected static void addExtensionConfigurations(Object extensionConfigurations) {
