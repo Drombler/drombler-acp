@@ -66,22 +66,21 @@ public class DockingAreaAnnotationProcessor extends AbstractApplicationAnnotatio
 
     @Override
     protected boolean handleProcess(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
-        for (Element element : roundEnv.getElementsAnnotatedWith(DockingAreas.class)) {
+        roundEnv.getElementsAnnotatedWith(DockingAreas.class).forEach(element -> {
             DockingAreas dockingAreasAnnotation = element.getAnnotation(DockingAreas.class);
             if (dockingAreasAnnotation != null) {
                 for (DockingArea dockingAreaAnnotation : dockingAreasAnnotation.value()) {
                     registerDockingArea(dockingAreaAnnotation, element);
                 }
             }
-        }
+        });
 
-        for (Element element : roundEnv.getElementsAnnotatedWith(DockingArea.class)) {
+        roundEnv.getElementsAnnotatedWith(DockingArea.class).forEach(element -> {
             DockingArea dockingAreaAnnotation = element.getAnnotation(DockingArea.class);
             if (dockingAreaAnnotation != null) {
                 registerDockingArea(dockingAreaAnnotation, element);
             }
-        }
-
+        });
 
         return false;
     }

@@ -14,16 +14,20 @@
  */
 package org.drombler.acp.core.action.spi;
 
+import java.util.MissingResourceException;
 import org.apache.commons.lang3.StringUtils;
 import org.drombler.acp.core.action.jaxb.MenuType;
 import org.drombler.acp.core.commons.util.OSGiResourceBundleUtils;
 import org.osgi.framework.Bundle;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
  * @author puce
  */
 public class MenuDescriptor extends AbstractMenuEntryDescriptor {
+    private static final Logger LOG = LoggerFactory.getLogger(MenuDescriptor.class);
 
     private final String id;
     private final String displayName;
@@ -84,9 +88,14 @@ public class MenuDescriptor extends AbstractMenuEntryDescriptor {
     }
 
     public static MenuDescriptor createMenuDescriptor(MenuType menuType, Bundle bundle) {
+        try {
         return new MenuDescriptor(StringUtils.stripToNull(menuType.getId()),
                 OSGiResourceBundleUtils.getPackageResourceStringPrefixed(menuType.getPackage(),
-                menuType.getDisplayName(), bundle), StringUtils.stripToEmpty(menuType.getPath()), menuType.getPosition());
+                            menuType.getDisplayName(), bundle), StringUtils.stripToEmpty(menuType.getPath()), menuType.getPosition());
+        } catch (MissingResourceException ex) {
+            LOG.warn("ResourceBundle not found for menu {}: {}", menuType.getId(), ex.getMessage());
+            throw ex;
+        }
     }
 //    private void registerMenu(MenuDescriptor menuDescriptor) {
 //        throw new UnsupportedOperationException("Not yet implemented");
