@@ -39,7 +39,7 @@ import org.drombler.acp.core.application.AbstractApplicationAnnotationProcessor;
  * @author puce
  */
 @SupportedAnnotationTypes({"org.drombler.acp.core.action.ToolBars", "org.drombler.acp.core.action.ToolBar",
-    "org.drombler.acp.core.action.ToolBarEntry"})
+    "org.drombler.acp.core.action.ToolBarEntry", "org.drombler.acp.core.action.ToolBarToggleEntry"})
 @SupportedSourceVersion(SourceVersion.RELEASE_8)
 public class ToolBarAnnotationProcessor extends AbstractApplicationAnnotationProcessor {
 
@@ -47,38 +47,37 @@ public class ToolBarAnnotationProcessor extends AbstractApplicationAnnotationPro
 
     @Override
     protected boolean handleProcess(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
-        for (Element element : roundEnv.getElementsAnnotatedWith(ToolBars.class)) {
+        roundEnv.getElementsAnnotatedWith(ToolBars.class).forEach(element -> {
             ToolBars toolBarsAnnotation = element.getAnnotation(ToolBars.class);
             if (toolBarsAnnotation != null) {
                 for (ToolBar toolBarAnnotation : toolBarsAnnotation.value()) {
                     registerToolBar(toolBarAnnotation, element);
                 }
             }
-        }
+        });
 
-        for (Element element : roundEnv.getElementsAnnotatedWith(ToolBar.class)) {
+        roundEnv.getElementsAnnotatedWith(ToolBar.class).forEach(element -> {
             ToolBar toolBarAnnotation = element.getAnnotation(ToolBar.class);
             if (toolBarAnnotation != null) {
                 registerToolBar(toolBarAnnotation, element);
             }
-        }
+        });
 
-        for (Element element : roundEnv.getElementsAnnotatedWith(ToolBarEntry.class)) {
+        roundEnv.getElementsAnnotatedWith(ToolBarEntry.class).forEach(element -> {
             ToolBarEntry toolBarEntryAnnotation = element.getAnnotation(ToolBarEntry.class);
             if (toolBarEntryAnnotation != null) {
                 Action actionAnnotation = element.getAnnotation(Action.class);
                 registerToolBarEntry(toolBarEntryAnnotation, actionAnnotation, element);
             }
-        }
+        });
 
-
-        for (Element element : roundEnv.getElementsAnnotatedWith(ToolBarToggleEntry.class)) {
+        roundEnv.getElementsAnnotatedWith(ToolBarToggleEntry.class).forEach(element -> {
             ToolBarToggleEntry toolBarEntryAnnotation = element.getAnnotation(ToolBarToggleEntry.class);
             if (toolBarEntryAnnotation != null) {
                 ToggleAction actionAnnotation = element.getAnnotation(ToggleAction.class);
                 registerToolBarToggleEntry(toolBarEntryAnnotation, actionAnnotation, element);
             }
-        }
+        });
 
         return false;
     }
