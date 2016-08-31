@@ -14,6 +14,7 @@
  */
 package org.drombler.acp.core.application;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Writer;
@@ -107,6 +108,8 @@ public abstract class AbstractApplicationAnnotationProcessor extends AbstractPro
             Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
             try (InputStream is = applicationXmlFileObject.openInputStream()) {
                 return (ApplicationType) unmarshaller.unmarshal(is);
+            } catch (FileNotFoundException ex) {
+                return null;
             }
         } else {
             return null;
@@ -115,7 +118,12 @@ public abstract class AbstractApplicationAnnotationProcessor extends AbstractPro
 
     private FileObject getManualApplicationXml(Filer filer) {
         try {
-            return filer.getResource(StandardLocation.CLASS_PATH, "", ApplicationTracker.APPLICATION_XML_RELATIVE_NAME);
+            FileObject fileObject = filer.getResource(StandardLocation.CLASS_OUTPUT, "", ApplicationTracker.APPLICATION_XML_RELATIVE_NAME);
+//            if (fileObject.toUri().equals(ORIGINATING_ELEMENTS.get(0).)){
+            return fileObject;
+//            } else {
+//                return null;
+//            }
         } catch (IOException ex) {
             return null;
         }

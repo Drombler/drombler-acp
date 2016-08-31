@@ -125,7 +125,16 @@ Contributor(s): .
         </dependency>
         <dependency>
             <groupId>org.drombler.commons</groupId>
+            <artifactId>drombler-commons-data</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.drombler.commons</groupId>
             <artifactId>drombler-commons-docking-core</artifactId>
+        </dependency>
+        <!--JavaFX dependency!!! remove!!!-->
+        <dependency>
+            <groupId>org.drombler.commons</groupId>
+            <artifactId>drombler-commons-docking-context</artifactId>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>

@@ -23,15 +23,16 @@ import org.apache.felix.scr.annotations.Reference;
 import org.apache.felix.scr.annotations.ReferenceCardinality;
 import org.apache.felix.scr.annotations.ReferencePolicy;
 import org.drombler.acp.core.docking.jaxb.DockingsType;
-import org.drombler.acp.core.docking.spi.DockingAreaContainerDockableEvent;
-import org.drombler.acp.core.docking.spi.DockingAreaContainerDockingAreaEvent;
-import org.drombler.acp.core.docking.spi.DockingAreaContainerListener;
+import org.drombler.acp.core.docking.spi.DockingDescriptorUtils;
 import org.drombler.acp.core.docking.spi.EditorDockingDescriptor;
 import org.drombler.acp.core.docking.spi.EditorDockingDescriptorRegistry;
 import org.drombler.commons.docking.DockableData;
 import org.drombler.commons.docking.DockableEntry;
-import org.drombler.commons.docking.DockableKind;
 import org.drombler.commons.docking.DockablePreferences;
+import org.drombler.commons.docking.context.DockingAreaContainerActiveDockableChangedEvent;
+import org.drombler.commons.docking.context.DockingAreaContainerDockableEvent;
+import org.drombler.commons.docking.context.DockingAreaContainerDockingAreaEvent;
+import org.drombler.commons.docking.context.DockingAreaContainerListener;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.service.component.ComponentContext;
@@ -45,7 +46,7 @@ import org.slf4j.LoggerFactory;
 @Component(immediate = true)
 @Reference(name = "editorDockingDescriptor", referenceInterface = EditorDockingDescriptor.class,
         cardinality = ReferenceCardinality.OPTIONAL_MULTIPLE, policy = ReferencePolicy.DYNAMIC)
-public class EditorDockingHandler<D, DATA extends DockableData, E extends DockableEntry<D>> extends AbstractDockableDockingHandler<D, DATA, E> {
+public class EditorDockingHandler<D, DATA extends DockableData, E extends DockableEntry<D, DATA>> extends AbstractDockableDockingHandler<D, DATA, E> {
 
     private static final Logger LOG = LoggerFactory.getLogger(EditorDockingHandler.class);
 
@@ -54,6 +55,7 @@ public class EditorDockingHandler<D, DATA extends DockableData, E extends Dockab
 
     @Reference
     private EditorDockingDescriptorRegistry<D> editorRegistry;
+
 
     protected void bindEditorDockingDescriptor(EditorDockingDescriptor<? extends D> dockingDescriptor) {
         resolveDockingDescriptor(dockingDescriptor);
@@ -64,18 +66,19 @@ public class EditorDockingHandler<D, DATA extends DockableData, E extends Dockab
 
     @Activate
     protected void activate(ComponentContext context) {
-        getDockingAreaContainerProvider().getDockingAreaContainer().addDockingAreaContainerListener(dockingAreaListener);
+        getDockingAreaContainer().addDockingAreaContainerListener(dockingAreaListener);
         resolveUnresolvedDockables();
     }
 
     @Deactivate
     protected void deactivate(ComponentContext context) {
+        getDockingAreaContainer().removeDockingAreaContainerListener(dockingAreaListener);
     }
 
     @Override
     protected boolean isInitialized() {
         return super.isInitialized()
-                && getDockingAreaContainerProvider().getDockingAreaContainer().getDefaultEditorAreaId() != null;
+                && getDockingAreaContainer().getDefaultEditorAreaId() != null;
     }
 
     @Override
@@ -83,7 +86,7 @@ public class EditorDockingHandler<D, DATA extends DockableData, E extends Dockab
         dockingsType.getEditorDocking().forEach(dockingType -> {
             try {
                 EditorDockingDescriptor<? extends D> dockingDescriptor
-                        = (EditorDockingDescriptor<? extends D>) EditorDockingDescriptor.createEditorDockingDescriptor(dockingType, bundle);
+                        = (EditorDockingDescriptor<? extends D>) DockingDescriptorUtils.createEditorDockingDescriptor(dockingType, bundle);
                 // TODO: register EditorDockingDescriptor as service? Omit resolveDockingDescriptor?
                 resolveDockingDescriptor(dockingDescriptor);
             } catch (Exception ex) {
@@ -95,8 +98,8 @@ public class EditorDockingHandler<D, DATA extends DockableData, E extends Dockab
     private void resolveDockingDescriptor(EditorDockingDescriptor<? extends D> dockingDescriptor) {
         if (isInitialized()) {
             editorRegistry.registerEditorDockingDescriptor(dockingDescriptor.getContentType(), dockingDescriptor);
-            String defaultEditorAreaId = getDockingAreaContainerProvider().getDockingAreaContainer().getDefaultEditorAreaId();
-            DockablePreferences dockablePreferences = createDockablePreferences(defaultEditorAreaId, 0);
+            String defaultEditorAreaId = getDockingAreaContainer().getDefaultEditorAreaId();
+            DockablePreferences dockablePreferences = new DockablePreferences(defaultEditorAreaId, 0);
             registerDefaultDockablePreferences(dockingDescriptor.getDockableClass(), dockablePreferences);
         } else {
             unresolvedDockingDescriptors.add(dockingDescriptor);
@@ -109,7 +112,7 @@ public class EditorDockingHandler<D, DATA extends DockableData, E extends Dockab
         unresolvedDockingDescriptorsCopy.forEach(this::resolveDockingDescriptor);
     }
 
-    private class DockingAreaListener implements DockingAreaContainerListener<D, E> {
+    private class DockingAreaListener implements DockingAreaContainerListener<D, DATA, E> {
 
         /**
          * This method gets called from the application thread!
@@ -117,7 +120,7 @@ public class EditorDockingHandler<D, DATA extends DockableData, E extends Dockab
          * @param event
          */
         @Override
-        public void dockingAreaAdded(DockingAreaContainerDockingAreaEvent<D, E> event) {
+        public void dockingAreaAdded(DockingAreaContainerDockingAreaEvent<D, DATA, E> event) {
             resolveUnresolvedDockables();
         }
 
@@ -127,23 +130,23 @@ public class EditorDockingHandler<D, DATA extends DockableData, E extends Dockab
          * @param event
          */
         @Override
-        public void dockingAreaRemoved(DockingAreaContainerDockingAreaEvent<D, E> event) {
+        public void dockingAreaRemoved(DockingAreaContainerDockingAreaEvent<D, DATA, E> event) {
             // TODO: ???
         }
 
         @Override
-        public void dockableAdded(DockingAreaContainerDockableEvent<D, E> event) {
+        public void dockableAdded(DockingAreaContainerDockableEvent<D, DATA, E> event) {
             // do nothing
         }
 
         @Override
-        public void dockableRemoved(DockingAreaContainerDockableEvent<D, E> event) {
-            // TODO: better place for this code?
-            if (event.getDockableEntry().getKind() == DockableKind.EDITOR) {
-                final D dockable = event.getDockableEntry().getDockable();
-                getDockableDataManager().unregisterDockableData(dockable);
-                getDockablePreferencesManager().unregisterDockablePreferences(dockable);
-            }
+        public void dockableRemoved(DockingAreaContainerDockableEvent<D, DATA, E> event) {
+            // do nothing
+        }
+
+        @Override
+        public void activeDockableChanged(DockingAreaContainerActiveDockableChangedEvent<D, DATA, E> event) {
+            // do nothing
         }
 
     }

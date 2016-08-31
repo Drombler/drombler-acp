@@ -107,6 +107,10 @@
             <artifactId>drombler-commons-context</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.drombler.commons</groupId>
+            <artifactId>drombler-commons-data</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.drombler.acp</groupId>
             <artifactId>drombler-acp-startup-main</artifactId>
             <version>${project.version}</version>

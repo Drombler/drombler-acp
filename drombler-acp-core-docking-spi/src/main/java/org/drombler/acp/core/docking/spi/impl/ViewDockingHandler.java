@@ -25,14 +25,10 @@ import org.apache.felix.scr.annotations.ReferenceCardinality;
 import org.apache.felix.scr.annotations.ReferencePolicy;
 import org.apache.felix.scr.annotations.References;
 import org.drombler.acp.core.docking.jaxb.DockingsType;
-import org.drombler.acp.core.docking.spi.DockableDataFactory;
-import org.drombler.acp.core.docking.spi.DockableEntryFactory;
 import org.drombler.acp.core.docking.spi.DockableFactory;
+import org.drombler.acp.core.docking.spi.DockingDescriptorUtils;
 import org.drombler.acp.core.docking.spi.ViewDockingDescriptor;
 import org.drombler.acp.startup.main.ApplicationExecutorProvider;
-import org.drombler.commons.context.ActiveContextProvider;
-import org.drombler.commons.context.ApplicationContextProvider;
-import org.drombler.commons.context.ContextInjector;
 import org.drombler.commons.docking.DockableData;
 import org.drombler.commons.docking.DockableEntry;
 import org.drombler.commons.docking.DockablePreferences;
@@ -54,39 +50,15 @@ import org.slf4j.LoggerFactory;
             cardinality = ReferenceCardinality.OPTIONAL_MULTIPLE, policy = ReferencePolicy.DYNAMIC),
     @Reference(name = "applicationExecutorProvider", referenceInterface = ApplicationExecutorProvider.class)
 })
-public class ViewDockingHandler<D, DATA extends DockableData, E extends DockableEntry<D>> extends AbstractDockableDockingHandler<D, DATA, E> {
+public class ViewDockingHandler<D, DATA extends DockableData, E extends DockableEntry<D, DATA>> extends AbstractDockableDockingHandler<D, DATA, E> {
 
     private static final Logger LOG = LoggerFactory.getLogger(ViewDockingHandler.class);
 
     @Reference
-    private ActiveContextProvider activeContextProvider;
-    @Reference
-    private ApplicationContextProvider applicationContextProvider;
-    @Reference
     private DockableFactory<D> dockableFactory;
-    @Reference
-    private DockableEntryFactory<D, E> dockableEntryFactory;
-    @Reference
-    private DockableDataFactory<DATA> dockableDataFactory;
     private Executor applicationExecutor;
     private ViewDockingManager<D, DATA, E> viewDockingManager;
     private final List<UnresolvedEntry<ViewDockingDescriptor<? extends D>>> unresolvedDockingDescriptors = new ArrayList<>();
-
-    protected void bindActiveContextProvider(ActiveContextProvider activeContextProvider) {
-        this.activeContextProvider = activeContextProvider;
-    }
-
-    protected void unbindActiveContextProvider(ActiveContextProvider activeContextProvider) {
-        this.activeContextProvider = null;
-    }
-
-    protected void bindApplicationContextProvider(ApplicationContextProvider applicationContextProvider) {
-        this.applicationContextProvider = applicationContextProvider;
-    }
-
-    protected void unbindApplicationContextProvider(ApplicationContextProvider applicationContextProvider) {
-        this.applicationContextProvider = null;
-    }
 
     protected void bindApplicationExecutorProvider(ApplicationExecutorProvider applicationExecutorProvider) {
         applicationExecutor = applicationExecutorProvider.getApplicationExecutor();
@@ -104,14 +76,6 @@ public class ViewDockingHandler<D, DATA extends DockableData, E extends Dockable
         this.dockableFactory = null;
     }
 
-    protected void bindDockableEntryFactory(DockableEntryFactory<D, E> dockableEntryFactory) {
-        this.dockableEntryFactory = dockableEntryFactory;
-    }
-
-    protected void unbindDockableEntryFactory(DockableEntryFactory<D, E> dockableEntryFactory) {
-        this.dockableEntryFactory = null;
-    }
-
     protected void bindViewDockingDescriptor(ServiceReference<ViewDockingDescriptor<? extends D>> serviceReference) {
         BundleContext context = serviceReference.getBundle().getBundleContext();
         ViewDockingDescriptor<? extends D> dockingDescriptor = context.getService(serviceReference);
@@ -121,20 +85,9 @@ public class ViewDockingHandler<D, DATA extends DockableData, E extends Dockable
     protected void unbindViewDockingDescriptor(ViewDockingDescriptor<?> dockingDescriptor) {
     }
 
-    protected void bindDockableDataFactory(DockableDataFactory<DATA> dockableDataFactory) {
-        this.dockableDataFactory = dockableDataFactory;
-    }
-
-    protected void unbindDockableDataFactory(DockableDataFactory<D> dockableDataFactory) {
-        this.dockableDataFactory = null;
-    }
-
     @Activate
     protected void activate(ComponentContext context) {
-        viewDockingManager = new ViewDockingManager<>(dockableFactory, dockableDataFactory, dockableEntryFactory,
-                new ContextInjector(activeContextProvider, applicationContextProvider),
-                getDockingAreaContainerProvider().getDockingAreaContainer(), getDockableDataManager(),
-                getDockablePreferencesManager());
+        viewDockingManager = new ViewDockingManager<>(dockableFactory, getDockingAreaContainer());
         resolveUnresolvedDockables();
     }
 
@@ -146,17 +99,14 @@ public class ViewDockingHandler<D, DATA extends DockableData, E extends Dockable
 
     @Override
     protected boolean isInitialized() {
-        return super.isInitialized() && dockableFactory != null && dockableEntryFactory != null
-                && applicationExecutor != null && activeContextProvider != null && applicationContextProvider != null
-                && dockableDataFactory != null;
+        return super.isInitialized() && dockableFactory != null && applicationExecutor != null;
     }
 
     @Override
     protected void resolveDockingsType(DockingsType dockingsType, Bundle bundle, BundleContext context) {
         dockingsType.getViewDocking().forEach(dockingType -> {
             try {
-                ViewDockingDescriptor<?> dockingDescriptor
-                        = ViewDockingDescriptor.createViewDockingDescriptor(dockingType, bundle);
+                ViewDockingDescriptor<?> dockingDescriptor = DockingDescriptorUtils.createViewDockingDescriptor(dockingType, bundle);
                 // TODO: register ViewDockingDescriptor as service? Omit resolveDockable?
                 resolveDockable((ViewDockingDescriptor<? extends D>) dockingDescriptor, context);
             } catch (Exception ex) {
@@ -191,7 +141,7 @@ public class ViewDockingHandler<D, DATA extends DockableData, E extends Dockable
     }
 
     private void registerDefaultDockablePreferences(ViewDockingDescriptor<?> dockingDescriptor) {
-        DockablePreferences dockablePreferences = createDockablePreferences(dockingDescriptor.getAreaId(), dockingDescriptor.getPosition());
+        DockablePreferences dockablePreferences = new DockablePreferences(dockingDescriptor.getAreaId(), dockingDescriptor.getPosition());
         registerDefaultDockablePreferences(dockingDescriptor.getDockableClass(), dockablePreferences);
     }
 

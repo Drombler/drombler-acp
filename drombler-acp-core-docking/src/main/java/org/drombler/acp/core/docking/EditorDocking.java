@@ -19,6 +19,7 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+import org.softsmithy.lib.util.UniqueKeyProvider;
 
 /**
  * Registers an editor dockable.
@@ -37,6 +38,6 @@ public @interface EditorDocking {
      *
      * @return the content type of this editor
      */
-    Class<?> contentType();
+    Class<? extends UniqueKeyProvider<?>> contentType();
 
 }

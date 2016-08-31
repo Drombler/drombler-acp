@@ -1,22 +1,23 @@
 package org.drombler.acp.core.data;
 
+import org.drombler.commons.data.DataCapabilityProvider;
+import org.drombler.commons.data.DataHandler;
 import org.drombler.acp.core.commons.util.SimpleServiceTrackerCustomizer;
-import org.drombler.acp.core.data.DataCapabilityProvider;
 import org.drombler.commons.context.Context;
-import org.drombler.commons.context.LocalContextProvider;
 import org.drombler.commons.context.SimpleContext;
 import org.drombler.commons.context.SimpleContextContent;
 import org.osgi.util.tracker.ServiceTracker;
 
 /**
- * An abstract data handler. It observes registered {@link DataCapabilityProvider}s and adds the found data capabilities to it's local context.
+ * An abstract {@link DataHandler}. It observes registered {@link DataCapabilityProvider}s and adds the found data capabilities to it's local context.
  *
  * You can use this class as a base class for your own data handler implementations.
  *
+ * @param <T> the type of the unique key of this data handler
  * @see AbstractDocumentHandler
  * @author puce
  */
-public abstract class AbstractDataHandler implements AutoCloseable, LocalContextProvider {
+public abstract class AbstractDataHandler<T> implements DataHandler<T>, AutoCloseable {
 
     private final SimpleContextContent contextContent = new SimpleContextContent();
     private final Context localContext = new SimpleContext(contextContent);

@@ -11,8 +11,9 @@ import org.apache.felix.scr.annotations.ReferencePolicy;
 import org.apache.felix.scr.annotations.References;
 import org.drombler.acp.core.data.jaxb.FileExtensionType;
 import org.drombler.acp.core.data.jaxb.FileExtensionsType;
-import org.drombler.acp.core.data.spi.FileExtensionDescriptor;
-import org.drombler.acp.core.data.spi.FileExtensionDescriptorRegistry;
+import org.drombler.acp.core.data.spi.FileExtensionDescriptorRegistryProvider;
+import org.drombler.acp.core.data.spi.FileExtensionUtils;
+import org.drombler.commons.data.file.FileExtensionDescriptor;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.component.ComponentContext;
@@ -37,7 +38,7 @@ public class FileExtensionHandler {
     private final List<FileExtensionDescriptor> unresolvedFileExtensionDescriptors = new ArrayList<>();
 
     @Reference
-    private FileExtensionDescriptorRegistry fileExtensionRegistry;
+    private FileExtensionDescriptorRegistryProvider fileExtensionDescriptorRegistryProvider;
 
     protected void bindFileExtensionsType(ServiceReference<FileExtensionsType> serviceReference) {
         BundleContext context = serviceReference.getBundle().getBundleContext();
@@ -57,11 +58,11 @@ public class FileExtensionHandler {
         // TODO
     }
 
-    protected void bindFileExtensionRegistry(FileExtensionDescriptorRegistry fileExtensionRegistry) {
-        this.fileExtensionRegistry = fileExtensionRegistry;
+    protected void bindFileExtensionDescriptorRegistryProvider(FileExtensionDescriptorRegistryProvider fileExtensionDescriptorRegistryProvider) {
+        this.fileExtensionDescriptorRegistryProvider = fileExtensionDescriptorRegistryProvider;
     }
 
-    protected void unbindFileExtensionRegistry(FileExtensionDescriptorRegistry fileExtensionRegistry) {
+    protected void unbindFileExtensionDescriptorRegistryProvider(FileExtensionDescriptorRegistryProvider fileExtensionDescriptorRegistryProvider) {
         // TODO
     }
 
@@ -81,14 +82,14 @@ public class FileExtensionHandler {
 
     private void registerFileExtension(FileExtensionType fileExtensionType, BundleContext context) {
         // TODO: register FileExtensionDescriptor as service?
-        FileExtensionDescriptor fileExtensionDescriptor = FileExtensionDescriptor.createFileExtensionDescriptor(
+        FileExtensionDescriptor fileExtensionDescriptor = FileExtensionUtils.createFileExtensionDescriptor(
                 fileExtensionType, context.getBundle());
         registerFileExtensionDescriptor(fileExtensionDescriptor);
     }
 
     private void registerFileExtensionDescriptor(FileExtensionDescriptor fileExtensionDescriptor) {
         if (isInitialized()) {
-            fileExtensionRegistry.registerFileExtensionDescriptor(fileExtensionDescriptor);
+            fileExtensionDescriptorRegistryProvider.getFileExtensionDescriptorRegistry().registerFileExtensionDescriptor(fileExtensionDescriptor);
         } else {
             unresolvedFileExtensionDescriptors.add(fileExtensionDescriptor);
         }
@@ -99,6 +100,6 @@ public class FileExtensionHandler {
     }
 
     private boolean isInitialized() {
-        return fileExtensionRegistry != null;
+        return fileExtensionDescriptorRegistryProvider != null;
     }
 }

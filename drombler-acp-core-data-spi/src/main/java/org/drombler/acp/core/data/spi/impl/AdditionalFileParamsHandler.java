@@ -30,15 +30,15 @@ import org.apache.felix.scr.annotations.Deactivate;
 import org.apache.felix.scr.annotations.Reference;
 import org.apache.felix.scr.annotations.ReferenceCardinality;
 import org.apache.felix.scr.annotations.ReferencePolicy;
-import org.drombler.acp.core.data.spi.DocumentHandlerDescriptorRegistry;
-import org.drombler.acp.core.data.spi.DocumentHandlerDescriptorEvent;
-import org.drombler.acp.core.data.spi.FileExtensionDescriptorRegistry;
-import org.drombler.acp.core.data.spi.FileExtensionEvent;
-import org.drombler.acp.core.data.spi.FileExtensionListener;
-import org.drombler.acp.core.data.spi.FileUtils;
+import org.drombler.acp.core.data.spi.DocumentHandlerDescriptorRegistryProvider;
 import org.drombler.acp.startup.main.AdditionalArgumentsProvider;
+import org.drombler.commons.data.file.DocumentHandlerDescriptorEvent;
+import org.drombler.commons.data.file.DocumentHandlerDescriptorListener;
+import org.drombler.commons.data.file.FileExtensionEvent;
+import org.drombler.commons.data.file.FileExtensionListener;
+import org.drombler.commons.data.file.FileUtils;
 import org.osgi.service.component.ComponentContext;
-import org.drombler.acp.core.data.spi.DocumentHandlerDescriptorListener;
+import org.drombler.acp.core.data.spi.FileExtensionDescriptorRegistryProvider;
 
 /**
  *
@@ -50,9 +50,9 @@ import org.drombler.acp.core.data.spi.DocumentHandlerDescriptorListener;
 public class AdditionalFileParamsHandler {
 
     @Reference
-    private FileExtensionDescriptorRegistry fileExtensionDescriptorRegistry;
+    private FileExtensionDescriptorRegistryProvider fileExtensionDescriptorRegistryProvider;
     @Reference
-    private DocumentHandlerDescriptorRegistry documentHandlerDescriptorRegistry;
+    private DocumentHandlerDescriptorRegistryProvider documentHandlerDescriptorRegistryProvider;
 
     private final List<String> unresolvedArguments = new ArrayList<>();
     private final List<Path> unresolvedPaths = new ArrayList<>();
@@ -67,37 +67,37 @@ public class AdditionalFileParamsHandler {
         // TODO
     }
 
-    protected void bindFileExtensionDescriptorRegistry(FileExtensionDescriptorRegistry fileExtensionDescriptorRegistry) {
-        this.fileExtensionDescriptorRegistry = fileExtensionDescriptorRegistry;
+    protected void bindFileExtensionDescriptorRegistryProvider(FileExtensionDescriptorRegistryProvider fileExtensionDescriptorRegistryProvider) {
+        this.fileExtensionDescriptorRegistryProvider = fileExtensionDescriptorRegistryProvider;
     }
 
-    protected void unbindFileExtensionDescriptorRegistry(FileExtensionDescriptorRegistry fileExtensionDescriptorRegistry) {
+    protected void unbindFileExtensionDescriptorRegistryProvider(FileExtensionDescriptorRegistryProvider fileExtensionDescriptorRegistry) {
         // TODO
     }
 
-    protected void bindDocumentHandlerDescriptorRegistry(DocumentHandlerDescriptorRegistry documentHandlerDescriptorRegistry) {
-        this.documentHandlerDescriptorRegistry = documentHandlerDescriptorRegistry;
+    protected void bindDocumentHandlerDescriptorRegistryProvider(DocumentHandlerDescriptorRegistryProvider documentHandlerDescriptorRegistryProvider) {
+        this.documentHandlerDescriptorRegistryProvider = documentHandlerDescriptorRegistryProvider;
     }
 
-    protected void unbindDocumentHandlerDescriptorRegistry(DocumentHandlerDescriptorRegistry documentHandlerDescriptorRegistry) {
+    protected void unbindDocumentHandlerDescriptorRegistryProvider(DocumentHandlerDescriptorRegistryProvider documentHandlerDescriptorRegistryProvider) {
         // TODO
     }
 
     @Activate
     protected void activate(ComponentContext context) {
-        fileExtensionDescriptorRegistry.registerFileExtensionListener(fileExtensionListener);
-        documentHandlerDescriptorRegistry.registerDocumentHandlerDescriptorListener(documentHandlerListener);
+        fileExtensionDescriptorRegistryProvider.getFileExtensionDescriptorRegistry().registerFileExtensionListener(fileExtensionListener);
+        documentHandlerDescriptorRegistryProvider.getDocumentHandlerDescriptorRegistry().registerDocumentHandlerDescriptorListener(documentHandlerListener);
         resolveUnresolvedArguments();
     }
 
     @Deactivate
     protected void deactivate(ComponentContext context) {
-        documentHandlerDescriptorRegistry.unregisterDocumentHandlerDescriptorListener(documentHandlerListener);
-        fileExtensionDescriptorRegistry.unregisterFileExtensionListener(fileExtensionListener);
+        documentHandlerDescriptorRegistryProvider.getDocumentHandlerDescriptorRegistry().unregisterDocumentHandlerDescriptorListener(documentHandlerListener);
+        fileExtensionDescriptorRegistryProvider.getFileExtensionDescriptorRegistry().unregisterFileExtensionListener(fileExtensionListener);
     }
 
     private boolean isInitialized() {
-        return fileExtensionDescriptorRegistry != null && documentHandlerDescriptorRegistry != null;
+        return fileExtensionDescriptorRegistryProvider != null && documentHandlerDescriptorRegistryProvider != null;
     }
 
     private void handleAdditionalArguments(List<String> additionalArguments) {
@@ -128,7 +128,7 @@ public class AdditionalFileParamsHandler {
 
     private void openFile(Path filePath) {
         try {
-            FileUtils.openFile(filePath, fileExtensionDescriptorRegistry, documentHandlerDescriptorRegistry);
+            FileUtils.openFile(filePath, fileExtensionDescriptorRegistryProvider.getFileExtensionDescriptorRegistry(), documentHandlerDescriptorRegistryProvider.getDocumentHandlerDescriptorRegistry());
         } catch (RuntimeException ex) {
             unresolvedPaths.add(filePath);
         }

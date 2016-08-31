@@ -90,7 +90,7 @@ public class ExtensionAnnotationProcessor extends AbstractApplicationAnnotationP
 
     private Object readExtensionFile(String extensionFile) throws JAXBException, IOException {
         JAXBContext jaxbContext = createJAXBContext();
-        FileObject extensionFileObject = processingEnv.getFiler().getResource(StandardLocation.CLASS_PATH, "", extensionFile);
+        FileObject extensionFileObject = processingEnv.getFiler().getResource(StandardLocation.CLASS_OUTPUT, "", extensionFile);
         Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
         try (InputStream is = extensionFileObject.openInputStream()) {
             return unmarshaller.unmarshal(is);

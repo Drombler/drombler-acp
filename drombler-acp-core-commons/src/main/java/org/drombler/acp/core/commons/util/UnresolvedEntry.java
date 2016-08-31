@@ -19,6 +19,7 @@ import org.osgi.framework.BundleContext;
 /**
  *
  * @author puce
+ * @param <T> the type of the entry
  */
 public class UnresolvedEntry<T> {
     private final T entry;

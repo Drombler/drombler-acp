@@ -21,10 +21,11 @@ package org.drombler.acp.core.docking.spi;
 public class AbstractDockableDockingDescriptor<D> {
 
     private final Class<D> dockableClass;
-    private String id;
+    private final String id;
 
-    public AbstractDockableDockingDescriptor(Class<D> dockableClass) {
+    public AbstractDockableDockingDescriptor(Class<D> dockableClass, String id) {
         this.dockableClass = dockableClass;
+        this.id = id;
     }
 
     /**
@@ -32,13 +33,6 @@ public class AbstractDockableDockingDescriptor<D> {
      */
     public String getId() {
         return id;
-    }
-
-    /**
-     * @param id the id to set
-     */
-    public void setId(String id) {
-        this.id = id;
     }
 
     /**
