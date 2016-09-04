@@ -24,12 +24,11 @@ import org.drombler.acp.core.docking.spi.DockableFactory;
 import org.drombler.acp.core.docking.spi.ViewDockingDescriptor;
 import org.drombler.commons.docking.DockableData;
 import org.drombler.commons.docking.DockableEntry;
+import org.drombler.commons.docking.DockingAreaDescriptor;
 import org.drombler.commons.docking.context.DockingAreaContainer;
-import org.drombler.commons.docking.context.DockingAreaContainerActiveDockableChangedEvent;
-import org.drombler.commons.docking.context.DockingAreaContainerDockableEvent;
-import org.drombler.commons.docking.context.DockingAreaContainerDockingAreaEvent;
-import org.drombler.commons.docking.context.DockingAreaContainerListener;
 import org.osgi.framework.BundleContext;
+import org.softsmithy.lib.util.SetChangeEvent;
+import org.softsmithy.lib.util.SetChangeListener;
 
 /**
  *
@@ -39,7 +38,7 @@ import org.osgi.framework.BundleContext;
 public class ViewDockingManager<D, DATA extends DockableData, E extends DockableEntry<D, DATA>> implements AutoCloseable {
 
     private final Map<String, List<UnresolvedEntry<ViewDockingDescriptor<? extends D>>>> unresolvedDockingDescriptorsAreaId = new HashMap<>();
-    private final DockingAreaListener<D, DATA, E> dockingAreaListener = new DockingAreaListener<>();
+    private final SetChangeListener<DockingAreaDescriptor> dockingAreaListener = new DockingAreaListener();
     private final DockableFactory<D> dockableFactory;
     private final DockingAreaContainer<D, DATA, E> dockingAreaContainer;
 
@@ -47,7 +46,7 @@ public class ViewDockingManager<D, DATA extends DockableData, E extends Dockable
         this.dockableFactory = dockableFactory;
         this.dockingAreaContainer = dockingAreaContainer;
 
-        this.dockingAreaContainer.addDockingAreaContainerListener(dockingAreaListener);
+        this.dockingAreaContainer.addDockingAreaSetChangeListener(dockingAreaListener);
     }
 
     /**
@@ -85,10 +84,10 @@ public class ViewDockingManager<D, DATA extends DockableData, E extends Dockable
 
     @Override
     public void close() {
-        dockingAreaContainer.removeDockingAreaContainerListener(dockingAreaListener);
+        dockingAreaContainer.removeDockingAreaSetChangeListener(dockingAreaListener);
     }
 
-    private class DockingAreaListener<D, DATA extends DockableData, E extends DockableEntry<D, DATA>> implements DockingAreaContainerListener<D, DATA, E> {
+    private class DockingAreaListener implements SetChangeListener<DockingAreaDescriptor> {
 
         /**
          * This method gets called from the application thread!
@@ -96,8 +95,8 @@ public class ViewDockingManager<D, DATA extends DockableData, E extends Dockable
          * @param event
          */
         @Override
-        public void dockingAreaAdded(DockingAreaContainerDockingAreaEvent<D, DATA, E> event) {
-            resolveUnresolvedDockables(event.getAreaId());
+        public void elementAdded(SetChangeEvent<DockingAreaDescriptor> event) {
+            resolveUnresolvedDockables(event.getElement().getId());
         }
 
         /**
@@ -106,23 +105,8 @@ public class ViewDockingManager<D, DATA extends DockableData, E extends Dockable
          * @param event
          */
         @Override
-        public void dockingAreaRemoved(DockingAreaContainerDockingAreaEvent<D, DATA, E> event) {
+        public void elementRemoved(SetChangeEvent<DockingAreaDescriptor> event) {
             // TODO: ???
-        }
-
-        @Override
-        public void dockableAdded(DockingAreaContainerDockableEvent<D, DATA, E> event) {
-            // do nothing
-        }
-
-        @Override
-        public void dockableRemoved(DockingAreaContainerDockableEvent<D, DATA, E> event) {
-            // do nothing
-        }
-
-        @Override
-        public void activeDockableChanged(DockingAreaContainerActiveDockableChangedEvent<D, DATA, E> event) {
-            // do nothing
         }
 
     }
