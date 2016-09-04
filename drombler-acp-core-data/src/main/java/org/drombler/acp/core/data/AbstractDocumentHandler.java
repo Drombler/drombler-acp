@@ -14,11 +14,12 @@
  */
 package org.drombler.acp.core.data;
 
-import org.drombler.commons.client.dialog.FileChooserProvider;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Locale;
 import org.drombler.acp.core.commons.util.SimpleServiceTrackerCustomizer;
+import org.drombler.commons.client.dialog.FileChooserProvider;
+import org.drombler.commons.data.DataCapabilityProvider;
 import org.osgi.util.tracker.ServiceTracker;
 
 /**
