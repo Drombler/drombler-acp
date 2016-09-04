@@ -29,15 +29,14 @@ import org.drombler.acp.core.docking.spi.EditorDockingDescriptorRegistry;
 import org.drombler.commons.docking.DockableData;
 import org.drombler.commons.docking.DockableEntry;
 import org.drombler.commons.docking.DockablePreferences;
-import org.drombler.commons.docking.context.DockingAreaContainerActiveDockableChangedEvent;
-import org.drombler.commons.docking.context.DockingAreaContainerDockableEvent;
-import org.drombler.commons.docking.context.DockingAreaContainerDockingAreaEvent;
-import org.drombler.commons.docking.context.DockingAreaContainerListener;
+import org.drombler.commons.docking.DockingAreaDescriptor;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.service.component.ComponentContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.softsmithy.lib.util.SetChangeEvent;
+import org.softsmithy.lib.util.SetChangeListener;
 
 /**
  *
@@ -66,13 +65,13 @@ public class EditorDockingHandler<D, DATA extends DockableData, E extends Dockab
 
     @Activate
     protected void activate(ComponentContext context) {
-        getDockingAreaContainer().addDockingAreaContainerListener(dockingAreaListener);
+        getDockingAreaContainer().addDockingAreaSetChangeListener(dockingAreaListener);
         resolveUnresolvedDockables();
     }
 
     @Deactivate
     protected void deactivate(ComponentContext context) {
-        getDockingAreaContainer().removeDockingAreaContainerListener(dockingAreaListener);
+        getDockingAreaContainer().removeDockingAreaSetChangeListener(dockingAreaListener);
     }
 
     @Override
@@ -112,7 +111,7 @@ public class EditorDockingHandler<D, DATA extends DockableData, E extends Dockab
         unresolvedDockingDescriptorsCopy.forEach(this::resolveDockingDescriptor);
     }
 
-    private class DockingAreaListener implements DockingAreaContainerListener<D, DATA, E> {
+    private class DockingAreaListener implements SetChangeListener<DockingAreaDescriptor> {
 
         /**
          * This method gets called from the application thread!
@@ -120,7 +119,7 @@ public class EditorDockingHandler<D, DATA extends DockableData, E extends Dockab
          * @param event
          */
         @Override
-        public void dockingAreaAdded(DockingAreaContainerDockingAreaEvent<D, DATA, E> event) {
+        public void elementAdded(SetChangeEvent<DockingAreaDescriptor> event) {
             resolveUnresolvedDockables();
         }
 
@@ -130,23 +129,8 @@ public class EditorDockingHandler<D, DATA extends DockableData, E extends Dockab
          * @param event
          */
         @Override
-        public void dockingAreaRemoved(DockingAreaContainerDockingAreaEvent<D, DATA, E> event) {
+        public void elementRemoved(SetChangeEvent<DockingAreaDescriptor> event) {
             // TODO: ???
-        }
-
-        @Override
-        public void dockableAdded(DockingAreaContainerDockableEvent<D, DATA, E> event) {
-            // do nothing
-        }
-
-        @Override
-        public void dockableRemoved(DockingAreaContainerDockableEvent<D, DATA, E> event) {
-            // do nothing
-        }
-
-        @Override
-        public void activeDockableChanged(DockingAreaContainerActiveDockableChangedEvent<D, DATA, E> event) {
-            // do nothing
         }
 
     }
