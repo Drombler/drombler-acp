@@ -21,6 +21,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import java.nio.file.Path;
 import org.drombler.commons.context.LocalContextProvider;
+import org.drombler.commons.data.DataCapabilityProvider;
 
 /**
  * Registers a document handler. A document handler usually knows how to read, save etc. a particular kind of document. A document handler is usally {@link Path} based.
