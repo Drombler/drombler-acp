@@ -2,8 +2,8 @@ package org.drombler.acp.core.docking.spi.impl;
 
 import org.apache.felix.scr.annotations.Component;
 import org.apache.felix.scr.annotations.Service;
-import org.drombler.acp.core.data.DataCapabilityProvider;
-import org.drombler.acp.core.data.Openable;
+import org.drombler.commons.data.DataCapabilityProvider;
+import org.drombler.commons.data.Openable;
 import org.drombler.acp.core.docking.spi.Dockables;
 
 @Component

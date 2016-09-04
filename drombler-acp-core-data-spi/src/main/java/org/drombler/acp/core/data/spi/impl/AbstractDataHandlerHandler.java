@@ -7,8 +7,9 @@ import org.apache.felix.scr.annotations.ReferenceCardinality;
 import org.apache.felix.scr.annotations.ReferencePolicy;
 import org.apache.felix.scr.annotations.References;
 import org.drombler.acp.core.data.jaxb.DataHandlersType;
-import org.drombler.acp.core.data.spi.AbstractDataHandlerDescriptor;
-import org.drombler.acp.core.data.spi.DataHandlerDescriptorRegistry;
+import org.drombler.acp.core.data.spi.DataHandlerDescriptorRegistryProvider;
+import org.drombler.commons.data.AbstractDataHandlerDescriptor;
+import org.drombler.commons.data.DataHandlerDescriptorRegistry;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.component.ComponentContext;
@@ -21,12 +22,12 @@ import org.osgi.service.component.ComponentContext;
     @Reference(name = "dataHandlersType", referenceInterface = DataHandlersType.class,
             cardinality = ReferenceCardinality.OPTIONAL_MULTIPLE, policy = ReferencePolicy.DYNAMIC)
 })
-public abstract class AbstractDataHandlerHandler<T, D extends AbstractDataHandlerDescriptor<T>> {
+public abstract class AbstractDataHandlerHandler<D extends AbstractDataHandlerDescriptor<?>> {
 
     private final List<D> unresolvedDataHandlerDescriptors = new ArrayList<>();
 
     @Reference
-    private DataHandlerDescriptorRegistry dataHandlerDescriptorRegistry;
+    private DataHandlerDescriptorRegistryProvider dataHandlerDescriptorRegistryProvider;
 
     protected void bindDataHandlersType(ServiceReference<DataHandlersType> serviceReference) {
         BundleContext context = serviceReference.getBundle().getBundleContext();
@@ -38,12 +39,12 @@ public abstract class AbstractDataHandlerHandler<T, D extends AbstractDataHandle
         // TODO
     }
 
-    protected void bindDataHandlerDescriptorRegistry(DataHandlerDescriptorRegistry dataHandlerDescriptorRegistry) {
-        this.dataHandlerDescriptorRegistry = dataHandlerDescriptorRegistry;
+    protected void bindDataHandlerDescriptorRegistryProvider(DataHandlerDescriptorRegistryProvider dataHandlerDescriptorRegistryProvider) {
+        this.dataHandlerDescriptorRegistryProvider = dataHandlerDescriptorRegistryProvider;
     }
 
-    protected void unbindDataHandlerDescriptorRegistry(DataHandlerDescriptorRegistry dataHandlerDescriptorRegistry) {
-        this.dataHandlerDescriptorRegistry = null;
+    protected void unbindDataHandlerDescriptorRegistryProvider(DataHandlerDescriptorRegistryProvider dataHandlerDescriptorRegistryProvider) {
+        this.dataHandlerDescriptorRegistryProvider = null;
     }
 
     protected void activate(ComponentContext context) {
@@ -56,7 +57,7 @@ public abstract class AbstractDataHandlerHandler<T, D extends AbstractDataHandle
     protected abstract void registerDataHandlers(DataHandlersType dataHandlersType, BundleContext context);
 
     public DataHandlerDescriptorRegistry getDataHandlerDescriptorRegistry() {
-        return dataHandlerDescriptorRegistry;
+        return dataHandlerDescriptorRegistryProvider.getDataHandlerDescriptorRegistry();
     }
 
     private void resolveUnresolvedDocumentHandlerDescriptors() {
@@ -72,7 +73,7 @@ public abstract class AbstractDataHandlerHandler<T, D extends AbstractDataHandle
     }
 
     protected boolean isInitialized() {
-        return dataHandlerDescriptorRegistry != null;
+        return dataHandlerDescriptorRegistryProvider != null;
     }
 
     protected void resolveDataHandlerDescriptorInitialized(D handlerDescriptor) {

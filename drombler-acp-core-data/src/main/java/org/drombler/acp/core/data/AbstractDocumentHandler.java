@@ -14,6 +14,7 @@
  */
 package org.drombler.acp.core.data;
 
+import org.drombler.commons.client.dialog.FileChooserProvider;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Locale;
@@ -27,12 +28,13 @@ import org.osgi.util.tracker.ServiceTracker;
  *
  * @author puce
  */
-public abstract class AbstractDocumentHandler extends AbstractDataHandler {
+public abstract class AbstractDocumentHandler extends AbstractDataHandler<Path> {
 
     private final ServiceTracker<FileChooserProvider, FileChooserProvider> fileChooserProviderTracker;
     private Path path;
     private FileChooserProvider fileChooserProvider;
     private final String defaultFileExtenion;
+    private Path uniqueKey;
 
     /**
      * Creates a new instance of this class with an unkown (null) document path.
@@ -50,11 +52,18 @@ public abstract class AbstractDocumentHandler extends AbstractDataHandler {
      * @param defaultFileExtenion the default file extension for the document type
      */
     public AbstractDocumentHandler(String defaultFileExtenion, Path path) {
-        this.path = path;
+        setPath(path);
         this.defaultFileExtenion = defaultFileExtenion;
         this.fileChooserProviderTracker = SimpleServiceTrackerCustomizer.createServiceTracker(FileChooserProvider.class, this::setFileChooserProvider);
 
         this.fileChooserProviderTracker.open(true);
+//        SavableAs savableAs = new SavableAs() {
+//            @Override
+//            public void saveAs() {
+//                AbstractDocumentHandler.this.saveAs("sfd");
+//
+//            }
+//        };
     }
 
     private String getDisplayString(Locale inLocale) {
@@ -73,8 +82,12 @@ public abstract class AbstractDocumentHandler extends AbstractDataHandler {
     /**
      * @param path the path to set
      */
-    protected void setPath(Path path) {
+    private void setPath(Path path) {
+        if (this.path != null) {
+            throw new IllegalStateException("The path must not change once set!");
+        }
         this.path = path;
+        setUniqueKey(path);
     }
 
     /**
@@ -104,10 +117,11 @@ public abstract class AbstractDocumentHandler extends AbstractDataHandler {
      * @throws IOException
      * @see #save()
      */
+    // TODO: private
     public boolean saveAs(String initialFileName) throws IOException {
         Path selectedPath = getFileChooserProvider().showSaveAsDialog(initialFileName);
         if (selectedPath != null) {
-            setPath(selectedPath);
+            setPath(selectedPath); // attention IllegalState!!
             save();
             return true;
         } else {
@@ -129,6 +143,21 @@ public abstract class AbstractDocumentHandler extends AbstractDataHandler {
     public void close() {
         fileChooserProviderTracker.close();
         super.close();
+    }
+
+    @Override
+    public Path getUniqueKey() {
+        return uniqueKey;
+    }
+
+    private void setUniqueKey(Path path) {
+        if (path != null && uniqueKey == null) {
+            try {
+                uniqueKey = path.toRealPath();
+            } catch (IOException ex) {
+                uniqueKey = path;
+            }
+        }
     }
 
     /**

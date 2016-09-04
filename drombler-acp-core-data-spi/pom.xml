@@ -77,6 +77,10 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
+            <groupId>org.drombler.commons</groupId>
+            <artifactId>drombler-commons-data</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.softsmithy.lib</groupId>
             <artifactId>softsmithy-lib-core</artifactId>
         </dependency>

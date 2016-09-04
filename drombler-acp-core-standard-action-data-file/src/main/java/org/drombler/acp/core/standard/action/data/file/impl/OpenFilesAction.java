@@ -5,11 +5,11 @@ import java.util.List;
 import org.drombler.acp.core.action.Action;
 import org.drombler.acp.core.action.MenuEntry;
 import org.drombler.acp.core.commons.util.SimpleServiceTrackerCustomizer;
-import org.drombler.acp.core.data.spi.DocumentHandlerDescriptorRegistry;
-import org.drombler.acp.core.data.FileChooserProvider;
-import org.drombler.acp.core.data.spi.FileExtensionDescriptorRegistry;
-import org.drombler.acp.core.data.spi.FileUtils;
+import org.drombler.acp.core.data.spi.DocumentHandlerDescriptorRegistryProvider;
+import org.drombler.acp.core.data.spi.FileExtensionDescriptorRegistryProvider;
 import org.drombler.commons.action.AbstractActionListener;
+import org.drombler.commons.client.dialog.FileChooserProvider;
+import org.drombler.commons.data.file.FileUtils;
 import org.osgi.util.tracker.ServiceTracker;
 
 /**
@@ -22,18 +22,20 @@ import org.osgi.util.tracker.ServiceTracker;
 public class OpenFilesAction extends AbstractActionListener<Object> implements AutoCloseable {
 
     private final ServiceTracker<FileChooserProvider, FileChooserProvider> fileChooserProviderServiceTracker;
-    private final ServiceTracker<FileExtensionDescriptorRegistry, FileExtensionDescriptorRegistry> fileExtensionDescriptorRegistryServiceTracker;
-    private final ServiceTracker<DocumentHandlerDescriptorRegistry, DocumentHandlerDescriptorRegistry> documentHandlerDescriptorRegistryServiceTracker;
+    private final ServiceTracker<FileExtensionDescriptorRegistryProvider, FileExtensionDescriptorRegistryProvider> fileExtensionDescriptorRegistryProviderServiceTracker;
+    private final ServiceTracker<DocumentHandlerDescriptorRegistryProvider, DocumentHandlerDescriptorRegistryProvider> documentHandlerDescriptorRegistryServiceTracker;
     private FileChooserProvider fileChooserProvider;
-    private FileExtensionDescriptorRegistry fileExtensionDescriptorRegistry;
-    private DocumentHandlerDescriptorRegistry documentHandlerDescriptorRegistry;
+    private FileExtensionDescriptorRegistryProvider fileExtensionDescriptorRegistryProvider;
+    private DocumentHandlerDescriptorRegistryProvider documentHandlerDescriptorRegistryProvider;
 
     public OpenFilesAction() {
         this.fileChooserProviderServiceTracker = SimpleServiceTrackerCustomizer.createServiceTracker(FileChooserProvider.class, this::setFileChooserProvider);
-        this.fileExtensionDescriptorRegistryServiceTracker = SimpleServiceTrackerCustomizer.createServiceTracker(FileExtensionDescriptorRegistry.class, this::setFileExtensionDescriptorRegistry);
-        this.documentHandlerDescriptorRegistryServiceTracker = SimpleServiceTrackerCustomizer.createServiceTracker(DocumentHandlerDescriptorRegistry.class, this::setDocumentHandlerDescriptorRegistry);
+        this.fileExtensionDescriptorRegistryProviderServiceTracker = SimpleServiceTrackerCustomizer.createServiceTracker(FileExtensionDescriptorRegistryProvider.class,
+                this::setFileExtensionDescriptorRegistryProvider);
+        this.documentHandlerDescriptorRegistryServiceTracker = SimpleServiceTrackerCustomizer.createServiceTracker(DocumentHandlerDescriptorRegistryProvider.class,
+                this::setDocumentHandlerDescriptorRegistryProvider);
         this.fileChooserProviderServiceTracker.open(true);
-        this.fileExtensionDescriptorRegistryServiceTracker.open(true);
+        this.fileExtensionDescriptorRegistryProviderServiceTracker.open(true);
         this.documentHandlerDescriptorRegistryServiceTracker.open(true);
         setEnabled(isInitialized());
     }
@@ -51,11 +53,11 @@ public class OpenFilesAction extends AbstractActionListener<Object> implements A
     }
 
     private boolean isInitialized() {
-        return fileChooserProvider != null && fileExtensionDescriptorRegistry != null && documentHandlerDescriptorRegistry != null;
+        return fileChooserProvider != null && fileExtensionDescriptorRegistryProvider != null && documentHandlerDescriptorRegistryProvider != null;
     }
 
     private void openFile(Path fileToOpen) {
-        FileUtils.openFile(fileToOpen, fileExtensionDescriptorRegistry, documentHandlerDescriptorRegistry);
+        FileUtils.openFile(fileToOpen, fileExtensionDescriptorRegistryProvider.getFileExtensionDescriptorRegistry(), documentHandlerDescriptorRegistryProvider.getDocumentHandlerDescriptorRegistry());
     }
 
     /**
@@ -76,37 +78,37 @@ public class OpenFilesAction extends AbstractActionListener<Object> implements A
     /**
      * @return the fileExtensionDescriptorRegistry
      */
-    public FileExtensionDescriptorRegistry getFileExtensionDescriptorRegistry() {
-        return fileExtensionDescriptorRegistry;
+    public FileExtensionDescriptorRegistryProvider getFileExtensionDescriptorRegistryProvider() {
+        return fileExtensionDescriptorRegistryProvider;
     }
 
     /**
      * @param fileExtensionDescriptorRegistry the fileExtensionDescriptorRegistry to set
      */
-    public void setFileExtensionDescriptorRegistry(FileExtensionDescriptorRegistry fileExtensionDescriptorRegistry) {
-        this.fileExtensionDescriptorRegistry = fileExtensionDescriptorRegistry;
+    public void setFileExtensionDescriptorRegistryProvider(FileExtensionDescriptorRegistryProvider fileExtensionDescriptorRegistryProvider) {
+        this.fileExtensionDescriptorRegistryProvider = fileExtensionDescriptorRegistryProvider;
         setEnabled(isInitialized());
     }
 
     /**
      * @return the documentHandlerDescriptorRegistry
      */
-    public DocumentHandlerDescriptorRegistry getDocumentHandlerDescriptorRegistry() {
-        return documentHandlerDescriptorRegistry;
+    public DocumentHandlerDescriptorRegistryProvider getDocumentHandlerDescriptorRegistryProvider() {
+        return documentHandlerDescriptorRegistryProvider;
     }
 
     /**
      * @param documentHandlerDescriptorRegistry the documentHandlerDescriptorRegistry to set
      */
-    public void setDocumentHandlerDescriptorRegistry(DocumentHandlerDescriptorRegistry documentHandlerDescriptorRegistry) {
-        this.documentHandlerDescriptorRegistry = documentHandlerDescriptorRegistry;
+    public void setDocumentHandlerDescriptorRegistryProvider(DocumentHandlerDescriptorRegistryProvider documentHandlerDescriptorRegistryProvider) {
+        this.documentHandlerDescriptorRegistryProvider = documentHandlerDescriptorRegistryProvider;
         setEnabled(isInitialized());
     }
 
     @Override
     public void close() {
         this.fileChooserProviderServiceTracker.close();
-        this.fileExtensionDescriptorRegistryServiceTracker.close();
+        this.fileExtensionDescriptorRegistryProviderServiceTracker.close();
         this.documentHandlerDescriptorRegistryServiceTracker.close();
     }
 

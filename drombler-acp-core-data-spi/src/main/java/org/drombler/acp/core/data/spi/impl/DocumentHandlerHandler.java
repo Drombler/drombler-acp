@@ -23,8 +23,9 @@ import org.apache.felix.scr.annotations.ReferencePolicy;
 import org.apache.felix.scr.annotations.References;
 import org.drombler.acp.core.data.jaxb.DataHandlersType;
 import org.drombler.acp.core.data.jaxb.DocumentHandlerType;
-import org.drombler.acp.core.data.spi.DocumentHandlerDescriptor;
-import org.drombler.acp.core.data.spi.DocumentHandlerDescriptorRegistry;
+import org.drombler.acp.core.data.spi.DataHandlerUtils;
+import org.drombler.acp.core.data.spi.DocumentHandlerDescriptorRegistryProvider;
+import org.drombler.commons.data.file.DocumentHandlerDescriptor;
 import org.osgi.framework.BundleContext;
 import org.osgi.service.component.ComponentContext;
 import org.slf4j.Logger;
@@ -39,26 +40,26 @@ import org.slf4j.LoggerFactory;
     @Reference(name = "documentHandlerDescriptor", referenceInterface = DocumentHandlerDescriptor.class,
             cardinality = ReferenceCardinality.OPTIONAL_MULTIPLE, policy = ReferencePolicy.DYNAMIC)
 })
-public class DocumentHandlerHandler<D> extends AbstractDataHandlerHandler<D, DocumentHandlerDescriptor<D>> {
+public class DocumentHandlerHandler extends AbstractDataHandlerHandler<DocumentHandlerDescriptor<?>> {
 
     private static final Logger LOG = LoggerFactory.getLogger(DocumentHandlerHandler.class);
 
     @Reference
-    private DocumentHandlerDescriptorRegistry documentHandlerDescriptorRegistry;
+    private DocumentHandlerDescriptorRegistryProvider documentHandlerDescriptorRegistryProvider;
 
-    protected void bindDocumentHandlerDescriptor(DocumentHandlerDescriptor handlerDescriptor) {
+    protected void bindDocumentHandlerDescriptor(DocumentHandlerDescriptor<?> handlerDescriptor) {
         resolveDataHandlerDescriptor(handlerDescriptor);
     }
 
-    protected void unbindDocumentHandlerDescriptor(DocumentHandlerDescriptor handlerDescriptor) {
+    protected void unbindDocumentHandlerDescriptor(DocumentHandlerDescriptor<?> handlerDescriptor) {
     }
 
-    protected void bindDocumentHandlerRegistry(DocumentHandlerDescriptorRegistry documentHandlerRegistry) {
-        this.documentHandlerDescriptorRegistry = documentHandlerRegistry;
+    protected void bindDocumentHandlerDescriptorRegistryProvider(DocumentHandlerDescriptorRegistryProvider documentHandlerDescriptorRegistryProvider) {
+        this.documentHandlerDescriptorRegistryProvider = documentHandlerDescriptorRegistryProvider;
     }
 
-    protected void unbindDocumentHandlerRegistry(DocumentHandlerDescriptorRegistry documentHandlerRegistry) {
-        this.documentHandlerDescriptorRegistry = null;
+    protected void unbindDocumentHandlerDescriptorRegistryProvider(DocumentHandlerDescriptorRegistryProvider documentHandlerDescriptorRegistryProvider) {
+        this.documentHandlerDescriptorRegistryProvider = null;
     }
 
     @Activate
@@ -82,7 +83,7 @@ public class DocumentHandlerHandler<D> extends AbstractDataHandlerHandler<D, Doc
     private void registerDocumentHandler(DocumentHandlerType documentHandlerType, BundleContext context) {
         try {
             // TODO: register DocumentHandlerDescriptor as service?
-            DocumentHandlerDescriptor documentHandlerDescriptor = DocumentHandlerDescriptor.createDocumentHandlerDescriptor(
+            DocumentHandlerDescriptor<?> documentHandlerDescriptor = DataHandlerUtils.createDocumentHandlerDescriptor(
                     documentHandlerType, context.getBundle());
             resolveDataHandlerDescriptor(documentHandlerDescriptor);
         } catch (ClassNotFoundException ex) {
@@ -92,13 +93,13 @@ public class DocumentHandlerHandler<D> extends AbstractDataHandlerHandler<D, Doc
 
     @Override
     protected boolean isInitialized() {
-        return super.isInitialized() && documentHandlerDescriptorRegistry != null;
+        return super.isInitialized() && documentHandlerDescriptorRegistryProvider != null;
     }
 
     @Override
-    protected void resolveDataHandlerDescriptorInitialized(DocumentHandlerDescriptor<D> handlerDescriptor) {
+    protected void resolveDataHandlerDescriptorInitialized(DocumentHandlerDescriptor<?> handlerDescriptor) {
         super.resolveDataHandlerDescriptorInitialized(handlerDescriptor);
-        documentHandlerDescriptorRegistry.registerDocumentHandlerDescriptor(handlerDescriptor);
+        documentHandlerDescriptorRegistryProvider.getDocumentHandlerDescriptorRegistry().registerDocumentHandlerDescriptor(handlerDescriptor);
     }
 
 }

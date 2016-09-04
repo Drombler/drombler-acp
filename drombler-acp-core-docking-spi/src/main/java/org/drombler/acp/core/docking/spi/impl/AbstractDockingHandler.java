@@ -16,32 +16,39 @@ package org.drombler.acp.core.docking.spi.impl;
 
 import org.apache.felix.scr.annotations.Reference;
 import org.drombler.acp.core.docking.spi.DockingAreaContainerProvider;
+import org.drombler.commons.docking.DockableData;
 import org.drombler.commons.docking.DockableEntry;
+import org.drombler.commons.docking.DockablePreferences;
+import org.drombler.commons.docking.context.DockingAreaContainer;
 
 /**
  *
  * @author puce
+ * @param <D>
+ * @param <DATA>
+ * @param <E>
  */
 @Reference(name = "dockingAreaContainerProvider", referenceInterface = DockingAreaContainerProvider.class)
-public abstract class AbstractDockingHandler<D, E extends DockableEntry<D>> {
+public abstract class AbstractDockingHandler<D, DATA extends DockableData, E extends DockableEntry<D, DATA>> {
 
-    private DockingAreaContainerProvider<D, E> dockingAreaContainerProvider;
+    private DockingAreaContainerProvider<D, DATA, E> dockingAreaContainerProvider;
 
     protected void bindDockingAreaContainerProvider(
-            DockingAreaContainerProvider<D, E> dockingAreaContainerProvider) {
+            DockingAreaContainerProvider<D, DATA, E> dockingAreaContainerProvider) {
         this.dockingAreaContainerProvider = dockingAreaContainerProvider;
     }
 
     protected void unbindDockingAreaContainerProvider(
-            DockingAreaContainerProvider<D, E> dockingAreaContainerProvider) {
+            DockingAreaContainerProvider<D, DATA, E> dockingAreaContainerProvider) {
         this.dockingAreaContainerProvider = null;
     }
 
-    /**
-     * @return the dockingAreaContainer
-     */
-    protected DockingAreaContainerProvider<D, E> getDockingAreaContainerProvider() {
-        return dockingAreaContainerProvider;
+    protected void registerDefaultDockablePreferences(Class<?> dockableClass, DockablePreferences dockablePreferences) {
+        getDockingAreaContainer().registerDefaultDockablePreferences(dockableClass, dockablePreferences);
+    }
+
+    protected DockingAreaContainer<D, DATA, E> getDockingAreaContainer() {
+        return dockingAreaContainerProvider.getDockingAreaContainer();
     }
 
     protected boolean isInitialized() {

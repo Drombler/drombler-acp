@@ -23,7 +23,8 @@ import org.apache.felix.scr.annotations.ReferencePolicy;
 import org.apache.felix.scr.annotations.References;
 import org.drombler.acp.core.data.jaxb.BusinessObjectHandlerType;
 import org.drombler.acp.core.data.jaxb.DataHandlersType;
-import org.drombler.acp.core.data.spi.BusinessObjectHandlerDescriptor;
+import org.drombler.acp.core.data.spi.DataHandlerUtils;
+import org.drombler.commons.data.BusinessObjectHandlerDescriptor;
 import org.osgi.framework.BundleContext;
 import org.osgi.service.component.ComponentContext;
 import org.slf4j.Logger;
@@ -34,16 +35,16 @@ import org.slf4j.LoggerFactory;
     @Reference(name = "businessObjectHandlerDescriptor", referenceInterface = BusinessObjectHandlerDescriptor.class,
             cardinality = ReferenceCardinality.OPTIONAL_MULTIPLE, policy = ReferencePolicy.DYNAMIC)
 })
-public class BusinessObjectHandlerHandler<D> extends AbstractDataHandlerHandler<D, BusinessObjectHandlerDescriptor<D>> {
+public class BusinessObjectHandlerHandler extends AbstractDataHandlerHandler<BusinessObjectHandlerDescriptor<?>> {
 
     private static final Logger LOG = LoggerFactory.getLogger(BusinessObjectHandlerHandler.class);
 
 
-    protected void bindBusinessObjectHandlerDescriptor(BusinessObjectHandlerDescriptor handlerDescriptor) {
+    protected void bindBusinessObjectHandlerDescriptor(BusinessObjectHandlerDescriptor<?> handlerDescriptor) {
         resolveDataHandlerDescriptor(handlerDescriptor);
     }
 
-    protected void unbindBusinessObjectHandlerDescriptor(BusinessObjectHandlerDescriptor handlerDescriptor) {
+    protected void unbindBusinessObjectHandlerDescriptor(BusinessObjectHandlerDescriptor<?> handlerDescriptor) {
     }
 
     @Activate
@@ -67,7 +68,7 @@ public class BusinessObjectHandlerHandler<D> extends AbstractDataHandlerHandler<
     private void registerBusinessObjectHandler(BusinessObjectHandlerType businessObjectHandler, BundleContext context) {
         try {
             // TODO: register BusinessObjectHandlerDescriptor as service?
-            BusinessObjectHandlerDescriptor businessObjectHandlerDescriptor = BusinessObjectHandlerDescriptor.createBusinessObjectHandlerDescriptor(
+            BusinessObjectHandlerDescriptor<?> businessObjectHandlerDescriptor = DataHandlerUtils.createBusinessObjectHandlerDescriptor(
                     businessObjectHandler, context.getBundle());
             resolveDataHandlerDescriptor(businessObjectHandlerDescriptor);
         } catch (ClassNotFoundException ex) {

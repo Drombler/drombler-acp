@@ -14,12 +14,6 @@
  */
 package org.drombler.acp.core.docking.spi;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-import org.apache.commons.lang3.StringUtils;
-import org.drombler.acp.core.docking.jaxb.EditorDockingType;
-import org.osgi.framework.Bundle;
-
 /**
  *
  * @author puce
@@ -29,8 +23,8 @@ public class EditorDockingDescriptor<D> extends AbstractDockableDockingDescripto
 
     private final Class<?> contentType;
 
-    public EditorDockingDescriptor(Class<D> dockableClass, Class<?> contentType) {
-        super(dockableClass);
+    public EditorDockingDescriptor(Class<D> dockableClass, String id, Class<?> contentType) {
+        super(dockableClass, id);
         this.contentType = contentType;
     }
 
@@ -41,25 +35,10 @@ public class EditorDockingDescriptor<D> extends AbstractDockableDockingDescripto
         return contentType;
     }
 
-    public static EditorDockingDescriptor<?> createEditorDockingDescriptor(EditorDockingType docking, Bundle bundle)
-            throws ClassNotFoundException {
-        final Class<?> dockableClass = bundle.loadClass(StringUtils.stripToNull(docking.getDockableClass()));
-        return createEditorDockingDescriptor(docking, dockableClass, bundle);
-    }
 
-    private static <D> EditorDockingDescriptor<D> createEditorDockingDescriptor(EditorDockingType docking,
-            Class<D> dockableClass, Bundle bundle) throws ClassNotFoundException {
-        Class<?> contentType = bundle.loadClass(StringUtils.stripToNull(docking.getContentType()));
-        EditorDockingDescriptor<D> dockingDescriptor = new EditorDockingDescriptor<>(dockableClass, contentType);
-
-        DockingDescriptorUtils.configureDockingDescriptor(dockingDescriptor, docking, bundle);
-
-        return dockingDescriptor;
-    }
-
-    public D createEditor(Object content)
-            throws IllegalAccessException, SecurityException, InvocationTargetException, InstantiationException, IllegalArgumentException, NoSuchMethodException {
-        Constructor<? extends D> editorConstructor = getDockableClass().getConstructor(content.getClass());
-        return editorConstructor.newInstance(content);
-    }
+//    public D createEditor(Object content)
+//            throws IllegalAccessException, SecurityException, InvocationTargetException, InstantiationException, IllegalArgumentException, NoSuchMethodException {
+//        Constructor<? extends D> editorConstructor = getDockableClass().getConstructor(content.getClass());
+//        return editorConstructor.newInstance(content);
+//    }
 }
