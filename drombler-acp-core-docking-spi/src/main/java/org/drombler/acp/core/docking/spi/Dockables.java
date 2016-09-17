@@ -106,21 +106,4 @@ public final class Dockables {
         bundleContext.ungetService(dockingAreaContainerProviderServiceReference);
     }
 
-    @Deprecated
-    public static <D, DATA extends DockableData, E extends DockableEntry<D, DATA>> void inject(D dockable) {
-        // TODO: cache ServiceReference?
-        // TODO: check if the code is safe, if the services disappear
-        BundleContext bundleContext = FrameworkUtil.getBundle(Dockables.class).getBundleContext();
-        @SuppressWarnings("rawtypes")
-        ServiceReference<DockingAreaContainerProvider> dockingAreaContainerProviderServiceReference
-                = bundleContext.getServiceReference(DockingAreaContainerProvider.class);
-        @SuppressWarnings("unchecked")
-        DockingAreaContainerProvider<D, DATA, E> dockingAreaContainerProvider
-                = bundleContext.getService(dockingAreaContainerProviderServiceReference);
-
-        dockingAreaContainerProvider.getDockingAreaContainer().inject(dockable);
-
-        bundleContext.ungetService(dockingAreaContainerProviderServiceReference);
-    }
-
 }
