@@ -1,10 +1,11 @@
 package org.drombler.acp.core.data;
 
-import org.drombler.commons.data.DataCapabilityProvider;
 import org.drombler.acp.core.commons.util.SimpleServiceTrackerCustomizer;
 import org.drombler.commons.context.Context;
 import org.drombler.commons.context.SimpleContext;
 import org.drombler.commons.context.SimpleContextContent;
+import org.drombler.commons.data.DataCapabilityProvider;
+import org.drombler.commons.data.DataHandler;
 import org.osgi.util.tracker.ServiceTracker;
 
 /**
@@ -21,6 +22,8 @@ public abstract class AbstractDataHandler<T> implements DataHandler<T>, AutoClos
     private final SimpleContextContent contextContent = new SimpleContextContent();
     private final Context localContext = new SimpleContext(contextContent);
     private final ServiceTracker<DataCapabilityProvider, DataCapabilityProvider> dataCapabilityProviderTracker;
+
+    private boolean dirty = false;
 
     /**
      * Creates a new instance of this class.
@@ -44,6 +47,20 @@ public abstract class AbstractDataHandler<T> implements DataHandler<T>, AutoClos
 
     private void removeDataCapabilityProvider(DataCapabilityProvider<?> dataCapabilityProvider) {
         contextContent.remove(dataCapabilityProvider.getDataCapability(this));
+    }
+
+    @Override
+    public void markDirty() {
+        dirty = true;
+    }
+
+    @Override
+    public boolean isDirty() {
+        return dirty;
+    }
+
+    protected void markClean() {
+        dirty = false;
     }
 
     /**
