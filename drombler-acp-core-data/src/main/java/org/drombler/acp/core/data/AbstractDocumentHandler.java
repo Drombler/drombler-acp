@@ -60,8 +60,8 @@ public abstract class AbstractDocumentHandler extends AbstractDataHandler<Path> 
         this.fileChooserProviderTracker.open(true);
 //        SavableAs savableAs = new SavableAs() {
 //            @Override
-//            public void saveAs() {
-//                AbstractDocumentHandler.this.saveAs("sfd");
+//            public void saveNew() {
+//                AbstractDocumentHandler.this.saveNew("sfd");
 //
 //            }
 //        };
@@ -91,6 +91,16 @@ public abstract class AbstractDocumentHandler extends AbstractDataHandler<Path> 
         setUniqueKey(path);
     }
 
+    @Override
+    public String getTitle() {
+        return getPath() != null ? getPath().getFileName().toString() : null;
+    }
+
+    @Override
+    public String getTooltipText() {
+        return getPath() != null ? getPath().toString() : null;
+    }
+
     /**
      * Gets the default file extension for the document type.
      *
@@ -104,14 +114,14 @@ public abstract class AbstractDocumentHandler extends AbstractDataHandler<Path> 
      * Saves the content to the file. Only call this method if the path is known.
      *
      * @throws IOException
-     * @see #saveAs(java.lang.String)
+     * @see #saveNew(java.lang.String)
      */
     public void save() throws IOException {
         writeContent();
     }
 
     /**
-     * Saves the content to a file selected from the saveAs dialog. If a file has been selected, the path is set to the selected file.
+     * Saves the content to a file selected from the saveNew dialog. If a file has been selected, the path is set to the selected file.
      *
      * @param initialFileName the initial file name
      * @return true, if a file has been selected and saved, else false
@@ -119,10 +129,13 @@ public abstract class AbstractDocumentHandler extends AbstractDataHandler<Path> 
      * @see #save()
      */
     // TODO: private
-    public boolean saveAs(String initialFileName) throws IOException {
+    public boolean saveNew(String initialFileName) throws IOException {
+        if (getPath() != null) {
+            throw new IllegalStateException("The path must not change once set!");
+        }
         Path selectedPath = getFileChooserProvider().showSaveAsDialog(initialFileName);
         if (selectedPath != null) {
-            setPath(selectedPath); // attention IllegalState!!
+            setPath(selectedPath);
             save();
             return true;
         } else {
@@ -162,7 +175,7 @@ public abstract class AbstractDocumentHandler extends AbstractDataHandler<Path> 
     }
 
     /**
-     * The system wide FileChooserProvider used for the saveAs dialog.
+     * The system wide FileChooserProvider used for the saveNew dialog.
      *
      * @return the fileChooserProvider the system wide FileChooserProvider
      */

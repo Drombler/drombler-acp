@@ -24,6 +24,7 @@ import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.ServiceReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.softsmithy.lib.util.UniqueKeyProvider;
 
 /**
  * TODO: Move to API? But DockingAreaContainerProvider is a SPI interface...
@@ -60,7 +61,7 @@ public final class Dockables {
         bundleContext.ungetService(dockingAreaContainerProviderServiceReference);
     }
 
-    public static <D, DATA extends DockableData, E extends DockableEntry<D, DATA>> void openEditorForContent(Object content) {
+    public static <D, DATA extends DockableData, E extends DockableEntry<D, DATA>> void openEditorForContent(UniqueKeyProvider<?> content) {
         // TODO: cache ServiceReference?
         // TODO: check if the code is safe, if the services disappear
         BundleContext bundleContext = FrameworkUtil.getBundle(Dockables.class).getBundleContext();
@@ -103,23 +104,6 @@ public final class Dockables {
         bundleContext.ungetService(applicationExecutorProviderServiceReference);
         bundleContext.ungetService(editorRegistryServiceReference);
         bundleContext.ungetService(dataHandlerDescriptorRegistryProviderServiceReference);
-        bundleContext.ungetService(dockingAreaContainerProviderServiceReference);
-    }
-
-    @Deprecated
-    public static <D, DATA extends DockableData, E extends DockableEntry<D, DATA>> void inject(D dockable) {
-        // TODO: cache ServiceReference?
-        // TODO: check if the code is safe, if the services disappear
-        BundleContext bundleContext = FrameworkUtil.getBundle(Dockables.class).getBundleContext();
-        @SuppressWarnings("rawtypes")
-        ServiceReference<DockingAreaContainerProvider> dockingAreaContainerProviderServiceReference
-                = bundleContext.getServiceReference(DockingAreaContainerProvider.class);
-        @SuppressWarnings("unchecked")
-        DockingAreaContainerProvider<D, DATA, E> dockingAreaContainerProvider
-                = bundleContext.getService(dockingAreaContainerProviderServiceReference);
-
-        dockingAreaContainerProvider.getDockingAreaContainer().inject(dockable);
-
         bundleContext.ungetService(dockingAreaContainerProviderServiceReference);
     }
 

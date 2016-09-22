@@ -17,6 +17,7 @@ package org.drombler.acp.core.docking.spi;
 /**
  *
  * @author puce
+ * @param <D> the type of the dockable
  */
 public class AbstractDockableDockingDescriptor<D> {
 
