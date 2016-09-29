@@ -49,7 +49,8 @@ public @interface DocumentHandler {
      * The icon name pattern to resolve the icons to be used for this file type handler.
      *
      * Note that this only specifies the name pattern. Drombler ACP looks for
-     * <icon-base-name>16.<icon-extension> for data types (expected to be 16x16 pixels). So if icon is &quot;test.png&quot;, Drombler ACP would look for test16.png.
+     * &lt;icon-base-name&gt;16.&lt;icon-extension&gt; for data types (expected to be 16x16 pixels). So if icon is
+     * &quot;test.png&quot;, Drombler ACP would look for test16.png.
      *
      * @return the icon name pattern
      */

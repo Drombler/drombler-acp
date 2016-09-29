@@ -27,7 +27,8 @@ public @interface BusinessObjectHandler {
      * The icon name pattern to resolve the icons to be used for this file type handler.
      *
      * Note that this only specifies the name pattern. Drombler ACP Docking Framework looks for
-     * <icon-base-name>16.<icon-extension> (expected to be 16x16 pixels). So if icon is &quot;test.png&quot;, the Drombler ACP Docking Framework would look for test16.png.
+     * &lt;icon-base-name&gt;16.&lt;icon-extension&gt; (expected to be 16x16 pixels). So if icon is
+     * &quot;test.png&quot;, the Drombler ACP Docking Framework would look for test16.png.
      *
      * @return the icon name pattern
      */
