@@ -4,7 +4,6 @@ import org.apache.felix.scr.annotations.Component;
 import org.apache.felix.scr.annotations.Service;
 import org.drombler.acp.core.data.spi.DocumentHandlerDescriptorRegistryProvider;
 import org.drombler.commons.data.file.DocumentHandlerDescriptorRegistry;
-import org.drombler.commons.data.file.SimpleDocumentHandlerDescriptorRegistry;
 
 /**
  *
@@ -15,7 +14,7 @@ import org.drombler.commons.data.file.SimpleDocumentHandlerDescriptorRegistry;
 @Service
 public class DocumentHandlerDescriptorRegistryProviderImpl implements DocumentHandlerDescriptorRegistryProvider {
 
-    private final DocumentHandlerDescriptorRegistry documentHandlerDescriptorRegistry = new SimpleDocumentHandlerDescriptorRegistry();
+    private final DocumentHandlerDescriptorRegistry documentHandlerDescriptorRegistry = new DocumentHandlerDescriptorRegistry();
 
     @Override
     public DocumentHandlerDescriptorRegistry getDocumentHandlerDescriptorRegistry() {
