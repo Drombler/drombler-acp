@@ -23,7 +23,6 @@ import org.apache.felix.scr.annotations.ReferencePolicy;
 import org.apache.felix.scr.annotations.References;
 import org.drombler.acp.core.data.jaxb.BusinessObjectHandlerType;
 import org.drombler.acp.core.data.jaxb.DataHandlersType;
-import org.drombler.acp.core.data.spi.DataHandlerUtils;
 import org.drombler.commons.data.BusinessObjectHandlerDescriptor;
 import org.osgi.framework.BundleContext;
 import org.osgi.service.component.ComponentContext;

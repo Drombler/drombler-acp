@@ -7,8 +7,8 @@
  * http://www.opensource.org/licenses/cddl1.txt
  *
  * The Original Code is Drombler.org. The Initial Developer of the
- * Original Code is Florian Brunner (Sourceforge.net user: puce).
- * Copyright 2012 Drombler.org. All Rights Reserved.
+ * Original Code is Florian Brunner (GitHub user: puce77).
+ * Copyright 2016 Drombler.org. All Rights Reserved.
  *
  * Contributor(s): .
  */
@@ -31,14 +31,15 @@ import org.apache.felix.scr.annotations.Reference;
 import org.apache.felix.scr.annotations.ReferenceCardinality;
 import org.apache.felix.scr.annotations.ReferencePolicy;
 import org.drombler.acp.core.data.spi.DocumentHandlerDescriptorRegistryProvider;
+import org.drombler.acp.core.data.spi.FileExtensionDescriptorRegistryProvider;
 import org.drombler.acp.startup.main.AdditionalArgumentsProvider;
 import org.drombler.commons.data.file.DocumentHandlerDescriptorEvent;
 import org.drombler.commons.data.file.DocumentHandlerDescriptorListener;
-import org.drombler.commons.data.file.FileExtensionEvent;
-import org.drombler.commons.data.file.FileExtensionListener;
+import org.drombler.commons.data.file.FileExtensionDescriptor;
 import org.drombler.commons.data.file.FileUtils;
 import org.osgi.service.component.ComponentContext;
-import org.drombler.acp.core.data.spi.FileExtensionDescriptorRegistryProvider;
+import org.softsmithy.lib.util.SetChangeEvent;
+import org.softsmithy.lib.util.SetChangeListener;
 
 /**
  *
@@ -56,8 +57,8 @@ public class AdditionalFileParamsHandler {
 
     private final List<String> unresolvedArguments = new ArrayList<>();
     private final List<Path> unresolvedPaths = new ArrayList<>();
-    private final FileExtensionListener fileExtensionListener = new OpenFileListener();
-    private final DocumentHandlerDescriptorListener documentHandlerListener = new OpenDocumentListener();
+    private final SetChangeListener<FileExtensionDescriptor> openFileListener = new OpenFileListener();
+    private final DocumentHandlerDescriptorListener openDocumentListener = new OpenDocumentListener();
 
     protected void bindAdditionalArgumentsProvider(AdditionalArgumentsProvider additionalArgumentsProvider) {
         handleAdditionalArguments(additionalArgumentsProvider.getAdditionalArguments());
@@ -85,15 +86,15 @@ public class AdditionalFileParamsHandler {
 
     @Activate
     protected void activate(ComponentContext context) {
-        fileExtensionDescriptorRegistryProvider.getFileExtensionDescriptorRegistry().registerFileExtensionListener(fileExtensionListener);
-        documentHandlerDescriptorRegistryProvider.getDocumentHandlerDescriptorRegistry().registerDocumentHandlerDescriptorListener(documentHandlerListener);
+        fileExtensionDescriptorRegistryProvider.getFileExtensionDescriptorRegistry().addFileExtensionListener(openFileListener);
+        documentHandlerDescriptorRegistryProvider.getDocumentHandlerDescriptorRegistry().addDocumentHandlerDescriptorListener(openDocumentListener);
         resolveUnresolvedArguments();
     }
 
     @Deactivate
     protected void deactivate(ComponentContext context) {
-        documentHandlerDescriptorRegistryProvider.getDocumentHandlerDescriptorRegistry().unregisterDocumentHandlerDescriptorListener(documentHandlerListener);
-        fileExtensionDescriptorRegistryProvider.getFileExtensionDescriptorRegistry().unregisterFileExtensionListener(fileExtensionListener);
+        documentHandlerDescriptorRegistryProvider.getDocumentHandlerDescriptorRegistry().removeDocumentHandlerDescriptorListener(openDocumentListener);
+        fileExtensionDescriptorRegistryProvider.getFileExtensionDescriptorRegistry().removeFileExtensionListener(openFileListener);
     }
 
     private boolean isInitialized() {
@@ -146,15 +147,15 @@ public class AdditionalFileParamsHandler {
         unresolvedPathsCopy.forEach(this::openFile);
     }
 
-    private class OpenFileListener implements FileExtensionListener {
+    private class OpenFileListener implements SetChangeListener<FileExtensionDescriptor> {
 
         @Override
-        public void fileExtensionAdded(FileExtensionEvent event) {
+        public void elementAdded(SetChangeEvent<FileExtensionDescriptor> event) {
             resolveUnresolvedPaths();
         }
 
         @Override
-        public void fileExtensionRemoved(FileExtensionEvent event) {
+        public void elementRemoved(SetChangeEvent<FileExtensionDescriptor> event) {
             // nothing to do
         }
 
