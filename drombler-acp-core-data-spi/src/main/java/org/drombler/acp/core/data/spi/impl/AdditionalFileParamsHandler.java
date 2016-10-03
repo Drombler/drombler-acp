@@ -33,8 +33,7 @@ import org.apache.felix.scr.annotations.ReferencePolicy;
 import org.drombler.acp.core.data.spi.DocumentHandlerDescriptorRegistryProvider;
 import org.drombler.acp.core.data.spi.FileExtensionDescriptorRegistryProvider;
 import org.drombler.acp.startup.main.AdditionalArgumentsProvider;
-import org.drombler.commons.data.file.DocumentHandlerDescriptorEvent;
-import org.drombler.commons.data.file.DocumentHandlerDescriptorListener;
+import org.drombler.commons.data.file.DocumentHandlerDescriptor;
 import org.drombler.commons.data.file.FileExtensionDescriptor;
 import org.drombler.commons.data.file.FileUtils;
 import org.osgi.service.component.ComponentContext;
@@ -58,7 +57,7 @@ public class AdditionalFileParamsHandler {
     private final List<String> unresolvedArguments = new ArrayList<>();
     private final List<Path> unresolvedPaths = new ArrayList<>();
     private final SetChangeListener<FileExtensionDescriptor> openFileListener = new OpenFileListener();
-    private final DocumentHandlerDescriptorListener openDocumentListener = new OpenDocumentListener();
+    private final SetChangeListener<DocumentHandlerDescriptor<?>> openDocumentListener = new OpenDocumentListener();
 
     protected void bindAdditionalArgumentsProvider(AdditionalArgumentsProvider additionalArgumentsProvider) {
         handleAdditionalArguments(additionalArgumentsProvider.getAdditionalArguments());
@@ -161,15 +160,15 @@ public class AdditionalFileParamsHandler {
 
     }
 
-    private class OpenDocumentListener implements DocumentHandlerDescriptorListener {
+    private class OpenDocumentListener implements SetChangeListener<DocumentHandlerDescriptor<?>> {
 
         @Override
-        public void documentHandlerDescriptorAdded(DocumentHandlerDescriptorEvent<?> event) {
+        public void elementAdded(SetChangeEvent<DocumentHandlerDescriptor<?>> event) {
             resolveUnresolvedPaths();
         }
 
         @Override
-        public void documentHandlerDescriptorRemoved(DocumentHandlerDescriptorEvent<?> event) {
+        public void elementRemoved(SetChangeEvent<DocumentHandlerDescriptor<?>> event) {
             // nothing to do
         }
 
