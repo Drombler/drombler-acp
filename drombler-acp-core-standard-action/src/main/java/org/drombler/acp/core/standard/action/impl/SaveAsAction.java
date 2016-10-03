@@ -14,8 +14,6 @@
  */
 package org.drombler.acp.core.standard.action.impl;
 
-import org.drombler.acp.core.action.Action;
-import org.drombler.acp.core.action.MenuEntry;
 //import org.drombler.acp.core.data.command.SavableAs;
 import org.drombler.commons.action.AbstractActionListener;
 import org.drombler.commons.context.ActiveContextSensitive;
@@ -25,9 +23,9 @@ import org.drombler.commons.context.Context;
  *
  * @author puce
  */
-@Action(id = "standard.saveAs", category = "core", displayName = "%saveAs.displayName")
-@MenuEntry(path = "File", position = 4205)
-public class SaveAsAction extends AbstractActionListener<Object> implements ActiveContextSensitive {
+//@Action(id = "standard.saveAs", category = "core", displayName = "%saveAs.displayName")
+//@MenuEntry(path = "File", position = 4205)
+class SaveAsAction extends AbstractActionListener<Object> implements ActiveContextSensitive {
 
 //    private SavableAs savableAs;
     private Context activeContext;
