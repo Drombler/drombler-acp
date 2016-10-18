@@ -17,6 +17,7 @@ package org.drombler.acp.core.docking.spi;
 import org.drombler.acp.core.data.spi.DataHandlerDescriptorRegistryProvider;
 import org.drombler.acp.startup.main.ApplicationExecutorProvider;
 import org.drombler.commons.data.AbstractDataHandlerDescriptor;
+import org.drombler.commons.data.DataHandlerDescriptorRegistry;
 import org.drombler.commons.docking.DockableData;
 import org.drombler.commons.docking.DockableEntry;
 import org.drombler.commons.docking.context.DockingAreaContainer;
