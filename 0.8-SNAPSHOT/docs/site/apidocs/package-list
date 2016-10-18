@@ -5,6 +5,7 @@ org.drombler.acp.core.application
 org.drombler.acp.core.application.jaxb
 org.drombler.acp.core.commons.util
 org.drombler.acp.core.data
+org.drombler.acp.core.data.command
 org.drombler.acp.core.data.jaxb
 org.drombler.acp.core.data.spi
 org.drombler.acp.core.docking
