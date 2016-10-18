@@ -19,6 +19,7 @@ import org.drombler.acp.startup.main.ApplicationExecutorProvider;
 import org.drombler.commons.data.AbstractDataHandlerDescriptor;
 import org.drombler.commons.docking.DockableData;
 import org.drombler.commons.docking.DockableEntry;
+import org.drombler.commons.docking.context.DockingAreaContainer;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.ServiceReference;
@@ -61,6 +62,18 @@ public final class Dockables {
         bundleContext.ungetService(dockingAreaContainerProviderServiceReference);
     }
 
+    /**
+     * Opens an Editor for the specified content.
+     *
+     * It looks in the {@link EditorDockingDescriptorRegistry} if there is any registered {@link EditorDockingDescriptor} for the content type. If one is registered it looks in the
+     * {@link DataHandlerDescriptorRegistry} if there is any registerd Data Handler descriptor. If there is one it tries to open an editor by calling
+     * {@link DockingAreaContainer#openEditorForContent(java.lang.Object, java.lang.Class, java.lang.String, org.softsmithy.lib.util.ResourceLoader)}.
+     *
+     * @param <D> the Dockable type
+     * @param <DATA> the Dockable data type
+     * @param <E> the Dockable entry type
+     * @param content the content to open in an Editor
+     */
     public static <D, DATA extends DockableData, E extends DockableEntry<D, DATA>> void openEditorForContent(UniqueKeyProvider<?> content) {
         // TODO: cache ServiceReference?
         // TODO: check if the code is safe, if the services disappear
