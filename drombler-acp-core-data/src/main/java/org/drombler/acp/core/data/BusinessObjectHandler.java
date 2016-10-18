@@ -1,3 +1,17 @@
+/*
+ *         COMMON DEVELOPMENT AND DISTRIBUTION LICENSE (CDDL) Notice
+ *
+ * The contents of this file are subject to the COMMON DEVELOPMENT AND DISTRIBUTION LICENSE (CDDL)
+ * Version 1.0 (the "License"); you may not use this file except in
+ * compliance with the License. A copy of the License is available at
+ * http://www.opensource.org/licenses/cddl1.txt
+ *
+ * The Original Code is Drombler.org. The Initial Developer of the
+ * Original Code is Florian Brunner (GitHub user: puce77).
+ * Copyright 2016 Drombler.org. All Rights Reserved.
+ *
+ * Contributor(s): .
+ */
 package org.drombler.acp.core.data;
 
 import java.lang.annotation.Documented;
@@ -27,7 +41,8 @@ public @interface BusinessObjectHandler {
      * The icon name pattern to resolve the icons to be used for this file type handler.
      *
      * Note that this only specifies the name pattern. Drombler ACP Docking Framework looks for
-     * <icon-base-name>16.<icon-extension> (expected to be 16x16 pixels). So if icon is &quot;test.png&quot;, the Drombler ACP Docking Framework would look for test16.png.
+     * &lt;icon-base-name&gt;16.&lt;icon-extension&gt; (expected to be 16x16 pixels). So if icon is
+     * &quot;test.png&quot;, the Drombler ACP Docking Framework would look for test16.png.
      *
      * @return the icon name pattern
      */

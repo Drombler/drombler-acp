@@ -16,7 +16,6 @@ package org.drombler.acp.core.data;
 
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.Locale;
 import org.drombler.acp.core.commons.util.SimpleServiceTrackerCustomizer;
 import org.drombler.commons.client.dialog.FileChooserProvider;
 import org.drombler.commons.data.DataCapabilityProvider;
@@ -65,10 +64,6 @@ public abstract class AbstractDocumentHandler extends AbstractDataHandler<Path> 
 //
 //            }
 //        };
-    }
-
-    private String getDisplayString(Locale inLocale) {
-        return getPath() != null ? getPath().getFileName().toString() : "???";
     }
 
     /**
