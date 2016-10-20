@@ -1,0 +1,14 @@
+org.drombler.acp.startup.main
+org.drombler.acp.core.commons.util
+org.drombler.acp.core.application
+org.drombler.acp.core.application.jaxb
+org.drombler.acp.core.action
+org.drombler.acp.core.action.jaxb
+org.drombler.acp.core.action.spi
+org.drombler.acp.core.data
+org.drombler.acp.core.data.command
+org.drombler.acp.core.data.jaxb
+org.drombler.acp.core.data.spi
+org.drombler.acp.core.docking
+org.drombler.acp.core.docking.jaxb
+org.drombler.acp.core.docking.spi
