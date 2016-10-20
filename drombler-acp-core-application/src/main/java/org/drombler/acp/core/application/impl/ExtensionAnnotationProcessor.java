@@ -17,6 +17,7 @@ package org.drombler.acp.core.application.impl;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Set;
+import java.util.function.Supplier;
 import javax.annotation.processing.RoundEnvironment;
 import javax.annotation.processing.SupportedAnnotationTypes;
 import javax.annotation.processing.SupportedSourceVersion;
@@ -98,13 +99,17 @@ public class ExtensionAnnotationProcessor extends AbstractApplicationAnnotationP
     }
 
     private TypeMirror getExtensionJAXBRootClass(Extension extensionAnnotation) {
-        TypeMirror extensionJAXBRootType = null;
-        try {
-            extensionAnnotation.extensionJAXBRootClass();
-        } catch (MirroredTypeException mte) {
-            extensionJAXBRootType = mte.getTypeMirror();
-        }
-        return extensionJAXBRootType;
+        return getTypeMirror(extensionAnnotation::extensionJAXBRootClass);
     }
 
+    // TODO: move to SoftSmithy
+    private TypeMirror getTypeMirror(Supplier<Class<?>> supplier) {
+        TypeMirror typeMirror = null;
+        try {
+            supplier.get();
+        } catch (MirroredTypeException mte) {
+            typeMirror = mte.getTypeMirror();
+        }
+        return typeMirror;
+    }
 }
