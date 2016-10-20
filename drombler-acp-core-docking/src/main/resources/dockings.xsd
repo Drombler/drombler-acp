@@ -30,8 +30,12 @@ Contributor(s): .
         <complexContent>
             <extension base="tns:AbstractDockingType">
                 <sequence>
+                    <element name="areaId" type="string" />
+                    <!--            <element name="singleton" type="boolean" />-->
+                    <element name="icon" type="string" minOccurs="0" />
+                    <element name="state" type="tns:DockingStateType" />
                     <element name="position" type="int" />
-<!--            <element name="singleton" type="boolean" />-->
+                    <!--            <element name="singleton" type="boolean" />-->
                     <element name="displayName" type="string" />
                     <element name="accelerator" type="string" minOccurs="0"/>
                     <element name="menuEntry" type="tns:WindowMenuEntryType"/>
@@ -44,17 +48,15 @@ Contributor(s): .
     <complexType name="EditorDockingType">
         <complexContent>
             <extension base="tns:AbstractDockingType">
-                <sequence></sequence>
+                <sequence>
+                    <element name="contentType" type="string"/>
+                </sequence>
             </extension>
         </complexContent>
     </complexType>
     
     <complexType name="AbstractDockingType">
         <sequence>
-            <element name="areaId" type="string" />
-<!--            <element name="singleton" type="boolean" />-->
-            <element name="icon" type="string" minOccurs="0" />
-            <element name="state" type="tns:DockingStateType" />
             <element name="dockableClass" type="string"/>
         </sequence>
         <attribute name="id" type="string" use="required"/>

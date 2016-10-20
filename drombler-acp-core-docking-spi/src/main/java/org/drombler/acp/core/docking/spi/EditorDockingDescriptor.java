@@ -14,20 +14,31 @@
  */
 package org.drombler.acp.core.docking.spi;
 
-import org.drombler.acp.core.docking.jaxb.EditorDockingType;
-import org.osgi.framework.Bundle;
-
 /**
  *
  * @author puce
+ * @param <D> the type of the editor
  */
-public class EditorDockingDescriptor extends AbstractDockableDockingDescriptor {
+public class EditorDockingDescriptor<D> extends AbstractDockableDockingDescriptor<D> {
 
-    public static EditorDockingDescriptor createEditorDockingDescriptor(EditorDockingType docking, Bundle bundle) throws ClassNotFoundException {
-        EditorDockingDescriptor dockingDescriptor = new EditorDockingDescriptor();
+    private final Class<?> contentType;
 
-        DockingDescriptorUtils.configureDockingDescriptor(dockingDescriptor, docking, bundle);
-
-        return dockingDescriptor;
+    public EditorDockingDescriptor(Class<D> editorClass, String id, Class<?> contentType) {
+        super(editorClass, id);
+        this.contentType = contentType;
     }
+
+    /**
+     * @return the contentType
+     */
+    public Class<?> getContentType() {
+        return contentType;
+    }
+
+
+//    public D createEditor(Object content)
+//            throws IllegalAccessException, SecurityException, InvocationTargetException, InstantiationException, IllegalArgumentException, NoSuchMethodException {
+//        Constructor<? extends D> editorConstructor = getDockableClass().getConstructor(content.getClass());
+//        return editorConstructor.newInstance(content);
+//    }
 }

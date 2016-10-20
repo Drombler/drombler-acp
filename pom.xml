@@ -18,7 +18,7 @@ Contributor(s): .
     <parent>
         <groupId>org.drombler.acp</groupId>
         <artifactId>drombler-acp-parent</artifactId>
-        <version>0.7</version>
+        <version>0.8</version>
         <relativePath>drombler-acp-parent/pom.xml</relativePath>
     </parent>
     <artifactId>drombler-acp</artifactId>
@@ -30,7 +30,7 @@ Contributor(s): .
         Drombler ACP dependencies.</description>
     <inceptionYear>2012</inceptionYear>
     <!-- required for Javadoc (apidocs) linking -->
-    <url>http://www.drombler.org/DromblerACP/${project.version}/docs/site</url>
+    <url>http://www.drombler.org/drombler-acp/${project.version}/docs/site</url>
     
     <scm>
         <connection>${scm.connection}</connection>
@@ -64,14 +64,18 @@ Contributor(s): .
         <module>drombler-acp-core-commons</module>
         <module>drombler-acp-core-action</module>
         <module>drombler-acp-core-action-spi</module>
+        <module>drombler-acp-core-data</module>
+        <module>drombler-acp-core-data-spi</module>
         <module>drombler-acp-core-docking</module>
         <module>drombler-acp-core-docking-spi</module>
-        <module>drombler-acp-core-docking-spi-locale-de</module>
+        <module>drombler-acp-core-docking-spi-l10n-de</module>
         <module>drombler-acp-core-standard-action</module>
-        <module>drombler-acp-core-standard-action-locale-de</module>
+        <module>drombler-acp-core-standard-action-data-file-l10n-de</module>
+        <module>drombler-acp-core-standard-action-data-file</module>
+        <module>drombler-acp-core-standard-action-l10n-de</module>
         <module>drombler-acp-core-standard-docking</module>
-        <module>drombler-acp-locale-all</module>
-        <module>drombler-acp-locale-de</module>
+        <module>drombler-acp-l10n-all</module>
+        <module>drombler-acp-l10n-de</module>
         <module>drombler-acp-docs</module>
     </modules>
     
@@ -99,6 +103,16 @@ Contributor(s): .
             </dependency>
             <dependency>
                 <groupId>${project.groupId}</groupId>
+                <artifactId>drombler-acp-core-data</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>drombler-acp-core-data-spi</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
                 <artifactId>drombler-acp-core-docking</artifactId>
                 <version>${project.version}</version>
             </dependency>
@@ -109,7 +123,7 @@ Contributor(s): .
             </dependency>
             <dependency>
                 <groupId>${project.groupId}</groupId>
-                <artifactId>drombler-acp-core-docking-spi-locale-de</artifactId>
+                <artifactId>drombler-acp-core-docking-spi-l10n-de</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
@@ -119,7 +133,17 @@ Contributor(s): .
             </dependency>
             <dependency>
                 <groupId>${project.groupId}</groupId>
-                <artifactId>drombler-acp-core-standard-action-locale-de</artifactId>
+                <artifactId>drombler-acp-core-standard-action-data-file</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>drombler-acp-core-standard-action-data-file-l10n-de</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>drombler-acp-core-standard-action-l10n-de</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
@@ -129,13 +153,13 @@ Contributor(s): .
             </dependency>
             <dependency>
                 <groupId>${project.groupId}</groupId>
-                <artifactId>drombler-acp-locale-all</artifactId>
+                <artifactId>drombler-acp-l10n-all</artifactId>
                 <type>pom</type>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>${project.groupId}</groupId>
-                <artifactId>drombler-acp-locale-de</artifactId>
+                <artifactId>drombler-acp-l10n-de</artifactId>
                 <type>pom</type>
                 <version>${project.version}</version>
             </dependency>

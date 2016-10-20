@@ -18,7 +18,7 @@ Contributor(s): .
     <parent>
         <groupId>org.drombler.acp</groupId>
         <artifactId>drombler-acp-parent</artifactId>
-        <version>0.7</version>
+        <version>0.8</version>
         <relativePath>../drombler-acp-parent/pom.xml</relativePath>
     </parent>
     <artifactId>drombler-acp-core-docking-spi</artifactId>
@@ -28,7 +28,7 @@ Contributor(s): .
     <description>SPI for building a declarative and modular Docking Framework.</description>
     <inceptionYear>2012</inceptionYear>
     <!-- required for Javadoc (apidocs) linking -->
-    <url>http://www.drombler.org/DromblerACP/${project.version}/docs/site</url>
+    <url>http://www.drombler.org/drombler-acp/${project.version}/docs/site</url>
 
     <scm>
         <connection>${scm.connection}</connection>
@@ -79,28 +79,39 @@ Contributor(s): .
     
     <dependencies>
         <dependency>
-            <groupId>org.drombler.acp</groupId>
+            <groupId>${project.groupId}</groupId>
             <artifactId>drombler-acp-startup-main</artifactId>
             <version>${project.version}</version>
             <scope>provided</scope>
         </dependency>
+
         <dependency>
-            <groupId>org.drombler.acp</groupId>
+            <groupId>${project.groupId}</groupId>
             <artifactId>drombler-acp-core-docking</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.drombler.acp</groupId>
+            <groupId>${project.groupId}</groupId>
             <artifactId>drombler-acp-core-action</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.drombler.acp</groupId>
+            <groupId>${project.groupId}</groupId>
             <artifactId>drombler-acp-core-action-spi</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.drombler.acp</groupId>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>drombler-acp-core-data</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>drombler-acp-core-data-spi</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
             <artifactId>drombler-acp-core-commons</artifactId>
             <version>${project.version}</version>
         </dependency>
@@ -114,7 +125,16 @@ Contributor(s): .
         </dependency>
         <dependency>
             <groupId>org.drombler.commons</groupId>
+            <artifactId>drombler-commons-data</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.drombler.commons</groupId>
             <artifactId>drombler-commons-docking-core</artifactId>
+        </dependency>
+        <!--JavaFX dependency!!! remove!!!-->
+        <dependency>
+            <groupId>org.drombler.commons</groupId>
+            <artifactId>drombler-commons-docking-context</artifactId>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>

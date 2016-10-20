@@ -17,10 +17,11 @@ package org.drombler.acp.core.action.spi;
 /**
  *
  * @author puce
+ * @param <T> toggle action type
  */
 public interface ToggleActionFactory<T> {
 
-    T createToggleAction(ActionDescriptor actionDescriptor);
+    T createToggleAction(ActionDescriptor<?> actionDescriptor);
 
     Class<T> getToggleActionClass();
 }

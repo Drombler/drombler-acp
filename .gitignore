@@ -7,10 +7,12 @@
 /drombler-acp-core-docking/target/
 /drombler-acp-core-docking-spi/target/
 /drombler-acp-core-standard-docking/target/
-/drombler-acp-core-docking-spi-locale-de/target/
 /drombler-acp-core-standard-action/target/
-/drombler-acp-core-standard-action-locale-de/target/
-/drombler-acp-locale-all/target/
-/drombler-acp-locale-de/target/
+/drombler-acp-l10n-all/target/
+/drombler-acp-l10n-de/target/
 /target/
 /drombler-acp-docs/target/
+/drombler-acp-core-data/target/
+/drombler-acp-core-docking-spi-l10n-de/target/
+/drombler-acp-core-standard-action-data-file-l10n-de/target/
+/drombler-acp-core-standard-action-l10n-de/target/

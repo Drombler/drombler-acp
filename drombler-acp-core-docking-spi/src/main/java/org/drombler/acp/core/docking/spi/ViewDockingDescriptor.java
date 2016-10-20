@@ -17,35 +17,88 @@ package org.drombler.acp.core.docking.spi;
 import java.util.ResourceBundle;
 import org.drombler.acp.core.action.spi.ActionDescriptor;
 import org.drombler.acp.core.action.spi.MenuEntryDescriptor;
-import org.drombler.acp.core.docking.jaxb.ViewDockingType;
+import org.drombler.acp.core.docking.spi.impl.ActivateViewAction;
 import org.drombler.commons.client.util.MnemonicUtils;
 import org.drombler.commons.client.util.ResourceBundleUtils;
-import org.osgi.framework.Bundle;
+import org.softsmithy.lib.util.ResourceLoader;
 
 /**
  *
  * @author puce
+ * @param <D>
  */
-public class ViewDockingDescriptor extends AbstractDockableDockingDescriptor {
+public class ViewDockingDescriptor<D> extends AbstractDockableDockingDescriptor<D> {
 
-    private String displayName;
+    private final String displayName;
     private int position;
-    private ActionDescriptor activateDockableActionDescriptor;
+    private final ActionDescriptor<ActivateViewAction<D>> activateDockableActionDescriptor;
     private MenuEntryDescriptor activateDockableMenuEntryDescriptor;
-    private ResourceBundle resourceBundle;
+    private final ResourceBundle resourceBundle;
+    private final ResourceLoader resourceLoader;
+    private String areaId;
+    private final String icon;
+
+    /**
+     *
+     * @param dockableClass
+     * @param id
+     * @param displayName
+     * @param accelerator
+     * @param icon
+     * @param resourceBundleBaseName
+     */
+    public ViewDockingDescriptor(Class<D> dockableClass, String id, String displayName, String icon, String accelerator, String resourceBundleBaseName) {
+        super(dockableClass, id);
+        this.resourceLoader = new ResourceLoader(dockableClass);
+        this.resourceBundle = ResourceBundleUtils.getResourceBundle(dockableClass, resourceBundleBaseName, displayName);
+        String localizedDisplayName = ResourceBundleUtils.getResourceStringPrefixed(displayName, resourceBundle);
+
+        this.displayName = MnemonicUtils.removeMnemonicChar(localizedDisplayName);
+        this.icon = icon;
+        this.activateDockableActionDescriptor = createActivateDockableActionDescriptor(id, localizedDisplayName, accelerator, icon);
+    }
+
+    private ActionDescriptor<ActivateViewAction<D>> createActivateDockableActionDescriptor(String id, String displayName, String accelerator, String icon) {
+        ActionDescriptor<ActivateViewAction<D>> actionDescriptor
+                = new ActionDescriptor<>((Class<ActivateViewAction<D>>) (Class<?>) ActivateViewAction.class, resourceLoader);
+        actionDescriptor.setId(id);
+        actionDescriptor.setDisplayName(displayName);
+        actionDescriptor.setAccelerator(accelerator);
+        actionDescriptor.setIcon(icon);
+//        actionDescriptor.setListener(new ActivateViewAction(dockingDescriptor.getDockable()));
+        return actionDescriptor;
+    }
+
+    /**
+     * @return the icon
+     */
+    public String getIcon() {
+        return icon;
+    }
+
+    /**
+     * @return the areaId
+     */
+    public String getAreaId() {
+        return areaId;
+    }
+
+    /**
+     * @param areaId the areaId to set
+     */
+    public void setAreaId(String areaId) {
+        this.areaId = areaId;
+    }
+
+    public ResourceLoader getResourceLoader() {
+        return resourceLoader;
+    }
 
     /**
      * @return the displayName
      */
     public String getDisplayName() {
         return displayName;
-    }
-
-    /**
-     * @param displayName the displayName to set
-     */
-    public void setDisplayName(String displayName) {
-        this.displayName = displayName;
     }
 
     /**
@@ -65,54 +118,12 @@ public class ViewDockingDescriptor extends AbstractDockableDockingDescriptor {
     /**
      * @return the activateDockableActionDescriptor
      */
-    public ActionDescriptor getActivateDockableActionDescriptor() {
+    public ActionDescriptor<?> getActivateDockableActionDescriptor() {
         return activateDockableActionDescriptor;
     }
 
-    /**
-     * @param activateDockableActionDescriptor the activateDockableActionDescriptor to set
-     */
-    public void setActivateDockableActionDescriptor(ActionDescriptor activateDockableActionDescriptor) {
-        this.activateDockableActionDescriptor = activateDockableActionDescriptor;
-    }
-
-    public static ViewDockingDescriptor createViewDockingDescriptor(ViewDockingType docking, Bundle bundle) throws
-            ClassNotFoundException, InstantiationException, IllegalAccessException {
-        ViewDockingDescriptor dockingDescriptor = new ViewDockingDescriptor();
-
-        DockingDescriptorUtils.configureDockingDescriptor(dockingDescriptor, docking, bundle);
-        dockingDescriptor.setResourceBundle(ResourceBundleUtils.getResourceBundle(dockingDescriptor.getDockableClass(),
-                docking.getResourceBundleBaseName(), docking.getDisplayName()));
-        String displayName = ResourceBundleUtils.getResourceStringPrefixed(docking.getDisplayName(), dockingDescriptor.
-                getResourceBundle());
-        dockingDescriptor.setDisplayName(MnemonicUtils.removeMnemonicChar(displayName));
-        dockingDescriptor.setPosition(docking.getPosition());
-        dockingDescriptor.setActivateDockableActionDescriptor(createActivateDockableActionDescriptor(dockingDescriptor,
-                displayName, docking.getAccelerator()));
-        dockingDescriptor.setActivateDockableMenuEntryDescriptor(new MenuEntryDescriptor(dockingDescriptor.getId(),
-                getWindowPath(docking), docking.getMenuEntry().getPosition()));
-        return dockingDescriptor;
-    }
-
-    private static String getWindowPath(ViewDockingType docking) {
-        StringBuilder sb = new StringBuilder("Window");
-        if (docking.getMenuEntry().getPath() != null) {
-            sb.append("/");
-            sb.append(docking.getMenuEntry().getPath());
-        }
-        return sb.toString();
-    }
-
-    private static ActionDescriptor createActivateDockableActionDescriptor(ViewDockingDescriptor dockingDescriptor,
-            String displayName, String accelerator) {
-        ActionDescriptor actionDescriptor = new ActionDescriptor();
-        actionDescriptor.setId(dockingDescriptor.getId());
-        actionDescriptor.setDisplayName(displayName);
-        actionDescriptor.setAccelerator(accelerator);
-        actionDescriptor.setIcon(dockingDescriptor.getIcon());
-        actionDescriptor.setResourceLoader(dockingDescriptor.getResourceLoader());
-//        actionDescriptor.setListener(new ActivateDockableAction(dockingDescriptor.getDockable()));
-        return actionDescriptor;
+    public void setDockable(D dockable) {
+        this.activateDockableActionDescriptor.setListener(new ActivateViewAction<>(dockable));
     }
 
     /**
@@ -131,10 +142,6 @@ public class ViewDockingDescriptor extends AbstractDockableDockingDescriptor {
 
     public ResourceBundle getResourceBundle() {
         return resourceBundle;
-    }
-
-    public void setResourceBundle(ResourceBundle resourceBundle) {
-        this.resourceBundle = resourceBundle;
     }
 
 }

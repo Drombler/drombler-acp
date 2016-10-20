@@ -18,16 +18,16 @@ Contributor(s): .
     <parent>
         <groupId>org.drombler</groupId>
         <artifactId>drombler-oss-parent</artifactId>
-        <version>2.2</version>
+        <version>2.3</version>
         <relativePath />
     </parent>
     <groupId>org.drombler.acp</groupId>
     <artifactId>drombler-acp-parent</artifactId>
-    <version>0.7</version>
+    <version>0.8</version>
     <packaging>pom</packaging>
     
     <name>Drombler ACP - Parent</name>
-    <url>http://www.drombler.org/DromblerACP/${project.version}/docs/site</url>
+    <url>http://www.drombler.org/drombler-acp/${project.version}/docs/site</url>
     <description>The parent POM of the Drombler ACP (Abstract Client Platform) project. This Drombler ACP Parent POM should be the parent (either directly or indirectly) of every Drombler ACP project unless there is a good reason to do otherwise (in which case the reason should be documented).</description>
     <inceptionYear>2012</inceptionYear>
     
@@ -66,8 +66,8 @@ Contributor(s): .
         <distributionManagement.parent.url>${distributionManagement.base.url}/docs/site</distributionManagement.parent.url>
         <!-- URL to use with the GitHub site plugin -->
         <!--<distributionManagement.parent.url>${project.version}/docs/site</distributionManagement.parent.url>-->
-        <!--<url.parent>http://www.drombler.org/DromblerACP/${project.version}/docs/site</url.parent>-->
-        <drombler-commons.version>0.7</drombler-commons.version>
+        <!--<url.parent>http://www.drombler.org/drombler-acp/${project.version}/docs/site</url.parent>-->
+        <drombler-commons.version>0.8</drombler-commons.version>
         <!-- Dependency Versions Defaults -->
 
     </properties>

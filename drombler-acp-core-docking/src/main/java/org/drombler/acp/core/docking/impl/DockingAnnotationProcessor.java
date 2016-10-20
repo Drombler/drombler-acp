@@ -14,6 +14,7 @@
  */
 package org.drombler.acp.core.docking.impl;
 
+import java.util.Collections;
 import java.util.EnumMap;
 import java.util.Map;
 import java.util.Set;
@@ -22,7 +23,13 @@ import javax.annotation.processing.SupportedAnnotationTypes;
 import javax.annotation.processing.SupportedSourceVersion;
 import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Element;
+import javax.lang.model.element.ExecutableElement;
+import javax.lang.model.element.Modifier;
 import javax.lang.model.element.TypeElement;
+import javax.lang.model.type.MirroredTypeException;
+import javax.lang.model.type.TypeMirror;
+import javax.lang.model.util.ElementFilter;
+import javax.tools.Diagnostic;
 import org.apache.commons.lang3.StringUtils;
 import org.drombler.acp.core.application.AbstractApplicationAnnotationProcessor;
 import org.drombler.acp.core.docking.DockingState;
@@ -69,31 +76,73 @@ public class DockingAnnotationProcessor extends AbstractApplicationAnnotationPro
 
     @Override
     protected boolean handleProcess(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
-        for (Element element : roundEnv.getElementsAnnotatedWith(ViewDocking.class)) {
+        roundEnv.getElementsAnnotatedWith(ViewDocking.class).forEach(element -> {
             ViewDocking dockingAnnotation = element.getAnnotation(ViewDocking.class);
             if (dockingAnnotation != null) {
                 registerViewDocking(dockingAnnotation, element);
             }
-        }
+        });
 
-        for (Element element : roundEnv.getElementsAnnotatedWith(EditorDocking.class)) {
+        roundEnv.getElementsAnnotatedWith(EditorDocking.class).forEach(element -> {
             EditorDocking dockingAnnotation = element.getAnnotation(EditorDocking.class);
             if (dockingAnnotation != null) {
                 registerEditorDocking(dockingAnnotation, element);
             }
-        }
-
+        });
 
         return false;
+    }
+
+    private void registerEditorDocking(EditorDocking dockingAnnotation, Element element) {
+        TypeMirror contentType = getContentType(dockingAnnotation);
+        if (contentType != null) {
+            if (ElementFilter.typesIn(Collections.singletonList(element)).stream()
+                    .anyMatch(typeElement -> checkForContentTypeConstructor(typeElement, contentType))) {
+                registerEditorDockingOnly(dockingAnnotation, element);
+            } else {
+                // Couldn't find any matching constructor
+                processingEnv.getMessager().printMessage(
+                        Diagnostic.Kind.ERROR, "Missing a public constructor with a single parameter of type: " + contentType,
+                        element);
+            }
+        } else {
+            // should not happen here
+            processingEnv.getMessager().printMessage(
+                    Diagnostic.Kind.ERROR, "Couldn't retrieve the contentType information.",
+                    element);
+        }
+    }
+
+    private TypeMirror getContentType(EditorDocking dockingAnnotation) {
+        TypeMirror contentType = null;
+        try {
+            dockingAnnotation.contentType();
+        } catch (MirroredTypeException mte) {
+            contentType = mte.getTypeMirror();
+        }
+        return contentType;
+    }
+
+    private boolean checkForContentTypeConstructor(TypeElement type, TypeMirror contentType) {
+        return ElementFilter.constructorsIn(type.getEnclosedElements()).stream().
+                anyMatch(constructor -> isContentTypeConstructor(constructor, contentType));
+    }
+
+    private static boolean isContentTypeConstructor(ExecutableElement cons, TypeMirror contentType) {
+        return cons.getModifiers().contains(Modifier.PUBLIC)
+                && cons.getParameters().size() == 1
+                && cons.getParameters().get(0).asType().equals(contentType);
     }
 
     private void registerViewDocking(ViewDocking dockingAnnotation, Element element) {
         init(element);
 
         ViewDockingType docking = new ViewDockingType();
-        configureDocking(docking, element, dockingAnnotation.areaId(), dockingAnnotation.icon(),
-                dockingAnnotation.state());
+        configureDocking(docking, element);
 
+        docking.setAreaId(StringUtils.stripToNull(dockingAnnotation.areaId()));
+        docking.setIcon(StringUtils.stripToNull(dockingAnnotation.icon()));
+        docking.setState(DOCKING_STATES.get(dockingAnnotation.state()));
         docking.setPosition(dockingAnnotation.position());
 //        docking.setSingleton(dockingAnnotation.singleton());
         docking.setDisplayName(StringUtils.stripToNull(dockingAnnotation.displayName()));
@@ -108,12 +157,8 @@ public class DockingAnnotationProcessor extends AbstractApplicationAnnotationPro
         dockings.getViewDocking().add(docking);
     }
 
-    private void configureDocking(AbstractDockingType docking, Element element, String areaId, String icon,
-            DockingState dockingState) {
+    private void configureDocking(AbstractDockingType docking, Element element) {
         docking.setId(element.asType().toString());
-        docking.setAreaId(StringUtils.stripToNull(areaId));
-        docking.setIcon(StringUtils.stripToNull(icon));
-        docking.setState(DOCKING_STATES.get(dockingState));
         docking.setDockableClass(element.asType().toString());
     }
 
@@ -126,12 +171,16 @@ public class DockingAnnotationProcessor extends AbstractApplicationAnnotationPro
         addOriginatingElements(element); // TODO: needed?
     }
 
-    private void registerEditorDocking(EditorDocking dockingAnnotation, Element element) {
+    private void registerEditorDockingOnly(EditorDocking dockingAnnotation, Element element) {
         init(element);
 
         EditorDockingType docking = new EditorDockingType();
-        configureDocking(docking, element, dockingAnnotation.areaId(), dockingAnnotation.icon(),
-                dockingAnnotation.state());
+        configureDocking(docking, element);
+        try {
+            dockingAnnotation.contentType();
+        } catch (MirroredTypeException ex) {
+            docking.setContentType(ex.getTypeMirror().toString());
+        }
         dockings.getEditorDocking().add(docking);
     }
 }

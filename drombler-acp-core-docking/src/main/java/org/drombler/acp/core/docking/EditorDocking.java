@@ -19,8 +19,12 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+import org.softsmithy.lib.util.UniqueKeyProvider;
 
 /**
+ * Registers an editor dockable.
+ *
+ * The annotated editor requires a constructor with a single parameter of type {@link #contentType() }. The contentType is usually a data handler.
  *
  * @author puce
  */
@@ -29,13 +33,11 @@ import java.lang.annotation.Target;
 @Target(ElementType.TYPE)
 public @interface EditorDocking {
 
-//    String id();
-    String areaId();
-
-//    boolean singleton() default true;
-
-    String icon() default "";
-
-    DockingState state() default DockingState.DOCKED;
+    /**
+     * The content type of this editor. This is usually a data handler.
+     *
+     * @return the content type of this editor
+     */
+    Class<? extends UniqueKeyProvider<?>> contentType();
 
 }

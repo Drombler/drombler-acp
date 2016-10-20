@@ -19,7 +19,6 @@ import org.drombler.acp.core.action.jaxb.ActionType;
 import org.drombler.commons.client.util.ResourceBundleUtils;
 import org.drombler.commons.context.ContextInjector;
 import org.osgi.framework.Bundle;
-import org.softsmithy.lib.util.ResourceLoader;
 
 /**
  *
@@ -30,18 +29,25 @@ class ActionDescriptorUtils {
     private ActionDescriptorUtils() {
     }
 
-    public static void configureActionDescriptor(ActionDescriptor actionDescriptor, ActionType actionType, Bundle bundle,
-            ContextInjector contextInjector) throws ClassNotFoundException, InstantiationException,
+    public static <T> void configureActionDescriptor(ActionDescriptor<T> actionDescriptor, ActionType actionType,
+            Bundle bundle, ContextInjector contextInjector) throws ClassNotFoundException, InstantiationException,
             IllegalAccessException {
-        Class<?> actionListenerClass = bundle.loadClass(StringUtils.stripToNull(actionType.getListenerClass()));
         actionDescriptor.setId(StringUtils.stripToNull(actionType.getId()));
-        actionDescriptor.setDisplayName(ResourceBundleUtils.getPackageResourceStringPrefixed(actionListenerClass,
+        actionDescriptor.setDisplayName(ResourceBundleUtils.getPackageResourceStringPrefixed(actionDescriptor.
+                getListenerType(),
                 actionType.getDisplayName()));
-        actionDescriptor.setAccelerator(ResourceBundleUtils.getPackageResourceStringPrefixed(actionListenerClass,
+        actionDescriptor.setAccelerator(ResourceBundleUtils.getPackageResourceStringPrefixed(actionDescriptor.
+                getListenerType(),
                 actionType.getAccelerator()));
         actionDescriptor.setIcon(StringUtils.stripToNull(actionType.getIcon()));
-        actionDescriptor.setResourceLoader(new ResourceLoader(actionListenerClass));
-        Object actionListener = actionListenerClass.newInstance();
+        configureActionDescriptorListener(actionDescriptor, actionDescriptor.getListenerType(), contextInjector);
+
+    }
+
+    private static <T> void configureActionDescriptorListener(ActionDescriptor<T> actionDescriptor,
+            Class<T> actionListenerClass, ContextInjector contextInjector) throws InstantiationException,
+            IllegalAccessException {
+        T actionListener = actionListenerClass.newInstance();
         contextInjector.inject(actionListener);
         actionDescriptor.setListener(actionListener);
     }

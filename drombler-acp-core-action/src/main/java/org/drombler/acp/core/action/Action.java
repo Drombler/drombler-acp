@@ -67,10 +67,9 @@ public @interface Action {
      * The icon name pattern to resolve the icons to be used for this action.
      *
      * Note that this only specifies the name pattern. Drombler ACP looks for
-     * <icon-base-name>16.<icon-extension> for menu items (expected to be 16x16 pixels) and
-     * <icon-base-name>24.<icon-extension> for toolbar buttons (expected to be 24x24 pixels). So if icon is
-     * &quot;test.png&quot;, Drombler ACP would look for test16.png (for menu items) and test24.png (for toolbar
-     * buttons).
+     * &lt;icon-base-name>16.&lt;icon-extension&gt; for menu items (expected to be 16x16 pixels) and
+     * &lt;icon-base-name>24.&lt;icon-extension&gt; for toolbar buttons (expected to be 24x24 pixels). So if icon is &quot;test.png&quot;, Drombler ACP would look for test16.png (for menu items) and
+     * test24.png (for toolbar buttons).
      *
      * @return the icon name pattern
      */

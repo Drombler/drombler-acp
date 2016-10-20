@@ -34,19 +34,19 @@ import org.osgi.service.component.ComponentContext;
  */
 @Component(immediate = true)
 @Reference(name = "actionDescriptor", referenceInterface = ActionDescriptor.class,
-cardinality = ReferenceCardinality.OPTIONAL_MULTIPLE, policy = ReferencePolicy.DYNAMIC)
-public class ActionHandler<T> extends AbstractActionHandler<ActionType, ActionDescriptor> {
+        cardinality = ReferenceCardinality.OPTIONAL_MULTIPLE, policy = ReferencePolicy.DYNAMIC)
+public class ActionHandler<T> extends AbstractActionHandler<ActionType, ActionDescriptor<?>> {
 
     @Reference
     private ActionFactory<T> actionFactory;
 
-    protected void bindActionDescriptor(ServiceReference<ActionDescriptor> serviceReference) {
+    protected void bindActionDescriptor(ServiceReference<ActionDescriptor<?>> serviceReference) {
         BundleContext context = serviceReference.getBundle().getBundleContext();
-        ActionDescriptor actionDescriptor = context.getService(serviceReference);
+        ActionDescriptor<?> actionDescriptor = context.getService(serviceReference);
         registerActionDescriptor(actionDescriptor, context);
     }
 
-    protected void unbindActionDescriptor(ActionDescriptor actionDescriptor) {
+    protected void unbindActionDescriptor(ActionDescriptor<?> actionDescriptor) {
         // TODO
     }
 
@@ -77,21 +77,30 @@ public class ActionHandler<T> extends AbstractActionHandler<ActionType, ActionDe
 
     @Override
     protected void registerActions(ActionsType actionsType, BundleContext context) {
-        actionsType.getAction().forEach((actionType) -> registerActionType(actionType, context));
+        actionsType.getAction().forEach(actionType -> registerActionType(actionType, context));
     }
 
     @Override
-    protected ActionDescriptor createActionDescriptor(ActionType actionType, BundleContext context) throws IllegalAccessException, ClassNotFoundException, InstantiationException {
+    protected ActionDescriptor<?> createActionDescriptor(ActionType actionType, BundleContext context) throws
+            IllegalAccessException, ClassNotFoundException, InstantiationException {
         return ActionDescriptor.createActionDescriptor(actionType, context.getBundle(), getContextInjector());
     }
 
     @Override
-    protected void registerActionDescriptor(ActionDescriptor actionDescriptor, BundleContext context) {
+    protected void registerActionDescriptor(ActionDescriptor<?> actionDescriptor, BundleContext context) {
         if (isInitialized()) {
             T action = actionFactory.createAction(actionDescriptor);
-            getActionRegistry().registerAction(actionDescriptor.getId(), actionFactory.getActionClass(), action, context);
+            if (!actionDescriptor.getListenerType().equals(actionFactory.getActionClass())) {
+                registerActionListener(context, actionDescriptor);
+            }
+            getActionRegistry().
+                    registerAction(actionDescriptor.getId(), actionFactory.getActionClass(), action, context);
         } else {
             registerUnresolvedActionDescriptor(actionDescriptor, context);
         }
+    }
+
+    private <T> void registerActionListener(BundleContext context, ActionDescriptor<T> actionDescriptor) {
+        context.registerService(actionDescriptor.getListenerType(), actionDescriptor.getListener(), null);
     }
 }
