@@ -1,0 +1,43 @@
+-classpath
+'/home/puce/.m2/repository/org/apache/felix/org.apache.felix.framework/4.6.0/org.apache.felix.framework-4.6.0.jar:/home/puce/.m2/repository/org/drombler/acp/drombler-acp-startup-main/0.8/drombler-acp-startup-main-0.8.jar:/home/puce/.m2/repository/org/drombler/commons/drombler-commons-client-core/0.8/drombler-commons-client-core-0.8.jar:/home/puce/.m2/repository/org/drombler/commons/drombler-commons-context/0.8/drombler-commons-context-0.8.jar:/home/puce/.m2/repository/org/apache/commons/commons-lang3/3.1/commons-lang3-3.1.jar:/home/puce/.m2/repository/org/drombler/commons/drombler-commons-action-core/0.8/drombler-commons-action-core-0.8.jar:/home/puce/.m2/repository/org/softsmithy/lib/softsmithy-lib-core/0.6/softsmithy-lib-core-0.6.jar:/home/puce/.m2/repository/org/apache/felix/org.apache.felix.scr.annotations/1.9.10/org.apache.felix.scr.annotations-1.9.10.jar:/home/puce/.m2/repository/org/apache/felix/org.apache.felix.scr/1.8.2/org.apache.felix.scr-1.8.2.jar:/home/puce/.m2/repository/org/drombler/acp/drombler-acp-core-application/0.8/drombler-acp-core-application-0.8.jar:/home/puce/.m2/repository/org/drombler/acp/drombler-acp-core-commons/0.8/drombler-acp-core-commons-0.8.jar:/home/puce/.m2/repository/org/drombler/acp/drombler-acp-core-action/0.8/drombler-acp-core-action-0.8.jar:/home/puce/.m2/repository/org/slf4j/slf4j-api/1.7.6/slf4j-api-1.7.6.jar'
+-encoding
+'UTF-8'
+-protected
+-sourcepath
+'/fastdata/Programming/Java/drombler/drombler-acp/drombler-acp.git/drombler-acp-core-action-spi/src/main/java'
+-javafx
+-Xdoclint:accessibility
+-Xdoclint:html
+-Xdoclint:missing
+-Xdoclint:reference
+-author
+-bottom
+'Copyright &#169; 2012&#x2013;2016 <a href="http://www.drombler.com">Drombler</a>. All rights reserved.'
+-charset
+'UTF-8'
+-d
+'/fastdata/Programming/Java/drombler/drombler-acp/drombler-acp.git/drombler-acp-core-action-spi/target/site/apidocs'
+-docencoding
+'UTF-8'
+-doctitle
+'Drombler ACP - Core - Action - SPI 0.8 API'
+-link
+'http://docs.oracle.com/javaee/7/api'
+-link
+'http://www.softsmithy.org/lib/0.6/docs/site/softsmithy-lib-all/softsmithy-lib-all/apidocs'
+-link
+'http://docs.oracle.com/javase/8/javafx/api'
+-link
+'http://www.drombler.org/drombler-commons/0.8/docs/site/apidocs'
+-link
+'http://commons.apache.org/lang/apidocs'
+-link
+'http://www.softsmithy.org/softsmithy-lib/lib/0.6/docs/site/apidocs'
+-link
+'http://www.slf4j.org/apidocs'
+-linkoffline
+'http://docs.oracle.com/javase/8/docs/api' '/fastdata/Programming/Java/drombler/drombler-acp/drombler-acp.git/drombler-acp-core-action-spi/target/javadoc-bundle-options'
+-use
+-version
+-windowtitle
+'Drombler ACP - Core - Action - SPI 0.8 API'
