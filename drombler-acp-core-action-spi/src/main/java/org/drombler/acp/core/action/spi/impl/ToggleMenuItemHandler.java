@@ -20,17 +20,18 @@ import org.apache.felix.scr.annotations.Deactivate;
 import org.apache.felix.scr.annotations.Reference;
 import org.apache.felix.scr.annotations.ReferenceCardinality;
 import org.apache.felix.scr.annotations.ReferencePolicy;
+import org.drombler.acp.core.action.jaxb.MenusType;
+import org.drombler.acp.core.action.spi.ActionRegistry;
+import org.drombler.acp.core.action.spi.ToggleActionFactory;
+import org.drombler.acp.core.action.spi.ToggleMenuEntryDescriptor;
+import org.drombler.acp.core.action.spi.ToggleMenuItemFactory;
+import org.drombler.acp.core.commons.util.UnresolvedEntry;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.component.ComponentContext;
 import org.osgi.util.tracker.ServiceTracker;
 import org.osgi.util.tracker.ServiceTrackerCustomizer;
-import org.drombler.acp.core.action.jaxb.MenusType;
-import org.drombler.acp.core.action.spi.ActionRegistry;
-import org.drombler.acp.core.action.spi.ToggleActionFactory;
-import org.drombler.acp.core.action.spi.ToggleMenuEntryDescriptor;
-import org.drombler.acp.core.action.spi.ToggleMenuItemFactory;
 
 /**
  *

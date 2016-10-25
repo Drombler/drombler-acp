@@ -28,6 +28,7 @@ import org.drombler.acp.core.action.spi.MenuItemContainerListenerAdapter;
 import org.drombler.acp.core.action.spi.MenuItemContainerMenuEvent;
 import org.drombler.acp.core.action.spi.MenuItemRootContainer;
 import org.drombler.acp.core.action.spi.PositionableMenuItemAdapter;
+import org.drombler.acp.core.commons.util.UnresolvedEntry;
 import org.drombler.acp.startup.main.ApplicationExecutorProvider;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
