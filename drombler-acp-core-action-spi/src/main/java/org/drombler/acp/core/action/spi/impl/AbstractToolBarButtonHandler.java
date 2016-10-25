@@ -22,6 +22,7 @@ import org.drombler.acp.core.action.spi.ActionRegistry;
 import org.drombler.acp.core.action.spi.ToolBarContainerListenerAdapter;
 import org.drombler.acp.core.action.spi.ToolBarContainerToolBarEvent;
 import org.drombler.acp.core.action.spi.ToolBarEntryDescriptor;
+import org.drombler.acp.core.commons.util.UnresolvedEntry;
 import org.drombler.acp.startup.main.ApplicationExecutorProvider;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;

@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 import org.drombler.acp.core.action.jaxb.ToolBarType;
 import org.drombler.acp.core.action.spi.ToolBarDescriptor;
+import org.drombler.acp.core.commons.util.UnresolvedEntry;
 
 /**
  *

@@ -26,6 +26,7 @@ import org.drombler.acp.core.action.spi.ActionFactory;
 import org.drombler.acp.core.action.spi.ActionRegistry;
 import org.drombler.acp.core.action.spi.MenuEntryDescriptor;
 import org.drombler.acp.core.action.spi.MenuItemFactory;
+import org.drombler.acp.core.commons.util.UnresolvedEntry;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
