@@ -27,7 +27,7 @@ import org.drombler.acp.core.action.spi.MenuItemContainer;
 import org.drombler.acp.core.action.spi.MenuItemContainerListenerAdapter;
 import org.drombler.acp.core.action.spi.MenuItemContainerMenuEvent;
 import org.drombler.acp.core.action.spi.MenuItemRootContainer;
-import org.drombler.acp.core.action.spi.PositionableMenuItemAdapter;
+import org.drombler.acp.core.action.spi.MenuItemSupplierFactory;
 import org.drombler.acp.core.commons.util.UnresolvedEntry;
 import org.drombler.acp.startup.main.ApplicationExecutorProvider;
 import org.osgi.framework.Bundle;
@@ -44,12 +44,12 @@ import org.osgi.framework.ServiceReference;
     @Reference(name = "menuBarMenuContainerProvider", referenceInterface = MenuBarMenuContainerProvider.class),
     @Reference(name = "applicationExecutorProvider", referenceInterface = ApplicationExecutorProvider.class)
 })
-public abstract class AbstractMenuItemHandler<MenuItem, Menu extends MenuItem, M extends MenuItem, D extends AbstractMenuEntryDescriptor, Config> {
+public abstract class AbstractMenuItemHandler<MenuItem, Menu extends MenuItem, M extends MenuItem, D extends AbstractMenuEntryDescriptor<MenuItem, ?>, Config> {
 
     private static final String ROOT_PATH_ID = "";
     private Executor applicationExecutor;
-    private final MenuItemResolutionManager<D> menuItemResolutionManager = new MenuItemResolutionManager<>();
-    private MenuItemRootContainer<MenuItem, Menu> rootContainer;
+    private final MenuItemResolutionManager<MenuItem, D> menuItemResolutionManager = new MenuItemResolutionManager<>();
+    private MenuItemRootContainer<MenuItem, Menu, ?> rootContainer;
 
     protected void bindMenusType(ServiceReference<MenusType> serviceReference) {
         Bundle bundle = serviceReference.getBundle();
@@ -68,7 +68,7 @@ public abstract class AbstractMenuItemHandler<MenuItem, Menu extends MenuItem, M
 
             @Override
             public void menuAdded(MenuItemContainerMenuEvent<MenuItem, Menu> event) {
-                MenuItemResolutionManager<D> menuItemResolutionManager = getMenuItemResolutionManager(event.getPath());
+                MenuItemResolutionManager<MenuItem, D> menuItemResolutionManager = getMenuItemResolutionManager(event.getPath());
                 resolveUnresolvedItems(menuItemResolutionManager, event.getMenuId());
             }
         });
@@ -93,8 +93,8 @@ public abstract class AbstractMenuItemHandler<MenuItem, Menu extends MenuItem, M
 
     protected abstract void resolveMenuItem(MenusType menusType, Bundle bundle, BundleContext context);
 
-    private MenuItemContainer<MenuItem, Menu> getParent(List<String> path) {
-        MenuItemContainer<MenuItem, Menu> parentContainer = rootContainer;
+    private MenuItemContainer<MenuItem, Menu, ?> getParent(List<String> path) {
+        MenuItemContainer<MenuItem, Menu, ?> parentContainer = rootContainer;
         for (String pathId : path) {
             if (parentContainer != null) {
                 parentContainer = parentContainer.getMenuContainer(pathId);
@@ -105,18 +105,18 @@ public abstract class AbstractMenuItemHandler<MenuItem, Menu extends MenuItem, M
         return parentContainer;
     }
 
-    private MenuItemResolutionManager<D> getMenuItemResolutionManager(List<String> path) {
+    private MenuItemResolutionManager<MenuItem, D> getMenuItemResolutionManager(List<String> path) {
 //        MenuResolutionManager manager = menuResolutionManager.getMenuItemResolutionManager(ROOT_PATH_ID);
-        MenuItemResolutionManager<D> manager = menuItemResolutionManager;
+        MenuItemResolutionManager<MenuItem, D> manager = menuItemResolutionManager;
         for (String pathId : path) {
             manager = manager.getMenuResolutionManager(pathId);
         }
         return manager;
     }
 
-    protected void resolveMenuItem(final D menuEntryDescriptor, final BundleContext context) {
+    protected void resolveMenuItem(D menuEntryDescriptor, final BundleContext context) {
         if (isInitialized()) {
-            MenuItemContainer<MenuItem, Menu> parentContainer = getParent(menuEntryDescriptor.getPath());
+            MenuItemContainer<MenuItem, Menu, ?> parentContainer = getParent(menuEntryDescriptor.getPath());
             if (parentContainer != null) {
                 Config config = createConfig(menuEntryDescriptor, context);
                 if (config != null) {
@@ -132,7 +132,7 @@ public abstract class AbstractMenuItemHandler<MenuItem, Menu extends MenuItem, M
         }
     }
 
-    protected void resolveMenuItem(final Config config, final D menuEntryDescriptor, final MenuItemContainer<MenuItem, Menu> parentContainer) {
+    protected void resolveMenuItem(Config config, D menuEntryDescriptor, MenuItemContainer<MenuItem, Menu, ?> parentContainer) {
         applicationExecutor.execute(() -> {
             M menuItem = createMenuItem(menuEntryDescriptor, config);
             addToContainer(parentContainer, menuItem, menuEntryDescriptor);
@@ -145,10 +145,10 @@ public abstract class AbstractMenuItemHandler<MenuItem, Menu extends MenuItem, M
 
     protected abstract void registerUnresolvedMenuItem(D menuEntryDescriptor, BundleContext context);
 
-    protected void addToContainer(MenuItemContainer<MenuItem, Menu> parentContainer, M menuItem, D menuEntryDescriptor) {
+    protected <T extends MenuItemSupplierFactory<MenuItem>> void addToContainer(MenuItemContainer<MenuItem, Menu, T> parentContainer, M menuItem,
+            D menuEntryDescriptor) {
         //        if (parentContainer.isSupportingItems()) {
-        parentContainer.addMenuItem(
-                PositionableMenuItemAdapter.wrapMenuItem(menuItem, menuEntryDescriptor.getPosition()));
+        parentContainer.addMenuItem(menuItem, (T) menuEntryDescriptor.getMenuItemSupplierFactory());
         //        }
     }
 
@@ -156,7 +156,7 @@ public abstract class AbstractMenuItemHandler<MenuItem, Menu extends MenuItem, M
         resolveUnresolvedItems(menuItemResolutionManager, ROOT_PATH_ID);
     }
 
-    private void resolveUnresolvedItems(MenuItemResolutionManager<D> menuItemResolutionManager, String pathId) {
+    private void resolveUnresolvedItems(MenuItemResolutionManager<MenuItem, D> menuItemResolutionManager, String pathId) {
         if (menuItemResolutionManager.containsUnresolvedMenuEntries(pathId)) {
             menuItemResolutionManager.removeUnresolvedMenuEntries(pathId).forEach(unresolvedEntry
                     -> resolveMenuItem(unresolvedEntry.getEntry(), unresolvedEntry.getContext()));
@@ -164,11 +164,11 @@ public abstract class AbstractMenuItemHandler<MenuItem, Menu extends MenuItem, M
     }
 
     private void registerUnresolvedMenuEntry(D menuEntryDescriptor, BundleContext context) {
-        MenuItemResolutionManager<D> resolutionManager = this.menuItemResolutionManager;
+        MenuItemResolutionManager<MenuItem, D> resolutionManager = this.menuItemResolutionManager;
         //        MenuItemContainer lastResolvedParentContainer = parentContainer;
         String firstUnresolvedPathId = ROOT_PATH_ID;
         if (isInitialized()) {
-            MenuItemContainer<MenuItem, Menu> parentContainer = rootContainer;
+            MenuItemContainer<MenuItem, Menu, ?> parentContainer = rootContainer;
             //            resolutionManager = resolutionManager.getMenuItemResolutionManager(firstUnresolvedPathId);
             for (String pathId : menuEntryDescriptor.getPath()) {
                 parentContainer = parentContainer.getMenuContainer(pathId);
@@ -183,9 +183,9 @@ public abstract class AbstractMenuItemHandler<MenuItem, Menu extends MenuItem, M
         registerUnresolvedMenuEntry(resolutionManager, firstUnresolvedPathId, menuEntryDescriptor, context);
     }
 
-    private void registerUnresolvedMenuEntry(MenuItemResolutionManager<D> resolutionManager, String firstUnresolvedPathId,
+    private <T extends MenuItemSupplierFactory<MenuItem>> void registerUnresolvedMenuEntry(
+            MenuItemResolutionManager<MenuItem, D> resolutionManager, String firstUnresolvedPathId,
             D menuEntryDescriptor, BundleContext context) {
-        resolutionManager.addUnresolvedMenuEntry(firstUnresolvedPathId,
-                new UnresolvedEntry<>(menuEntryDescriptor, context));
+        resolutionManager.addUnresolvedMenuEntry(firstUnresolvedPathId, new UnresolvedEntry<>(menuEntryDescriptor, context));
     }
 }

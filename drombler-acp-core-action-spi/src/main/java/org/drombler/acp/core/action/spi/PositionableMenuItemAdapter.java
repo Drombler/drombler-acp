@@ -20,7 +20,7 @@ import org.softsmithy.lib.util.PositionableAdapter;
  *
  * @author puce
  */
-public class PositionableMenuItemAdapter<T> extends PositionableAdapter<T> {
+public class PositionableMenuItemAdapter<T> extends PositionableAdapter<T> implements MenuItemSupplier<T> {
 
     public static <S> PositionableMenuItemAdapter<S> wrapSeparator(S separatorMenuItem, int position) {
         return new PositionableMenuItemAdapter<>(separatorMenuItem, position, true);
@@ -31,12 +31,17 @@ public class PositionableMenuItemAdapter<T> extends PositionableAdapter<T> {
     }
     private final boolean separator;
 
-    private PositionableMenuItemAdapter(T menuItem, int position, boolean separator) {
+    public PositionableMenuItemAdapter(T menuItem, int position, boolean separator) {
         super(menuItem, position);
         this.separator = separator;
     }
 
     public boolean isSeparator() {
         return separator;
+    }
+
+    @Override
+    public T getMenuItem() {
+        return getAdapted();
     }
 }

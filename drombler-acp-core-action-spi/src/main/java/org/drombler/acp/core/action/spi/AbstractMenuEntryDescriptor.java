@@ -22,15 +22,20 @@ import java.util.List;
  *
  * @author puce
  */
-public abstract class AbstractMenuEntryDescriptor {
+public abstract class AbstractMenuEntryDescriptor<MenuItem, F extends MenuItemSupplierFactory<MenuItem>> {
 
     private static final String PATH_DELIMITER = "/";
     private final List<String> path;
-    private final int position;
+    private final F menuItemSupplierFactory;
 
-    protected AbstractMenuEntryDescriptor(String path, int position) {
+    /**
+     *
+     * @param path
+     * @param menuItemSupplierFactory
+     */
+    protected AbstractMenuEntryDescriptor(String path, F menuItemSupplierFactory) {
         this.path = splitPath(path);
-        this.position = position;
+        this.menuItemSupplierFactory = menuItemSupplierFactory;
     }
 
     private List<String> splitPath(String path) {
@@ -42,12 +47,6 @@ public abstract class AbstractMenuEntryDescriptor {
         }
     }
 
-    /**
-     * @return the position
-     */
-    public int getPosition() {
-        return position;
-    }
 //    public List<String> getPath() {
 //        List<String> path = new ArrayList<>();
 //        MenuDescriptor parentMenuDescriptor = getParent();
@@ -64,5 +63,12 @@ public abstract class AbstractMenuEntryDescriptor {
      */
     public List<String> getPath() {
         return path;
+    }
+
+    /**
+     * @return the menuItemSupplierFactory
+     */
+    public F getMenuItemSupplierFactory() {
+        return menuItemSupplierFactory;
     }
 }

@@ -23,10 +23,10 @@ import java.util.List;
  */
 public abstract class AbstractMenuItemContainerMenuItemEvent<MenuItem, Menu extends MenuItem, M extends MenuItem> extends EventObject {
 
-    private final PositionableMenuItemAdapter<? extends M> menuItem;
+    private final MenuItemSupplier<? extends M> menuItem;
     private final List<String> path;
 
-    public AbstractMenuItemContainerMenuItemEvent(MenuItemContainer<MenuItem, Menu> source, PositionableMenuItemAdapter<? extends M> menuItem, List<String> path) {
+    public AbstractMenuItemContainerMenuItemEvent(MenuItemContainer<MenuItem, Menu, ?> source, MenuItemSupplier<? extends M> menuItem, List<String> path) {
         super(source);
         this.menuItem = menuItem;
         this.path = path;
@@ -42,7 +42,7 @@ public abstract class AbstractMenuItemContainerMenuItemEvent<MenuItem, Menu exte
     /**
      * @return the menuItem
      */
-    public PositionableMenuItemAdapter<? extends M> getMenuItem() {
+    public MenuItemSupplier<? extends M> getMenuItem() {
         return menuItem;
     }
 }

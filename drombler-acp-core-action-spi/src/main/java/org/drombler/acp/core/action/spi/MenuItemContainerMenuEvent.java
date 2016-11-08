@@ -14,7 +14,6 @@
  */
 package org.drombler.acp.core.action.spi;
 
-import java.util.EventObject;
 import java.util.List;
 
 /**
@@ -25,7 +24,7 @@ public class MenuItemContainerMenuEvent<MenuItem, Menu extends MenuItem> extends
 
     private final String menuId;
 
-    public MenuItemContainerMenuEvent(MenuItemContainer<MenuItem, Menu> source, PositionableMenuItemAdapter<? extends Menu> menu, String menuId, List<String> path) {
+    public MenuItemContainerMenuEvent(MenuItemContainer<MenuItem, Menu, ?> source, MenuItemSupplier<? extends Menu> menu, String menuId, List<String> path) {
         super(source, menu, path);
         this.menuId = menuId;
     }

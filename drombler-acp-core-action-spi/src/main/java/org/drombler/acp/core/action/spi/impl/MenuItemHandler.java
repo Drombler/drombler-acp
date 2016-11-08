@@ -20,7 +20,6 @@ import org.apache.felix.scr.annotations.Deactivate;
 import org.apache.felix.scr.annotations.Reference;
 import org.apache.felix.scr.annotations.ReferenceCardinality;
 import org.apache.felix.scr.annotations.ReferencePolicy;
-import org.drombler.acp.core.action.jaxb.MenuEntryType;
 import org.drombler.acp.core.action.jaxb.MenusType;
 import org.drombler.acp.core.action.spi.ActionFactory;
 import org.drombler.acp.core.action.spi.ActionRegistry;
@@ -41,7 +40,7 @@ import org.osgi.util.tracker.ServiceTrackerCustomizer;
 @Component(immediate = true)
 @Reference(name = "menuEntryDescriptor", referenceInterface = MenuEntryDescriptor.class,
         cardinality = ReferenceCardinality.OPTIONAL_MULTIPLE, policy = ReferencePolicy.DYNAMIC)
-public class MenuItemHandler<MenuItem, Menu extends MenuItem, Action> extends AbstractMenuItemHandler<MenuItem, Menu, MenuItem, MenuEntryDescriptor, MenuItemConfig<Action>> {
+public class MenuItemHandler<MenuItem, Menu extends MenuItem, Action> extends AbstractMenuItemHandler<MenuItem, Menu, MenuItem, MenuEntryDescriptor<MenuItem, ?>, MenuItemConfig<Action>> {
 
     @Reference
     private MenuItemFactory<MenuItem, Action> menuItemFactory;
@@ -122,14 +121,13 @@ public class MenuItemHandler<MenuItem, Menu extends MenuItem, Action> extends Ab
 
     @Override
     protected void resolveMenuItem(MenusType menusType, Bundle bundle, BundleContext context) {
-        for (MenuEntryType menuEntry : menusType.getMenuEntry()) {
-            MenuEntryDescriptor menuEntryDescriptor = MenuEntryDescriptor.createMenuEntryDescriptor(menuEntry);
-            resolveMenuItem(menuEntryDescriptor, context);
-        }
+        menusType.getMenuEntry().stream()
+                .map(MenuEntryDescriptor::createMenuEntryDescriptor)
+                .forEach(menuEntryDescriptor -> resolveMenuItem((MenuEntryDescriptor<MenuItem, ?>) menuEntryDescriptor, context)); // TODO: possible to avoid cast?
     }
 
     @Override
-    protected MenuItemConfig<Action> createConfig(MenuEntryDescriptor menuEntryDescriptor, BundleContext context) {
+    protected MenuItemConfig<Action> createConfig(MenuEntryDescriptor<MenuItem, ?> menuEntryDescriptor, BundleContext context) {
         Action action = actionRegistry.getAction(menuEntryDescriptor.getActionId(), actionFactory.getActionClass(),
                 context);
         if (action != null) {
@@ -140,14 +138,14 @@ public class MenuItemHandler<MenuItem, Menu extends MenuItem, Action> extends Ab
     }
 
     @Override
-    protected MenuItem createMenuItem(MenuEntryDescriptor menuEntryDescriptor, MenuItemConfig<Action> config) {
+    protected MenuItem createMenuItem(MenuEntryDescriptor<MenuItem, ?> menuEntryDescriptor, MenuItemConfig<Action> config) {
 //        System.out.println(actionFactory.getActionClass().getName() + ": " + menuEntryDescriptor.getActionId());
         return menuItemFactory.createMenuItem(config.getAction(), config.getIconSize());
 
     }
 
     @Override
-    protected void registerUnresolvedMenuItem(MenuEntryDescriptor menuEntryDescriptor, BundleContext context) {
+    protected void registerUnresolvedMenuItem(MenuEntryDescriptor<MenuItem, ?> menuEntryDescriptor, BundleContext context) {
         actionResolutionManager.addUnresolvedEntry(menuEntryDescriptor.getActionId(),
                 new UnresolvedEntry<>(menuEntryDescriptor, context));
     }

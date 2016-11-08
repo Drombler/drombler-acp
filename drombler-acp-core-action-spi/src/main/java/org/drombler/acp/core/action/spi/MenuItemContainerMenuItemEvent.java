@@ -22,7 +22,7 @@ import java.util.List;
  */
 public class MenuItemContainerMenuItemEvent<MenuItem, Menu extends MenuItem> extends AbstractMenuItemContainerMenuItemEvent<MenuItem, Menu, MenuItem> {
 
-    public MenuItemContainerMenuItemEvent(MenuItemContainer<MenuItem, Menu> source, PositionableMenuItemAdapter<? extends MenuItem> menuItem, List<String> path) {
+    public MenuItemContainerMenuItemEvent(MenuItemContainer<MenuItem, Menu, ?> source, MenuItemSupplier<? extends MenuItem> menuItem, List<String> path) {
         super(source, menuItem, path);
     }
 }

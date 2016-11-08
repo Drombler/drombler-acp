@@ -20,5 +20,5 @@ package org.drombler.acp.core.action.spi;
  */
 public interface MenuBarMenuContainerProvider<MenuItem, Menu extends MenuItem> {
 
-    MenuItemRootContainer<MenuItem, Menu> getMenuBarMenuContainer();
+    MenuItemRootContainer<MenuItem, Menu, PositionableMenuItemAdapterFactory<MenuItem>> getMenuBarMenuContainer();
 }

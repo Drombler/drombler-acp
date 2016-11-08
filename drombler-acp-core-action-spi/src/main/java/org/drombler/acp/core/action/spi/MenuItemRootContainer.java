@@ -18,7 +18,7 @@ package org.drombler.acp.core.action.spi;
  *
  * @author puce
  */
-public interface MenuItemRootContainer<MenuItem, Menu extends MenuItem> extends MenuItemContainer<MenuItem, Menu> {
+public interface MenuItemRootContainer<MenuItem, Menu extends MenuItem, F extends MenuItemSupplierFactory<MenuItem>> extends MenuItemContainer<MenuItem, Menu, F> {
 
     void addMenuContainerListener(MenuItemContainerListener<MenuItem, Menu> containerListener);
 

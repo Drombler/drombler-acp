@@ -26,16 +26,18 @@ import org.slf4j.LoggerFactory;
  *
  * @author puce
  */
-public class MenuDescriptor extends AbstractMenuEntryDescriptor {
+public class MenuDescriptor<MenuItem, F extends MenuItemSupplierFactory<MenuItem>> extends AbstractMenuEntryDescriptor<MenuItem, F> {
     private static final Logger LOG = LoggerFactory.getLogger(MenuDescriptor.class);
 
     private final String id;
     private final String displayName;
+    private final MenuItemSortingStrategy<MenuItem, ?> sortingStrategy;
 
-    public MenuDescriptor(String id, String displayName, String path, int position) {
-        super(path, position);
+    public MenuDescriptor(String id, String displayName, String path, F menuItemSupplierFactory, MenuItemSortingStrategy<MenuItem, ?> sortingStrategy) {
+        super(path, menuItemSupplierFactory);
         this.id = id;
         this.displayName = displayName;
+        this.sortingStrategy = sortingStrategy;
     }
 
 //    private MenuRootDescriptor getRoot() {
@@ -87,11 +89,21 @@ public class MenuDescriptor extends AbstractMenuEntryDescriptor {
         return id;
     }
 
+    /**
+     * @return the sortingStrategy
+     */
+    public MenuItemSortingStrategy<MenuItem, ?> getSortingStrategy() {
+        return sortingStrategy;
+    }
+
     public static MenuDescriptor createMenuDescriptor(MenuType menuType, Bundle bundle) {
         try {
-        return new MenuDescriptor(StringUtils.stripToNull(menuType.getId()),
-                OSGiResourceBundleUtils.getPackageResourceStringPrefixed(menuType.getPackage(),
-                            menuType.getDisplayName(), bundle), StringUtils.stripToEmpty(menuType.getPath()), menuType.getPosition());
+            return new MenuDescriptor(StringUtils.stripToNull(menuType.getId()),
+                    OSGiResourceBundleUtils.getPackageResourceStringPrefixed(menuType.getPackage(),
+                            menuType.getDisplayName(), bundle),
+                    StringUtils.stripToEmpty(menuType.getPath()),
+                    new PositionableMenuItemAdapterFactory<>(menuType.getPosition(), false),
+                    new PositionSortingStrategy<>());
         } catch (MissingResourceException ex) {
             LOG.warn("ResourceBundle not found for menu {}: {}", menuType.getId(), ex.getMessage());
             throw ex;
@@ -188,4 +200,5 @@ public class MenuDescriptor extends AbstractMenuEntryDescriptor {
 //            unresolvedMenus.get(unresolvedPathId).add(menu);
 //        }
 //    }
+
 }

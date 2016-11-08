@@ -21,17 +21,17 @@ import org.drombler.acp.core.action.jaxb.ToggleMenuEntryType;
  *
  * @author puce
  */
-public class ToggleMenuEntryDescriptor extends MenuEntryDescriptor {
+public class ToggleMenuEntryDescriptor<MenuItem, F extends MenuItemSupplierFactory<MenuItem>> extends MenuEntryDescriptor<MenuItem, F> {
 
     private final String toggleGroupId;
 
-    public ToggleMenuEntryDescriptor(String actionId, String toggleGroupId, String path, int position) {
-        super(actionId, path, position);
+    public ToggleMenuEntryDescriptor(String actionId, String toggleGroupId, String path, F menuItemSupplierFactory) {
+        super(actionId, path, menuItemSupplierFactory);
         this.toggleGroupId = toggleGroupId;
     }
 
-    public ToggleMenuEntryDescriptor(String actionId, String path, int position) {
-        this(actionId, null, path, position);
+    public ToggleMenuEntryDescriptor(String actionId, String path, F menuItemSupplierFactory) {
+        this(actionId, null, path, menuItemSupplierFactory);
     }
 
     /**
@@ -41,9 +41,10 @@ public class ToggleMenuEntryDescriptor extends MenuEntryDescriptor {
         return toggleGroupId;
     }
 
-    public static ToggleMenuEntryDescriptor createRadioMenuEntryDescriptor(ToggleMenuEntryType menuEntryType) {
-        return new ToggleMenuEntryDescriptor(StringUtils.stripToNull(menuEntryType.getActionId()),
+    public static <MenuItem> ToggleMenuEntryDescriptor<MenuItem, PositionableMenuItemAdapterFactory<MenuItem>> createToggleMenuEntryDescriptor(ToggleMenuEntryType menuEntryType) {
+        return new ToggleMenuEntryDescriptor<>(StringUtils.stripToNull(menuEntryType.getActionId()),
                 StringUtils.stripToNull(menuEntryType.getToggleGroupId()),
-                StringUtils.stripToEmpty(menuEntryType.getPath()), menuEntryType.getPosition());
+                StringUtils.stripToEmpty(menuEntryType.getPath()),
+                new PositionableMenuItemAdapterFactory<>(menuEntryType.getPosition(), false));
     }
 }

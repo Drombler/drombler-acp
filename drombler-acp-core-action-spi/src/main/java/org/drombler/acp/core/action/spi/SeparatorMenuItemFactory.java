@@ -18,17 +18,7 @@ package org.drombler.acp.core.action.spi;
  *
  * @author puce
  */
-public interface MenuItemContainer<MenuItem, Menu extends MenuItem, F extends MenuItemSupplierFactory<MenuItem>> {
+public interface SeparatorMenuItemFactory<S> {
 
-    void addMenu(String id, Menu menu, F supplierFactory, MenuItemSortingStrategy<MenuItem, ?> sortingStrategy);
-
-    void addMenuItem(MenuItem menuItem, F supplierFactory);
-
-    MenuItemSortingStrategy<MenuItem, ?> getMenuItemSortingStrategy(); // TODO: return MenuItemSortingStrategy<MenuItem, F> ?
-    /**
-     * @return the menuContainers
-     */
-    MenuItemContainer<MenuItem, Menu, ?> getMenuContainer(String id);
-
-    boolean isSupportingItems();
+    S createSeparatorMenuItem();
 }

@@ -98,7 +98,7 @@ public class ToolBarDescriptor implements Positionable {
                 toolBarContainer);
         toolBarDescriptor.setShowToolBarActionDescriptor(actionDescriptor);
         toolBarDescriptor.setShowToolBarCheckMenuEntryDescriptor(new ToggleMenuEntryDescriptor(actionDescriptor.getId(),
-                "View/Toolbars", toolBarType.getPosition()));
+                "View/Toolbars", new PositionableMenuItemAdapterFactory<>(toolBarType.getPosition(), false)));
         return toolBarDescriptor;
     }
 
