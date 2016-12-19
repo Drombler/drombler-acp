@@ -18,6 +18,7 @@ package org.drombler.acp.core.action.spi;
  *
  * @author puce
  */
+// TODO: good name?
 public class IdentityMenuItemSupplier<MenuItem> implements MenuItemSupplier<MenuItem> {
 
     private final MenuItem menuItem;

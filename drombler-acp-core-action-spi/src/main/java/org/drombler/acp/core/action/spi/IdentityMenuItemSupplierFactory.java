@@ -2,7 +2,7 @@ package org.drombler.acp.core.action.spi;
 
 
 
-
+// TODO: good name?
 public class IdentityMenuItemSupplierFactory<MenuItem> implements MenuItemSupplierFactory<MenuItem> {
 
     @Override
