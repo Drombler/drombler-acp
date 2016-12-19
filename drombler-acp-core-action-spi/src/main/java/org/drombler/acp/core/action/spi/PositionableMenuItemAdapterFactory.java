@@ -3,9 +3,8 @@ package org.drombler.acp.core.action.spi;
 /**
  *
  * @author puce
+ * @param <MenuItem>
  */
-
-
 public class PositionableMenuItemAdapterFactory<MenuItem> implements MenuItemSupplierFactory<MenuItem> {
 
     private final int position;

@@ -64,5 +64,4 @@ public class PositionSortingStrategy<MenuItem> implements MenuItemSortingStrateg
     }
 
 
-
 }
