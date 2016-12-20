@@ -17,7 +17,6 @@ package org.drombler.acp.core.commons.util;
 import java.util.ResourceBundle;
 import org.drombler.commons.client.util.ResourceBundleUtils;
 import org.osgi.framework.Bundle;
-import org.osgi.framework.wiring.BundleWiring;
 
 /**
  * A utility class for {@link ResourceBundle}s in OSGi {@link Bundle}s.
@@ -42,6 +41,6 @@ public class OSGiResourceBundleUtils {
      * @return
      */
     public static String getPackageResourceStringPrefixed(String aPackage, String resourceKey, Bundle bundle) {
-        return ResourceBundleUtils.getPackageResourceStringPrefixed(aPackage, resourceKey, bundle.adapt(BundleWiring.class).getClassLoader());
+        return ResourceBundleUtils.getPackageResourceStringPrefixed(aPackage, resourceKey, BundleUtils.getClassLoader(bundle));
     }
 }
