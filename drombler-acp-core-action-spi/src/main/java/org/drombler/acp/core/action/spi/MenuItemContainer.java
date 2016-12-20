@@ -14,6 +14,8 @@
  */
 package org.drombler.acp.core.action.spi;
 
+import java.util.List;
+
 /**
  *
  * @author puce
@@ -24,11 +26,17 @@ public interface MenuItemContainer<MenuItem, Menu extends MenuItem, F extends Me
 
     void addMenuItem(MenuItem menuItem, F supplierFactory);
 
-    MenuItemSortingStrategy<MenuItem, ?> getMenuItemSortingStrategy(); // TODO: return MenuItemSortingStrategy<MenuItem, F> ?
+    MenuItemSortingStrategy<MenuItem, F> getMenuItemSortingStrategy(); // TODO: correct? or MenuItemSortingStrategy<MenuItem, ?> ?
     /**
      * @return the menuContainers
      */
     MenuItemContainer<MenuItem, Menu, ?> getMenuContainer(String id);
 
+    MenuItemContainer<MenuItem, Menu, ?> getParentMenuContainer();
+
     boolean isSupportingItems();
+
+    List<String> getPath();
+
+    String getId();
 }
