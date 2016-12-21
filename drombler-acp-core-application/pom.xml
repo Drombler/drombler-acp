@@ -119,6 +119,12 @@ Contributor(s): .
             <scope>runtime</scope>
         </dependency>
         <dependency>
+            <groupId>org.apache.felix</groupId>
+            <artifactId>org.apache.felix.configadmin</artifactId>
+            <scope>runtime</scope>
+            <!--seems to be required by scr v2.0.6 -->
+        </dependency>
+        <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
         </dependency>
