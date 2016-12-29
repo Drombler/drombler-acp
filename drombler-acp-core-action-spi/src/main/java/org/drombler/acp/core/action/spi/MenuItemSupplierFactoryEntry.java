@@ -1,11 +1,10 @@
 package org.drombler.acp.core.action.spi;
 
 /**
- *
+ * @param <MenuItem> the GUI toolkit specific type for menu items
+ * @param <F> the GUI toolkit and sorting strategy specific menu item supplier factory type
  * @author puce
  */
-
-
 public class MenuItemSupplierFactoryEntry<MenuItem, F extends MenuItemSupplierFactory<MenuItem>> {
 
     private final F supplierFactory;

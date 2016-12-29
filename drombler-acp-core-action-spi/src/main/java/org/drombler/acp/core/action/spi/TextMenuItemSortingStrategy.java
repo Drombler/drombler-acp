@@ -41,7 +41,7 @@ public class TextMenuItemSortingStrategy<MenuItem> implements MenuItemSortingStr
     }
 
     @Override
-    public MenuItemEntry<MenuItemSupplierFactoryEntry<MenuItem, IdentityMenuItemSupplierFactory<MenuItem>>> createSeparatorEntry(int index,
+    public MenuItemEntry<MenuItem> createSeparatorEntry(int index,
             List<? extends MenuItemSupplierFactoryEntry<MenuItem, IdentityMenuItemSupplierFactory<MenuItem>>> entryList,
             MenuItemSupplierFactoryEntry<MenuItem, IdentityMenuItemSupplierFactory<MenuItem>> entry,
             SeparatorMenuItemFactory<? extends MenuItem> separatorMenuItemFactory) {

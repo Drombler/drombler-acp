@@ -25,14 +25,9 @@ public class PositionSortingStrategy<MenuItem> implements MenuItemSortingStrateg
         return entry.getSupplierFactory().createMenuItemSupplier(entry.getMenuItem());
     }
 
-    private MenuItemSupplierFactoryEntry<MenuItem, PositionableMenuItemAdapterFactory<MenuItem>> createSeparatorMenuItemSupplier(int position,
-            SeparatorMenuItemFactory<? extends MenuItem> separatorMenuItemFactory) {
-        PositionableMenuItemAdapterFactory<MenuItem> positionableMenuItemAdapterFactory = new PositionableMenuItemAdapterFactory<>(position / SEPARATOR_STEPS * SEPARATOR_STEPS, true);
-        return new MenuItemSupplierFactoryEntry<>(positionableMenuItemAdapterFactory, separatorMenuItemFactory.createSeparatorMenuItem());
-    }
 
     @Override
-    public MenuItemEntry<MenuItemSupplierFactoryEntry<MenuItem, PositionableMenuItemAdapterFactory<MenuItem>>> createSeparatorEntry(int index,
+    public MenuItemEntry<MenuItem> createSeparatorEntry(int index,
             List<? extends MenuItemSupplierFactoryEntry<MenuItem, PositionableMenuItemAdapterFactory<MenuItem>>> entryList,
             MenuItemSupplierFactoryEntry<MenuItem, PositionableMenuItemAdapterFactory<MenuItem>> entry,
             SeparatorMenuItemFactory<? extends MenuItem> separatorMenuItemFactory) {
@@ -48,7 +43,7 @@ public class PositionSortingStrategy<MenuItem> implements MenuItemSortingStrateg
                 && ((menuItemAdapters.get(index + 1).getPosition() / SEPARATOR_STEPS) - (menuItemAdapter.getPosition() / SEPARATOR_STEPS)) >= 1
                 && !menuItemAdapters.get(index + 1).isSeparator()) {
 //            addSeparator(index + 1, createSeparatorMenuItemSupplier(xMenuItems.get(index + 1).getPosition()));
-            return new MenuItemEntry<>(index + 1, createSeparatorMenuItemSupplier(menuItemAdapters.get(index + 1).getPosition(), separatorMenuItemFactory));
+            return new MenuItemEntry<>(index + 1, separatorMenuItemFactory.createSeparatorMenuItem());
 
         }
 
@@ -56,7 +51,7 @@ public class PositionSortingStrategy<MenuItem> implements MenuItemSortingStrateg
                 && ((menuItemAdapter.getPosition() / SEPARATOR_STEPS) - (menuItemAdapters.get(index - 1).getPosition() / SEPARATOR_STEPS)) >= 1
                 && !menuItemAdapters.get(index - 1).isSeparator()) {
 //            addSeparator(index, createSeparatorMenuItemSupplier(menuItemAdapter.getPosition()));
-            return new MenuItemEntry<>(index, createSeparatorMenuItemSupplier(menuItemAdapter.getPosition(), separatorMenuItemFactory));
+            return new MenuItemEntry<>(index, separatorMenuItemFactory.createSeparatorMenuItem());
 
         }
 

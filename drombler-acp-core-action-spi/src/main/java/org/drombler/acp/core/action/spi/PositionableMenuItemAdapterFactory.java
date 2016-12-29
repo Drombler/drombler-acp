@@ -2,8 +2,8 @@ package org.drombler.acp.core.action.spi;
 
 /**
  *
+ * @param <MenuItem> the GUI toolkit specific type for menu items
  * @author puce
- * @param <MenuItem>
  */
 public class PositionableMenuItemAdapterFactory<MenuItem> implements MenuItemSupplierFactory<MenuItem> {
 

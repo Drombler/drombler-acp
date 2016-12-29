@@ -6,7 +6,7 @@ public interface MenuItemSortingStrategy<MenuItem, F extends MenuItemSupplierFac
 
     int getInsertionPoint(List<? extends MenuItemSupplierFactoryEntry<MenuItem, F>> entryList, MenuItemSupplierFactoryEntry<MenuItem, F> entry);
 
-    MenuItemEntry<MenuItemSupplierFactoryEntry<MenuItem, F>> createSeparatorEntry(int index, List<? extends MenuItemSupplierFactoryEntry<MenuItem, F>> entryList,
+    MenuItemEntry<MenuItem> createSeparatorEntry(int index, List<? extends MenuItemSupplierFactoryEntry<MenuItem, F>> entryList,
             MenuItemSupplierFactoryEntry<MenuItem, F> entry, SeparatorMenuItemFactory<? extends MenuItem> separatorMenuItemFactory);
 
 }

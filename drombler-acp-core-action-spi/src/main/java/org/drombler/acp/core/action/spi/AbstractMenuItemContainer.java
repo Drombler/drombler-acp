@@ -15,16 +15,18 @@
 package org.drombler.acp.core.action.spi;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
 /**
+ * An abstract base class for {@link MenuItemContainer}s.
  *
+ * @param <MenuItem> the GUI toolkit specific type for menu items
+ * @param <Menu> the GUI toolkit specific type for menus
+ * @param <F> the GUI toolkit and sorting strategy specific menu item supplier factory type
+ * @see MenuItemSortingStrategy
  * @author puce
- * @param <F>
  */
 public abstract class AbstractMenuItemContainer<MenuItem, Menu extends MenuItem, F extends MenuItemSupplierFactory<MenuItem>> implements MenuItemContainer<MenuItem, Menu, F> {
 
@@ -50,24 +52,33 @@ public abstract class AbstractMenuItemContainer<MenuItem, Menu extends MenuItem,
         this.separatorMenuItemFactory = separatorMenuItemFactory;
     }
 
+    /**
+     * {@inheritDoc }
+     */
     @Override
     public String getId() {
         return id;
     }
 
+    /**
+     * {@inheritDoc }
+     */
     @Override
     public MenuItemContainer<MenuItem, Menu, ?> getParentMenuContainer() {
         return parentMenuContainer;
     }
+
     /**
-     * @param id
-     * @return the menuContainers
+     * {@inheritDoc }
      */
     @Override
     public MenuItemContainer<MenuItem, Menu, ?> getMenuContainer(String id) {
         return menuContainers.get(id);
     }
 
+    /**
+     * {@inheritDoc }
+     */
     @Override
     public void addMenu(String id, Menu menu, F supplierFactory, MenuItemSortingStrategy<MenuItem, ?> sortingStrategy) {
         MenuItemContainer<MenuItem, Menu, ?> menuMenuItemContainer = menuMenuItemContainerFactory.createMenuMenuItemContainer(id, menu, this,
@@ -82,15 +93,20 @@ public abstract class AbstractMenuItemContainer<MenuItem, Menu extends MenuItem,
         getMenuItemRootContainer().fireMenuAddedEvent(menuSupplier, id, menuMenuContainer.getPath());
     }
 
+    /**
+     * {@inheritDoc }
+     */
     @Override
     public List<String> getPath() {
-        List<String> path = new ArrayList<>();
-        MenuItemContainer<MenuItem, Menu, ?> currentParentContainer = parentMenuContainer;
-        while (currentParentContainer != null && currentParentContainer.getId() != null) {
-            path.add(currentParentContainer.getId());
-            currentParentContainer = currentParentContainer.getParentMenuContainer();
+        List<String> path;
+        if (parentMenuContainer != null) {
+            path = parentMenuContainer.getPath();
+            if (parentMenuContainer.getId() != null) {
+                path.add(parentMenuContainer.getId());
+            }
+        } else {
+            path = new ArrayList<>();
         }
-        Collections.reverse(path);
         return path;
     }
 
@@ -100,14 +116,12 @@ public abstract class AbstractMenuItemContainer<MenuItem, Menu extends MenuItem,
 
         addMenuItem(index, menuItem, supplierFactory, menuItemList, menu);
 
-        // TODO: MenuItemEntry<MenuItem>?
-        MenuItemEntry<MenuItemSupplierFactoryEntry<MenuItem, F>> separatorEntry = menuItemSortingStrategy.createSeparatorEntry(index, xMenuItems, entry, separatorMenuItemFactory);
+        MenuItemEntry<MenuItem> separatorEntry = menuItemSortingStrategy.createSeparatorEntry(index, xMenuItems, entry, separatorMenuItemFactory);
         if (separatorEntry != null) {
-            addSeparator(separatorEntry.getIndex(), separatorEntry.getMenuItem().getMenuItem(), supplierFactory);
+            addSeparator(separatorEntry.getIndex(), separatorEntry.getMenuItem(), supplierFactory);
         }
 
     }
-
 
     private <T extends MenuItem> void addMenuItem(final int index, final T menuItem, F supplierFactory,
             final List<? super T> menuItemList, final boolean menu) {
@@ -132,6 +146,9 @@ public abstract class AbstractMenuItemContainer<MenuItem, Menu extends MenuItem,
 
     protected abstract List<? super Menu> getMenus();
 
+    /**
+     * {@inheritDoc }
+     */
     @Override
     public void addMenuItem(MenuItem menuItem, F supplierFactory) {
         addMenuItem(menuItem, supplierFactory, getItems(), false);
@@ -139,6 +156,9 @@ public abstract class AbstractMenuItemContainer<MenuItem, Menu extends MenuItem,
 
     protected abstract List<MenuItem> getItems();
 
+    /**
+     * {@inheritDoc }
+     */
     @Override
     public boolean isSupportingItems() {
         return supportingItems;
@@ -146,6 +166,9 @@ public abstract class AbstractMenuItemContainer<MenuItem, Menu extends MenuItem,
 
     protected abstract AbstractMenuItemRootContainer<MenuItem, Menu, ?> getMenuItemRootContainer();
 
+    /**
+     * {@inheritDoc }
+     */
     @Override
     public MenuItemSortingStrategy<MenuItem, F> getMenuItemSortingStrategy() {
         return menuItemSortingStrategy;

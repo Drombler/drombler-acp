@@ -17,7 +17,9 @@ package org.drombler.acp.core.action.spi;
 import java.util.List;
 
 /**
- *
+ * @param <MenuItem> the GUI toolkit specific type for menu items
+ * @param <Menu> the GUI toolkit specific type for menus
+ * @param <F> the GUI toolkit and sorting strategy specific menu item supplier factory type
  * @author puce
  */
 public interface MenuItemContainer<MenuItem, Menu extends MenuItem, F extends MenuItemSupplierFactory<MenuItem>> {

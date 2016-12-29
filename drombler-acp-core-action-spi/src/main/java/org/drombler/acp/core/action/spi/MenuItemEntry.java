@@ -1,11 +1,9 @@
 package org.drombler.acp.core.action.spi;
 
 /**
- *
+ * @param <MenuItem> the GUI toolkit specific type for menu items
  * @author puce
  */
-
-
 public class MenuItemEntry<MenuItem> {
 
     private final int index;
