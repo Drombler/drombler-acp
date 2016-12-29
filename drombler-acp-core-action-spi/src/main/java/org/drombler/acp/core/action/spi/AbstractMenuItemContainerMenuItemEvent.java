@@ -18,7 +18,9 @@ import java.util.EventObject;
 import java.util.List;
 
 /**
- *
+ * @param <MenuItem> the GUI toolkit specific type for menu items
+ * @param <Menu> the GUI toolkit specific type for menus
+ * @param <M> the type of the menu item
  * @author puce
  */
 public abstract class AbstractMenuItemContainerMenuItemEvent<MenuItem, Menu extends MenuItem, M extends MenuItem> extends EventObject {

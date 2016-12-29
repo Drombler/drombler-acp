@@ -15,10 +15,11 @@
 package org.drombler.acp.core.action.spi;
 
 /**
+ * TODO: good name?
  *
+ * @param <MenuItem> the GUI toolkit specific type for menu items
  * @author puce
  */
-// TODO: good name?
 public class IdentityMenuItemSupplier<MenuItem> implements MenuItemSupplier<MenuItem> {
 
     private final MenuItem menuItem;

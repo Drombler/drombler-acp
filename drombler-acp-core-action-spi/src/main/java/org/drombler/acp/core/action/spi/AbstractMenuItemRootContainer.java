@@ -21,7 +21,7 @@ import java.util.List;
 /**
  * @param <MenuItem> the GUI toolkit specific type for menu items
  * @param <Menu> the GUI toolkit specific type for menus
- * @param <F> the GUI toolkit and sorting strategy specific menu item supplier factory type
+ * @param <F> the sorting strategy specific menu item supplier factory type
  * @author puce
  */
 public abstract class AbstractMenuItemRootContainer<MenuItem, Menu extends MenuItem, F extends MenuItemSupplierFactory<MenuItem>> extends AbstractMenuItemContainer<MenuItem, Menu, F> implements

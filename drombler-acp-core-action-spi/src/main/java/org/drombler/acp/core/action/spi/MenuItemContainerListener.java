@@ -17,7 +17,10 @@ package org.drombler.acp.core.action.spi;
 import java.util.EventListener;
 
 /**
- *TODO: more methods might be added in future
+ * TODO: more methods might be added in future
+ *
+ * @param <MenuItem> the GUI toolkit specific type for menu items
+ * @param <Menu> the GUI toolkit specific type for menus
  * @author puce
  */
 public interface MenuItemContainerListener<MenuItem, Menu extends MenuItem> extends EventListener {

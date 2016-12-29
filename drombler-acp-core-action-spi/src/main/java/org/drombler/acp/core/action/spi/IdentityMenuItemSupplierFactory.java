@@ -1,8 +1,12 @@
 package org.drombler.acp.core.action.spi;
 
 
-
-// TODO: good name?
+/**
+ * TODO: good name?
+ *
+ * @param <MenuItem> the GUI toolkit specific type for menu items
+ * @author puce
+ */
 public class IdentityMenuItemSupplierFactory<MenuItem> implements MenuItemSupplierFactory<MenuItem> {
 
     @Override

@@ -17,10 +17,13 @@ package org.drombler.acp.core.action.spi;
 import java.util.List;
 
 /**
- *
+ * @param <MenuItem> the GUI toolkit specific type for menu items
+ * @param <Menu> the GUI toolkit specific type for menus
  * @author puce
  */
 public class MenuItemContainerMenuItemEvent<MenuItem, Menu extends MenuItem> extends AbstractMenuItemContainerMenuItemEvent<MenuItem, Menu, MenuItem> {
+
+    private static final long serialVersionUID = 1572045115559027950L;
 
     public MenuItemContainerMenuItemEvent(MenuItemContainer<MenuItem, Menu, ?> source, MenuItemSupplier<? extends MenuItem> menuItem, List<String> path) {
         super(source, menuItem, path);

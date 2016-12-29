@@ -8,7 +8,11 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import org.softsmithy.lib.util.Lists;
 
-
+/**
+ *
+ * @param <MenuItem> the GUI toolkit specific type for menu items
+ * @author puce
+ */
 public class TextMenuItemSortingStrategy<MenuItem> implements MenuItemSortingStrategy<MenuItem, IdentityMenuItemSupplierFactory<MenuItem>> {
     private final Collator collator;
     private final Function<MenuItem, String> menuTextExtractor;

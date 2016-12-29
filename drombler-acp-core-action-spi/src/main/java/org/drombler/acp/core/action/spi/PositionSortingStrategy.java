@@ -3,7 +3,11 @@ package org.drombler.acp.core.action.spi;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.softsmithy.lib.util.Positionables;
-
+/**
+ *
+ * @param <MenuItem> the GUI toolkit specific type for menu items
+ * @author puce
+ */
 public class PositionSortingStrategy<MenuItem> implements MenuItemSortingStrategy<MenuItem, PositionableMenuItemAdapterFactory<MenuItem>> {
 
     private static final int SEPARATOR_STEPS = 1000;

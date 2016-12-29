@@ -17,10 +17,10 @@ package org.drombler.acp.core.action.spi;
 import org.softsmithy.lib.util.PositionableAdapter;
 
 /**
- *
+ * @param <MenuItem> the GUI toolkit specific type for menu items
  * @author puce
  */
-public class PositionableMenuItemAdapter<T> extends PositionableAdapter<T> implements MenuItemSupplier<T> {
+public class PositionableMenuItemAdapter<MenuItem> extends PositionableAdapter<MenuItem> implements MenuItemSupplier<MenuItem> {
 
     public static <S> PositionableMenuItemAdapter<S> wrapSeparator(S separatorMenuItem, int position) {
         return new PositionableMenuItemAdapter<>(separatorMenuItem, position, true);
@@ -31,7 +31,7 @@ public class PositionableMenuItemAdapter<T> extends PositionableAdapter<T> imple
     }
     private final boolean separator;
 
-    public PositionableMenuItemAdapter(T menuItem, int position, boolean separator) {
+    public PositionableMenuItemAdapter(MenuItem menuItem, int position, boolean separator) {
         super(menuItem, position);
         this.separator = separator;
     }
@@ -41,7 +41,7 @@ public class PositionableMenuItemAdapter<T> extends PositionableAdapter<T> imple
     }
 
     @Override
-    public T getMenuItem() {
+    public MenuItem getMenuItem() {
         return getAdapted();
     }
 }

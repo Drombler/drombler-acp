@@ -23,7 +23,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- *
+ * @param <MenuItem> the GUI toolkit specific type for menu items
+ * @param <F> the sorting strategy specific menu item supplier factory type
  * @author puce
  */
 public class MenuDescriptor<MenuItem, F extends MenuItemSupplierFactory<MenuItem>> extends AbstractMenuEntryDescriptor<MenuItem, F> {

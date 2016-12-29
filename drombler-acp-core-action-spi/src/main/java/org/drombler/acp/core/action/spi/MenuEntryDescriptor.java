@@ -18,7 +18,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.drombler.acp.core.action.jaxb.MenuEntryType;
 
 /**
- *
+ * @param <MenuItem> the GUI toolkit specific type for menu items
+ * @param <F> the sorting strategy specific menu item supplier factory type
  * @author puce
  */
 public class MenuEntryDescriptor<MenuItem, F extends MenuItemSupplierFactory<MenuItem>> extends AbstractMenuEntryDescriptor<MenuItem, F> {

@@ -2,7 +2,8 @@ package org.drombler.acp.core.action.spi;
 
 
 /**
- *
+ * @param <MenuItem> the GUI toolkit specific type for menu items
+ * @param <Menu> the GUI toolkit specific type for menus
  * @author puce
  */
 public interface MenuMenuItemContainerFactory<MenuItem, Menu extends MenuItem> {

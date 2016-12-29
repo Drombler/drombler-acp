@@ -19,7 +19,8 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- *
+ * @param <MenuItem> the GUI toolkit specific type for menu items
+ * @param <F> the sorting strategy specific menu item supplier factory type
  * @author puce
  */
 public abstract class AbstractMenuEntryDescriptor<MenuItem, F extends MenuItemSupplierFactory<MenuItem>> {
