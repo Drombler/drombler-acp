@@ -14,9 +14,9 @@
  */
 package org.drombler.acp.core.action.spi;
 
-import org.drombler.acp.core.action.PositionableMenuItemAdapterFactory;
-import org.drombler.acp.core.action.MenuItemSupplierFactory;
 import org.apache.commons.lang3.StringUtils;
+import org.drombler.acp.core.action.MenuItemSupplierFactory;
+import org.drombler.acp.core.action.PositionableMenuItemAdapterFactory;
 import org.drombler.acp.core.action.jaxb.ToggleMenuEntryType;
 
 /**
@@ -47,6 +47,6 @@ public class ToggleMenuEntryDescriptor<MenuItem, F extends MenuItemSupplierFacto
         return new ToggleMenuEntryDescriptor<>(StringUtils.stripToNull(menuEntryType.getActionId()),
                 StringUtils.stripToNull(menuEntryType.getToggleGroupId()),
                 StringUtils.stripToEmpty(menuEntryType.getPath()),
-                new PositionableMenuItemAdapterFactory<>(menuEntryType.getPosition(), false));
+                new PositionableMenuItemAdapterFactory<>(menuEntryType.getPosition()));
     }
 }

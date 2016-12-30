@@ -14,8 +14,8 @@
  */
 package org.drombler.acp.core.action.spi;
 
-import org.drombler.acp.core.action.PositionableMenuItemAdapterFactory;
 import org.apache.commons.lang3.StringUtils;
+import org.drombler.acp.core.action.PositionableMenuItemAdapterFactory;
 import org.drombler.acp.core.action.jaxb.ToolBarType;
 import org.drombler.acp.core.action.spi.impl.ShowToolBarAction;
 import org.drombler.acp.core.commons.util.OSGiResourceBundleUtils;
@@ -99,7 +99,7 @@ public class ToolBarDescriptor implements Positionable {
                 toolBarContainer);
         toolBarDescriptor.setShowToolBarActionDescriptor(actionDescriptor);
         toolBarDescriptor.setShowToolBarCheckMenuEntryDescriptor(new ToggleMenuEntryDescriptor(actionDescriptor.getId(),
-                "View/Toolbars", new PositionableMenuItemAdapterFactory<>(toolBarType.getPosition(), false)));
+                "View/Toolbars", new PositionableMenuItemAdapterFactory<>(toolBarType.getPosition())));
         return toolBarDescriptor;
     }
 

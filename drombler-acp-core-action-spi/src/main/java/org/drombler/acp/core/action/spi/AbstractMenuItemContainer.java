@@ -117,10 +117,10 @@ public abstract class AbstractMenuItemContainer<MenuItem, Menu extends MenuItem,
     }
 
     private <T extends MenuItem> void addMenuItem(T menuItem, F supplierFactory, List<? super T> menuItemList) {
-        MenuItemSupplierFactoryEntry<MenuItem, F> entry = new MenuItemSupplierFactoryEntry<>(supplierFactory, menuItem);
+        MenuItemSupplierFactoryEntry<MenuItem, F> entry = new MenuItemSupplierFactoryEntry<>(supplierFactory, menuItem, false);
         int index = menuItemSortingStrategy.getMenuItemInsertionPoint(xMenuItems, entry);
 
-        addMenuItem(index, menuItem, supplierFactory, menuItemList);
+        addMenuItem(index, menuItem, entry, menuItemList);
 
         Optional<Integer> separatorInsertionPoint = menuItemSortingStrategy.getSeparatorInsertionPoint(index, xMenuItems, entry);
         if (separatorInsertionPoint != null && separatorInsertionPoint.isPresent()) {
@@ -129,8 +129,7 @@ public abstract class AbstractMenuItemContainer<MenuItem, Menu extends MenuItem,
 
     }
 
-    private <T extends MenuItem> void addMenuItem(int index, T menuItem, F supplierFactory, List<? super T> menuItemList) {
-        MenuItemSupplierFactoryEntry<MenuItem, F> entry = new MenuItemSupplierFactoryEntry<>(supplierFactory, menuItem);
+    private <T extends MenuItem> void addMenuItem(int index, T menuItem, MenuItemSupplierFactoryEntry<MenuItem, F> entry, List<? super T> menuItemList) {
         xMenuItems.add(index, entry);
         menuItemList.add(index, menuItem);
     }
@@ -141,7 +140,7 @@ public abstract class AbstractMenuItemContainer<MenuItem, Menu extends MenuItem,
 
     private void addSeparator(int index, MenuItem separatorMenuItem, F supplierFactory) {
         if (isSupportingItems()) {
-            addMenuItem(index, separatorMenuItem, supplierFactory, getItems());
+            addMenuItem(index, separatorMenuItem, new MenuItemSupplierFactoryEntry<>(supplierFactory, separatorMenuItem, true), getItems());
             fireMenuItemAddedEvent(supplierFactory.createMenuItemSupplier(separatorMenuItem));
         }
     }

@@ -9,11 +9,13 @@ public class MenuItemSupplierFactoryEntry<MenuItem, F extends MenuItemSupplierFa
 
     private final F supplierFactory;
     private final MenuItem menuItem;
+    private final boolean separator;
 
 
-    public MenuItemSupplierFactoryEntry(F supplierFactory, MenuItem menuItem) {
+    public MenuItemSupplierFactoryEntry(F supplierFactory, MenuItem menuItem, boolean separator) {
         this.supplierFactory = supplierFactory;
         this.menuItem = menuItem;
+        this.separator = separator;
     }
 
     /**
@@ -34,5 +36,11 @@ public class MenuItemSupplierFactoryEntry<MenuItem, F extends MenuItemSupplierFa
         return supplierFactory.createMenuItemSupplier(menuItem);
     }
 
+    /**
+     * @return the separator
+     */
+    public boolean isSeparator() {
+        return separator;
+    }
 
 }

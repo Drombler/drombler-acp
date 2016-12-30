@@ -22,15 +22,8 @@ import org.softsmithy.lib.util.PositionableAdapter;
  */
 public class PositionableMenuItemAdapter<MenuItem> extends PositionableAdapter<MenuItem> implements MenuItemSupplier<MenuItem> {
 
-    private final boolean separator;
-
-    public PositionableMenuItemAdapter(MenuItem menuItem, int position, boolean separator) {
+    public PositionableMenuItemAdapter(MenuItem menuItem, int position) {
         super(menuItem, position);
-        this.separator = separator;
-    }
-
-    public boolean isSeparator() {
-        return separator;
     }
 
     @Override

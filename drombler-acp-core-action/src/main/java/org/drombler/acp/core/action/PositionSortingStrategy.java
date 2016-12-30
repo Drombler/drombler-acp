@@ -45,7 +45,7 @@ public class PositionSortingStrategy<MenuItem> implements MenuItemSortingStrateg
 
         if (index < menuItemAdapters.size() - 1
                 && ((menuItemAdapters.get(index + 1).getPosition() / SEPARATOR_STEPS) - (menuItemAdapter.getPosition() / SEPARATOR_STEPS)) >= 1
-                && !menuItemAdapters.get(index + 1).isSeparator()) {
+                && !entryList.get(index + 1).isSeparator()) {
 //            addSeparator(index + 1, createSeparatorMenuItemSupplier(xMenuItems.get(index + 1).getPosition()));
             return Optional.of(index + 1);
 
@@ -53,7 +53,7 @@ public class PositionSortingStrategy<MenuItem> implements MenuItemSortingStrateg
 
         if (index > 0
                 && ((menuItemAdapter.getPosition() / SEPARATOR_STEPS) - (menuItemAdapters.get(index - 1).getPosition() / SEPARATOR_STEPS)) >= 1
-                && !menuItemAdapters.get(index - 1).isSeparator()) {
+                && !entryList.get(index - 1).isSeparator()) {
 //            addSeparator(index, createSeparatorMenuItemSupplier(menuItemAdapter.getPosition()));
             return Optional.of(index);
 

@@ -14,9 +14,9 @@
  */
 package org.drombler.acp.core.action.spi;
 
-import org.drombler.acp.core.action.PositionableMenuItemAdapterFactory;
-import org.drombler.acp.core.action.MenuItemSupplierFactory;
 import org.apache.commons.lang3.StringUtils;
+import org.drombler.acp.core.action.MenuItemSupplierFactory;
+import org.drombler.acp.core.action.PositionableMenuItemAdapterFactory;
 import org.drombler.acp.core.action.jaxb.MenuEntryType;
 
 /**
@@ -43,6 +43,6 @@ public class MenuEntryDescriptor<MenuItem, F extends MenuItemSupplierFactory<Men
 //StringUtils.stripToNull(menuEntryType.getId()),StringUtils.stripToEmpty(menuEntryType.getPath()), menuEntryType.getPosition()
     public static <MenuItem> MenuEntryDescriptor<MenuItem, PositionableMenuItemAdapterFactory<MenuItem>> createMenuEntryDescriptor(MenuEntryType menuEntryType) {
         return new MenuEntryDescriptor<>(StringUtils.stripToNull(menuEntryType.getActionId()),
-                StringUtils.stripToEmpty(menuEntryType.getPath()), new PositionableMenuItemAdapterFactory<>(menuEntryType.getPosition(), false));
+                StringUtils.stripToEmpty(menuEntryType.getPath()), new PositionableMenuItemAdapterFactory<>(menuEntryType.getPosition()));
     }
 }

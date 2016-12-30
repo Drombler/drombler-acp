@@ -14,12 +14,12 @@
  */
 package org.drombler.acp.core.action.spi;
 
-import org.drombler.acp.core.action.PositionableMenuItemAdapterFactory;
-import org.drombler.acp.core.action.PositionSortingStrategy;
-import org.drombler.acp.core.action.MenuItemSortingStrategy;
-import org.drombler.acp.core.action.MenuItemSupplierFactory;
 import java.util.MissingResourceException;
 import org.apache.commons.lang3.StringUtils;
+import org.drombler.acp.core.action.MenuItemSortingStrategy;
+import org.drombler.acp.core.action.MenuItemSupplierFactory;
+import org.drombler.acp.core.action.PositionSortingStrategy;
+import org.drombler.acp.core.action.PositionableMenuItemAdapterFactory;
 import org.drombler.acp.core.action.jaxb.MenuType;
 import org.drombler.acp.core.commons.util.OSGiResourceBundleUtils;
 import org.osgi.framework.Bundle;
@@ -107,7 +107,7 @@ public class MenuDescriptor<MenuItem, F extends MenuItemSupplierFactory<MenuItem
                     OSGiResourceBundleUtils.getPackageResourceStringPrefixed(menuType.getPackage(),
                             menuType.getDisplayName(), bundle),
                     StringUtils.stripToEmpty(menuType.getPath()),
-                    new PositionableMenuItemAdapterFactory<>(menuType.getPosition(), false),
+                    new PositionableMenuItemAdapterFactory<>(menuType.getPosition()),
                     new PositionSortingStrategy<>());
         } catch (MissingResourceException ex) {
             LOG.warn("ResourceBundle not found for menu {}: {}", menuType.getId(), ex.getMessage());
