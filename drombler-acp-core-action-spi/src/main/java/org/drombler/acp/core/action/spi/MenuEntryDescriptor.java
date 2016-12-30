@@ -14,6 +14,8 @@
  */
 package org.drombler.acp.core.action.spi;
 
+import org.drombler.acp.core.action.PositionableMenuItemAdapterFactory;
+import org.drombler.acp.core.action.MenuItemSupplierFactory;
 import org.apache.commons.lang3.StringUtils;
 import org.drombler.acp.core.action.jaxb.MenuEntryType;
 

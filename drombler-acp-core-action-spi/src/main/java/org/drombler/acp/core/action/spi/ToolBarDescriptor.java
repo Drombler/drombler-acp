@@ -14,6 +14,7 @@
  */
 package org.drombler.acp.core.action.spi;
 
+import org.drombler.acp.core.action.PositionableMenuItemAdapterFactory;
 import org.apache.commons.lang3.StringUtils;
 import org.drombler.acp.core.action.jaxb.ToolBarType;
 import org.drombler.acp.core.action.spi.impl.ShowToolBarAction;

@@ -14,6 +14,8 @@
  */
 package org.drombler.acp.core.action.spi;
 
+import org.drombler.acp.core.action.MenuItemSupplierFactory;
+
 /**
  * @param <MenuItem> the GUI toolkit specific type for menu items
  * @param <Menu> the GUI toolkit specific type for menus

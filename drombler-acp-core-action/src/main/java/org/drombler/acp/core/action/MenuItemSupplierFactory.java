@@ -1,4 +1,4 @@
-package org.drombler.acp.core.action.spi;
+package org.drombler.acp.core.action;
 
 /**
  * @param <MenuItem> the GUI toolkit specific type for menu items

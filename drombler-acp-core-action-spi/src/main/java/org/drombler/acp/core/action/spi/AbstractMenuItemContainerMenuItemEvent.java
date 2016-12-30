@@ -14,6 +14,7 @@
  */
 package org.drombler.acp.core.action.spi;
 
+import org.drombler.acp.core.action.MenuItemSupplier;
 import java.util.EventObject;
 import java.util.List;
 

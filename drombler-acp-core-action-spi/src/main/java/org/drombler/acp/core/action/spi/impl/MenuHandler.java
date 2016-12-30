@@ -24,7 +24,7 @@ import org.drombler.acp.core.action.jaxb.MenusType;
 import org.drombler.acp.core.action.spi.MenuDescriptor;
 import org.drombler.acp.core.action.spi.MenuFactory;
 import org.drombler.acp.core.action.spi.MenuItemContainer;
-import org.drombler.acp.core.action.spi.MenuItemSupplierFactory;
+import org.drombler.acp.core.action.MenuItemSupplierFactory;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.service.component.ComponentContext;

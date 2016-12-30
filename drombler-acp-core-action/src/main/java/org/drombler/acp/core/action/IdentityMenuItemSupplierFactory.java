@@ -1,4 +1,6 @@
-package org.drombler.acp.core.action.spi;
+package org.drombler.acp.core.action;
+
+import org.drombler.acp.core.action.MenuItemSupplierFactory;
 
 
 /**

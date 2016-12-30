@@ -1,9 +1,10 @@
-package org.drombler.acp.core.action.spi;
+package org.drombler.acp.core.action;
 
 import java.text.Collator;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import org.softsmithy.lib.util.Lists;
@@ -27,7 +28,7 @@ public class TextMenuItemSortingStrategy<MenuItem> implements MenuItemSortingStr
     }
 
     @Override
-    public int getInsertionPoint(List<? extends MenuItemSupplierFactoryEntry<MenuItem, IdentityMenuItemSupplierFactory<MenuItem>>> entryList,
+    public int getMenuItemInsertionPoint(List<? extends MenuItemSupplierFactoryEntry<MenuItem, IdentityMenuItemSupplierFactory<MenuItem>>> entryList,
             MenuItemSupplierFactoryEntry<MenuItem, IdentityMenuItemSupplierFactory<MenuItem>> entry) {
         List<IdentityMenuItemSupplier<MenuItem>> menuItemAdapters = mapToMenuItemAdapters(entryList);
         IdentityMenuItemSupplier<MenuItem> menuItemAdapter = createMenuItemSupplier(entry);
@@ -45,11 +46,10 @@ public class TextMenuItemSortingStrategy<MenuItem> implements MenuItemSortingStr
     }
 
     @Override
-    public MenuItemEntry<MenuItem> createSeparatorEntry(int index,
+    public Optional<Integer> getSeparatorInsertionPoint(int index,
             List<? extends MenuItemSupplierFactoryEntry<MenuItem, IdentityMenuItemSupplierFactory<MenuItem>>> entryList,
-            MenuItemSupplierFactoryEntry<MenuItem, IdentityMenuItemSupplierFactory<MenuItem>> entry,
-            SeparatorMenuItemFactory<? extends MenuItem> separatorMenuItemFactory) {
-            return null;
+            MenuItemSupplierFactoryEntry<MenuItem, IdentityMenuItemSupplierFactory<MenuItem>> entry) {
+        return Optional.empty();
     }
 
 }

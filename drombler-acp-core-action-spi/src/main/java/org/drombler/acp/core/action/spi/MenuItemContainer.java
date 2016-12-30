@@ -14,6 +14,8 @@
  */
 package org.drombler.acp.core.action.spi;
 
+import org.drombler.acp.core.action.MenuItemSortingStrategy;
+import org.drombler.acp.core.action.MenuItemSupplierFactory;
 import java.util.List;
 
 /**

@@ -14,6 +14,10 @@
  */
 package org.drombler.acp.core.action.spi;
 
+import org.drombler.acp.core.action.PositionableMenuItemAdapterFactory;
+import org.drombler.acp.core.action.PositionSortingStrategy;
+import org.drombler.acp.core.action.MenuItemSortingStrategy;
+import org.drombler.acp.core.action.MenuItemSupplierFactory;
 import java.util.MissingResourceException;
 import org.apache.commons.lang3.StringUtils;
 import org.drombler.acp.core.action.jaxb.MenuType;

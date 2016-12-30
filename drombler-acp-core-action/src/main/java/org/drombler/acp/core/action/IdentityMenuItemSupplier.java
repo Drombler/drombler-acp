@@ -12,7 +12,7 @@
  *
  * Contributor(s): .
  */
-package org.drombler.acp.core.action.spi;
+package org.drombler.acp.core.action;
 
 /**
  * TODO: good name?

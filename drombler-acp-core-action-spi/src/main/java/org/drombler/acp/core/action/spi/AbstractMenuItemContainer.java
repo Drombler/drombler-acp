@@ -14,10 +14,15 @@
  */
 package org.drombler.acp.core.action.spi;
 
+import org.drombler.acp.core.action.MenuItemSortingStrategy;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import org.drombler.acp.core.action.MenuItemSupplier;
+import org.drombler.acp.core.action.MenuItemSupplierFactory;
+import org.drombler.acp.core.action.MenuItemSupplierFactoryEntry;
 
 /**
  * An abstract base class for {@link MenuItemContainer}s.
@@ -112,13 +117,13 @@ public abstract class AbstractMenuItemContainer<MenuItem, Menu extends MenuItem,
 
     private <T extends MenuItem> void addMenuItem(T menuItem, F supplierFactory, List<? super T> menuItemList, boolean menu) {
         MenuItemSupplierFactoryEntry<MenuItem, F> entry = new MenuItemSupplierFactoryEntry<>(supplierFactory, menuItem);
-        int index = menuItemSortingStrategy.getInsertionPoint(xMenuItems, entry);
+        int index = menuItemSortingStrategy.getMenuItemInsertionPoint(xMenuItems, entry);
 
         addMenuItem(index, menuItem, supplierFactory, menuItemList, menu);
 
-        MenuItemEntry<MenuItem> separatorEntry = menuItemSortingStrategy.createSeparatorEntry(index, xMenuItems, entry, separatorMenuItemFactory);
-        if (separatorEntry != null) {
-            addSeparator(separatorEntry.getIndex(), separatorEntry.getMenuItem(), supplierFactory);
+        Optional<Integer> separatorInsertionPoint = menuItemSortingStrategy.getSeparatorInsertionPoint(index, xMenuItems, entry);
+        if (separatorInsertionPoint != null && separatorInsertionPoint.isPresent()) {
+            addSeparator(separatorInsertionPoint.get(), separatorMenuItemFactory.createSeparatorMenuItem(), supplierFactory);
         }
 
     }
