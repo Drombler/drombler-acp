@@ -1,7 +1,5 @@
 package org.drombler.acp.core.action;
 
-import org.drombler.acp.core.action.MenuItemSupplierFactory;
-
 
 /**
  * TODO: good name?
