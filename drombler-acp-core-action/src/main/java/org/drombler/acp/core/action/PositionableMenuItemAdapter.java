@@ -22,13 +22,6 @@ import org.softsmithy.lib.util.PositionableAdapter;
  */
 public class PositionableMenuItemAdapter<MenuItem> extends PositionableAdapter<MenuItem> implements MenuItemSupplier<MenuItem> {
 
-    public static <S> PositionableMenuItemAdapter<S> wrapSeparator(S separatorMenuItem, int position) {
-        return new PositionableMenuItemAdapter<>(separatorMenuItem, position, true);
-    }
-
-    public static <T> PositionableMenuItemAdapter<T> wrapMenuItem(T menuItem, int position) {
-        return new PositionableMenuItemAdapter<>(menuItem, position, false);
-    }
     private final boolean separator;
 
     public PositionableMenuItemAdapter(MenuItem menuItem, int position, boolean separator) {
