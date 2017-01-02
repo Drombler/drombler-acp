@@ -5,6 +5,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import org.softsmithy.lib.util.Positionables;
 /**
+ * The default position-based sorting strategy for declaratively registered menus and menu items. This sorting strategy will add separators between menu items in different thousand steps.
  *
  * @param <MenuItem> the GUI toolkit specific type for menu items
  * @author puce
@@ -13,6 +14,9 @@ public class PositionSortingStrategy<MenuItem> implements MenuItemSortingStrateg
 
     private static final int SEPARATOR_STEPS = 1000;
 
+    /**
+     * {@inheritDoc }
+     */
     @Override
     public int getMenuItemInsertionPoint(List<? extends MenuItemSupplierFactoryEntry<MenuItem, PositionableMenuItemAdapterFactory<MenuItem>>> entryList,
             MenuItemSupplierFactoryEntry<MenuItem, PositionableMenuItemAdapterFactory<MenuItem>> entry) {
@@ -30,23 +34,19 @@ public class PositionSortingStrategy<MenuItem> implements MenuItemSortingStrateg
         return entry.getSupplierFactory().createMenuItemSupplier(entry.getMenuItem());
     }
 
-
+    /**
+     * {@inheritDoc }
+     */
     @Override
     public Optional<Integer> getSeparatorInsertionPoint(int index,
             List<? extends MenuItemSupplierFactoryEntry<MenuItem, PositionableMenuItemAdapterFactory<MenuItem>>> entryList,
             MenuItemSupplierFactoryEntry<MenuItem, PositionableMenuItemAdapterFactory<MenuItem>> entry) {
-
-//    @Override
-//    public MenuItemEntry<PositionableMenuItemAdapter<? extends MenuItem>> getSeparatorInsertionPoint(int index,
-//            List<? extends PositionableMenuItemAdapter<? extends MenuItem>> menuItemList,
-//            PositionableMenuItemAdapter<? extends MenuItem> menuItem) {
         List<PositionableMenuItemAdapter<MenuItem>> menuItemAdapters = mapToMenuItemAdapters(entryList);
         PositionableMenuItemAdapter<MenuItem> menuItemAdapter = createMenuItemSupplier(entry);
 
         if (index < menuItemAdapters.size() - 1
                 && ((menuItemAdapters.get(index + 1).getPosition() / SEPARATOR_STEPS) - (menuItemAdapter.getPosition() / SEPARATOR_STEPS)) >= 1
                 && !entryList.get(index + 1).isSeparator()) {
-//            addSeparator(index + 1, createSeparatorMenuItemSupplier(xMenuItems.get(index + 1).getPosition()));
             return Optional.of(index + 1);
 
         }
@@ -54,7 +54,6 @@ public class PositionSortingStrategy<MenuItem> implements MenuItemSortingStrateg
         if (index > 0
                 && ((menuItemAdapter.getPosition() / SEPARATOR_STEPS) - (menuItemAdapters.get(index - 1).getPosition() / SEPARATOR_STEPS)) >= 1
                 && !entryList.get(index - 1).isSeparator()) {
-//            addSeparator(index, createSeparatorMenuItemSupplier(menuItemAdapter.getPosition()));
             return Optional.of(index);
 
         }

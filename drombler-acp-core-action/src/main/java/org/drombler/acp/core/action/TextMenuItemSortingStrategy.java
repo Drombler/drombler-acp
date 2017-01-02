@@ -10,23 +10,39 @@ import java.util.stream.Collectors;
 import org.softsmithy.lib.util.Lists;
 
 /**
+ * A {@link MenuItemSortingStrategy} which sorts the menu items depending on their text using a locale-sensitive comparison. This sorting strategy does not add any separators.
  *
  * @param <MenuItem> the GUI toolkit specific type for menu items
  * @author puce
  */
 public class TextMenuItemSortingStrategy<MenuItem> implements MenuItemSortingStrategy<MenuItem, IdentityMenuItemSupplierFactory<MenuItem>> {
+
     private final Collator collator;
     private final Function<MenuItem, String> menuTextExtractor;
 
+    /**
+     * Creates a new instance of the class.
+     *
+     * @param menuTextExtractor the GUI-toolkit specific function which provides the text of a menu item
+     */
     public TextMenuItemSortingStrategy(Function<MenuItem, String> menuTextExtractor) {
         this(menuTextExtractor, Collator.getInstance(Locale.getDefault(Locale.Category.DISPLAY)));
     }
 
+    /**
+     * Creates a new instance of the class.
+     *
+     * @param menuTextExtractor the GUI-toolkit specific function which provides the text of a menu item
+     * @param collator the {@link Collator} to use for the locale-sensitive text comparison
+     */
     public TextMenuItemSortingStrategy(Function<MenuItem, String> menuTextExtractor, Collator collator) {
         this.menuTextExtractor = menuTextExtractor;
         this.collator = collator;
     }
 
+    /**
+     * {@inheritDoc }
+     */
     @Override
     public int getMenuItemInsertionPoint(List<? extends MenuItemSupplierFactoryEntry<MenuItem, IdentityMenuItemSupplierFactory<MenuItem>>> entryList,
             MenuItemSupplierFactoryEntry<MenuItem, IdentityMenuItemSupplierFactory<MenuItem>> entry) {
@@ -45,6 +61,11 @@ public class TextMenuItemSortingStrategy<MenuItem> implements MenuItemSortingStr
         return entry.getSupplierFactory().createMenuItemSupplier(entry.getMenuItem());
     }
 
+    /**
+     * This method will always return an empty {@link Optional}.
+     *
+     * {@inheritDoc }
+     */
     @Override
     public Optional<Integer> getSeparatorInsertionPoint(int index,
             List<? extends MenuItemSupplierFactoryEntry<MenuItem, IdentityMenuItemSupplierFactory<MenuItem>>> entryList,

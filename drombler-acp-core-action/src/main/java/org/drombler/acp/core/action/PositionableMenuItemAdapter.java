@@ -17,15 +17,27 @@ package org.drombler.acp.core.action;
 import org.softsmithy.lib.util.PositionableAdapter;
 
 /**
+ * This {@link MenuItemSupplier} associates a menu item with a position. The position is needed by the {@link PositionSortingStrategy}.
+ *
  * @param <MenuItem> the GUI toolkit specific type for menu items
+ * @see PositionSortingStrategy
  * @author puce
  */
 public class PositionableMenuItemAdapter<MenuItem> extends PositionableAdapter<MenuItem> implements MenuItemSupplier<MenuItem> {
 
+    /**
+     * Creates a new instance of this class.
+     *
+     * @param menuItem the menu item
+     * @param position the position
+     */
     public PositionableMenuItemAdapter(MenuItem menuItem, int position) {
         super(menuItem, position);
     }
 
+    /**
+     * {@inheritDoc }
+     */
     @Override
     public MenuItem getMenuItem() {
         return getAdapted();
