@@ -14,18 +14,21 @@
  */
 package org.drombler.acp.core.action.spi;
 
-import java.util.EventObject;
+import org.drombler.acp.core.action.MenuItemSupplier;
 import java.util.List;
 
 /**
- *
+ * @param <MenuItem> the GUI toolkit specific type for menu items
+ * @param <Menu> the GUI toolkit specific type for menus
  * @author puce
  */
 public class MenuItemContainerMenuEvent<MenuItem, Menu extends MenuItem> extends AbstractMenuItemContainerMenuItemEvent<MenuItem, Menu, Menu> {
 
+    private static final long serialVersionUID = 6108086512276402172L;
+
     private final String menuId;
 
-    public MenuItemContainerMenuEvent(MenuItemContainer<MenuItem, Menu> source, PositionableMenuItemAdapter<? extends Menu> menu, String menuId, List<String> path) {
+    public MenuItemContainerMenuEvent(MenuItemContainer<MenuItem, Menu, ?> source, MenuItemSupplier<? extends Menu> menu, String menuId, List<String> path) {
         super(source, menu, path);
         this.menuId = menuId;
     }

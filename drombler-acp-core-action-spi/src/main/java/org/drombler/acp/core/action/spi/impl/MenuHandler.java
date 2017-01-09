@@ -20,14 +20,14 @@ import org.apache.felix.scr.annotations.Deactivate;
 import org.apache.felix.scr.annotations.Reference;
 import org.apache.felix.scr.annotations.ReferenceCardinality;
 import org.apache.felix.scr.annotations.ReferencePolicy;
-import org.osgi.framework.Bundle;
-import org.osgi.framework.BundleContext;
-import org.osgi.service.component.ComponentContext;
 import org.drombler.acp.core.action.jaxb.MenusType;
 import org.drombler.acp.core.action.spi.MenuDescriptor;
 import org.drombler.acp.core.action.spi.MenuFactory;
 import org.drombler.acp.core.action.spi.MenuItemContainer;
-import org.drombler.acp.core.action.spi.PositionableMenuItemAdapter;
+import org.drombler.acp.core.action.MenuItemSupplierFactory;
+import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
+import org.osgi.service.component.ComponentContext;
 
 /**
  *
@@ -36,7 +36,7 @@ import org.drombler.acp.core.action.spi.PositionableMenuItemAdapter;
 @Component(immediate = true)
 @Reference(name = "menuDescriptor", referenceInterface = MenuDescriptor.class,
 cardinality = ReferenceCardinality.OPTIONAL_MULTIPLE, policy = ReferencePolicy.DYNAMIC)
-public class MenuHandler<MenuItem, Menu extends MenuItem> extends AbstractMenuItemHandler<MenuItem, Menu, Menu, MenuDescriptor, MenuConfig> {
+public class MenuHandler<MenuItem, Menu extends MenuItem> extends AbstractMenuItemHandler<MenuItem, Menu, Menu, MenuDescriptor<MenuItem, ?>, MenuConfig> {
 
     @Reference
     private MenuFactory<Menu> menuFactory;
@@ -90,9 +90,8 @@ public class MenuHandler<MenuItem, Menu extends MenuItem> extends AbstractMenuIt
 //        }
 //    }
     @Override
-    protected void addToContainer(MenuItemContainer<MenuItem, Menu> parentContainer, Menu menuItem, MenuDescriptor menuDescriptor) {
-        parentContainer.addMenu(menuDescriptor.getId(),
-                PositionableMenuItemAdapter.wrapMenuItem(menuItem, menuDescriptor.getPosition()));
+    protected <T extends MenuItemSupplierFactory<MenuItem>> void addToContainer(MenuItemContainer<MenuItem, Menu, T> parentContainer, Menu menu, MenuDescriptor<MenuItem, ?> menuDescriptor) {
+        parentContainer.addMenu(menuDescriptor.getId(), menu, (T) menuDescriptor.getMenuItemSupplierFactory(), menuDescriptor.getSortingStrategy());
     }
 
     @Override

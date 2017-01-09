@@ -12,22 +12,37 @@
  *
  * Contributor(s): .
  */
-package org.drombler.acp.core.action.spi;
+package org.drombler.acp.core.action;
 
 /**
+ * This simple {@link MenuItemSupplier} just provides the menu item given at construction time.
+ *
+ * TODO: good name?
+ *
  * @param <MenuItem> the GUI toolkit specific type for menu items
- * @param <Menu> the GUI toolkit specific type for menus
+ * @see MenuItemSortingStrategy
+ * @see TextMenuItemSortingStrategy
  * @author puce
  */
-public class MenuItemContainerListenerAdapter<MenuItem, Menu extends MenuItem> implements MenuItemContainerListener<MenuItem, Menu> {
+public class IdentityMenuItemSupplier<MenuItem> implements MenuItemSupplier<MenuItem> {
 
-    @Override
-    public void menuAdded(MenuItemContainerMenuEvent<MenuItem, Menu> event) {
-        // do nothing
+    private final MenuItem menuItem;
+
+    /**
+     * Creates a new instance of this class.
+     *
+     * @param menuItem the menu item to provide with {@link #getMenuItem() }
+     */
+    public IdentityMenuItemSupplier(MenuItem menuItem) {
+        this.menuItem = menuItem;
     }
 
+    /**
+     * {@inheritDoc }
+     */
     @Override
-    public void menuItemAdded(MenuItemContainerMenuItemEvent<MenuItem, Menu> event) {
-        // do nothing
+    public MenuItem getMenuItem() {
+        return menuItem;
     }
+
 }

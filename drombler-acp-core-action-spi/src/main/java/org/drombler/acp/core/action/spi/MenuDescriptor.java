@@ -16,6 +16,10 @@ package org.drombler.acp.core.action.spi;
 
 import java.util.MissingResourceException;
 import org.apache.commons.lang3.StringUtils;
+import org.drombler.acp.core.action.MenuItemSortingStrategy;
+import org.drombler.acp.core.action.MenuItemSupplierFactory;
+import org.drombler.acp.core.action.PositionSortingStrategy;
+import org.drombler.acp.core.action.PositionableMenuItemAdapterFactory;
 import org.drombler.acp.core.action.jaxb.MenuType;
 import org.drombler.acp.core.commons.util.OSGiResourceBundleUtils;
 import org.osgi.framework.Bundle;
@@ -23,19 +27,22 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- *
+ * @param <MenuItem> the GUI toolkit specific type for menu items
+ * @param <F> the sorting strategy specific menu item supplier factory type
  * @author puce
  */
-public class MenuDescriptor extends AbstractMenuEntryDescriptor {
+public class MenuDescriptor<MenuItem, F extends MenuItemSupplierFactory<MenuItem>> extends AbstractMenuEntryDescriptor<MenuItem, F> {
     private static final Logger LOG = LoggerFactory.getLogger(MenuDescriptor.class);
 
     private final String id;
     private final String displayName;
+    private final MenuItemSortingStrategy<MenuItem, ?> sortingStrategy;
 
-    public MenuDescriptor(String id, String displayName, String path, int position) {
-        super(path, position);
+    public MenuDescriptor(String id, String displayName, String path, F menuItemSupplierFactory, MenuItemSortingStrategy<MenuItem, ?> sortingStrategy) {
+        super(path, menuItemSupplierFactory);
         this.id = id;
         this.displayName = displayName;
+        this.sortingStrategy = sortingStrategy;
     }
 
 //    private MenuRootDescriptor getRoot() {
@@ -87,11 +94,21 @@ public class MenuDescriptor extends AbstractMenuEntryDescriptor {
         return id;
     }
 
+    /**
+     * @return the sortingStrategy
+     */
+    public MenuItemSortingStrategy<MenuItem, ?> getSortingStrategy() {
+        return sortingStrategy;
+    }
+
     public static MenuDescriptor createMenuDescriptor(MenuType menuType, Bundle bundle) {
         try {
-        return new MenuDescriptor(StringUtils.stripToNull(menuType.getId()),
-                OSGiResourceBundleUtils.getPackageResourceStringPrefixed(menuType.getPackage(),
-                            menuType.getDisplayName(), bundle), StringUtils.stripToEmpty(menuType.getPath()), menuType.getPosition());
+            return new MenuDescriptor(StringUtils.stripToNull(menuType.getId()),
+                    OSGiResourceBundleUtils.getPackageResourceStringPrefixed(menuType.getPackage(),
+                            menuType.getDisplayName(), bundle),
+                    StringUtils.stripToEmpty(menuType.getPath()),
+                    new PositionableMenuItemAdapterFactory<>(menuType.getPosition()),
+                    new PositionSortingStrategy<>());
         } catch (MissingResourceException ex) {
             LOG.warn("ResourceBundle not found for menu {}: {}", menuType.getId(), ex.getMessage());
             throw ex;
@@ -188,4 +205,5 @@ public class MenuDescriptor extends AbstractMenuEntryDescriptor {
 //            unresolvedMenus.get(unresolvedPathId).add(menu);
 //        }
 //    }
+
 }

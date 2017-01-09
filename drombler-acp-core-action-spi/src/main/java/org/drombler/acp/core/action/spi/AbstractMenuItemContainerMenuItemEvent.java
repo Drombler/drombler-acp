@@ -14,19 +14,22 @@
  */
 package org.drombler.acp.core.action.spi;
 
+import org.drombler.acp.core.action.MenuItemSupplier;
 import java.util.EventObject;
 import java.util.List;
 
 /**
- *
+ * @param <MenuItem> the GUI toolkit specific type for menu items
+ * @param <Menu> the GUI toolkit specific type for menus
+ * @param <M> the type of the menu item
  * @author puce
  */
 public abstract class AbstractMenuItemContainerMenuItemEvent<MenuItem, Menu extends MenuItem, M extends MenuItem> extends EventObject {
 
-    private final PositionableMenuItemAdapter<? extends M> menuItem;
+    private final MenuItemSupplier<? extends M> menuItem;
     private final List<String> path;
 
-    public AbstractMenuItemContainerMenuItemEvent(MenuItemContainer<MenuItem, Menu> source, PositionableMenuItemAdapter<? extends M> menuItem, List<String> path) {
+    public AbstractMenuItemContainerMenuItemEvent(MenuItemContainer<MenuItem, Menu, ?> source, MenuItemSupplier<? extends M> menuItem, List<String> path) {
         super(source);
         this.menuItem = menuItem;
         this.path = path;
@@ -42,7 +45,7 @@ public abstract class AbstractMenuItemContainerMenuItemEvent<MenuItem, Menu exte
     /**
      * @return the menuItem
      */
-    public PositionableMenuItemAdapter<? extends M> getMenuItem() {
+    public MenuItemSupplier<? extends M> getMenuItem() {
         return menuItem;
     }
 }

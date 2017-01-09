@@ -14,11 +14,15 @@
  */
 package org.drombler.acp.core.action.spi;
 
+import org.drombler.acp.core.action.MenuItemSupplierFactory;
+
 /**
- *
+ * @param <MenuItem> the GUI toolkit specific type for menu items
+ * @param <Menu> the GUI toolkit specific type for menus
+ * @param <F> the sorting strategy specific menu item supplier factory type
  * @author puce
  */
-public interface MenuItemRootContainer<MenuItem, Menu extends MenuItem> extends MenuItemContainer<MenuItem, Menu> {
+public interface MenuItemRootContainer<MenuItem, Menu extends MenuItem, F extends MenuItemSupplierFactory<MenuItem>> extends MenuItemContainer<MenuItem, Menu, F> {
 
     void addMenuContainerListener(MenuItemContainerListener<MenuItem, Menu> containerListener);
 

@@ -15,6 +15,7 @@
 package org.drombler.acp.core.docking.spi;
 
 import org.apache.commons.lang3.StringUtils;
+import org.drombler.acp.core.action.PositionableMenuItemAdapterFactory;
 import org.drombler.acp.core.action.spi.MenuEntryDescriptor;
 import static org.drombler.acp.core.commons.util.BundleUtils.loadClass;
 import org.drombler.acp.core.docking.jaxb.EditorDockingType;
@@ -46,7 +47,7 @@ public class DockingDescriptorUtils {
         dockingDescriptor.setAreaId(areaId);
         dockingDescriptor.setPosition(docking.getPosition());
         dockingDescriptor.setActivateDockableMenuEntryDescriptor(new MenuEntryDescriptor(dockingDescriptor.getId(),
-                getWindowPath(docking), docking.getMenuEntry().getPosition()));
+                getWindowPath(docking), new PositionableMenuItemAdapterFactory<>(docking.getMenuEntry().getPosition())));
         return dockingDescriptor;
     }
 

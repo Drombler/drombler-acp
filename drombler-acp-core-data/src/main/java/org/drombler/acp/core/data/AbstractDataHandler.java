@@ -60,6 +60,7 @@ public abstract class AbstractDataHandler<T> implements DataHandler<T>, AutoClos
     }
 
     private void removeDataCapabilityProvider(DataCapabilityProvider<?> dataCapabilityProvider) {
+        // TODO: does this work? memory leak?
         contextContent.remove(dataCapabilityProvider.getDataCapability(this));
     }
 
