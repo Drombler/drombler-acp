@@ -12,35 +12,13 @@
  *
  * Contributor(s): .
  */
-package org.drombler.acp.core.action.spi.impl;
-
-import org.osgi.framework.BundleContext;
+package org.drombler.acp.core.action.spi;
 
 /**
  *
  * @author puce
  */
-public class UnresolvedEntry<T> {
-    private final T entry;
-    private final BundleContext context;
+public interface SeparatorMenuItemFactory<S> {
 
-    public UnresolvedEntry(T entry, BundleContext context) {
-        this.entry = entry;
-        this.context = context;
-    }
-
-    /**
-     * @return the entry
-     */
-    public T getEntry() {
-        return entry;
-    }
-
-    /**
-     * @return the context
-     */
-    public BundleContext getContext() {
-        return context;
-    }
-    
+    S createSeparatorMenuItem();
 }

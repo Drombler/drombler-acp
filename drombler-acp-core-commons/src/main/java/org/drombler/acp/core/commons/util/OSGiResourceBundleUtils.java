@@ -41,6 +41,6 @@ public class OSGiResourceBundleUtils {
      * @return
      */
     public static String getPackageResourceStringPrefixed(String aPackage, String resourceKey, Bundle bundle) {
-        return ResourceBundleUtils.getPackageResourceStringPrefixed(aPackage, resourceKey, new BundleProxyClassLoader(bundle));
+        return ResourceBundleUtils.getPackageResourceStringPrefixed(aPackage, resourceKey, BundleUtils.getClassLoader(bundle));
     }
 }

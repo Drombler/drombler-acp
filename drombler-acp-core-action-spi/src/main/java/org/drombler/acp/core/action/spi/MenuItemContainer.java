@@ -14,21 +14,33 @@
  */
 package org.drombler.acp.core.action.spi;
 
+import org.drombler.acp.core.action.MenuItemSortingStrategy;
+import org.drombler.acp.core.action.MenuItemSupplierFactory;
+import java.util.List;
+
 /**
- *
+ * @param <MenuItem> the GUI toolkit specific type for menu items
+ * @param <Menu> the GUI toolkit specific type for menus
+ * @param <F> the sorting strategy specific menu item supplier factory type
  * @author puce
  */
-public interface MenuItemContainer<MenuItem, Menu extends MenuItem> {
+public interface MenuItemContainer<MenuItem, Menu extends MenuItem, F extends MenuItemSupplierFactory<MenuItem>> {
 
-//    void addMenu(String id, PositionableMenuItemAdapter<? extends M> menu);
-    void addMenu(String id, PositionableMenuItemAdapter<? extends Menu> menu);
+    void addMenu(String id, Menu menu, F supplierFactory, MenuItemSortingStrategy<MenuItem, ?> sortingStrategy);
 
-    void addMenuItem(PositionableMenuItemAdapter<? extends MenuItem> menuItem);
+    void addMenuItem(MenuItem menuItem, F supplierFactory);
 
+    MenuItemSortingStrategy<MenuItem, F> getMenuItemSortingStrategy(); // TODO: correct? or MenuItemSortingStrategy<MenuItem, ?> ?
     /**
      * @return the menuContainers
      */
-    MenuItemContainer<MenuItem, Menu> getMenuContainer(String id);
+    MenuItemContainer<MenuItem, Menu, ?> getMenuContainer(String id);
+
+    MenuItemContainer<MenuItem, Menu, ?> getParentMenuContainer();
 
     boolean isSupportingItems();
+
+    List<String> getPath();
+
+    String getId();
 }

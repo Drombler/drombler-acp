@@ -19,6 +19,12 @@ import java.net.URL;
 import java.util.Enumeration;
 import org.osgi.framework.Bundle;
 
+/**
+ *
+ * @author puce
+ * @deprecated bundle.adapt(BundleWiring.class).getClassLoader()
+ */
+@Deprecated
 class BundleProxyClassLoader extends ClassLoader {
 
     private final Bundle bundle;

@@ -15,18 +15,21 @@
 package org.drombler.acp.core.action.spi;
 
 import org.apache.commons.lang3.StringUtils;
+import org.drombler.acp.core.action.MenuItemSupplierFactory;
+import org.drombler.acp.core.action.PositionableMenuItemAdapterFactory;
 import org.drombler.acp.core.action.jaxb.MenuEntryType;
 
 /**
- *
+ * @param <MenuItem> the GUI toolkit specific type for menu items
+ * @param <F> the sorting strategy specific menu item supplier factory type
  * @author puce
  */
-public class MenuEntryDescriptor extends AbstractMenuEntryDescriptor {
+public class MenuEntryDescriptor<MenuItem, F extends MenuItemSupplierFactory<MenuItem>> extends AbstractMenuEntryDescriptor<MenuItem, F> {
 
     private final String actionId;
 
-    public MenuEntryDescriptor(String actionId, String path, int position) {
-        super(path, position);
+    public MenuEntryDescriptor(String actionId, String path, F menuItemSupplierFactory) {
+        super(path, menuItemSupplierFactory);
         this.actionId = actionId;
     }
 
@@ -38,8 +41,8 @@ public class MenuEntryDescriptor extends AbstractMenuEntryDescriptor {
     }
 
 //StringUtils.stripToNull(menuEntryType.getId()),StringUtils.stripToEmpty(menuEntryType.getPath()), menuEntryType.getPosition()
-    public static MenuEntryDescriptor createMenuEntryDescriptor(MenuEntryType menuEntryType) {
-        return new MenuEntryDescriptor(StringUtils.stripToNull(menuEntryType.getActionId()),
-                StringUtils.stripToEmpty(menuEntryType.getPath()), menuEntryType.getPosition());
+    public static <MenuItem> MenuEntryDescriptor<MenuItem, PositionableMenuItemAdapterFactory<MenuItem>> createMenuEntryDescriptor(MenuEntryType menuEntryType) {
+        return new MenuEntryDescriptor<>(StringUtils.stripToNull(menuEntryType.getActionId()),
+                StringUtils.stripToEmpty(menuEntryType.getPath()), new PositionableMenuItemAdapterFactory<>(menuEntryType.getPosition()));
     }
 }

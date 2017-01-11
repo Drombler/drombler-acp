@@ -19,19 +19,20 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.drombler.acp.core.action.spi.AbstractMenuEntryDescriptor;
+import org.drombler.acp.core.commons.util.UnresolvedEntry;
 
 
 /**
  *
  * @author puce
  */
-public class MenuItemResolutionManager<D extends AbstractMenuEntryDescriptor> {
+public class MenuItemResolutionManager<MenuItem, D extends AbstractMenuEntryDescriptor<MenuItem, ?>> {
 
-    private final Map<String, MenuItemResolutionManager<D>> unresolvedMenuItemContainers = new HashMap<>();
+    private final Map<String, MenuItemResolutionManager<MenuItem, D>> unresolvedMenuItemContainers = new HashMap<>();
     private final Map<String, List<UnresolvedEntry<D>>> unresolvedMenuEntryDescriptors = new HashMap<>();
 
 
-    public MenuItemResolutionManager<D> getMenuResolutionManager(String pathId) {
+    public MenuItemResolutionManager<MenuItem, D> getMenuResolutionManager(String pathId) {
         if (!unresolvedMenuItemContainers.containsKey(pathId)) {
             unresolvedMenuItemContainers.put(pathId, new MenuItemResolutionManager<>());
         }

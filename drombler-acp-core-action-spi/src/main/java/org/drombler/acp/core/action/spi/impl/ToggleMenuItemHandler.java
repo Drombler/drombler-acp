@@ -20,17 +20,18 @@ import org.apache.felix.scr.annotations.Deactivate;
 import org.apache.felix.scr.annotations.Reference;
 import org.apache.felix.scr.annotations.ReferenceCardinality;
 import org.apache.felix.scr.annotations.ReferencePolicy;
+import org.drombler.acp.core.action.jaxb.MenusType;
+import org.drombler.acp.core.action.spi.ActionRegistry;
+import org.drombler.acp.core.action.spi.ToggleActionFactory;
+import org.drombler.acp.core.action.spi.ToggleMenuEntryDescriptor;
+import org.drombler.acp.core.action.spi.ToggleMenuItemFactory;
+import org.drombler.acp.core.commons.util.UnresolvedEntry;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.component.ComponentContext;
 import org.osgi.util.tracker.ServiceTracker;
 import org.osgi.util.tracker.ServiceTrackerCustomizer;
-import org.drombler.acp.core.action.jaxb.MenusType;
-import org.drombler.acp.core.action.spi.ActionRegistry;
-import org.drombler.acp.core.action.spi.ToggleActionFactory;
-import org.drombler.acp.core.action.spi.ToggleMenuEntryDescriptor;
-import org.drombler.acp.core.action.spi.ToggleMenuItemFactory;
 
 /**
  *
@@ -40,7 +41,7 @@ import org.drombler.acp.core.action.spi.ToggleMenuItemFactory;
 @Reference(name = "toggleMenuEntryDescriptor", referenceInterface = ToggleMenuEntryDescriptor.class,
 cardinality = ReferenceCardinality.OPTIONAL_MULTIPLE, policy = ReferencePolicy.DYNAMIC)
 public class ToggleMenuItemHandler<MenuItem, Menu extends MenuItem, ToggleMenuItem extends MenuItem, ToggleAction>
-        extends AbstractMenuItemHandler<MenuItem, Menu, ToggleMenuItem, ToggleMenuEntryDescriptor, MenuItemConfig<ToggleAction>> {
+        extends AbstractMenuItemHandler<MenuItem, Menu, ToggleMenuItem, ToggleMenuEntryDescriptor<MenuItem, ?>, MenuItemConfig<ToggleAction>> {
 
     @Reference
     private ToggleMenuItemFactory<ToggleMenuItem, ToggleAction> toggleMenuItemFactory;
@@ -122,9 +123,9 @@ public class ToggleMenuItemHandler<MenuItem, Menu extends MenuItem, ToggleMenuIt
 
     @Override
     protected void resolveMenuItem(MenusType menusType, Bundle bundle, BundleContext context) {
-        menusType.getToggleMenuEntry().stream().
-                map(menuEntry -> ToggleMenuEntryDescriptor.createRadioMenuEntryDescriptor(menuEntry)).
-                forEach(menuEntryDescriptor -> resolveMenuItem(menuEntryDescriptor, context));
+        menusType.getToggleMenuEntry().stream()
+                .map(ToggleMenuEntryDescriptor::createToggleMenuEntryDescriptor)
+                .forEach(menuEntryDescriptor -> resolveMenuItem((ToggleMenuEntryDescriptor<MenuItem, ?>) menuEntryDescriptor, context)); // TODO: possible to avoid cast?
     }
 
     @Override
@@ -140,7 +141,7 @@ public class ToggleMenuItemHandler<MenuItem, Menu extends MenuItem, ToggleMenuIt
     }
 
     @Override
-    protected ToggleMenuItem createMenuItem(ToggleMenuEntryDescriptor menuEntryDescriptor,
+    protected ToggleMenuItem createMenuItem(ToggleMenuEntryDescriptor<MenuItem, ?> menuEntryDescriptor,
             MenuItemConfig<ToggleAction> config) {
 //        System.out.println(actionFactory.getToggleActionClass().getName() + ": " + menuEntryDescriptor.getActionId());
         return toggleMenuItemFactory.createToggleMenuItem(menuEntryDescriptor, config.getAction(), config.getIconSize());

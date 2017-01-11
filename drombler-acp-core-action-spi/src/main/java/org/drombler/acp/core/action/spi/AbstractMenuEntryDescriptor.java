@@ -14,23 +14,30 @@
  */
 package org.drombler.acp.core.action.spi;
 
+import org.drombler.acp.core.action.MenuItemSupplierFactory;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
 /**
- *
+ * @param <MenuItem> the GUI toolkit specific type for menu items
+ * @param <F> the sorting strategy specific menu item supplier factory type
  * @author puce
  */
-public abstract class AbstractMenuEntryDescriptor {
+public abstract class AbstractMenuEntryDescriptor<MenuItem, F extends MenuItemSupplierFactory<MenuItem>> {
 
     private static final String PATH_DELIMITER = "/";
     private final List<String> path;
-    private final int position;
+    private final F menuItemSupplierFactory;
 
-    protected AbstractMenuEntryDescriptor(String path, int position) {
+    /**
+     *
+     * @param path
+     * @param menuItemSupplierFactory
+     */
+    protected AbstractMenuEntryDescriptor(String path, F menuItemSupplierFactory) {
         this.path = splitPath(path);
-        this.position = position;
+        this.menuItemSupplierFactory = menuItemSupplierFactory;
     }
 
     private List<String> splitPath(String path) {
@@ -42,12 +49,6 @@ public abstract class AbstractMenuEntryDescriptor {
         }
     }
 
-    /**
-     * @return the position
-     */
-    public int getPosition() {
-        return position;
-    }
 //    public List<String> getPath() {
 //        List<String> path = new ArrayList<>();
 //        MenuDescriptor parentMenuDescriptor = getParent();
@@ -64,5 +65,12 @@ public abstract class AbstractMenuEntryDescriptor {
      */
     public List<String> getPath() {
         return path;
+    }
+
+    /**
+     * @return the menuItemSupplierFactory
+     */
+    public F getMenuItemSupplierFactory() {
+        return menuItemSupplierFactory;
     }
 }
