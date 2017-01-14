@@ -21,7 +21,6 @@ import java.util.Map;
 import java.util.Properties;
 import org.drombler.acp.startup.main.impl.PropertiesUtils;
 
-
 /**
  * The Application Configuration gets generated at build time of the application and packaged into the final JAR.
  *
@@ -29,7 +28,9 @@ import org.drombler.acp.startup.main.impl.PropertiesUtils;
  */
 public class ApplicationConfiguration {
 
-    public static final String APPLICATION_PROPERTIES_FILE_PATH = "/applicationConfig.properties";
+    public static final String APPLICATION_PROPERTIES_FILE_PATH_RELATIVE = "applicationConfig.properties";
+
+    public static final String APPLICATION_PROPERTIES_FILE_PATH_ABSOLUTE = "/" + APPLICATION_PROPERTIES_FILE_PATH_RELATIVE;
 
     public static final String APPLICATION_DEFAULT_SINGLE_INSTANCE_PORT_PROPERTY_NAME
             = "platform.application.defaultSingleInstancePort";
@@ -43,7 +44,7 @@ public class ApplicationConfiguration {
     private Map<String, String> loadApplicationConfig() {
         Properties configProperties = new Properties();
 
-        try (InputStream is = ApplicationConfiguration.class.getResourceAsStream(APPLICATION_PROPERTIES_FILE_PATH)) {
+        try (InputStream is = ApplicationConfiguration.class.getResourceAsStream(APPLICATION_PROPERTIES_FILE_PATH_ABSOLUTE)) {
             if (is != null) {
                 configProperties.load(is);
             }
