@@ -130,8 +130,8 @@ public class DromblerACPConfiguration {
             mainJarURIString = mainJarURIString.substring(FULL_JAR_URI_PREFIX_LENGTH);
         }
         Path mainJarPath = Paths.get(URI.create(mainJarURIString));
-        // <install-dir>/bin/<main-jar>.jar
-        return mainJarPath.getParent().getParent();
+        // <install-dir>/bin/lib/<jar>
+        return mainJarPath.getParent().getParent().getParent();
     }
 
     protected void loadSystemProperties(Path rootDirPath) throws MalformedURLException, IOException {
