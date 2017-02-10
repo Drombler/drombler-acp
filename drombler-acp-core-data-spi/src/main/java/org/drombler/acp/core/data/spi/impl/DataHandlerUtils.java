@@ -39,7 +39,7 @@ public final class DataHandlerUtils {
         return createDocumentHandlerDescriptor(documentHandler, handlerClass);
     }
 
-    private static <D> DocumentHandlerDescriptor<D> createDocumentHandlerDescriptor(DocumentHandlerType documentHandler, Class<D> handlerClass) throws ClassNotFoundException {
+    private static <D> DocumentHandlerDescriptor<D> createDocumentHandlerDescriptor(DocumentHandlerType documentHandler, Class<D> handlerClass) {
         DocumentHandlerDescriptor<D> documentHandlerDescriptor = new DocumentHandlerDescriptor<>();
         documentHandlerDescriptor.setMimeType(StringUtils.stripToNull(documentHandler.getMimeType()));
         configureDataHandlerDescriptor(documentHandlerDescriptor, documentHandler, handlerClass);

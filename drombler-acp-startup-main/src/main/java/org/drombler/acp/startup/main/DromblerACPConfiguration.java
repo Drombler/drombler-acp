@@ -57,7 +57,7 @@ public class DromblerACPConfiguration {
     /**
      * Name of the configuration directory.
      */
-    public static final String CONFIG_DIRECTORY = "conf";
+    public static final String CONFIG_DIRECTORY_NAME = "conf";
 
     /**
      * The property name used to specify an URL to the configuration property file to be used for the created the
@@ -75,6 +75,8 @@ public class DromblerACPConfiguration {
 
     private final Path installDirPath;
     private final Path userDirPath;
+    private final Path userConfigDirPath;
+
     private final Properties userConfigProps;
     private final ApplicationConfiguration applicationConfig;
     private final CommandLineArgs commandLineArgs;
@@ -108,6 +110,10 @@ public class DromblerACPConfiguration {
         resolveProperties(userConfigProps);
         copySystemProperties(userConfigProps);
 
+        this.userConfigDirPath = userDirPath.resolve(CONFIG_DIRECTORY_NAME);
+        if (!Files.exists(userConfigDirPath)) {
+            Files.createDirectories(userConfigDirPath);
+        }
         this.applicationConfig = new ApplicationConfiguration();
     }
 
@@ -152,7 +158,7 @@ public class DromblerACPConfiguration {
     private void loadProperties(Properties props, String systemPropertyName, Path rootDirPath, String propertiesFileName)
             throws IOException, MalformedURLException {
         String custom = System.getProperty(systemPropertyName);
-        URL propURL = custom != null ? new URL(custom) : rootDirPath.resolve(CONFIG_DIRECTORY).resolve(
+        URL propURL = custom != null ? new URL(custom) : rootDirPath.resolve(CONFIG_DIRECTORY_NAME).resolve(
                 propertiesFileName).toUri().toURL();
 
         try (InputStream is = propURL.openConnection().getInputStream()) {
@@ -215,6 +221,10 @@ public class DromblerACPConfiguration {
      */
     public Path getUserDirPath() {
         return userDirPath;
+    }
+
+    public Path getUserConfigDirPath() {
+        return userConfigDirPath;
     }
 
     /**

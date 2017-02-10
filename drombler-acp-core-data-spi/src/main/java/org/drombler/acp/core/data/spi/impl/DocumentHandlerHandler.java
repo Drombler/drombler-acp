@@ -85,7 +85,7 @@ public class DocumentHandlerHandler extends AbstractDataHandlerHandler<DocumentH
             DocumentHandlerDescriptor<?> documentHandlerDescriptor = DataHandlerUtils.createDocumentHandlerDescriptor(
                     documentHandlerType, context.getBundle());
             resolveDataHandlerDescriptor(documentHandlerDescriptor);
-        } catch (ClassNotFoundException ex) {
+        } catch (ClassNotFoundException | RuntimeException ex) {
             LOG.error(ex.getMessage(), ex);
         }
     }

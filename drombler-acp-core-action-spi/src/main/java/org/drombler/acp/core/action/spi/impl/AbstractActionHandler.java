@@ -111,7 +111,7 @@ public abstract class AbstractActionHandler<A, D> {
             try {
                 D actionDescriptor = createActionDescriptor(actionType, context);
                 registerActionDescriptor(actionDescriptor, context);
-            } catch (ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
+            } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | RuntimeException ex) {
                 LOG.error(ex.getMessage(), ex);
             }
         } else {
