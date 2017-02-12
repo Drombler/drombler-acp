@@ -60,8 +60,7 @@ public class DromblerACPConfiguration {
     public static final String CONFIG_DIRECTORY_NAME = "conf";
 
     /**
-     * The property name used to specify an URL to the configuration property file to be used for the created the
-     * framework instance.
+     * The property name used to specify an URL to the configuration property file to be used for the created the framework instance.
      *
      */
     public static final String CONFIG_PROPERTIES_PROP = "config.properties.file";
@@ -74,6 +73,7 @@ public class DromblerACPConfiguration {
     public static final String USER_DIR_PROPERTY = "platform.userdir";
 
     private final Path installDirPath;
+    private final Path installConfigDirPath;
     private final Path userDirPath;
     private final Path userConfigDirPath;
 
@@ -92,6 +92,7 @@ public class DromblerACPConfiguration {
             MissingPropertyException {
         this.commandLineArgs = commandLineArgs;
         this.installDirPath = determineInstallDirPath();
+        this.installConfigDirPath = installDirPath.resolve(CONFIG_DIRECTORY_NAME);
 
         loadSystemProperties(getInstallDirPath());
 
@@ -216,14 +217,18 @@ public class DromblerACPConfiguration {
         return installDirPath;
     }
 
+    public final Path getInstallConfigDirPath() {
+        return installConfigDirPath;
+    }
+
     /**
      * @return the userDirPath
      */
-    public Path getUserDirPath() {
+    public final Path getUserDirPath() {
         return userDirPath;
     }
 
-    public Path getUserConfigDirPath() {
+    public final Path getUserConfigDirPath() {
         return userConfigDirPath;
     }
 
