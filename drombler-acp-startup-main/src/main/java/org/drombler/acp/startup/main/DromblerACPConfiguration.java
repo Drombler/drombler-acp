@@ -73,6 +73,7 @@ public class DromblerACPConfiguration {
     public static final String USER_DIR_PROPERTY = "platform.userdir";
 
     private final Path installDirPath;
+    private final Path installDirConfigPath;
     private final Path userDirPath;
     private final Path userConfigDirPath;
 
@@ -91,6 +92,7 @@ public class DromblerACPConfiguration {
             MissingPropertyException {
         this.commandLineArgs = commandLineArgs;
         this.installDirPath = determineInstallDirPath();
+        this.installDirConfigPath = installDirPath.resolve(CONFIG_DIRECTORY_NAME);
 
         loadSystemProperties(getInstallDirPath());
 
@@ -215,14 +217,18 @@ public class DromblerACPConfiguration {
         return installDirPath;
     }
 
+    public final Path getInstallConfigDirPath() {
+        return installDirConfigPath;
+    }
+
     /**
      * @return the userDirPath
      */
-    public Path getUserDirPath() {
+    public final Path getUserDirPath() {
         return userDirPath;
     }
 
-    public Path getUserConfigDirPath() {
+    public final Path getUserConfigDirPath() {
         return userConfigDirPath;
     }
 
