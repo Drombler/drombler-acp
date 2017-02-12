@@ -40,12 +40,19 @@ public class SimpleServiceTrackerCustomizer<T> implements ServiceTrackerCustomiz
 
     public static <T> ServiceTracker<T, T> createServiceTracker(Class<T> serviceType, Consumer<T> consumer) {
         return createServiceTracker(serviceType, consumer, consumer);
+    }
 
+    public static <T> ServiceTracker<T, T> createServiceTracker(BundleContext bundleContext, Class<T> serviceType, Consumer<T> consumer) {
+        return createServiceTracker(bundleContext, serviceType, consumer, consumer);
     }
 
     public static <T> ServiceTracker<T, T> createServiceTracker(Class<T> serviceType, Consumer<T> addingServiceConsumer, Consumer<T> removedServiceConsumer) {
         BundleContext bundleContext = FrameworkUtil.getBundle(serviceType).getBundleContext();
-        return new ServiceTracker<>(bundleContext, serviceType, new SimpleServiceTrackerCustomizer<>(bundleContext, addingServiceConsumer, removedServiceConsumer));
+        return createServiceTracker(bundleContext, serviceType, addingServiceConsumer, removedServiceConsumer);
 
+    }
+
+    public static <T> ServiceTracker<T, T> createServiceTracker(BundleContext bundleContext, Class<T> serviceType, Consumer<T> addingServiceConsumer, Consumer<T> removedServiceConsumer) {
+        return new ServiceTracker<>(bundleContext, serviceType, new SimpleServiceTrackerCustomizer<>(bundleContext, addingServiceConsumer, removedServiceConsumer));
     }
 }
