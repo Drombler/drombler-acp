@@ -76,7 +76,7 @@ public class SingleInstanceStarter implements BootServiceStarter {
     @Override
     public boolean init() throws IOException {
         boolean initialized;
-        Path userConfigDir = configuration.getUserDirPath().resolve(DromblerACPConfiguration.CONFIG_DIRECTORY);
+        Path userConfigDir = configuration.getUserDirPath().resolve(DromblerACPConfiguration.CONFIG_DIRECTORY_NAME);
         if (!Files.exists(userConfigDir)) {
             Files.createDirectories(userConfigDir);
         }
