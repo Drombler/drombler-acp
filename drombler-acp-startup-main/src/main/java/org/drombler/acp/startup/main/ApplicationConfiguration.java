@@ -33,7 +33,7 @@ public class ApplicationConfiguration {
     public static final String APPLICATION_PROPERTIES_FILE_PATH_ABSOLUTE = "/" + APPLICATION_PROPERTIES_FILE_PATH_RELATIVE;
 
     public static final String APPLICATION_DEFAULT_SINGLE_INSTANCE_PORT_PROPERTY_NAME
-            = "platform.application.defaultSingleInstancePort";
+            = "drombler.application.defaultSingleInstancePort";
 
     private final Map<String, String> applicationConfig;
 
