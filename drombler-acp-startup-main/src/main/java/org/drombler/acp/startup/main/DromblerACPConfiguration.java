@@ -70,7 +70,7 @@ public class DromblerACPConfiguration {
      */
     public static final String CONFIG_PROPERTIES_FILE_NAME = "config.properties";
 
-    public static final String USER_DIR_PROPERTY = "platform.userdir";
+    public static final String USER_DIR_PROPERTY = "drombler.application.userdir";
 
     private final Path installDirPath;
     private final Path installConfigDirPath;
