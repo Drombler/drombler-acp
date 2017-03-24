@@ -25,6 +25,13 @@ public class EditorDockingDescriptorRegistryImpl<D> implements EditorDockingDesc
     }
 
     @Override
+    public EditorDockingDescriptor<? extends D> unregisterEditorDockingDescriptor(Class<?> contentType) {
+        EditorDockingDescriptor<? extends D> editorDockingDescriptor = editors.remove(contentType);
+        contentTypes.remove(editorDockingDescriptor.getDockableClass());
+        return editorDockingDescriptor;
+    }
+
+    @Override
     public EditorDockingDescriptor<? extends D> getEditorDockingDescriptor(Class<?> contentType) {
         return editors.get(contentType);
     }

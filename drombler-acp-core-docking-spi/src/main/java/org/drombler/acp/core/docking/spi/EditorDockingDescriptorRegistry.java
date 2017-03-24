@@ -9,6 +9,8 @@ public interface EditorDockingDescriptorRegistry<D> {
 
     void registerEditorDockingDescriptor(Class<?> contentType, EditorDockingDescriptor<? extends D> editorDockingDescriptor);
 
+    EditorDockingDescriptor<? extends D> unregisterEditorDockingDescriptor(Class<?> contentType);
+
     EditorDockingDescriptor<? extends D> getEditorDockingDescriptor(Class<?> contentType);
 
     Class<?> getContentType(Class<? extends D> editorType);

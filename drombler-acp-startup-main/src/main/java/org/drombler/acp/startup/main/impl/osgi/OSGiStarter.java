@@ -99,7 +99,8 @@ public class OSGiStarter implements BootServiceStarter {
     public void stop() throws BundleException, InterruptedException {
         if (isRunning()) {
             getFramework().stop();
-            getFramework().waitForStop(0);
+            FrameworkEvent stopEvent = getFramework().waitForStop(0);
+            System.out.println("OSGi Framework stopped: " + stopEvent.getType());
         }
     }
 
