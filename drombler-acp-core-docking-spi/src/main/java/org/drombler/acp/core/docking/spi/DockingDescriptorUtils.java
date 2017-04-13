@@ -20,6 +20,8 @@ import org.drombler.acp.core.action.spi.MenuEntryDescriptor;
 import static org.drombler.acp.core.commons.util.BundleUtils.loadClass;
 import org.drombler.acp.core.docking.jaxb.EditorDockingType;
 import org.drombler.acp.core.docking.jaxb.ViewDockingType;
+import org.drombler.commons.docking.DockableData;
+import org.drombler.commons.docking.DockableEntry;
 import org.osgi.framework.Bundle;
 
 /**
@@ -28,13 +30,13 @@ import org.osgi.framework.Bundle;
  */
 public class DockingDescriptorUtils {
 
-    public static ViewDockingDescriptor<?> createViewDockingDescriptor(ViewDockingType docking, Bundle bundle) throws
+    public static ViewDockingDescriptor<?, ?, ?> createViewDockingDescriptor(ViewDockingType docking, Bundle bundle) throws
             ClassNotFoundException, InstantiationException, IllegalAccessException {
         final Class<?> dockableClass = loadClass(bundle, docking.getDockableClass());
         return createViewDockingDescriptor(docking, dockableClass);
     }
 
-    private static <D> ViewDockingDescriptor<D> createViewDockingDescriptor(ViewDockingType docking,
+    private static <D, DATA extends DockableData, E extends DockableEntry<D, DATA>> ViewDockingDescriptor<D, DATA, E> createViewDockingDescriptor(ViewDockingType docking,
             Class<D> dockableClass) throws ClassNotFoundException {
         String id = StringUtils.stripToNull(docking.getId());
         String displayName = docking.getDisplayName();
@@ -43,7 +45,7 @@ public class DockingDescriptorUtils {
         String resourceBundleBaseName = docking.getResourceBundleBaseName();
         String accelerator = docking.getAccelerator();
 
-        ViewDockingDescriptor<D> dockingDescriptor = new ViewDockingDescriptor<>(dockableClass, id, displayName, icon, accelerator, resourceBundleBaseName);
+        ViewDockingDescriptor<D, DATA, E> dockingDescriptor = new ViewDockingDescriptor<>(dockableClass, id, displayName, icon, accelerator, resourceBundleBaseName);
         dockingDescriptor.setAreaId(areaId);
         dockingDescriptor.setPosition(docking.getPosition());
         dockingDescriptor.setActivateDockableMenuEntryDescriptor(new MenuEntryDescriptor(dockingDescriptor.getId(),
