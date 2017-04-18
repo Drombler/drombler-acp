@@ -22,7 +22,6 @@ import org.apache.felix.scr.annotations.ReferenceCardinality;
 import org.apache.felix.scr.annotations.ReferencePolicy;
 import org.drombler.acp.core.action.jaxb.ActionsType;
 import org.drombler.acp.core.action.jaxb.ToggleActionType;
-import org.drombler.acp.core.action.spi.ActionDescriptor;
 import org.drombler.acp.core.action.spi.ToggleActionDescriptor;
 import org.drombler.acp.core.action.spi.ToggleActionFactory;
 import org.osgi.framework.BundleContext;
@@ -48,7 +47,7 @@ public class ToggleActionHandler<T> extends AbstractActionHandler<ToggleActionTy
     }
 
     protected void unbindToggleActionDescriptor(ToggleActionDescriptor<?> actionDescriptor) {
-        // TODO
+        closeActionDescriptor(actionDescriptor);
     }
 
     protected void bindToggleActionFactory(ToggleActionFactory<T> toggleActionFactory) {
@@ -84,8 +83,11 @@ public class ToggleActionHandler<T> extends AbstractActionHandler<ToggleActionTy
     @Override
     protected void registerActionDescriptor(ToggleActionDescriptor<?> actionDescriptor, BundleContext context) {
         if (isInitialized()) {
+            registerActionDescriptor(actionDescriptor);
             T action = toggleActionFactory.createToggleAction(actionDescriptor);
-            registerActionListener(context, actionDescriptor);
+            if (!actionDescriptor.getListenerType().equals(toggleActionFactory.getToggleActionClass())) {
+                registerActionListener(context, actionDescriptor);
+            }
             getActionRegistry().registerAction(actionDescriptor.getId(), toggleActionFactory.getToggleActionClass(),
                     action, context);
         } else {
@@ -93,15 +95,14 @@ public class ToggleActionHandler<T> extends AbstractActionHandler<ToggleActionTy
         }
     }
 
-    private <T> void registerActionListener(BundleContext context, ActionDescriptor<T> actionDescriptor) {
+    //    TODO [puce, 18.04.2017]: used? If yes, use getActionRegistry().registerAction instead (set the id property)?
+    private <T> void registerActionListener(BundleContext context, ToggleActionDescriptor<T> actionDescriptor) {
         context.registerService(actionDescriptor.getListenerType(), actionDescriptor.getListener(), null);
     }
 
     @Override
     protected ToggleActionDescriptor<?> createActionDescriptor(ToggleActionType actionType, BundleContext context)
-            throws
-            IllegalAccessException, ClassNotFoundException, InstantiationException {
-        return ToggleActionDescriptor.
-                createToggleActionDescriptor(actionType, context.getBundle(), getContextInjector());
+            throws IllegalAccessException, ClassNotFoundException, InstantiationException {
+        return ToggleActionDescriptor.createToggleActionDescriptor(actionType, context.getBundle(), getContextInjector());
     }
 }

@@ -37,8 +37,7 @@ public class ActionRegistry {
 //    private final Map<String, ActionDescriptor> actionDescriptors = new HashMap<>();
     public <T> T getAction(String actionId, Class<T> actionClass, BundleContext context) {
         try {
-            Collection<ServiceReference<T>> serviceReferences = context.getServiceReferences(
-                    actionClass, "(" + ActionDescriptor.ID_KEY + "=" + escapeLDAPFilter(actionId) + ")");
+            Collection<ServiceReference<T>> serviceReferences = context.getServiceReferences(actionClass, createActionFilter(actionId));
             if (!serviceReferences.isEmpty()) {
                 return context.getService(serviceReferences.iterator().next());
             }
@@ -78,5 +77,27 @@ public class ActionRegistry {
 
     public String getActionId(ServiceReference<?> reference) {
         return reference.getProperty(ActionDescriptor.ID_KEY).toString();
+    }
+
+    public void registerActionDescriptor(ActionDescriptor<?> actionDescriptor, BundleContext context) {
+        Dictionary<String, String> properties = new Hashtable<>(1);
+        properties.put(ActionDescriptor.ID_KEY, escapeLDAPFilter(actionDescriptor.getId()));
+        context.registerService(ActionDescriptor.class, actionDescriptor, properties);
+    }
+
+    public ActionDescriptor<?> getActionDescriptor(String actionId, BundleContext context) {
+        try {
+            Collection<ServiceReference<ActionDescriptor>> serviceReferences = context.getServiceReferences(ActionDescriptor.class, createActionFilter(actionId));
+            if (!serviceReferences.isEmpty()) {
+                return context.getService(serviceReferences.iterator().next());
+            }
+        } catch (InvalidSyntaxException ex) {
+            LOG.error(ex.getMessage(), ex);
+        }
+        return null;
+    }
+
+    private String createActionFilter(String actionId) {
+        return "(" + ActionDescriptor.ID_KEY + "=" + escapeLDAPFilter(actionId) + ")";
     }
 }

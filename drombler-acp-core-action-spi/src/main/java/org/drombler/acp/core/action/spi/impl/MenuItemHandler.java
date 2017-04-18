@@ -128,8 +128,7 @@ public class MenuItemHandler<MenuItem, Menu extends MenuItem, Action> extends Ab
 
     @Override
     protected MenuItemConfig<Action> createConfig(MenuEntryDescriptor<MenuItem, ?> menuEntryDescriptor, BundleContext context) {
-        Action action = actionRegistry.getAction(menuEntryDescriptor.getActionId(), actionFactory.getActionClass(),
-                context);
+        Action action = actionRegistry.getAction(menuEntryDescriptor.getActionId(), actionFactory.getActionClass(), context);
         if (action != null) {
             return new MenuItemConfig<>(action);
         } else {
