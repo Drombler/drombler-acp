@@ -47,7 +47,7 @@ public class ActionHandler<T> extends AbstractActionHandler<ActionType, ActionDe
     }
 
     protected void unbindActionDescriptor(ActionDescriptor<?> actionDescriptor) {
-        closeActionDescriptor(actionDescriptor);
+        unregisterActionDescriptor(actionDescriptor);
     }
 
     protected void bindActionFactory(ActionFactory<T> actionFactory) {

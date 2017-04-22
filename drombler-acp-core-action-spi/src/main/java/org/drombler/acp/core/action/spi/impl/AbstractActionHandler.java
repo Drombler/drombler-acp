@@ -146,6 +146,11 @@ public abstract class AbstractActionHandler<A, D extends ActionDescriptor<?>> {
         actionDescriptors.add(actionDescriptor);
     }
 
+    protected void unregisterActionDescriptor(D actionDescriptor) {
+        closeActionDescriptor(actionDescriptor);
+        actionDescriptors.remove(actionDescriptor);
+    }
+
     protected void registerUnresolvedActionDescriptor(D actionDescriptor, BundleContext context) {
         unresolvedActionDescriptors.add(new UnresolvedEntry<>(actionDescriptor, context));
     }

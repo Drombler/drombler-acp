@@ -47,7 +47,7 @@ public class ToggleActionHandler<T> extends AbstractActionHandler<ToggleActionTy
     }
 
     protected void unbindToggleActionDescriptor(ToggleActionDescriptor<?> actionDescriptor) {
-        closeActionDescriptor(actionDescriptor);
+        unregisterActionDescriptor(actionDescriptor);
     }
 
     protected void bindToggleActionFactory(ToggleActionFactory<T> toggleActionFactory) {
