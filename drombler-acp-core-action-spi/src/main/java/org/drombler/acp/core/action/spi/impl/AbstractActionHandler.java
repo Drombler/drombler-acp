@@ -21,6 +21,7 @@ import org.apache.felix.scr.annotations.ReferenceCardinality;
 import org.apache.felix.scr.annotations.ReferencePolicy;
 import org.apache.felix.scr.annotations.References;
 import org.drombler.acp.core.action.jaxb.ActionsType;
+import org.drombler.acp.core.action.spi.ActionDescriptor;
 import org.drombler.acp.core.action.spi.ActionRegistry;
 import org.drombler.acp.core.commons.util.UnresolvedEntry;
 import org.drombler.commons.context.ActiveContextProvider;
@@ -40,7 +41,7 @@ import org.slf4j.LoggerFactory;
     @Reference(name = "actionsType", referenceInterface = ActionsType.class,
             cardinality = ReferenceCardinality.OPTIONAL_MULTIPLE, policy = ReferencePolicy.DYNAMIC)
 })
-public abstract class AbstractActionHandler<A, D> {
+public abstract class AbstractActionHandler<A, D extends ActionDescriptor<?>> {
 
     private static final Logger LOG = LoggerFactory.getLogger(AbstractActionHandler.class);
 
@@ -50,6 +51,7 @@ public abstract class AbstractActionHandler<A, D> {
     private ApplicationContextProvider applicationContextProvider;
     private ContextInjector contextInjector;
     private final ActionRegistry actionRegistry = new ActionRegistry();
+    private final List<D> actionDescriptors = new ArrayList<>();
     private final List<UnresolvedEntry<A>> unresolvedActions = new ArrayList<>();
     private final List<UnresolvedEntry<D>> unresolvedActionDescriptors = new ArrayList<>();
 
@@ -76,7 +78,7 @@ public abstract class AbstractActionHandler<A, D> {
     }
 
     protected void unbindActionsType(ActionsType actionsType) {
-        // TODO
+        // nothing to do
     }
 
     protected void activate(ComponentContext context) {
@@ -85,6 +87,8 @@ public abstract class AbstractActionHandler<A, D> {
     }
 
     protected void deactivate(ComponentContext context) {
+        actionDescriptors.forEach(this::closeActionDescriptor);
+        actionDescriptors.clear();
     }
 
     protected boolean isInitialized() {
@@ -110,7 +114,7 @@ public abstract class AbstractActionHandler<A, D> {
         if (isInitialized()) {
             try {
                 D actionDescriptor = createActionDescriptor(actionType, context);
-                registerActionDescriptor(actionDescriptor, context);
+                getActionRegistry().registerActionDescriptor(actionDescriptor, context);
             } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | RuntimeException ex) {
                 LOG.error(ex.getMessage(), ex);
             }
@@ -119,10 +123,33 @@ public abstract class AbstractActionHandler<A, D> {
         }
     }
 
-    protected abstract D createActionDescriptor(A actionType, BundleContext context)
-            throws IllegalAccessException, ClassNotFoundException, InstantiationException;
+    protected abstract D createActionDescriptor(A actionType, BundleContext context) throws IllegalAccessException, ClassNotFoundException, InstantiationException;
+
+    protected void closeActionDescriptor(D actionDescriptor) {
+        try {
+            closeActionListener(actionDescriptor.getListener());
+            actionDescriptor.setListener(null);
+        } catch (Exception ex) {
+            LOG.error(ex.getMessage(), ex);
+        }
+    }
+
+    private void closeActionListener(Object listener) throws Exception {
+        if (listener instanceof AutoCloseable) {
+            ((AutoCloseable) listener).close();
+        }
+    }
 
     protected abstract void registerActionDescriptor(D actionDescriptor, BundleContext context);
+
+    protected void registerActionDescriptor(D actionDescriptor) {
+        actionDescriptors.add(actionDescriptor);
+    }
+
+    protected void unregisterActionDescriptor(D actionDescriptor) {
+        closeActionDescriptor(actionDescriptor);
+        actionDescriptors.remove(actionDescriptor);
+    }
 
     protected void registerUnresolvedActionDescriptor(D actionDescriptor, BundleContext context) {
         unresolvedActionDescriptors.add(new UnresolvedEntry<>(actionDescriptor, context));

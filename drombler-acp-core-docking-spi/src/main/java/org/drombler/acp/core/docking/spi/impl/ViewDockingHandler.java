@@ -29,6 +29,7 @@ import org.apache.felix.scr.annotations.References;
 import org.drombler.acp.core.action.spi.ActionDescriptor;
 import org.drombler.acp.core.action.spi.MenuEntryDescriptor;
 import org.drombler.acp.core.commons.util.BundleUtils;
+import org.drombler.acp.core.commons.util.UnresolvedEntry;
 import org.drombler.acp.core.docking.jaxb.DockingsType;
 import org.drombler.acp.core.docking.spi.DockingDescriptorUtils;
 import org.drombler.acp.core.docking.spi.ViewDockingDescriptor;

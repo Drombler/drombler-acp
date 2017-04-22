@@ -33,15 +33,12 @@ class ActionDescriptorUtils {
             Bundle bundle, ContextInjector contextInjector) throws ClassNotFoundException, InstantiationException,
             IllegalAccessException {
         actionDescriptor.setId(StringUtils.stripToNull(actionType.getId()));
-        actionDescriptor.setDisplayName(ResourceBundleUtils.getPackageResourceStringPrefixed(actionDescriptor.
-                getListenerType(),
-                actionType.getDisplayName()));
-        actionDescriptor.setAccelerator(ResourceBundleUtils.getPackageResourceStringPrefixed(actionDescriptor.
-                getListenerType(),
-                actionType.getAccelerator()));
+        actionDescriptor.setDisplayName(ResourceBundleUtils.getPackageResourceStringPrefixed(
+                actionDescriptor.getListenerType(), actionType.getDisplayName()));
+        actionDescriptor.setAccelerator(ResourceBundleUtils.getPackageResourceStringPrefixed(
+                actionDescriptor.getListenerType(), actionType.getAccelerator()));
         actionDescriptor.setIcon(StringUtils.stripToNull(actionType.getIcon()));
         configureActionDescriptorListener(actionDescriptor, actionDescriptor.getListenerType(), contextInjector);
-
     }
 
     private static <T> void configureActionDescriptorListener(ActionDescriptor<T> actionDescriptor,
