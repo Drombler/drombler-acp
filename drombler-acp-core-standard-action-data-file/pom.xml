@@ -133,6 +133,5 @@ Contributor(s): .
             <artifactId>org.apache.felix.scr.annotations</artifactId>
             <scope>provided</scope>
         </dependency>
-
     </dependencies>
 </project>

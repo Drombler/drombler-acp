@@ -13,6 +13,7 @@ import org.drombler.acp.startup.main.ApplicationExecutorProvider;
 import org.drombler.commons.action.AbstractActionListener;
 import org.drombler.commons.client.dialog.FileChooserProvider;
 import org.drombler.commons.data.file.FileUtils;
+import org.osgi.framework.FrameworkUtil;
 import org.osgi.util.tracker.ServiceTracker;
 
 /**
@@ -36,7 +37,8 @@ public class OpenFilesAction extends AbstractActionListener<Object> implements A
     private ApplicationExecutorProvider applicationExecutorProvider;
 
     public OpenFilesAction() {
-        this.applicationExecutorProviderServiceTracker = SimpleServiceTrackerCustomizer.createServiceTracker(ApplicationExecutorProvider.class, this::setApplicationExecutorProvider);
+        this.applicationExecutorProviderServiceTracker = SimpleServiceTrackerCustomizer.createServiceTracker(FrameworkUtil.getBundle(OpenFilesAction.class).getBundleContext(),
+                ApplicationExecutorProvider.class, this::setApplicationExecutorProvider);
         this.applicationExecutorProviderServiceTracker.open(true);
         setEnabled(isInitialized());
     }
@@ -162,9 +164,7 @@ public class OpenFilesAction extends AbstractActionListener<Object> implements A
 
     @Override
     public void close() {
-        this.fileChooserProviderServiceTracker.close();
-        this.fileExtensionDescriptorRegistryProviderServiceTracker.close();
-        this.documentHandlerDescriptorRegistryServiceTracker.close();
+        this.applicationExecutorProviderServiceTracker.close();
     }
 
 }
