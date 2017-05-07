@@ -50,7 +50,6 @@ public abstract class AbstractActionHandler<A, D extends ActionDescriptor<?>> {
     @Reference
     private ApplicationContextProvider applicationContextProvider;
     private ContextInjector contextInjector;
-    private final ActionRegistry actionRegistry = new ActionRegistry();
     private final List<D> actionDescriptors = new ArrayList<>();
     private final List<UnresolvedEntry<A>> unresolvedActions = new ArrayList<>();
     private final List<UnresolvedEntry<D>> unresolvedActionDescriptors = new ArrayList<>();
@@ -92,7 +91,7 @@ public abstract class AbstractActionHandler<A, D extends ActionDescriptor<?>> {
     }
 
     protected boolean isInitialized() {
-        return activeContextProvider != null && applicationContextProvider != null && getContextInjector() != null;
+        return activeContextProvider != null && applicationContextProvider != null && contextInjector != null;
     }
 
     protected abstract void registerActions(ActionsType actionType, BundleContext context);
@@ -142,6 +141,11 @@ public abstract class AbstractActionHandler<A, D extends ActionDescriptor<?>> {
 
     protected abstract void registerActionDescriptor(D actionDescriptor, BundleContext context);
 
+    /**
+     * @return the actionRegistry
+     */
+    protected abstract ActionRegistry<D> getActionRegistry();
+
     protected void registerActionDescriptor(D actionDescriptor) {
         actionDescriptors.add(actionDescriptor);
     }
@@ -153,13 +157,6 @@ public abstract class AbstractActionHandler<A, D extends ActionDescriptor<?>> {
 
     protected void registerUnresolvedActionDescriptor(D actionDescriptor, BundleContext context) {
         unresolvedActionDescriptors.add(new UnresolvedEntry<>(actionDescriptor, context));
-    }
-
-    /**
-     * @return the actionRegistry
-     */
-    protected ActionRegistry getActionRegistry() {
-        return actionRegistry;
     }
 
     /**

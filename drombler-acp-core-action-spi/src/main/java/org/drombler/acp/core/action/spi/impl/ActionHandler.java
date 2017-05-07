@@ -24,6 +24,7 @@ import org.drombler.acp.core.action.jaxb.ActionType;
 import org.drombler.acp.core.action.jaxb.ActionsType;
 import org.drombler.acp.core.action.spi.ActionDescriptor;
 import org.drombler.acp.core.action.spi.ActionFactory;
+import org.drombler.acp.core.action.spi.ActionRegistry;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.component.ComponentContext;
@@ -39,6 +40,8 @@ public class ActionHandler<T> extends AbstractActionHandler<ActionType, ActionDe
 
     @Reference
     private ActionFactory<T> actionFactory;
+
+    private final ActionRegistry<ActionDescriptor<?>> actionRegistry = new ActionRegistry<>((Class<ActionDescriptor<?>>) (Class<?>) ActionDescriptor.class);
 
     protected void bindActionDescriptor(ServiceReference<ActionDescriptor<?>> serviceReference) {
         BundleContext context = serviceReference.getBundle().getBundleContext();
@@ -84,6 +87,11 @@ public class ActionHandler<T> extends AbstractActionHandler<ActionType, ActionDe
     protected ActionDescriptor<?> createActionDescriptor(ActionType actionType, BundleContext context)
             throws IllegalAccessException, ClassNotFoundException, InstantiationException {
         return ActionDescriptor.createActionDescriptor(actionType, context.getBundle(), getContextInjector());
+    }
+
+    @Override
+    protected ActionRegistry<ActionDescriptor<?>> getActionRegistry() {
+        return actionRegistry;
     }
 
     @Override

@@ -30,6 +30,8 @@ import org.osgi.util.tracker.ServiceTracker;
  */
 public abstract class AbstractDocumentHandler extends AbstractDataHandler<Path> {
 
+    public static final String PATH_PROPERTY_NAME = "path";
+
     private final ServiceTracker<FileChooserProvider, FileChooserProvider> fileChooserProviderTracker;
     private Path path;
     private FileChooserProvider fileChooserProvider;
@@ -83,6 +85,9 @@ public abstract class AbstractDocumentHandler extends AbstractDataHandler<Path> 
             throw new IllegalStateException("The path must not change once set!");
         }
         this.path = path;
+        getPropertyChangeSupport().firePropertyChange(PATH_PROPERTY_NAME, null, this.path);
+        getPropertyChangeSupport().firePropertyChange(TITLE_PROPERTY_NAME, null, this.path);
+        getPropertyChangeSupport().firePropertyChange(TOOLTIP_TEXT_PROPERTY_NAME, null, this.path);
         setUniqueKey(path);
     }
 
@@ -166,6 +171,7 @@ public abstract class AbstractDocumentHandler extends AbstractDataHandler<Path> 
             } catch (IOException ex) {
                 uniqueKey = path;
             }
+            getPropertyChangeSupport().firePropertyChange(UNIQUE_KEY_PROPERTY_NAME, null, this.uniqueKey);
         }
     }
 

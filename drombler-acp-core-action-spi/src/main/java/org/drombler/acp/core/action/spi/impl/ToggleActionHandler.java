@@ -22,6 +22,7 @@ import org.apache.felix.scr.annotations.ReferenceCardinality;
 import org.apache.felix.scr.annotations.ReferencePolicy;
 import org.drombler.acp.core.action.jaxb.ActionsType;
 import org.drombler.acp.core.action.jaxb.ToggleActionType;
+import org.drombler.acp.core.action.spi.ActionRegistry;
 import org.drombler.acp.core.action.spi.ToggleActionDescriptor;
 import org.drombler.acp.core.action.spi.ToggleActionFactory;
 import org.osgi.framework.BundleContext;
@@ -39,6 +40,9 @@ public class ToggleActionHandler<T> extends AbstractActionHandler<ToggleActionTy
 
     @Reference
     private ToggleActionFactory<T> toggleActionFactory;
+
+    private final ActionRegistry<ToggleActionDescriptor<?>> actionRegistry = new ActionRegistry<>((Class<ToggleActionDescriptor<?>>) (Class<?>) ToggleActionDescriptor.class);
+
 
     protected void bindToggleActionDescriptor(ServiceReference<ToggleActionDescriptor<?>> serviceReference) {
         BundleContext context = serviceReference.getBundle().getBundleContext();
@@ -104,5 +108,10 @@ public class ToggleActionHandler<T> extends AbstractActionHandler<ToggleActionTy
     protected ToggleActionDescriptor<?> createActionDescriptor(ToggleActionType actionType, BundleContext context)
             throws IllegalAccessException, ClassNotFoundException, InstantiationException {
         return ToggleActionDescriptor.createToggleActionDescriptor(actionType, context.getBundle(), getContextInjector());
+    }
+
+    @Override
+    protected ActionRegistry<ToggleActionDescriptor<?>> getActionRegistry() {
+        return actionRegistry;
     }
 }
