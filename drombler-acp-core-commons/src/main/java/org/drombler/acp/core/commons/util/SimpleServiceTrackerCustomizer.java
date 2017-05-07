@@ -35,7 +35,6 @@ public class SimpleServiceTrackerCustomizer<T> implements ServiceTrackerCustomiz
     @Override
     public void removedService(ServiceReference<T> reference, T service) {
         removedServiceConsumer.accept(addingServiceConsumer != removedServiceConsumer ? service : null);
-        context.ungetService(reference);
     }
 
     public static <T> ServiceTracker<T, T> createServiceTracker(Class<T> serviceType, Consumer<T> consumer) {
