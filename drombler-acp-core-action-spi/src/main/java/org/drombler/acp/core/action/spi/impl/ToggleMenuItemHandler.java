@@ -21,6 +21,7 @@ import org.apache.felix.scr.annotations.Reference;
 import org.apache.felix.scr.annotations.ReferenceCardinality;
 import org.apache.felix.scr.annotations.ReferencePolicy;
 import org.drombler.acp.core.action.jaxb.MenusType;
+import org.drombler.acp.core.action.spi.ActionDescriptor;
 import org.drombler.acp.core.action.spi.ActionRegistry;
 import org.drombler.acp.core.action.spi.ToggleActionFactory;
 import org.drombler.acp.core.action.spi.ToggleMenuEntryDescriptor;
@@ -47,7 +48,7 @@ public class ToggleMenuItemHandler<MenuItem, Menu extends MenuItem, ToggleMenuIt
     private ToggleMenuItemFactory<ToggleMenuItem, ToggleAction> toggleMenuItemFactory;
     @Reference
     private ToggleActionFactory<ToggleAction> toggleActionFactory;
-    private final ActionRegistry actionRegistry = new ActionRegistry();
+    private final ActionRegistry<?> actionRegistry = new ActionRegistry<>(ActionDescriptor.class);
     private final ActionResolutionManager<ToggleMenuEntryDescriptor> actionResolutionManager = new ActionResolutionManager<>();
     private ServiceTracker<ToggleAction, ServiceReference<ToggleAction>> tracker;
 

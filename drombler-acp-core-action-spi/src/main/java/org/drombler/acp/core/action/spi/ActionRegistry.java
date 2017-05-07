@@ -27,12 +27,18 @@ import org.slf4j.LoggerFactory;
 /**
  *
  * @author puce
+ * @param <D> the ActionDescriptor type
  */
-public class ActionRegistry {
+public class ActionRegistry<D extends ActionDescriptor<?>> {
 
     private static final Logger LOG = LoggerFactory.getLogger(ActionRegistry.class);
     private static final String BACKSLASH = "\\";
     private static final String NUL = Character.toString((char) 0);
+    private final Class<D> actionDescriptorType;
+
+    public ActionRegistry(Class<D> actionDescriptorType) {
+        this.actionDescriptorType = actionDescriptorType;
+    }
 
 //    private final Map<String, ActionDescriptor> actionDescriptors = new HashMap<>();
     public <T> T getAction(String actionId, Class<T> actionClass, BundleContext context) {
@@ -79,15 +85,15 @@ public class ActionRegistry {
         return reference.getProperty(ActionDescriptor.ID_KEY).toString();
     }
 
-    public void registerActionDescriptor(ActionDescriptor<?> actionDescriptor, BundleContext context) {
+    public void registerActionDescriptor(D actionDescriptor, BundleContext context) {
         Dictionary<String, String> properties = new Hashtable<>(1);
         properties.put(ActionDescriptor.ID_KEY, escapeLDAPFilter(actionDescriptor.getId()));
-        context.registerService(ActionDescriptor.class, actionDescriptor, properties);
+        context.registerService(actionDescriptorType, actionDescriptor, properties);
     }
 
-    public ActionDescriptor<?> getActionDescriptor(String actionId, BundleContext context) {
+    public D getActionDescriptor(String actionId, BundleContext context) {
         try {
-            Collection<ServiceReference<ActionDescriptor>> serviceReferences = context.getServiceReferences(ActionDescriptor.class, createActionFilter(actionId));
+            Collection<ServiceReference<D>> serviceReferences = context.getServiceReferences(actionDescriptorType, createActionFilter(actionId));
             if (!serviceReferences.isEmpty()) {
                 return context.getService(serviceReferences.iterator().next());
             }
