@@ -61,8 +61,7 @@ public class OpenFilesAction extends AbstractActionListener<Object> implements A
     }
 
     private void openFile(Path fileToOpen) {
-        FileUtils.openFile(fileToOpen, fileExtensionDescriptorRegistryProvider.getFileExtensionDescriptorRegistry(), documentHandlerDescriptorRegistryProvider.getDocumentHandlerDescriptorRegistry(),
-                dataHandlerRegistryProvider.getDataHandlerRegistry());
+        FileUtils.openFile(fileToOpen, dataHandlerRegistryProvider.getDataHandlerRegistry(), fileExtensionDescriptorRegistryProvider.getFileExtensionDescriptorRegistry(), documentHandlerDescriptorRegistryProvider.getDocumentHandlerDescriptorRegistry());
     }
 
     /**

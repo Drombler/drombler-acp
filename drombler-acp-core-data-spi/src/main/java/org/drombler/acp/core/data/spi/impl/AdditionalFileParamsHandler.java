@@ -140,8 +140,7 @@ public class AdditionalFileParamsHandler {
 
     private void openFile(Path filePath) {
         try {
-            FileUtils.openFile(filePath, fileExtensionDescriptorRegistryProvider.getFileExtensionDescriptorRegistry(), documentHandlerDescriptorRegistryProvider.getDocumentHandlerDescriptorRegistry(),
-                    dataHandlerRegistryProvider.getDataHandlerRegistry());
+            FileUtils.openFile(filePath, dataHandlerRegistryProvider.getDataHandlerRegistry(), fileExtensionDescriptorRegistryProvider.getFileExtensionDescriptorRegistry(), documentHandlerDescriptorRegistryProvider.getDocumentHandlerDescriptorRegistry());
         } catch (RuntimeException ex) {
             unresolvedPaths.add(filePath);
         }
