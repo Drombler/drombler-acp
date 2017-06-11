@@ -11,7 +11,6 @@ import org.osgi.service.component.annotations.ReferencePolicy;
  * @author puce
  */
 @Component
-
 public class StatusBarElementHandler {
 
     @Reference(cardinality = ReferenceCardinality.MULTIPLE, policy = ReferencePolicy.DYNAMIC)
