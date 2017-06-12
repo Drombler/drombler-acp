@@ -6,7 +6,7 @@ package org.drombler.acp.core.status.spi;
  */
 
 
-public interface StatusBarElementContainerProvider {
+public interface StatusBarElementContainerProvider<T> {
 
-    StatusBarElementContainer getStatusBarElementContainer();
+    StatusBarElementContainer<T> getStatusBarElementContainer();
 }

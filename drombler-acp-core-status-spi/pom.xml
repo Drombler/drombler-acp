@@ -66,17 +66,21 @@ Contributor(s): .
         </plugins>
     </build>
     <dependencies>
-        <!--        <dependency>
-            <groupId>org.drombler.acp</groupId>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
             <artifactId>drombler-acp-startup-main</artifactId>
             <version>${project.version}</version>
             <scope>provided</scope>
         </dependency>
-        -->       
+               
         <dependency>
-            <groupId>org.drombler.acp</groupId>
+            <groupId>${project.groupId}</groupId>
             <artifactId>drombler-acp-core-application</artifactId>
             <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.drombler.commons</groupId>
+            <artifactId>drombler-commons-context</artifactId>
         </dependency>
         <!--<dependency>
             <groupId>org.apache.commons</groupId>
@@ -110,6 +114,11 @@ Contributor(s): .
         <dependency>
             <groupId>org.osgi</groupId>
             <artifactId>osgi.core</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.osgi</groupId>
+            <artifactId>org.osgi.compendium</artifactId>
             <scope>provided</scope>
         </dependency>
     </dependencies>

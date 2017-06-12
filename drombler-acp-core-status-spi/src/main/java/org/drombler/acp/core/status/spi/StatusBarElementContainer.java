@@ -1,20 +1,21 @@
 package org.drombler.acp.core.status.spi;
 
-import javafx.scene.Node;
 import org.softsmithy.lib.util.PositionableAdapter;
 
 /**
  *
  * @author puce
  */
+public interface StatusBarElementContainer<T> {
 
+    void addLeftStatusBarElement(PositionableAdapter<? extends T> statusBarElement);
 
-public interface StatusBarElementContainer {
+    void addCenterStatusBarElement(PositionableAdapter<? extends T> statusBarElement);
 
-    void addLeftStatusBarElement(PositionableAdapter<? extends Node> statusBarElement);
+    void addRightStatusBarElement(PositionableAdapter<? extends T> statusBarElement);
 
-    void addCenterStatusBarElement(PositionableAdapter<? extends Node> statusBarElement);
+    boolean isLeftToRight();
 
-    void addRightStatusBarElement(PositionableAdapter<? extends Node> statusBarElement);
+    boolean isMirroringEnabled();
 
 }
