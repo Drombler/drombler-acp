@@ -72,14 +72,19 @@ public class DromblerACPStarter {
 
     public void start() {
         starters.stream().
-                map(starter -> Executors.defaultThreadFactory().newThread(() -> {
-                    try {
-                        registerShutdownHook(starter);
-                        starter.startAndWait();
-                    } catch (Exception ex) {
-                        logError(ex);
-                    }
-                })).
+                map(starter -> {
+                    Thread starterThread = Executors.defaultThreadFactory().newThread(() -> {
+                        try {
+                            registerShutdownHook(starter);
+                            starter.startAndWait();
+                        } catch (Exception ex) {
+                            logError(ex);
+                        }
+            });
+            starterThread.setDaemon(true);
+            starterThread.setName("Boot Service Starter Thread - " + starter.getName());
+                    return starterThread;
+                }).
                 forEach(Thread::start);
         osgiStarter.getFramework().getBundleContext().addFrameworkListener(event -> {
             if (event.getType() == FrameworkEvent.STARTED) {
