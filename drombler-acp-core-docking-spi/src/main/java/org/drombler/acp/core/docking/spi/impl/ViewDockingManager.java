@@ -14,100 +14,72 @@
  */
 package org.drombler.acp.core.docking.spi.impl;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import org.drombler.acp.core.action.spi.ActionDescriptor;
-import org.drombler.acp.core.action.spi.MenuEntryDescriptor;
-import org.drombler.acp.core.docking.spi.DockableFactory;
 import org.drombler.acp.core.docking.spi.ViewDockingDescriptor;
 import org.drombler.commons.docking.DockableData;
 import org.drombler.commons.docking.DockableEntry;
-import org.drombler.commons.docking.DockingAreaDescriptor;
 import org.drombler.commons.docking.context.DockingAreaContainer;
-import org.osgi.framework.BundleContext;
-import org.softsmithy.lib.util.SetChangeEvent;
-import org.softsmithy.lib.util.SetChangeListener;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
  * @author puce
  */
 // access only on the application thread
-public class ViewDockingManager<D, DATA extends DockableData, E extends DockableEntry<D, DATA>> implements AutoCloseable {
+public class ViewDockingManager<D, DATA extends DockableData, E extends DockableEntry<D, DATA>> {
 
-    private final Map<String, List<UnresolvedEntry<ViewDockingDescriptor<? extends D>>>> unresolvedDockingDescriptorsAreaId = new HashMap<>();
-    private final SetChangeListener<DockingAreaDescriptor> dockingAreaListener = new DockingAreaListener();
-    private final DockableFactory<D> dockableFactory;
+    private static final Logger LOG = LoggerFactory.getLogger(ViewDockingManager.class);
+
+    private final Map<String, E> viewEntries = new HashMap<>();
+
     private final DockingAreaContainer<D, DATA, E> dockingAreaContainer;
 
-    public ViewDockingManager(DockableFactory<D> dockableFactory, DockingAreaContainer<D, DATA, E> dockingAreaContainer) {
-        this.dockableFactory = dockableFactory;
+    public ViewDockingManager(DockingAreaContainer<D, DATA, E> dockingAreaContainer) {
         this.dockingAreaContainer = dockingAreaContainer;
-
-        this.dockingAreaContainer.addDockingAreaSetChangeListener(dockingAreaListener);
     }
 
     /**
-     * Only call this method on the applicatio thread!
+     * Only call this method on the application thread!
      *
      * @param dockingDescriptor
      * @param context
      */
-    public <T extends D> void addDockable(final ViewDockingDescriptor<T> dockingDescriptor, final BundleContext context) {
-        final T dockable = dockableFactory.createDockable(dockingDescriptor);
-        if (dockable != null) {
-            if (dockingAreaContainer.openAndRegisterNewView(dockable, false, dockingDescriptor.getDisplayName(), dockingDescriptor.getIcon(), dockingDescriptor.getResourceLoader())) {
-                dockingDescriptor.setDockable(dockable);
-                context.registerService(ActionDescriptor.class,
-                        dockingDescriptor.getActivateDockableActionDescriptor(), null);
-                context.registerService(MenuEntryDescriptor.class,
-                        dockingDescriptor.getActivateDockableMenuEntryDescriptor(), null);
-            } else {
-                // TODO: Does this still work?
-                final String preferredAreaId = dockingAreaContainer.getDockablePreferences(dockable).getAreaId();
-                if (!unresolvedDockingDescriptorsAreaId.containsKey(preferredAreaId)) {
-                    unresolvedDockingDescriptorsAreaId.put(preferredAreaId, new ArrayList<>());
-                }
-                unresolvedDockingDescriptorsAreaId.get(preferredAreaId).add(new UnresolvedEntry<>(dockingDescriptor, context));
-            }
+    public boolean addView(final ViewDockingDescriptor<D, DATA, E> dockingDescriptor) {
+        E viewEntry = dockingAreaContainer.openAndRegisterNewView(dockingDescriptor.getDockableClass(), false,
+                dockingDescriptor.getDisplayName(), dockingDescriptor.getIcon(), dockingDescriptor.getResourceLoader());
+        if (viewEntry != null) {
+            dockingDescriptor.setViewEntry(viewEntry);
+            viewEntries.put(dockingDescriptor.getId(), viewEntry);
+            return true;
+        } else {
+            return false;
         }
     }
 
-    private void resolveUnresolvedDockables(String areaId) {
-        if (unresolvedDockingDescriptorsAreaId.containsKey(areaId)) {
-            unresolvedDockingDescriptorsAreaId.get(areaId).forEach(unresolvedEntry
-                    -> addDockable(unresolvedEntry.getEntry(), unresolvedEntry.getContext()));
+    public E removeView(String dockableId) throws Exception {
+        if (viewEntries.containsKey(dockableId)) {
+            E dockableEntry = viewEntries.remove(dockableId);
+            dockingAreaContainer.closeAndUnregisterView(dockableEntry);
+            return dockableEntry;
         }
+        return null;
     }
 
-    @Override
-    public void close() {
-        dockingAreaContainer.removeDockingAreaSetChangeListener(dockingAreaListener);
-    }
+//    @Override
+//    public void close() {
+//        // TODO: show with a unit test that this is needed to be executed on the applicatoin thread
+//        Map<String, E> viewEntriesCopy = new HashMap<>(viewEntries);
+//        viewEntriesCopy.entrySet().forEach(entry -> {
+//            try {
+//                E viewEntry = entry.getValue();
+//                dockingAreaContainer.closeAndUnregisterView(viewEntry);
+//            } catch (Exception ex) {
+//                LOG.error(ex.getMessage(), ex);
+//            }
+//        });
+//        viewEntries.clear();
+//    }
 
-    private class DockingAreaListener implements SetChangeListener<DockingAreaDescriptor> {
-
-        /**
-         * This method gets called from the application thread!
-         *
-         * @param event
-         */
-        @Override
-        public void elementAdded(SetChangeEvent<DockingAreaDescriptor> event) {
-            resolveUnresolvedDockables(event.getElement().getId());
-        }
-
-        /**
-         * This method gets called from the application thread!
-         *
-         * @param event
-         */
-        @Override
-        public void elementRemoved(SetChangeEvent<DockingAreaDescriptor> event) {
-            // TODO: ???
-        }
-
-    }
 }

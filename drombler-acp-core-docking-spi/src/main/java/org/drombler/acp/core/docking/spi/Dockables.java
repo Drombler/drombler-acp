@@ -40,7 +40,7 @@ public final class Dockables {
     private Dockables() {
     }
 
-    public static <D, DATA extends DockableData, E extends DockableEntry<D, DATA>> void openView(D dockable) {
+    public static <D, DATA extends DockableData, E extends DockableEntry<D, DATA>> void openView(E viewEntry) {
         // TODO: cache ServiceReference? or even DockingAreaContainerProvider?
         // TODO: check if the code is safe, if the services disappear
         BundleContext bundleContext = FrameworkUtil.getBundle(Dockables.class).getBundleContext();
@@ -57,7 +57,7 @@ public final class Dockables {
         ApplicationExecutorProvider applicationExecutorProvider
                 = bundleContext.getService(applicationExecutorProviderServiceReference);
 
-        applicationExecutorProvider.getApplicationExecutor().execute(() -> dockingAreaContainerProvider.getDockingAreaContainer().openView(dockable, true));
+        applicationExecutorProvider.getApplicationExecutor().execute(() -> dockingAreaContainerProvider.getDockingAreaContainer().addDockable(viewEntry, true));
 
         bundleContext.ungetService(applicationExecutorProviderServiceReference);
         bundleContext.ungetService(dockingAreaContainerProviderServiceReference);

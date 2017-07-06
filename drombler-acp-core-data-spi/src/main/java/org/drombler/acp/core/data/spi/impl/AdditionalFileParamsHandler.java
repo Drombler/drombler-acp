@@ -30,6 +30,7 @@ import org.apache.felix.scr.annotations.Deactivate;
 import org.apache.felix.scr.annotations.Reference;
 import org.apache.felix.scr.annotations.ReferenceCardinality;
 import org.apache.felix.scr.annotations.ReferencePolicy;
+import org.drombler.acp.core.data.spi.DataHandlerRegistryProvider;
 import org.drombler.acp.core.data.spi.DocumentHandlerDescriptorRegistryProvider;
 import org.drombler.acp.core.data.spi.FileExtensionDescriptorRegistryProvider;
 import org.drombler.acp.startup.main.AdditionalArgumentsProvider;
@@ -53,6 +54,8 @@ public class AdditionalFileParamsHandler {
     private FileExtensionDescriptorRegistryProvider fileExtensionDescriptorRegistryProvider;
     @Reference
     private DocumentHandlerDescriptorRegistryProvider documentHandlerDescriptorRegistryProvider;
+    @Reference
+    private DataHandlerRegistryProvider dataHandlerRegistryProvider;
 
     private final List<String> unresolvedArguments = new ArrayList<>();
     private final List<Path> unresolvedPaths = new ArrayList<>();
@@ -83,6 +86,14 @@ public class AdditionalFileParamsHandler {
         // TODO
     }
 
+    protected void bindDataHandlerRegistryProvider(DataHandlerRegistryProvider dataHandlerRegistryProvider) {
+        this.dataHandlerRegistryProvider = dataHandlerRegistryProvider;
+    }
+
+    protected void unbindDataHandlerRegistryProvider(DataHandlerRegistryProvider dataHandlerRegistryProvider) {
+        this.dataHandlerRegistryProvider = null;
+    }
+
     @Activate
     protected void activate(ComponentContext context) {
         fileExtensionDescriptorRegistryProvider.getFileExtensionDescriptorRegistry().addFileExtensionListener(openFileListener);
@@ -97,7 +108,8 @@ public class AdditionalFileParamsHandler {
     }
 
     private boolean isInitialized() {
-        return fileExtensionDescriptorRegistryProvider != null && documentHandlerDescriptorRegistryProvider != null;
+        return fileExtensionDescriptorRegistryProvider != null && documentHandlerDescriptorRegistryProvider != null
+                && dataHandlerRegistryProvider != null;
     }
 
     private void handleAdditionalArguments(List<String> additionalArguments) {
@@ -128,7 +140,7 @@ public class AdditionalFileParamsHandler {
 
     private void openFile(Path filePath) {
         try {
-            FileUtils.openFile(filePath, fileExtensionDescriptorRegistryProvider.getFileExtensionDescriptorRegistry(), documentHandlerDescriptorRegistryProvider.getDocumentHandlerDescriptorRegistry());
+            FileUtils.openFile(filePath, dataHandlerRegistryProvider.getDataHandlerRegistry(), fileExtensionDescriptorRegistryProvider.getFileExtensionDescriptorRegistry(), documentHandlerDescriptorRegistryProvider.getDocumentHandlerDescriptorRegistry());
         } catch (RuntimeException ex) {
             unresolvedPaths.add(filePath);
         }

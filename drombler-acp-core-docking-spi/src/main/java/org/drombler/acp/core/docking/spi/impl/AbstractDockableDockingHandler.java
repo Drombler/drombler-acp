@@ -42,11 +42,15 @@ public abstract class AbstractDockableDockingHandler<D, DATA extends DockableDat
         resolveDockingsType(dockingsType, bundle, context);
     }
 
-    protected void unbindDockingsType(DockingsType dockingAreasType) {
-        // TODO
+    protected void unbindDockingsType(ServiceReference<DockingsType> serviceReference) throws Exception {
+        Bundle bundle = serviceReference.getBundle();
+        BundleContext context = bundle.getBundleContext();
+        DockingsType dockingsType = context.getService(serviceReference);
+        unregisterDockingsType(dockingsType, bundle);
     }
 
     protected abstract void resolveDockingsType(DockingsType dockingsType, Bundle bundle, BundleContext context);
 
+    protected abstract void unregisterDockingsType(DockingsType dockingsType, Bundle bundle) throws Exception;
 
 }

@@ -24,6 +24,7 @@ import org.drombler.acp.core.action.jaxb.ActionType;
 import org.drombler.acp.core.action.jaxb.ActionsType;
 import org.drombler.acp.core.action.spi.ActionDescriptor;
 import org.drombler.acp.core.action.spi.ActionFactory;
+import org.drombler.acp.core.action.spi.ActionRegistry;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.component.ComponentContext;
@@ -40,6 +41,8 @@ public class ActionHandler<T> extends AbstractActionHandler<ActionType, ActionDe
     @Reference
     private ActionFactory<T> actionFactory;
 
+    private final ActionRegistry<ActionDescriptor<?>> actionRegistry = new ActionRegistry<>((Class<ActionDescriptor<?>>) (Class<?>) ActionDescriptor.class);
+
     protected void bindActionDescriptor(ServiceReference<ActionDescriptor<?>> serviceReference) {
         BundleContext context = serviceReference.getBundle().getBundleContext();
         ActionDescriptor<?> actionDescriptor = context.getService(serviceReference);
@@ -47,7 +50,7 @@ public class ActionHandler<T> extends AbstractActionHandler<ActionType, ActionDe
     }
 
     protected void unbindActionDescriptor(ActionDescriptor<?> actionDescriptor) {
-        // TODO
+        unregisterActionDescriptor(actionDescriptor);
     }
 
     protected void bindActionFactory(ActionFactory<T> actionFactory) {
@@ -81,25 +84,31 @@ public class ActionHandler<T> extends AbstractActionHandler<ActionType, ActionDe
     }
 
     @Override
-    protected ActionDescriptor<?> createActionDescriptor(ActionType actionType, BundleContext context) throws
-            IllegalAccessException, ClassNotFoundException, InstantiationException {
+    protected ActionDescriptor<?> createActionDescriptor(ActionType actionType, BundleContext context)
+            throws IllegalAccessException, ClassNotFoundException, InstantiationException {
         return ActionDescriptor.createActionDescriptor(actionType, context.getBundle(), getContextInjector());
+    }
+
+    @Override
+    protected ActionRegistry<ActionDescriptor<?>> getActionRegistry() {
+        return actionRegistry;
     }
 
     @Override
     protected void registerActionDescriptor(ActionDescriptor<?> actionDescriptor, BundleContext context) {
         if (isInitialized()) {
+            registerActionDescriptor(actionDescriptor);
             T action = actionFactory.createAction(actionDescriptor);
             if (!actionDescriptor.getListenerType().equals(actionFactory.getActionClass())) {
                 registerActionListener(context, actionDescriptor);
             }
-            getActionRegistry().
-                    registerAction(actionDescriptor.getId(), actionFactory.getActionClass(), action, context);
+            getActionRegistry().registerAction(actionDescriptor.getId(), actionFactory.getActionClass(), action, context);
         } else {
             registerUnresolvedActionDescriptor(actionDescriptor, context);
         }
     }
 
+    //    TODO [puce, 18.04.2017]: used? If yes, use getActionRegistry().registerAction instead (set the id property)?
     private <T> void registerActionListener(BundleContext context, ActionDescriptor<T> actionDescriptor) {
         context.registerService(actionDescriptor.getListenerType(), actionDescriptor.getListener(), null);
     }

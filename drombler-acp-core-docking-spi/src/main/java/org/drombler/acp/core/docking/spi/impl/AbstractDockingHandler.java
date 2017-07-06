@@ -33,18 +33,24 @@ public abstract class AbstractDockingHandler<D, DATA extends DockableData, E ext
 
     private DockingAreaContainerProvider<D, DATA, E> dockingAreaContainerProvider;
 
-    protected void bindDockingAreaContainerProvider(
-            DockingAreaContainerProvider<D, DATA, E> dockingAreaContainerProvider) {
+    protected void bindDockingAreaContainerProvider(DockingAreaContainerProvider<D, DATA, E> dockingAreaContainerProvider) {
         this.dockingAreaContainerProvider = dockingAreaContainerProvider;
     }
 
-    protected void unbindDockingAreaContainerProvider(
-            DockingAreaContainerProvider<D, DATA, E> dockingAreaContainerProvider) {
+    protected void unbindDockingAreaContainerProvider(DockingAreaContainerProvider<D, DATA, E> dockingAreaContainerProvider) {
         this.dockingAreaContainerProvider = null;
     }
 
     protected void registerDefaultDockablePreferences(Class<?> dockableClass, DockablePreferences dockablePreferences) {
         getDockingAreaContainer().registerDefaultDockablePreferences(dockableClass, dockablePreferences);
+    }
+
+    protected DockablePreferences unregisterDefaultDockablePreferences(Class<?> dockableClass) {
+        if (isInitialized()) {
+            return getDockingAreaContainer().unregisterDefaultDockablePreferences(dockableClass);
+        } else {
+            return null;
+        }
     }
 
     protected DockingAreaContainer<D, DATA, E> getDockingAreaContainer() {

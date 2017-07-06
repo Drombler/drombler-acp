@@ -15,7 +15,9 @@
 package org.drombler.acp.core.docking.spi.impl;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.Executor;
 import org.apache.felix.scr.annotations.Activate;
 import org.apache.felix.scr.annotations.Component;
@@ -24,20 +26,27 @@ import org.apache.felix.scr.annotations.Reference;
 import org.apache.felix.scr.annotations.ReferenceCardinality;
 import org.apache.felix.scr.annotations.ReferencePolicy;
 import org.apache.felix.scr.annotations.References;
+import org.drombler.acp.core.action.spi.ActionDescriptor;
+import org.drombler.acp.core.action.spi.MenuEntryDescriptor;
+import org.drombler.acp.core.commons.util.BundleUtils;
+import org.drombler.acp.core.commons.util.UnresolvedEntry;
 import org.drombler.acp.core.docking.jaxb.DockingsType;
-import org.drombler.acp.core.docking.spi.DockableFactory;
 import org.drombler.acp.core.docking.spi.DockingDescriptorUtils;
 import org.drombler.acp.core.docking.spi.ViewDockingDescriptor;
 import org.drombler.acp.startup.main.ApplicationExecutorProvider;
 import org.drombler.commons.docking.DockableData;
 import org.drombler.commons.docking.DockableEntry;
 import org.drombler.commons.docking.DockablePreferences;
+import org.drombler.commons.docking.DockingAreaDescriptor;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
+import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.component.ComponentContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.softsmithy.lib.util.SetChangeEvent;
+import org.softsmithy.lib.util.SetChangeListener;
 
 /**
  * TODO: thread-safe???
@@ -47,18 +56,22 @@ import org.slf4j.LoggerFactory;
 @Component(immediate = true)
 @References({
     @Reference(name = "viewDockingDescriptor", referenceInterface = ViewDockingDescriptor.class,
-            cardinality = ReferenceCardinality.OPTIONAL_MULTIPLE, policy = ReferencePolicy.DYNAMIC),
+            cardinality = ReferenceCardinality.OPTIONAL_MULTIPLE, policy = ReferencePolicy.DYNAMIC)
+    ,
     @Reference(name = "applicationExecutorProvider", referenceInterface = ApplicationExecutorProvider.class)
 })
 public class ViewDockingHandler<D, DATA extends DockableData, E extends DockableEntry<D, DATA>> extends AbstractDockableDockingHandler<D, DATA, E> {
 
     private static final Logger LOG = LoggerFactory.getLogger(ViewDockingHandler.class);
 
-    @Reference
-    private DockableFactory<D> dockableFactory;
     private Executor applicationExecutor;
     private ViewDockingManager<D, DATA, E> viewDockingManager;
-    private final List<UnresolvedEntry<ViewDockingDescriptor<? extends D>>> unresolvedDockingDescriptors = new ArrayList<>();
+    private final Map<String, List<UnresolvedEntry<ViewDockingDescriptor<D, DATA, E>>>> unresolvedDockingDescriptorsAreaId = new HashMap<>();
+    private final List<UnresolvedEntry<ViewDockingDescriptor<D, DATA, E>>> unresolvedDockingDescriptors = new ArrayList<>();
+    private final Map<String, ServiceRegistration<ActionDescriptor>> actionServiceRegistrations = new HashMap<>();
+    private final Map<String, ServiceRegistration<MenuEntryDescriptor>> menuEntryServiceRegistrations = new HashMap<>();
+    private final SetChangeListener<DockingAreaDescriptor> dockingAreaListener = new DockingAreaListener();
+//    private final BundleScope scope = new BundleScope();
 
     protected void bindApplicationExecutorProvider(ApplicationExecutorProvider applicationExecutorProvider) {
         applicationExecutor = applicationExecutorProvider.getApplicationExecutor();
@@ -68,91 +81,97 @@ public class ViewDockingHandler<D, DATA extends DockableData, E extends Dockable
         applicationExecutor = null;
     }
 
-    protected void bindDockableFactory(DockableFactory<D> dockableFactory) {
-        this.dockableFactory = dockableFactory;
-    }
-
-    protected void unbindDockableFactory(DockableFactory<D> dockableFactory) {
-        this.dockableFactory = null;
-    }
-
-    protected void bindViewDockingDescriptor(ServiceReference<ViewDockingDescriptor<? extends D>> serviceReference) {
+    protected void bindViewDockingDescriptor(ServiceReference<ViewDockingDescriptor<D, DATA, E>> serviceReference) {
         BundleContext context = serviceReference.getBundle().getBundleContext();
-        ViewDockingDescriptor<? extends D> dockingDescriptor = context.getService(serviceReference);
+        ViewDockingDescriptor<D, DATA, E> dockingDescriptor = context.getService(serviceReference);
         resolveDockable(dockingDescriptor, context);
     }
 
-    protected void unbindViewDockingDescriptor(ViewDockingDescriptor<?> dockingDescriptor) {
+    protected void unbindViewDockingDescriptor(ViewDockingDescriptor<D, DATA, E> dockingDescriptor) throws InterruptedException {
+        unregisterView(dockingDescriptor.getId(), dockingDescriptor.getDockableClass());
     }
 
     @Activate
     protected void activate(ComponentContext context) {
-        viewDockingManager = new ViewDockingManager<>(dockableFactory, getDockingAreaContainer());
+        getDockingAreaContainer().addDockingAreaSetChangeListener(dockingAreaListener);
+        viewDockingManager = new ViewDockingManager<>(getDockingAreaContainer());
         resolveUnresolvedDockables();
     }
 
     @Deactivate
-    protected void deactivate(ComponentContext context) {
-        viewDockingManager.close();
+    protected void deactivate(ComponentContext context) throws InterruptedException {
+        getDockingAreaContainer().removeDockingAreaSetChangeListener(dockingAreaListener);
+        unresolvedDockingDescriptors.clear();
+        unresolvedDockingDescriptorsAreaId.clear();
+//        ViewDockingManager<D, DATA, E> manager = viewDockingManager;
+//        applicationExecutor.execute(() -> manager.close());
         viewDockingManager = null;
     }
 
     @Override
     protected boolean isInitialized() {
-        return super.isInitialized() && dockableFactory != null && applicationExecutor != null;
+        return super.isInitialized() && applicationExecutor != null;
     }
 
     @Override
     protected void resolveDockingsType(DockingsType dockingsType, Bundle bundle, BundleContext context) {
         dockingsType.getViewDocking().forEach(dockingType -> {
             try {
-                ViewDockingDescriptor<?> dockingDescriptor = DockingDescriptorUtils.createViewDockingDescriptor(dockingType, bundle);
+                ViewDockingDescriptor<?, ?, ?> dockingDescriptor = DockingDescriptorUtils.createViewDockingDescriptor(dockingType, bundle);
                 // TODO: register ViewDockingDescriptor as service? Omit resolveDockable?
-                resolveDockable((ViewDockingDescriptor<? extends D>) dockingDescriptor, context);
-            } catch (Exception ex) {
+                resolveDockable((ViewDockingDescriptor<D, DATA, E>) dockingDescriptor, context);
+            } catch (ClassNotFoundException | IllegalAccessException | InstantiationException | RuntimeException ex) {
                 LOG.error(ex.getMessage(), ex);
             }
         });
     }
 
-    private void resolveDockable(final ViewDockingDescriptor<? extends D> dockingDescriptor, final BundleContext context) {
+    private void resolveDockable(final ViewDockingDescriptor<D, DATA, E> dockingDescriptor, final BundleContext context) {
         if (isInitialized()) {
-            resolveDockableBasic(dockingDescriptor);
-            addDockable(dockingDescriptor, context);
+            registerDefaultDockablePreferences(dockingDescriptor);
+            applicationExecutor.execute(() -> addDockable(dockingDescriptor, context));
         } else {
             unresolvedDockingDescriptors.add(new UnresolvedEntry<>(dockingDescriptor, context));
         }
     }
 
-    private void resolveDockableBasic(final ViewDockingDescriptor<? extends D> dockingDescriptor) {
-        registerDefaultDockablePreferences(dockingDescriptor);
+    private void addDockable(final ViewDockingDescriptor<D, DATA, E> dockingDescriptor, final BundleContext context) {
+        if (viewDockingManager.addView(dockingDescriptor)) {
+            ServiceRegistration<ActionDescriptor> actionServiceRegistration = context.registerService(ActionDescriptor.class,
+                    dockingDescriptor.getActivateDockableActionDescriptor(), null);
+            actionServiceRegistrations.put(dockingDescriptor.getId(), actionServiceRegistration);
+            ServiceRegistration<MenuEntryDescriptor> menuEntryServiceRegistration = context.registerService(MenuEntryDescriptor.class,
+                    dockingDescriptor.getActivateDockableMenuEntryDescriptor(), null);
+            menuEntryServiceRegistrations.put(dockingDescriptor.getId(), menuEntryServiceRegistration);
+        } else {
+            // TODO: Does this still work?
+            final String areaId = dockingDescriptor.getAreaId();
+            if (!unresolvedDockingDescriptorsAreaId.containsKey(areaId)) {
+                unresolvedDockingDescriptorsAreaId.put(areaId, new ArrayList<>());
+            }
+            unresolvedDockingDescriptorsAreaId.get(areaId).add(new UnresolvedEntry<>(dockingDescriptor, context));
+        }
     }
 
-    private void addDockable(final ViewDockingDescriptor<? extends D> dockingDescriptor, final BundleContext context) {
-        applicationExecutor.execute(() -> viewDockingManager.addDockable(dockingDescriptor, context));
-    }
-
-    private void addDockables(
-            final List<UnresolvedEntry<ViewDockingDescriptor<? extends D>>> unresolvedDockingDescriptors) {
+    private void addDockables(final List<UnresolvedEntry<ViewDockingDescriptor<D, DATA, E>>> unresolvedDockingDescriptors) {
         applicationExecutor.execute(()
                 -> unresolvedDockingDescriptors.forEach(unresolvedEntry
-                        -> viewDockingManager.addDockable(unresolvedEntry.getEntry(), unresolvedEntry.getContext()))
+                        -> addDockable(unresolvedEntry.getEntry(), unresolvedEntry.getContext()))
         );
     }
 
-    private void registerDefaultDockablePreferences(ViewDockingDescriptor<?> dockingDescriptor) {
+    private void registerDefaultDockablePreferences(ViewDockingDescriptor<D, DATA, E> dockingDescriptor) {
         DockablePreferences dockablePreferences = new DockablePreferences(dockingDescriptor.getAreaId(), dockingDescriptor.getPosition());
         registerDefaultDockablePreferences(dockingDescriptor.getDockableClass(), dockablePreferences);
     }
 
-    private void registerDefaultDockablePreferences(
-            List<UnresolvedEntry<ViewDockingDescriptor<? extends D>>> unresolvedDockingDescriptors) {
-        unresolvedDockingDescriptors.forEach(unresolvedEntry -> resolveDockableBasic(unresolvedEntry.getEntry()));
+    private void registerDefaultDockablePreferences(List<UnresolvedEntry<ViewDockingDescriptor<D, DATA, E>>> unresolvedDockingDescriptors) {
+        unresolvedDockingDescriptors.forEach(unresolvedEntry -> registerDefaultDockablePreferences(unresolvedEntry.getEntry()));
     }
 
     private void resolveUnresolvedDockables() {
         if (isInitialized()) {
-            List<UnresolvedEntry<ViewDockingDescriptor<? extends D>>> unresolvedDockingDescriptorsCopy
+            List<UnresolvedEntry<ViewDockingDescriptor<D, DATA, E>>> unresolvedDockingDescriptorsCopy
                     = new ArrayList<>(unresolvedDockingDescriptors);
             unresolvedDockingDescriptors.clear();
             registerDefaultDockablePreferences(unresolvedDockingDescriptorsCopy);
@@ -160,4 +179,76 @@ public class ViewDockingHandler<D, DATA extends DockableData, E extends Dockable
         }
     }
 
+    @Override
+    protected void unregisterDockingsType(DockingsType dockingsType, Bundle bundle) throws InterruptedException {
+        dockingsType.getViewDocking().forEach(dockingType -> {
+            try {
+                // TODO: unregister ViewDockingDescriptor as service? Omit resolveDockable?
+                unregisterView(dockingType.getId(), BundleUtils.loadClass(bundle, dockingType.getDockableClass()));
+            } catch (ClassNotFoundException | RuntimeException ex) {
+                LOG.error(ex.getMessage(), ex);
+            }
+        });
+    }
+
+    private void unregisterView(String viewId, Class<?> dockableClass) {
+        if (isInitialized()) {
+            unregisterDefaultDockablePreferences(dockableClass);
+            removeView(viewId);
+        } else {
+            unresolvedDockingDescriptors.removeIf(unresolvedEntry -> unresolvedEntry.getEntry().getId().equals(viewId));
+        }
+    }
+
+    private void removeView(String viewId) {
+        if (menuEntryServiceRegistrations.containsKey(viewId)) {
+            ServiceRegistration<MenuEntryDescriptor> menuEntryServiceRegistration = menuEntryServiceRegistrations.remove(viewId);
+            menuEntryServiceRegistration.unregister();
+        }
+        if (actionServiceRegistrations.containsKey(viewId)) {
+            ServiceRegistration<ActionDescriptor> actionServiceRegistration = actionServiceRegistrations.remove(viewId);
+            actionServiceRegistration.unregister();
+        }
+        unresolvedDockingDescriptorsAreaId.entrySet().forEach(entry
+                -> entry.getValue().removeIf(unresolvedEntry -> unresolvedEntry.getEntry().getId().equals(viewId)));
+        applicationExecutor.execute(() -> {
+            try {
+                viewDockingManager.removeView(viewId);
+            } catch (Exception ex) {
+                LOG.error(ex.getMessage(), ex);
+            }
+        });
+    }
+
+    private void resolveUnresolvedDockables(String areaId) {
+        if (unresolvedDockingDescriptorsAreaId.containsKey(areaId)) {
+            applicationExecutor.execute(()
+                    -> unresolvedDockingDescriptorsAreaId.get(areaId).forEach(unresolvedEntry -> addDockable(unresolvedEntry.getEntry(), unresolvedEntry.getContext()))
+            );
+        }
+    }
+
+    private class DockingAreaListener implements SetChangeListener<DockingAreaDescriptor> {
+
+        /**
+         * This method gets called from the application thread!
+         *
+         * @param event
+         */
+        @Override
+        public void elementAdded(SetChangeEvent<DockingAreaDescriptor> event) {
+            resolveUnresolvedDockables(event.getElement().getId());
+        }
+
+        /**
+         * This method gets called from the application thread!
+         *
+         * @param event
+         */
+        @Override
+        public void elementRemoved(SetChangeEvent<DockingAreaDescriptor> event) {
+            // TODO: ???
+        }
+
+    }
 }

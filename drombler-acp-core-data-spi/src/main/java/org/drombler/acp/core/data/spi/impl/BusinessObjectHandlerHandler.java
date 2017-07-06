@@ -70,7 +70,7 @@ public class BusinessObjectHandlerHandler extends AbstractDataHandlerHandler<Bus
             BusinessObjectHandlerDescriptor<?> businessObjectHandlerDescriptor = DataHandlerUtils.createBusinessObjectHandlerDescriptor(
                     businessObjectHandler, context.getBundle());
             resolveDataHandlerDescriptor(businessObjectHandlerDescriptor);
-        } catch (ClassNotFoundException ex) {
+        } catch (ClassNotFoundException | RuntimeException ex) {
             LOG.error(ex.getMessage(), ex);
         }
     }

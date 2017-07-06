@@ -18,6 +18,7 @@ import java.util.concurrent.Executor;
 import org.apache.felix.scr.annotations.Activate;
 import org.apache.felix.scr.annotations.Deactivate;
 import org.apache.felix.scr.annotations.Reference;
+import org.drombler.acp.core.action.spi.ActionDescriptor;
 import org.drombler.acp.core.action.spi.ActionRegistry;
 import org.drombler.acp.core.action.spi.ToolBarContainerListenerAdapter;
 import org.drombler.acp.core.action.spi.ToolBarContainerToolBarEvent;
@@ -40,7 +41,7 @@ public abstract class AbstractToolBarButtonHandler<ToolBar, ToolBarButton, Actio
 
     private static final int ICON_SIZE = 24;
     private final ToolBarEntryResolutionManager<D> toolBarEntryResolutionManager = new ToolBarEntryResolutionManager<>();
-    private final ActionRegistry actionRegistry = new ActionRegistry();
+    private final ActionRegistry<?> actionRegistry = new ActionRegistry<>(ActionDescriptor.class);
     private final ActionResolutionManager<D> actionResolutionManager = new ActionResolutionManager<>();
     private Executor applicationExecutor;
     private ServiceTracker<Action, ServiceReference<Action>> tracker;

@@ -27,18 +27,23 @@ import org.slf4j.LoggerFactory;
 /**
  *
  * @author puce
+ * @param <D> the ActionDescriptor type
  */
-public class ActionRegistry {
+public class ActionRegistry<D extends ActionDescriptor<?>> {
 
     private static final Logger LOG = LoggerFactory.getLogger(ActionRegistry.class);
     private static final String BACKSLASH = "\\";
     private static final String NUL = Character.toString((char) 0);
+    private final Class<D> actionDescriptorType;
+
+    public ActionRegistry(Class<D> actionDescriptorType) {
+        this.actionDescriptorType = actionDescriptorType;
+    }
 
 //    private final Map<String, ActionDescriptor> actionDescriptors = new HashMap<>();
     public <T> T getAction(String actionId, Class<T> actionClass, BundleContext context) {
         try {
-            Collection<ServiceReference<T>> serviceReferences = context.getServiceReferences(
-                    actionClass, "(" + ActionDescriptor.ID_KEY + "=" + escapeLDAPFilter(actionId) + ")");
+            Collection<ServiceReference<T>> serviceReferences = context.getServiceReferences(actionClass, createActionFilter(actionId));
             if (!serviceReferences.isEmpty()) {
                 return context.getService(serviceReferences.iterator().next());
             }
@@ -78,5 +83,27 @@ public class ActionRegistry {
 
     public String getActionId(ServiceReference<?> reference) {
         return reference.getProperty(ActionDescriptor.ID_KEY).toString();
+    }
+
+    public void registerActionDescriptor(D actionDescriptor, BundleContext context) {
+        Dictionary<String, String> properties = new Hashtable<>(1);
+        properties.put(ActionDescriptor.ID_KEY, escapeLDAPFilter(actionDescriptor.getId()));
+        context.registerService(actionDescriptorType, actionDescriptor, properties);
+    }
+
+    public D getActionDescriptor(String actionId, BundleContext context) {
+        try {
+            Collection<ServiceReference<D>> serviceReferences = context.getServiceReferences(actionDescriptorType, createActionFilter(actionId));
+            if (!serviceReferences.isEmpty()) {
+                return context.getService(serviceReferences.iterator().next());
+            }
+        } catch (InvalidSyntaxException ex) {
+            LOG.error(ex.getMessage(), ex);
+        }
+        return null;
+    }
+
+    private String createActionFilter(String actionId) {
+        return "(" + ActionDescriptor.ID_KEY + "=" + escapeLDAPFilter(actionId) + ")";
     }
 }

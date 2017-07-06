@@ -20,18 +20,22 @@ import org.drombler.acp.core.action.spi.MenuEntryDescriptor;
 import org.drombler.acp.core.docking.spi.impl.ActivateViewAction;
 import org.drombler.commons.client.util.MnemonicUtils;
 import org.drombler.commons.client.util.ResourceBundleUtils;
+import org.drombler.commons.docking.DockableData;
+import org.drombler.commons.docking.DockableEntry;
 import org.softsmithy.lib.util.ResourceLoader;
 
 /**
  *
  * @author puce
  * @param <D>
+ * @param <DATA>
+ * @param <E>
  */
-public class ViewDockingDescriptor<D> extends AbstractDockableDockingDescriptor<D> {
+public class ViewDockingDescriptor<D, DATA extends DockableData, E extends DockableEntry<D, DATA>> extends AbstractDockableDockingDescriptor<D> {
 
     private final String displayName;
     private int position;
-    private final ActionDescriptor<ActivateViewAction<D>> activateDockableActionDescriptor;
+    private final ActionDescriptor<ActivateViewAction<D, DATA, E>> activateDockableActionDescriptor;
     private MenuEntryDescriptor activateDockableMenuEntryDescriptor;
     private final ResourceBundle resourceBundle;
     private final ResourceLoader resourceLoader;
@@ -58,9 +62,9 @@ public class ViewDockingDescriptor<D> extends AbstractDockableDockingDescriptor<
         this.activateDockableActionDescriptor = createActivateDockableActionDescriptor(id, localizedDisplayName, accelerator, icon);
     }
 
-    private ActionDescriptor<ActivateViewAction<D>> createActivateDockableActionDescriptor(String id, String displayName, String accelerator, String icon) {
-        ActionDescriptor<ActivateViewAction<D>> actionDescriptor
-                = new ActionDescriptor<>((Class<ActivateViewAction<D>>) (Class<?>) ActivateViewAction.class, resourceLoader);
+    private ActionDescriptor<ActivateViewAction<D, DATA, E>> createActivateDockableActionDescriptor(String id, String displayName, String accelerator, String icon) {
+        ActionDescriptor<ActivateViewAction<D, DATA, E>> actionDescriptor
+                = new ActionDescriptor<>((Class<ActivateViewAction<D, DATA, E>>) (Class<?>) ActivateViewAction.class, resourceLoader);
         actionDescriptor.setId(id);
         actionDescriptor.setDisplayName(displayName);
         actionDescriptor.setAccelerator(accelerator);
@@ -122,8 +126,8 @@ public class ViewDockingDescriptor<D> extends AbstractDockableDockingDescriptor<
         return activateDockableActionDescriptor;
     }
 
-    public void setDockable(D dockable) {
-        this.activateDockableActionDescriptor.setListener(new ActivateViewAction<>(dockable));
+    public void setViewEntry(E viewEntry) {
+        this.activateDockableActionDescriptor.setListener(new ActivateViewAction<>(viewEntry));
     }
 
     /**

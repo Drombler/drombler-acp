@@ -16,22 +16,24 @@ package org.drombler.acp.core.docking.spi.impl;
 
 import org.drombler.acp.core.docking.spi.Dockables;
 import org.drombler.commons.action.AbstractActionListener;
+import org.drombler.commons.docking.DockableData;
+import org.drombler.commons.docking.DockableEntry;
 
 /**
  *
  * @author puce
  */
-public class ActivateViewAction<D> extends AbstractActionListener<Object> {
+public class ActivateViewAction<D, DATA extends DockableData, E extends DockableEntry<D, DATA>> extends AbstractActionListener<Object> {
 
-    private final D view;
+    private final E viewEntry;
 
-    public ActivateViewAction(D view) {
-        this.view = view;
+    public ActivateViewAction(E viewEntry) {
+        this.viewEntry = viewEntry;
     }
 
     @Override
     public void onAction(Object event) {
-        Dockables.openView(view);
+        Dockables.openView(viewEntry);
 //        dockable.requestActive();
     }
 }

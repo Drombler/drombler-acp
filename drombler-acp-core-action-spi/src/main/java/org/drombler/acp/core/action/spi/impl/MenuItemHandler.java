@@ -21,6 +21,7 @@ import org.apache.felix.scr.annotations.Reference;
 import org.apache.felix.scr.annotations.ReferenceCardinality;
 import org.apache.felix.scr.annotations.ReferencePolicy;
 import org.drombler.acp.core.action.jaxb.MenusType;
+import org.drombler.acp.core.action.spi.ActionDescriptor;
 import org.drombler.acp.core.action.spi.ActionFactory;
 import org.drombler.acp.core.action.spi.ActionRegistry;
 import org.drombler.acp.core.action.spi.MenuEntryDescriptor;
@@ -46,7 +47,7 @@ public class MenuItemHandler<MenuItem, Menu extends MenuItem, Action> extends Ab
     private MenuItemFactory<MenuItem, Action> menuItemFactory;
     @Reference
     private ActionFactory<Action> actionFactory;
-    private final ActionRegistry actionRegistry = new ActionRegistry();
+    private final ActionRegistry<?> actionRegistry = new ActionRegistry<>(ActionDescriptor.class);
     private final ActionResolutionManager<MenuEntryDescriptor> actionResolutionManager = new ActionResolutionManager<>();
     private ServiceTracker<Action, ServiceReference<Action>> tracker;
 
@@ -128,8 +129,7 @@ public class MenuItemHandler<MenuItem, Menu extends MenuItem, Action> extends Ab
 
     @Override
     protected MenuItemConfig<Action> createConfig(MenuEntryDescriptor<MenuItem, ?> menuEntryDescriptor, BundleContext context) {
-        Action action = actionRegistry.getAction(menuEntryDescriptor.getActionId(), actionFactory.getActionClass(),
-                context);
+        Action action = actionRegistry.getAction(menuEntryDescriptor.getActionId(), actionFactory.getActionClass(), context);
         if (action != null) {
             return new MenuItemConfig<>(action);
         } else {

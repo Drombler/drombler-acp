@@ -18,7 +18,7 @@ Contributor(s): .
     <parent>
         <groupId>org.drombler.acp</groupId>
         <artifactId>drombler-acp-parent</artifactId>
-        <version>0.9</version>
+        <version>0.10</version>
         <relativePath>../drombler-acp-parent/pom.xml</relativePath>
     </parent>
     <artifactId>drombler-acp-startup-main</artifactId>
@@ -64,19 +64,6 @@ Contributor(s): .
                 <artifactId>maven-bundle-plugin</artifactId>
                 <extensions>true</extensions>
                 <configuration>
-                    <instructions>
-                        <_donotcopy>(CVS|.svn|config.properties)</_donotcopy>
-                        <Main-Class>org.drombler.acp.startup.main.DromblerACPStarter</Main-Class>
-                        <!--                        <Bundle-SymbolicName>org.apache.felix.main</Bundle-SymbolicName>
-                        <Bundle-Name>Apache Felix</Bundle-Name>
-                        <Bundle-Description>OSGi R4 framework.</Bundle-Description>
-                        <Bundle-Vendor>The Apache Software Foundation</Bundle-Vendor>-->
-                        <Embed-Dependency>*;artifactId=org.apache.felix.framework;inline=true</Embed-Dependency>
-                        <!--                        <Private-Package>org.richclientplatform.startup.main.*</Private-Package>-->
-                        <!-- TODO: Why the excludes? -->
-                        <Export-Package>!org.osgi.service.log, !org.osgi.service.obr,org.osgi.*, !org.drombler.acp.startup.main.impl.*, org.drombler.acp.startup.main.*</Export-Package>
-                        <Import-Package>!*</Import-Package>
-                    </instructions>
                     <versions>
                         <drombler.acp.osgi.version.clean>${project.version}</drombler.acp.osgi.version.clean>
                     </versions>
