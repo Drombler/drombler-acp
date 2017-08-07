@@ -16,10 +16,14 @@ package org.drombler.acp.core.data;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import java.util.ArrayList;
+import java.util.List;
 import org.drombler.acp.core.commons.util.SimpleServiceTrackerCustomizer;
 import org.drombler.commons.context.Context;
 import org.drombler.commons.context.SimpleContext;
 import org.drombler.commons.context.SimpleContextContent;
+import org.drombler.commons.data.CloseEvent;
+import org.drombler.commons.data.CloseEventListener;
 import org.drombler.commons.data.DataCapabilityProvider;
 import org.drombler.commons.data.DataHandler;
 import org.osgi.util.tracker.ServiceTracker;
@@ -33,12 +37,13 @@ import org.osgi.util.tracker.ServiceTracker;
  * @see AbstractDocumentHandler
  * @author puce
  */
-public abstract class AbstractDataHandler<T> implements DataHandler<T>, AutoCloseable {
+public abstract class AbstractDataHandler<T> implements DataHandler<T> {
 
     private final SimpleContextContent contextContent = new SimpleContextContent();
     private final Context localContext = new SimpleContext(contextContent);
     private final ServiceTracker<DataCapabilityProvider, DataCapabilityProvider> dataCapabilityProviderTracker;
     private final PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);
+    private final List<CloseEventListener> closeEventListeners = new ArrayList<>();
 
     private boolean dirty = false;
 
@@ -56,6 +61,10 @@ public abstract class AbstractDataHandler<T> implements DataHandler<T>, AutoClos
     @Override
     public Context getLocalContext() {
         return localContext;
+    }
+
+    protected SimpleContextContent getContextContent() {
+        return contextContent;
     }
 
     private void addDataCapabilityProvider(DataCapabilityProvider<?> dataCapabilityProvider) {
@@ -113,6 +122,27 @@ public abstract class AbstractDataHandler<T> implements DataHandler<T>, AutoClos
     @Override
     public void close() {
         dataCapabilityProviderTracker.close();
+        fireCloseEvent();
     }
 
+    /**
+     * {@inheritDoc }
+     */
+    @Override
+    public void addCloseEventListener(CloseEventListener listener) {
+        closeEventListeners.add(listener);
+    }
+
+    /**
+     * {@inheritDoc }
+     */
+    @Override
+    public void removeCloseEventListener(CloseEventListener listener) {
+        closeEventListeners.remove(listener);
+    }
+
+    protected void fireCloseEvent() {
+        CloseEvent event = new CloseEvent(this);
+        closeEventListeners.forEach(listener -> listener.onClose(event));
+    }
 }
