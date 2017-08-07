@@ -79,6 +79,12 @@ Contributor(s): .
             <version>${project.version}</version>
         </dependency>
         <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>drombler-acp-core-context</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        
+        <dependency>
             <groupId>org.drombler.commons</groupId>
             <artifactId>drombler-commons-context</artifactId>
         </dependency>
