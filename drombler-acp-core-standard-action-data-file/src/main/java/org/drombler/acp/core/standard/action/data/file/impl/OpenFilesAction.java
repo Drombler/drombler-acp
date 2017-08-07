@@ -6,12 +6,14 @@ import org.drombler.acp.core.action.Action;
 import org.drombler.acp.core.action.MenuEntry;
 import org.drombler.acp.core.commons.util.SimpleServiceTrackerCustomizer;
 import org.drombler.acp.core.commons.util.concurrent.ApplicationThreadConsumer;
+import org.drombler.acp.core.context.ContextManagerProvider;
 import org.drombler.acp.core.data.spi.DataHandlerRegistryProvider;
 import org.drombler.acp.core.data.spi.DocumentHandlerDescriptorRegistryProvider;
 import org.drombler.acp.core.data.spi.FileExtensionDescriptorRegistryProvider;
 import org.drombler.acp.startup.main.ApplicationExecutorProvider;
 import org.drombler.commons.action.AbstractActionListener;
 import org.drombler.commons.client.dialog.FileChooserProvider;
+import org.drombler.commons.context.ContextInjector;
 import org.drombler.commons.data.file.FileUtils;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.util.tracker.ServiceTracker;
@@ -30,11 +32,14 @@ public class OpenFilesAction extends AbstractActionListener<Object> implements A
     private ServiceTracker<FileExtensionDescriptorRegistryProvider, FileExtensionDescriptorRegistryProvider> fileExtensionDescriptorRegistryProviderServiceTracker;
     private ServiceTracker<DocumentHandlerDescriptorRegistryProvider, DocumentHandlerDescriptorRegistryProvider> documentHandlerDescriptorRegistryServiceTracker;
     private ServiceTracker<DataHandlerRegistryProvider, DataHandlerRegistryProvider> dataHandlerRegistryServiceTracker;
+    private ServiceTracker<ContextManagerProvider, ContextManagerProvider> contextManagerServiceTracker;
     private FileChooserProvider fileChooserProvider;
     private FileExtensionDescriptorRegistryProvider fileExtensionDescriptorRegistryProvider;
     private DocumentHandlerDescriptorRegistryProvider documentHandlerDescriptorRegistryProvider;
     private DataHandlerRegistryProvider dataHandlerRegistryProvider;
     private ApplicationExecutorProvider applicationExecutorProvider;
+    private ContextManagerProvider contextManagerProvider;
+    private ContextInjector contextInjector;
 
     public OpenFilesAction() {
         this.applicationExecutorProviderServiceTracker = SimpleServiceTrackerCustomizer.createServiceTracker(FrameworkUtil.getBundle(OpenFilesAction.class).getBundleContext(),
@@ -61,7 +66,8 @@ public class OpenFilesAction extends AbstractActionListener<Object> implements A
     }
 
     private void openFile(Path fileToOpen) {
-        FileUtils.openFile(fileToOpen, dataHandlerRegistryProvider.getDataHandlerRegistry(), fileExtensionDescriptorRegistryProvider.getFileExtensionDescriptorRegistry(), documentHandlerDescriptorRegistryProvider.getDocumentHandlerDescriptorRegistry());
+        FileUtils.openFile(fileToOpen, dataHandlerRegistryProvider.getDataHandlerRegistry(), fileExtensionDescriptorRegistryProvider.getFileExtensionDescriptorRegistry(),
+                documentHandlerDescriptorRegistryProvider.getDocumentHandlerDescriptorRegistry(), contextManagerProvider.getContextManager(), contextInjector);
     }
 
     /**
@@ -85,10 +91,13 @@ public class OpenFilesAction extends AbstractActionListener<Object> implements A
                     new ApplicationThreadConsumer<>(this.applicationExecutorProvider, this::setDocumentHandlerDescriptorRegistryProvider));
             this.dataHandlerRegistryServiceTracker = SimpleServiceTrackerCustomizer.createServiceTracker(DataHandlerRegistryProvider.class,
                     new ApplicationThreadConsumer<>(this.applicationExecutorProvider, this::setDataHandlerRegistryProvider));
+            this.contextManagerServiceTracker = SimpleServiceTrackerCustomizer.createServiceTracker(ContextManagerProvider.class,
+                    new ApplicationThreadConsumer<>(this.applicationExecutorProvider, this::setContextManagerProvider));
             this.fileChooserProviderServiceTracker.open(true);
             this.fileExtensionDescriptorRegistryProviderServiceTracker.open(true);
             this.documentHandlerDescriptorRegistryServiceTracker.open(true);
             this.dataHandlerRegistryServiceTracker.open(true);
+            this.contextManagerServiceTracker.open(true);
         } else {
             this.fileChooserProviderServiceTracker.close();
             this.fileChooserProviderServiceTracker = null;
@@ -98,6 +107,8 @@ public class OpenFilesAction extends AbstractActionListener<Object> implements A
             this.documentHandlerDescriptorRegistryServiceTracker = null;
             this.dataHandlerRegistryServiceTracker.close();
             this.dataHandlerRegistryServiceTracker = null;
+            this.contextManagerServiceTracker.close();
+            this.contextManagerServiceTracker = null;
         }
     }
 
@@ -158,6 +169,16 @@ public class OpenFilesAction extends AbstractActionListener<Object> implements A
      */
     public void setDataHandlerRegistryProvider(DataHandlerRegistryProvider dataHandlerRegistryProvider) {
         this.dataHandlerRegistryProvider = dataHandlerRegistryProvider;
+        setEnabled(isInitialized());
+    }
+
+    public void setContextManagerProvider(ContextManagerProvider contextManagerProvider) {
+        this.contextManagerProvider = contextManagerProvider;
+        if (contextManagerProvider != null) {
+            this.contextInjector = new ContextInjector(contextManagerProvider.getContextManager());
+        } else {
+            this.contextInjector = null;
+        }
         setEnabled(isInitialized());
     }
 
