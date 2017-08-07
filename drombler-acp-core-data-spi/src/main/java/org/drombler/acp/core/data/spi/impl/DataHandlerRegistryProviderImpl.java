@@ -14,13 +14,12 @@
  */
 package org.drombler.acp.core.data.spi.impl;
 
-import org.apache.felix.scr.annotations.Activate;
-import org.apache.felix.scr.annotations.Component;
-import org.apache.felix.scr.annotations.Deactivate;
-import org.apache.felix.scr.annotations.Service;
 import org.drombler.acp.core.data.spi.DataHandlerRegistryProvider;
 import org.drombler.commons.data.DataHandlerRegistry;
 import org.osgi.service.component.ComponentContext;
+import org.osgi.service.component.annotations.Activate;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Deactivate;
 
 /**
  *
@@ -28,7 +27,6 @@ import org.osgi.service.component.ComponentContext;
  * @author puce
  */
 @Component
-@Service
 public class DataHandlerRegistryProviderImpl implements DataHandlerRegistryProvider {
 
     private DataHandlerRegistry dataHandlerRegistry;
