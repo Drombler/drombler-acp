@@ -46,6 +46,7 @@ public abstract class AbstractDataHandler<T> implements DataHandler<T> {
     private final List<CloseEventListener> closeEventListeners = new ArrayList<>();
 
     private boolean dirty = false;
+    private boolean initialized = true;
 
     /**
      * Creates a new instance of this class.
@@ -53,6 +54,11 @@ public abstract class AbstractDataHandler<T> implements DataHandler<T> {
     public AbstractDataHandler() {
         this.dataCapabilityProviderTracker = SimpleServiceTrackerCustomizer.createServiceTracker(DataCapabilityProvider.class, this::addDataCapabilityProvider, this::removeDataCapabilityProvider);
         dataCapabilityProviderTracker.open(true);
+        addPropertyChangeListener(INITIALIZED_PROPERTY_NAME, evt -> {
+            if (!initialized) {
+                markDirty();
+            }
+        });
     }
 
     /**
@@ -96,7 +102,18 @@ public abstract class AbstractDataHandler<T> implements DataHandler<T> {
         propertyChangeSupport.firePropertyChange(DIRTY_PROPERTY_NAME, oldDirty, this.dirty);
     }
 
-    protected PropertyChangeSupport getPropertyChangeSupport() {
+    @Override
+    public boolean isInitialized() {
+        return initialized;
+    }
+
+    protected void setInitialized(boolean initialized) {
+        boolean oldInitialized = this.initialized;
+        this.initialized = initialized;
+        propertyChangeSupport.firePropertyChange(INITIALIZED_PROPERTY_NAME, oldInitialized, this.initialized);
+    }
+
+    protected final PropertyChangeSupport getPropertyChangeSupport() {
         return propertyChangeSupport;
     }
 
@@ -104,7 +121,7 @@ public abstract class AbstractDataHandler<T> implements DataHandler<T> {
      * {@inheritDoc }
      */
     @Override
-    public void addPropertyChangeListener(String propertyName, PropertyChangeListener listener) {
+    public final void addPropertyChangeListener(String propertyName, PropertyChangeListener listener) {
         propertyChangeSupport.addPropertyChangeListener(propertyName, listener);
     }
 
@@ -112,7 +129,7 @@ public abstract class AbstractDataHandler<T> implements DataHandler<T> {
      * {@inheritDoc }
      */
     @Override
-    public void removePropertyChangeListener(String propertyName, PropertyChangeListener listener) {
+    public final void removePropertyChangeListener(String propertyName, PropertyChangeListener listener) {
         propertyChangeSupport.removePropertyChangeListener(propertyName, listener);
     }
 
@@ -123,6 +140,7 @@ public abstract class AbstractDataHandler<T> implements DataHandler<T> {
     public void close() {
         dataCapabilityProviderTracker.close();
         fireCloseEvent();
+        closeEventListeners.clear();
     }
 
     /**
@@ -143,6 +161,7 @@ public abstract class AbstractDataHandler<T> implements DataHandler<T> {
 
     protected void fireCloseEvent() {
         CloseEvent event = new CloseEvent(this);
-        closeEventListeners.forEach(listener -> listener.onClose(event));
+        ArrayList<CloseEventListener> closeEventListenersCopy = new ArrayList<>(closeEventListeners);
+        closeEventListenersCopy.forEach(listener -> listener.onClose(event));
     }
 }
