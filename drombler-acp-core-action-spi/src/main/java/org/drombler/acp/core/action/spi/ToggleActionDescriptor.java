@@ -18,6 +18,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.drombler.acp.core.action.jaxb.ActionType;
 import org.drombler.acp.core.action.jaxb.ToggleActionType;
 import org.drombler.commons.context.ContextInjector;
+import org.drombler.commons.context.ContextManager;
 import org.osgi.framework.Bundle;
 import org.softsmithy.lib.util.ResourceLoader;
 
@@ -36,18 +37,16 @@ public class ToggleActionDescriptor<T> extends ActionDescriptor<T> { // TODO: ex
         super(listenerType, resourceLoader);
     }
 
-    public static ToggleActionDescriptor<?> createToggleActionDescriptor(
-            ToggleActionType actionType, Bundle bundle, ContextInjector contextInjector) throws
-            ClassNotFoundException, InstantiationException, IllegalAccessException {
+    public static ToggleActionDescriptor<?> createToggleActionDescriptor(ToggleActionType actionType, Bundle bundle,
+            ContextManager contextManager, ContextInjector contextInjector) throws ClassNotFoundException, InstantiationException, IllegalAccessException {
         Class<?> actionListenerClass = bundle.loadClass(StringUtils.stripToNull(actionType.getListenerClass()));
-        return createToggleActionDescriptor(actionListenerClass, actionType, bundle, contextInjector);
+        return createToggleActionDescriptor(actionListenerClass, actionType, bundle, contextManager, contextInjector);
     }
 
-    private static <T> ToggleActionDescriptor<T> createToggleActionDescriptor(Class<T> actionListenerClass,
-            ActionType actionType, Bundle bundle, ContextInjector contextInjector) throws ClassNotFoundException,
-            InstantiationException, IllegalAccessException {
+    private static <T> ToggleActionDescriptor<T> createToggleActionDescriptor(Class<T> actionListenerClass, ActionType actionType, Bundle bundle,
+            ContextManager contextManager, ContextInjector contextInjector) throws ClassNotFoundException, InstantiationException, IllegalAccessException {
         ToggleActionDescriptor<T> actionDescriptor = new ToggleActionDescriptor<>(actionListenerClass);
-        ActionDescriptorUtils.configureActionDescriptor(actionDescriptor, actionType, bundle, contextInjector);
+        ActionDescriptorUtils.configureActionDescriptor(actionDescriptor, actionType, bundle, contextManager, contextInjector);
         return actionDescriptor;
     }
 }

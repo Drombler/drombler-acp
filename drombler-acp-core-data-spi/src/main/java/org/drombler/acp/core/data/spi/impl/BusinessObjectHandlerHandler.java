@@ -14,31 +14,26 @@
  */
 package org.drombler.acp.core.data.spi.impl;
 
-import org.apache.felix.scr.annotations.Activate;
-import org.apache.felix.scr.annotations.Component;
-import org.apache.felix.scr.annotations.Deactivate;
-import org.apache.felix.scr.annotations.Reference;
-import org.apache.felix.scr.annotations.ReferenceCardinality;
-import org.apache.felix.scr.annotations.ReferencePolicy;
-import org.apache.felix.scr.annotations.References;
 import org.drombler.acp.core.data.jaxb.BusinessObjectHandlerType;
 import org.drombler.acp.core.data.jaxb.DataHandlersType;
 import org.drombler.commons.data.BusinessObjectHandlerDescriptor;
 import org.osgi.framework.BundleContext;
 import org.osgi.service.component.ComponentContext;
+import org.osgi.service.component.annotations.Activate;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Deactivate;
+import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ReferenceCardinality;
+import org.osgi.service.component.annotations.ReferencePolicy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @Component(immediate = true)
-@References({
-    @Reference(name = "businessObjectHandlerDescriptor", referenceInterface = BusinessObjectHandlerDescriptor.class,
-            cardinality = ReferenceCardinality.OPTIONAL_MULTIPLE, policy = ReferencePolicy.DYNAMIC)
-})
 public class BusinessObjectHandlerHandler extends AbstractDataHandlerHandler<BusinessObjectHandlerDescriptor<?>> {
 
     private static final Logger LOG = LoggerFactory.getLogger(BusinessObjectHandlerHandler.class);
 
-
+    @Reference(cardinality = ReferenceCardinality.MULTIPLE, policy = ReferencePolicy.DYNAMIC)
     protected void bindBusinessObjectHandlerDescriptor(BusinessObjectHandlerDescriptor<?> handlerDescriptor) {
         resolveDataHandlerDescriptor(handlerDescriptor);
     }

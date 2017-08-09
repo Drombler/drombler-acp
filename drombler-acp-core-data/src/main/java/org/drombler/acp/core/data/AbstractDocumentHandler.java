@@ -85,10 +85,10 @@ public abstract class AbstractDocumentHandler extends AbstractDataHandler<Path> 
             throw new IllegalStateException("The path must not change once set!");
         }
         this.path = path;
-        getPropertyChangeSupport().firePropertyChange(PATH_PROPERTY_NAME, null, this.path);
-        getPropertyChangeSupport().firePropertyChange(TITLE_PROPERTY_NAME, null, this.path);
-        getPropertyChangeSupport().firePropertyChange(TOOLTIP_TEXT_PROPERTY_NAME, null, this.path);
         setUniqueKey(path);
+        getPropertyChangeSupport().firePropertyChange(PATH_PROPERTY_NAME, null, this.path);
+        getPropertyChangeSupport().firePropertyChange(TITLE_PROPERTY_NAME, null, getTitle());
+        getPropertyChangeSupport().firePropertyChange(TOOLTIP_TEXT_PROPERTY_NAME, null, getTooltipText());
     }
 
     @Override

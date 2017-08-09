@@ -16,13 +16,6 @@ package org.drombler.acp.core.data.spi.impl;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.apache.felix.scr.annotations.Activate;
-import org.apache.felix.scr.annotations.Component;
-import org.apache.felix.scr.annotations.Deactivate;
-import org.apache.felix.scr.annotations.Reference;
-import org.apache.felix.scr.annotations.ReferenceCardinality;
-import org.apache.felix.scr.annotations.ReferencePolicy;
-import org.apache.felix.scr.annotations.References;
 import org.drombler.acp.core.data.jaxb.FileExtensionType;
 import org.drombler.acp.core.data.jaxb.FileExtensionsType;
 import org.drombler.acp.core.data.spi.FileExtensionDescriptorRegistryProvider;
@@ -30,6 +23,12 @@ import org.drombler.commons.data.file.FileExtensionDescriptor;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.component.ComponentContext;
+import org.osgi.service.component.annotations.Activate;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Deactivate;
+import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ReferenceCardinality;
+import org.osgi.service.component.annotations.ReferencePolicy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,12 +37,6 @@ import org.slf4j.LoggerFactory;
  * @author puce
  */
 @Component(immediate = true)
-@References({
-    @Reference(name = "fileExtensionsType", referenceInterface = FileExtensionsType.class,
-            cardinality = ReferenceCardinality.OPTIONAL_MULTIPLE, policy = ReferencePolicy.DYNAMIC),
-    @Reference(name = "fileExtensionDescriptor", referenceInterface = FileExtensionDescriptor.class,
-            cardinality = ReferenceCardinality.OPTIONAL_MULTIPLE, policy = ReferencePolicy.DYNAMIC)
-})
 public class FileExtensionHandler {
 
     private static final Logger LOG = LoggerFactory.getLogger(FileExtensionHandler.class);
@@ -53,6 +46,7 @@ public class FileExtensionHandler {
     @Reference
     private FileExtensionDescriptorRegistryProvider fileExtensionDescriptorRegistryProvider;
 
+    @Reference(cardinality = ReferenceCardinality.MULTIPLE, policy = ReferencePolicy.DYNAMIC)
     protected void bindFileExtensionsType(ServiceReference<FileExtensionsType> serviceReference) {
         BundleContext context = serviceReference.getBundle().getBundleContext();
         FileExtensionsType fileExtensionsType = context.getService(serviceReference);
@@ -63,6 +57,7 @@ public class FileExtensionHandler {
         // TODO
     }
 
+    @Reference(cardinality = ReferenceCardinality.MULTIPLE, policy = ReferencePolicy.DYNAMIC)
     protected void bindFileExtensionDescriptor(FileExtensionDescriptor fileExtensionDescriptor) {
         registerFileExtensionDescriptor(fileExtensionDescriptor);
     }
@@ -71,13 +66,6 @@ public class FileExtensionHandler {
         // TODO
     }
 
-    protected void bindFileExtensionDescriptorRegistryProvider(FileExtensionDescriptorRegistryProvider fileExtensionDescriptorRegistryProvider) {
-        this.fileExtensionDescriptorRegistryProvider = fileExtensionDescriptorRegistryProvider;
-    }
-
-    protected void unbindFileExtensionDescriptorRegistryProvider(FileExtensionDescriptorRegistryProvider fileExtensionDescriptorRegistryProvider) {
-        // TODO
-    }
 
     @Activate
     protected void activate(ComponentContext context) {

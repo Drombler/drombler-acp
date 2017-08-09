@@ -2,6 +2,7 @@ package org.drombler.acp.core.status.spi.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.drombler.acp.core.context.ContextManagerProvider;
 import org.drombler.acp.core.status.jaxb.StatusBarElementType;
 import org.drombler.acp.core.status.jaxb.StatusBarElementsType;
 import org.drombler.acp.core.status.spi.StatusBarElementContainer;
@@ -9,8 +10,6 @@ import org.drombler.acp.core.status.spi.StatusBarElementContainerProvider;
 import org.drombler.acp.core.status.spi.StatusBarElementDescriptor;
 import org.drombler.acp.startup.main.ApplicationExecutorProvider;
 import org.drombler.commons.client.geometry.HorizontalAlignment;
-import org.drombler.commons.context.ActiveContextProvider;
-import org.drombler.commons.context.ApplicationContextProvider;
 import org.drombler.commons.context.ContextInjector;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
@@ -42,11 +41,8 @@ public class StatusBarElementHandler<T> {
     private ApplicationExecutorProvider applicationExecutorProvider;
 
     @Reference
-    private ActiveContextProvider activeContextProvider;
-    
-    @Reference
-    private ApplicationContextProvider applicationContextProvider;
-    
+    private ContextManagerProvider contextManagerProvider;
+
     private ContextInjector contextInjector;
 
     @Reference(cardinality = ReferenceCardinality.MULTIPLE, policy = ReferencePolicy.DYNAMIC)
@@ -71,7 +67,7 @@ public class StatusBarElementHandler<T> {
 
     @Activate
     protected void activate(ComponentContext context) {
-        contextInjector = new ContextInjector(activeContextProvider, applicationContextProvider);
+        contextInjector = new ContextInjector(contextManagerProvider.getContextManager());
         resolveUnresolvedStatusBarElementDescriptors();
     }
 
@@ -80,7 +76,7 @@ public class StatusBarElementHandler<T> {
     }
 
     private boolean isInitialized() {
-        return statusBarElementContainerProvider != null && applicationExecutorProvider != null && contextInjector != null;
+        return statusBarElementContainerProvider != null && applicationExecutorProvider != null && contextManagerProvider != null && contextInjector != null;
     }
 
     private void registerStatusBarElements(StatusBarElementsType statusBarElementsType, BundleContext context) {
@@ -123,6 +119,7 @@ public class StatusBarElementHandler<T> {
 
     private T createStatusBarElement(StatusBarElementDescriptor<? extends T> statusBarElementDescriptor) throws InstantiationException, IllegalAccessException {
         T statusBarElement = statusBarElementDescriptor.getStatusBarElementClass().newInstance();
+        contextManagerProvider.getContextManager().putLocalContext(statusBarElement);
         contextInjector.inject(statusBarElement);
         return statusBarElement;
     }

@@ -8,13 +8,13 @@
         <relativePath>../drombler-acp-parent/pom.xml</relativePath>
     </parent>
 
-    <artifactId>drombler-acp-core-data-spi</artifactId>
+    <artifactId>drombler-acp-core-context</artifactId>
     <packaging>bundle</packaging>
 
-    <name>Drombler ACP - Core - Data - SPI</name>
+    <name>Drombler ACP - Core - Context</name>
 
-    <description>Declarative data support for Drombler ACP.</description>
-    <inceptionYear>2016</inceptionYear>
+    <description>Context support for Drombler ACP.</description>
+    <inceptionYear>2017</inceptionYear>
     <!-- required for Javadoc (apidocs) linking -->
     <url>http://www.drombler.org/drombler-acp/${project.version}/docs/site</url>
     
@@ -49,47 +49,17 @@
                 <groupId>org.apache.felix</groupId>
                 <artifactId>maven-bundle-plugin</artifactId>
                 <extensions>true</extensions>
-                <configuration>
-                    <instructions>
-                        <_dsannotations-options>inherit</_dsannotations-options>
-                    </instructions>
-                </configuration>
             </plugin>
         </plugins>
     </build>
     <dependencies>
         <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>drombler-acp-core-data</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>drombler-acp-core-context</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>drombler-acp-startup-main</artifactId>
-            <version>${project.version}</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
             <groupId>org.drombler.commons</groupId>
-            <artifactId>drombler-commons-data</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.softsmithy.lib</groupId>
-            <artifactId>softsmithy-lib-core</artifactId>
+            <artifactId>drombler-commons-context</artifactId>
         </dependency>
         <dependency>
             <groupId>org.osgi</groupId>
             <artifactId>org.osgi.service.component.annotations</artifactId>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.osgi</groupId>
-            <artifactId>org.osgi.compendium</artifactId>
             <scope>provided</scope>
         </dependency>
     </dependencies>

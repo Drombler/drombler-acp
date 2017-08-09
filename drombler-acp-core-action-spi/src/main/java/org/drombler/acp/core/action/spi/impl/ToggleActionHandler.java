@@ -14,28 +14,28 @@
  */
 package org.drombler.acp.core.action.spi.impl;
 
-import org.apache.felix.scr.annotations.Activate;
-import org.apache.felix.scr.annotations.Component;
-import org.apache.felix.scr.annotations.Deactivate;
-import org.apache.felix.scr.annotations.Reference;
-import org.apache.felix.scr.annotations.ReferenceCardinality;
-import org.apache.felix.scr.annotations.ReferencePolicy;
 import org.drombler.acp.core.action.jaxb.ActionsType;
 import org.drombler.acp.core.action.jaxb.ToggleActionType;
 import org.drombler.acp.core.action.spi.ActionRegistry;
 import org.drombler.acp.core.action.spi.ToggleActionDescriptor;
 import org.drombler.acp.core.action.spi.ToggleActionFactory;
+import org.drombler.commons.context.ContextInjector;
+import org.drombler.commons.context.ContextManager;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.component.ComponentContext;
+import org.osgi.service.component.annotations.Activate;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Deactivate;
+import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ReferenceCardinality;
+import org.osgi.service.component.annotations.ReferencePolicy;
 
 /**
  *
  * @author puce
  */
 @Component(immediate = true)
-@Reference(name = "toggleActionDescriptor", referenceInterface = ToggleActionDescriptor.class,
-        cardinality = ReferenceCardinality.OPTIONAL_MULTIPLE, policy = ReferencePolicy.DYNAMIC)
 public class ToggleActionHandler<T> extends AbstractActionHandler<ToggleActionType, ToggleActionDescriptor<?>> {
 
     @Reference
@@ -43,7 +43,7 @@ public class ToggleActionHandler<T> extends AbstractActionHandler<ToggleActionTy
 
     private final ActionRegistry<ToggleActionDescriptor<?>> actionRegistry = new ActionRegistry<>((Class<ToggleActionDescriptor<?>>) (Class<?>) ToggleActionDescriptor.class);
 
-
+    @Reference(cardinality = ReferenceCardinality.MULTIPLE, policy = ReferencePolicy.DYNAMIC)
     protected void bindToggleActionDescriptor(ServiceReference<ToggleActionDescriptor<?>> serviceReference) {
         BundleContext context = serviceReference.getBundle().getBundleContext();
         ToggleActionDescriptor<?> actionDescriptor = context.getService(serviceReference);
@@ -54,13 +54,6 @@ public class ToggleActionHandler<T> extends AbstractActionHandler<ToggleActionTy
         unregisterActionDescriptor(actionDescriptor);
     }
 
-    protected void bindToggleActionFactory(ToggleActionFactory<T> toggleActionFactory) {
-        this.toggleActionFactory = toggleActionFactory;
-    }
-
-    protected void unbindToggleActionFactory(ToggleActionFactory<T> toggleActionFactory) {
-        this.toggleActionFactory = null;
-    }
 
     @Activate
     @Override
@@ -105,9 +98,9 @@ public class ToggleActionHandler<T> extends AbstractActionHandler<ToggleActionTy
     }
 
     @Override
-    protected ToggleActionDescriptor<?> createActionDescriptor(ToggleActionType actionType, BundleContext context)
+    protected ToggleActionDescriptor<?> createActionDescriptor(ToggleActionType actionType, BundleContext context, ContextManager contextManager, ContextInjector contextInjector)
             throws IllegalAccessException, ClassNotFoundException, InstantiationException {
-        return ToggleActionDescriptor.createToggleActionDescriptor(actionType, context.getBundle(), getContextInjector());
+        return ToggleActionDescriptor.createToggleActionDescriptor(actionType, context.getBundle(), contextManager, contextInjector);
     }
 
     @Override
