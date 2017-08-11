@@ -13,6 +13,6 @@
  * Contributor(s): .
  */
 /**
- * Declarative actions, menus and toolbars support for Drombler ACP.
+ * Declarative and modular status bar support for Drombler ACP.
  */
 package org.drombler.acp.core.status;

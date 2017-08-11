@@ -22,7 +22,7 @@ import java.lang.annotation.Target;
 import org.drombler.commons.client.geometry.HorizontalAlignment;
 
 /**
- * This annotation registers a menu item.
+ * This annotation registers a status bar element.
  *
  * @author puce
  */
@@ -32,12 +32,9 @@ import org.drombler.commons.client.geometry.HorizontalAlignment;
 public @interface StatusBarElement {
 
     /**
-     * A slash '/' delimited path of Menu IDs.
+     * The horizontal alignment.
      *
-     * TODO: return a String array of Menu IDs instead of a '/' delimited path?
-     *
-     * @return a slash '/' delimited path of Menu IDs
-     * @see Menu
+     * @return the horizontal alignment
      */
     HorizontalAlignment horizontalAlignment();
 
