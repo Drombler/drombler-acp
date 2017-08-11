@@ -18,7 +18,7 @@ Contributor(s): .
     <parent>
         <groupId>org.drombler.acp</groupId>
         <artifactId>drombler-acp-parent</artifactId>
-        <version>0.10-SNAPSHOT</version>
+        <version>0.11-SNAPSHOT</version>
         <relativePath>drombler-acp-parent/pom.xml</relativePath>
     </parent>
     <artifactId>drombler-acp</artifactId>
@@ -61,6 +61,7 @@ Contributor(s): .
         <module>drombler-acp-parent</module>
         <module>drombler-acp-startup-main</module>
         <module>drombler-acp-core-application</module>
+        <module>drombler-acp-core-context</module>
         <module>drombler-acp-core-commons</module>
         <module>drombler-acp-core-action</module>
         <module>drombler-acp-core-action-spi</module>
@@ -96,6 +97,11 @@ Contributor(s): .
             <dependency>
                 <groupId>${project.groupId}</groupId>
                 <artifactId>drombler-acp-core-application</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>drombler-acp-core-context</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>

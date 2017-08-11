@@ -16,10 +16,6 @@ package org.drombler.acp.core.data.spi.impl;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.apache.felix.scr.annotations.Reference;
-import org.apache.felix.scr.annotations.ReferenceCardinality;
-import org.apache.felix.scr.annotations.ReferencePolicy;
-import org.apache.felix.scr.annotations.References;
 import org.drombler.acp.core.data.jaxb.DataHandlersType;
 import org.drombler.acp.core.data.spi.DataHandlerDescriptorRegistryProvider;
 import org.drombler.commons.data.AbstractDataHandlerDescriptor;
@@ -27,22 +23,22 @@ import org.drombler.commons.data.DataHandlerDescriptorRegistry;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.component.ComponentContext;
+import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ReferenceCardinality;
+import org.osgi.service.component.annotations.ReferencePolicy;
 
 /**
  *
  * @author puce
  */
-@References({
-    @Reference(name = "dataHandlersType", referenceInterface = DataHandlersType.class,
-            cardinality = ReferenceCardinality.OPTIONAL_MULTIPLE, policy = ReferencePolicy.DYNAMIC)
-})
 public abstract class AbstractDataHandlerHandler<D extends AbstractDataHandlerDescriptor<?>> {
 
     private final List<D> unresolvedDataHandlerDescriptors = new ArrayList<>();
 
     @Reference
-    private DataHandlerDescriptorRegistryProvider dataHandlerDescriptorRegistryProvider;
+    protected DataHandlerDescriptorRegistryProvider dataHandlerDescriptorRegistryProvider;
 
+    @Reference(cardinality = ReferenceCardinality.MULTIPLE, policy = ReferencePolicy.DYNAMIC)
     protected void bindDataHandlersType(ServiceReference<DataHandlersType> serviceReference) {
         BundleContext context = serviceReference.getBundle().getBundleContext();
         DataHandlersType dataHandlersType = context.getService(serviceReference);
@@ -51,14 +47,6 @@ public abstract class AbstractDataHandlerHandler<D extends AbstractDataHandlerDe
 
     protected void unbindDataHandlersType(DataHandlersType documentHandlersType) {
         // TODO
-    }
-
-    protected void bindDataHandlerDescriptorRegistryProvider(DataHandlerDescriptorRegistryProvider dataHandlerDescriptorRegistryProvider) {
-        this.dataHandlerDescriptorRegistryProvider = dataHandlerDescriptorRegistryProvider;
-    }
-
-    protected void unbindDataHandlerDescriptorRegistryProvider(DataHandlerDescriptorRegistryProvider dataHandlerDescriptorRegistryProvider) {
-        this.dataHandlerDescriptorRegistryProvider = null;
     }
 
     protected void activate(ComponentContext context) {
