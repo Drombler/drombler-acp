@@ -12,7 +12,7 @@ import org.softsmithy.lib.util.Positionables;
  */
 public class PositionSortingStrategy<MenuItem> implements MenuItemSortingStrategy<MenuItem, PositionableMenuItemAdapterFactory<MenuItem>> {
 
-    private static final int SEPARATOR_STEPS = 1000;
+    /*package-private*/ static final int SEPARATOR_STEPS = 1000;
 
     /**
      * {@inheritDoc }

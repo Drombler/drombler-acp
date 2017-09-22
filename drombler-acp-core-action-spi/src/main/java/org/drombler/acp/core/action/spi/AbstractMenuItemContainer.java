@@ -33,7 +33,7 @@ import org.drombler.acp.core.action.MenuItemSupplierFactoryEntry;
  * @see MenuItemSortingStrategy
  * @author puce
  */
-public abstract class AbstractMenuItemContainer<MenuItem, Menu extends MenuItem, F extends MenuItemSupplierFactory<MenuItem>> implements MenuItemContainer<MenuItem, Menu, F> {
+public abstract class AbstractMenuItemContainer<MenuItem, Menu extends MenuItem, F extends MenuItemSupplierFactory<MenuItem, F>> implements MenuItemContainer<MenuItem, Menu, F> {
 
     private final Map<String, MenuItemContainer<MenuItem, Menu, ?>> menuContainers = new HashMap<>();
     private final String id;
@@ -124,7 +124,9 @@ public abstract class AbstractMenuItemContainer<MenuItem, Menu extends MenuItem,
 
         Optional<Integer> separatorInsertionPoint = menuItemSortingStrategy.getSeparatorInsertionPoint(index, xMenuItems, entry);
         if (separatorInsertionPoint != null && separatorInsertionPoint.isPresent()) {
-            addSeparator(separatorInsertionPoint.get(), separatorMenuItemFactory.createSeparatorMenuItem(), supplierFactory);
+            int separatorIndex = separatorInsertionPoint.get();
+            addSeparator(separatorIndex, separatorMenuItemFactory.createSeparatorMenuItem(),
+                    separatorIndex > index ? supplierFactory.toNextSeparatorSupplierFactory() : supplierFactory.toPreviousSeparatorSupplierFactory());
         }
 
     }

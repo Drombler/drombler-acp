@@ -14,9 +14,9 @@
  */
 package org.drombler.acp.core.action.spi;
 
+import java.util.List;
 import org.drombler.acp.core.action.MenuItemSortingStrategy;
 import org.drombler.acp.core.action.MenuItemSupplierFactory;
-import java.util.List;
 
 /**
  * @param <MenuItem> the GUI toolkit specific type for menu items
@@ -24,7 +24,7 @@ import java.util.List;
  * @param <F> the sorting strategy specific menu item supplier factory type
  * @author puce
  */
-public interface MenuItemContainer<MenuItem, Menu extends MenuItem, F extends MenuItemSupplierFactory<MenuItem>> {
+public interface MenuItemContainer<MenuItem, Menu extends MenuItem, F extends MenuItemSupplierFactory<MenuItem, F>> {
 
     void addMenu(String id, Menu menu, F supplierFactory, MenuItemSortingStrategy<MenuItem, ?> sortingStrategy);
 
