@@ -8,7 +8,7 @@ package org.drombler.acp.core.action;
  * @see MenuItemSortingStrategy
  * @author puce
  */
-public class MenuItemSupplierFactoryEntry<MenuItem, F extends MenuItemSupplierFactory<MenuItem>> {
+public class MenuItemSupplierFactoryEntry<MenuItem, F extends MenuItemSupplierFactory<MenuItem, F>> {
 
     private final F supplierFactory;
     private final MenuItem menuItem;

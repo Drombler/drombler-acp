@@ -14,17 +14,17 @@
  */
 package org.drombler.acp.core.action.spi;
 
-import org.drombler.acp.core.action.MenuItemSupplierFactory;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import org.drombler.acp.core.action.MenuItemSupplierFactory;
 
 /**
  * @param <MenuItem> the GUI toolkit specific type for menu items
  * @param <F> the sorting strategy specific menu item supplier factory type
  * @author puce
  */
-public abstract class AbstractMenuEntryDescriptor<MenuItem, F extends MenuItemSupplierFactory<MenuItem>> {
+public abstract class AbstractMenuEntryDescriptor<MenuItem, F extends MenuItemSupplierFactory<MenuItem, F>> {
 
     private static final String PATH_DELIMITER = "/";
     private final List<String> path;

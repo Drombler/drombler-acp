@@ -8,7 +8,7 @@ package org.drombler.acp.core.action;
  * @see MenuItemSortingStrategy
  * @author puce
  */
-public interface MenuItemSupplierFactory<MenuItem> {
+public interface MenuItemSupplierFactory<MenuItem, F extends MenuItemSupplierFactory<MenuItem, F>> {
 
     /**
      * Creates a MenuItemSupplier for the according menu item.
@@ -18,4 +18,9 @@ public interface MenuItemSupplierFactory<MenuItem> {
      * @return a MenuItemSupplier for a given menu item
      */
     <T extends MenuItem> MenuItemSupplier<T> createMenuItemSupplier(T menuItem);
+
+    F toPreviousSeparatorSupplierFactory();
+
+    F toNextSeparatorSupplierFactory();
+
 }
