@@ -140,4 +140,10 @@ public class ActionDescriptor<T> {
         ActionDescriptorUtils.configureActionDescriptor(actionDescriptor, actionType, bundle, contextManager, contextInjector);
         return actionDescriptor;
     }
+
+    @Override
+    public String toString() {
+        return "ActionDescriptor[" + "id=" + id + ", displayName=" + displayName + ", listenerType=" + listenerType + ", accelerator=" + accelerator + ", icon=" + icon + ']';
+    }
+
 }
