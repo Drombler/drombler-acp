@@ -18,7 +18,7 @@ package org.drombler.acp.startup.main;
  *
  * @author puce
  */
-// TODO: move to SoftSmithy
+// TODO: use org.softsmithy.lib.util.ServiceLoaderException from SoftSmithy? startup dependency?
 public class ServiceLoaderException extends RuntimeException {
     private static final long serialVersionUID = -326132137354684616L;
 

@@ -105,6 +105,10 @@ Contributor(s): .
             <version>${project.version}</version>
         </dependency>
         <dependency>
+            <groupId>org.softsmithy.lib</groupId>
+            <artifactId>softsmithy-lib-compiler</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
         </dependency>

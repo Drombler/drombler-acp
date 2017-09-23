@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
  *
  * @author puce
  */
-// TODO: move to SoftSmithy
+// TODO: move to SoftSmithy? startup dependency?
 public final class PropertiesUtils {
 
     private PropertiesUtils() {
