@@ -17,14 +17,12 @@ package org.drombler.acp.core.application.impl;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Set;
-import java.util.function.Supplier;
 import javax.annotation.processing.RoundEnvironment;
 import javax.annotation.processing.SupportedAnnotationTypes;
 import javax.annotation.processing.SupportedSourceVersion;
 import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
-import javax.lang.model.type.MirroredTypeException;
 import javax.lang.model.type.TypeMirror;
 import javax.tools.Diagnostic;
 import javax.tools.FileObject;
@@ -35,6 +33,7 @@ import javax.xml.bind.Unmarshaller;
 import org.drombler.acp.core.application.AbstractApplicationAnnotationProcessor;
 import org.drombler.acp.core.application.Extension;
 import org.drombler.acp.core.application.Extensions;
+import static org.softsmithy.lib.lang.model.type.ModelTypeUtils.getTypeMirror;
 
 /**
  *
@@ -102,14 +101,4 @@ public class ExtensionAnnotationProcessor extends AbstractApplicationAnnotationP
         return getTypeMirror(extensionAnnotation::extensionJAXBRootClass);
     }
 
-    // TODO: move to SoftSmithy
-    private TypeMirror getTypeMirror(Supplier<Class<?>> supplier) {
-        TypeMirror typeMirror = null;
-        try {
-            supplier.get();
-        } catch (MirroredTypeException mte) {
-            typeMirror = mte.getTypeMirror();
-        }
-        return typeMirror;
-    }
 }

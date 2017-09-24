@@ -11,6 +11,7 @@ import org.drombler.acp.core.status.spi.StatusBarElementDescriptor;
 import org.drombler.acp.startup.main.ApplicationExecutorProvider;
 import org.drombler.commons.client.geometry.HorizontalAlignment;
 import org.drombler.commons.context.ContextInjector;
+import org.drombler.commons.context.Contexts;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.component.ComponentContext;
@@ -119,8 +120,7 @@ public class StatusBarElementHandler<T> {
 
     private T createStatusBarElement(StatusBarElementDescriptor<? extends T> statusBarElementDescriptor) throws InstantiationException, IllegalAccessException {
         T statusBarElement = statusBarElementDescriptor.getStatusBarElementClass().newInstance();
-        contextManagerProvider.getContextManager().putLocalContext(statusBarElement);
-        contextInjector.inject(statusBarElement);
+        Contexts.configureObject(statusBarElement, contextManagerProvider.getContextManager(), contextInjector);
         return statusBarElement;
     }
 

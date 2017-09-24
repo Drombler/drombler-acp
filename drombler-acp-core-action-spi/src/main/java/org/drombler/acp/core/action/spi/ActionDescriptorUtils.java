@@ -19,6 +19,7 @@ import org.drombler.acp.core.action.jaxb.ActionType;
 import org.drombler.commons.client.util.ResourceBundleUtils;
 import org.drombler.commons.context.ContextInjector;
 import org.drombler.commons.context.ContextManager;
+import org.drombler.commons.context.Contexts;
 import org.osgi.framework.Bundle;
 
 /**
@@ -44,8 +45,8 @@ class ActionDescriptorUtils {
     private static <T> void configureActionDescriptorListener(ActionDescriptor<T> actionDescriptor,
             Class<T> actionListenerClass, ContextManager contextManager, ContextInjector contextInjector) throws InstantiationException, IllegalAccessException {
         T actionListener = actionListenerClass.newInstance();
-        contextManager.putLocalContext(actionListener);
-        contextInjector.inject(actionListener);
+        Contexts.configureObject(actionListener, contextManager, contextInjector);
         actionDescriptor.setListener(actionListener);
     }
+
 }
