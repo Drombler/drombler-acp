@@ -106,7 +106,7 @@ public abstract class AbstractDocumentHandler extends AbstractDataHandler<Path> 
      * Saves the content to the file. Only call this method if the path is known.
      *
      * @throws IOException
-     * @see #saveNew(java.lang.String)
+     * @see #saveNew(java.nio.file.Path)
      */
     public void save() throws IOException {
         writeContent();
