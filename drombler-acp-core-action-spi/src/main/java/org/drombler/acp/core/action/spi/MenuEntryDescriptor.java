@@ -48,6 +48,6 @@ public class MenuEntryDescriptor<MenuItem, F extends MenuItemSupplierFactory<Men
 
     @Override
     public String toString() {
-        return "MenuEntryDescriptor[" + "actionId=" + actionId + ", path=" + getPath() + ']';
+        return "MenuEntryDescriptor[actionId=" + actionId + ", path=" + getPath() + ']';
     }
 }
