@@ -22,11 +22,11 @@ import org.drombler.acp.core.commons.util.SimpleServiceTrackerCustomizer;
 import org.drombler.commons.context.Context;
 import org.drombler.commons.context.SimpleContext;
 import org.drombler.commons.context.SimpleContextContent;
-import org.softsmithy.lib.util.CloseEvent;
-import org.softsmithy.lib.util.CloseEventListener;
 import org.drombler.commons.data.DataCapabilityProvider;
 import org.drombler.commons.data.DataHandler;
 import org.osgi.util.tracker.ServiceTracker;
+import org.softsmithy.lib.util.CloseEvent;
+import org.softsmithy.lib.util.CloseEventListener;
 
 /**
  * An abstract {@link DataHandler}. It observes registered {@link DataCapabilityProvider}s and adds the found data capabilities to it's local context.
@@ -163,5 +163,10 @@ public abstract class AbstractDataHandler<T> implements DataHandler<T> {
         CloseEvent event = new CloseEvent(this);
         ArrayList<CloseEventListener> closeEventListenersCopy = new ArrayList<>(closeEventListeners);
         closeEventListenersCopy.forEach(listener -> listener.onClose(event));
+    }
+
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "[uniqueKey=" + getUniqueKey() + "]";
     }
 }
