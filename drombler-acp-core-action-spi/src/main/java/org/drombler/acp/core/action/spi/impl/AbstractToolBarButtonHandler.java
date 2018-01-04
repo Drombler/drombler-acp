@@ -24,7 +24,7 @@ import org.drombler.acp.core.action.spi.ToolBarContainerListenerAdapter;
 import org.drombler.acp.core.action.spi.ToolBarContainerToolBarEvent;
 import org.drombler.acp.core.action.spi.ToolBarEntryDescriptor;
 import org.drombler.acp.core.commons.util.UnresolvedEntry;
-import org.drombler.acp.core.commons.util.concurrent.ApplicationExecutorProvider;
+import org.drombler.acp.core.commons.util.concurrent.ApplicationThreadExecutorProvider;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.component.ComponentContext;
@@ -36,7 +36,7 @@ import org.softsmithy.lib.util.PositionableAdapter;
  *
  * @author puce
  */
-@Reference(name = "applicationExecutorProvider", referenceInterface = ApplicationExecutorProvider.class)
+@Reference(name = "applicationThreadExecutorProvider", referenceInterface = ApplicationThreadExecutorProvider.class)
 public abstract class AbstractToolBarButtonHandler<ToolBar, ToolBarButton, Action, D extends ToolBarEntryDescriptor> extends AbstractToolBarHandler<ToolBar, ToolBarButton> {
 
     private static final int ICON_SIZE = 24;
@@ -46,11 +46,11 @@ public abstract class AbstractToolBarButtonHandler<ToolBar, ToolBarButton, Actio
     private Executor applicationExecutor;
     private ServiceTracker<Action, ServiceReference<Action>> tracker;
 
-    protected void bindApplicationExecutorProvider(ApplicationExecutorProvider applicationExecutorProvider) {
-        applicationExecutor = applicationExecutorProvider.getApplicationExecutor();
+    protected void bindApplicationThreadExecutorProvider(ApplicationThreadExecutorProvider applicationThreadExecutorProvider) {
+        applicationExecutor = applicationThreadExecutorProvider.getApplicationThreadExecutor();
     }
 
-    protected void unbindApplicationExecutorProvider(ApplicationExecutorProvider applicationExecutorProvider) {
+    protected void unbindApplicationThreadExecutorProvider(ApplicationThreadExecutorProvider applicationThreadExecutorProvider) {
         applicationExecutor = null;
     }
 

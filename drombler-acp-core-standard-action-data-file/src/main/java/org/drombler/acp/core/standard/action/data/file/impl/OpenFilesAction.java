@@ -5,8 +5,8 @@ import java.util.List;
 import org.drombler.acp.core.action.Action;
 import org.drombler.acp.core.action.MenuEntry;
 import org.drombler.acp.core.commons.util.SimpleServiceTrackerCustomizer;
-import org.drombler.acp.core.commons.util.concurrent.ApplicationExecutorProvider;
 import org.drombler.acp.core.commons.util.concurrent.ApplicationThreadConsumer;
+import org.drombler.acp.core.commons.util.concurrent.ApplicationThreadExecutorProvider;
 import org.drombler.acp.core.context.ContextManagerProvider;
 import org.drombler.acp.core.data.spi.DataHandlerRegistryProvider;
 import org.drombler.acp.core.data.spi.DocumentHandlerDescriptorRegistryProvider;
@@ -27,7 +27,7 @@ import org.osgi.util.tracker.ServiceTracker;
 @MenuEntry(path = "File", position = 1010)
 public class OpenFilesAction extends AbstractActionListener<Object> implements AutoCloseable {
 
-    private final ServiceTracker<ApplicationExecutorProvider, ApplicationExecutorProvider> applicationExecutorProviderServiceTracker;
+    private final ServiceTracker<ApplicationThreadExecutorProvider, ApplicationThreadExecutorProvider> applicationThreadExecutorProviderServiceTracker;
     private ServiceTracker<FileChooserProvider, FileChooserProvider> fileChooserProviderServiceTracker;
     private ServiceTracker<FileExtensionDescriptorRegistryProvider, FileExtensionDescriptorRegistryProvider> fileExtensionDescriptorRegistryProviderServiceTracker;
     private ServiceTracker<DocumentHandlerDescriptorRegistryProvider, DocumentHandlerDescriptorRegistryProvider> documentHandlerDescriptorRegistryServiceTracker;
@@ -37,14 +37,14 @@ public class OpenFilesAction extends AbstractActionListener<Object> implements A
     private FileExtensionDescriptorRegistryProvider fileExtensionDescriptorRegistryProvider;
     private DocumentHandlerDescriptorRegistryProvider documentHandlerDescriptorRegistryProvider;
     private DataHandlerRegistryProvider dataHandlerRegistryProvider;
-    private ApplicationExecutorProvider applicationExecutorProvider;
+    private ApplicationThreadExecutorProvider applicationThreadExecutorProvider;
     private ContextManagerProvider contextManagerProvider;
     private ContextInjector contextInjector;
 
     public OpenFilesAction() {
-        this.applicationExecutorProviderServiceTracker = SimpleServiceTrackerCustomizer.createServiceTracker(FrameworkUtil.getBundle(OpenFilesAction.class).getBundleContext(),
-                ApplicationExecutorProvider.class, this::setApplicationExecutorProvider);
-        this.applicationExecutorProviderServiceTracker.open(true);
+        this.applicationThreadExecutorProviderServiceTracker = SimpleServiceTrackerCustomizer.createServiceTracker(FrameworkUtil.getBundle(OpenFilesAction.class).getBundleContext(),
+                ApplicationThreadExecutorProvider.class, this::setApplicationThreadExecutorProvider);
+        this.applicationThreadExecutorProviderServiceTracker.open(true);
         setEnabled(isInitialized());
     }
 
@@ -73,26 +73,26 @@ public class OpenFilesAction extends AbstractActionListener<Object> implements A
     /**
      * @return the applicationExecutorProvider
      */
-    public ApplicationExecutorProvider getApplicationExecutorProvider() {
-        return applicationExecutorProvider;
+    public ApplicationThreadExecutorProvider getApplicationThreadExecutorProvider() {
+        return applicationThreadExecutorProvider;
     }
 
     /**
-     * @param applicationExecutorProvider the applicationExecutorProvider to set
+     * @param applicationThreadExecutorProvider the applicationExecutorProvider to set
      */
-    public void setApplicationExecutorProvider(ApplicationExecutorProvider applicationExecutorProvider) {
-        this.applicationExecutorProvider = applicationExecutorProvider;
-        if (this.applicationExecutorProvider != null) {
+    public void setApplicationThreadExecutorProvider(ApplicationThreadExecutorProvider applicationThreadExecutorProvider) {
+        this.applicationThreadExecutorProvider = applicationThreadExecutorProvider;
+        if (this.applicationThreadExecutorProvider != null) {
             this.fileChooserProviderServiceTracker = SimpleServiceTrackerCustomizer.createServiceTracker(FileChooserProvider.class,
-                    new ApplicationThreadConsumer<>(this.applicationExecutorProvider, this::setFileChooserProvider));
+                    new ApplicationThreadConsumer<>(this.applicationThreadExecutorProvider, this::setFileChooserProvider));
             this.fileExtensionDescriptorRegistryProviderServiceTracker = SimpleServiceTrackerCustomizer.createServiceTracker(FileExtensionDescriptorRegistryProvider.class,
-                    new ApplicationThreadConsumer<>(this.applicationExecutorProvider, this::setFileExtensionDescriptorRegistryProvider));
+                    new ApplicationThreadConsumer<>(this.applicationThreadExecutorProvider, this::setFileExtensionDescriptorRegistryProvider));
             this.documentHandlerDescriptorRegistryServiceTracker = SimpleServiceTrackerCustomizer.createServiceTracker(DocumentHandlerDescriptorRegistryProvider.class,
-                    new ApplicationThreadConsumer<>(this.applicationExecutorProvider, this::setDocumentHandlerDescriptorRegistryProvider));
+                    new ApplicationThreadConsumer<>(this.applicationThreadExecutorProvider, this::setDocumentHandlerDescriptorRegistryProvider));
             this.dataHandlerRegistryServiceTracker = SimpleServiceTrackerCustomizer.createServiceTracker(DataHandlerRegistryProvider.class,
-                    new ApplicationThreadConsumer<>(this.applicationExecutorProvider, this::setDataHandlerRegistryProvider));
+                    new ApplicationThreadConsumer<>(this.applicationThreadExecutorProvider, this::setDataHandlerRegistryProvider));
             this.contextManagerServiceTracker = SimpleServiceTrackerCustomizer.createServiceTracker(ContextManagerProvider.class,
-                    new ApplicationThreadConsumer<>(this.applicationExecutorProvider, this::setContextManagerProvider));
+                    new ApplicationThreadConsumer<>(this.applicationThreadExecutorProvider, this::setContextManagerProvider));
             this.fileChooserProviderServiceTracker.open(true);
             this.fileExtensionDescriptorRegistryProviderServiceTracker.open(true);
             this.documentHandlerDescriptorRegistryServiceTracker.open(true);
@@ -184,7 +184,7 @@ public class OpenFilesAction extends AbstractActionListener<Object> implements A
 
     @Override
     public void close() {
-        this.applicationExecutorProviderServiceTracker.close();
+        this.applicationThreadExecutorProviderServiceTracker.close();
     }
 
 }

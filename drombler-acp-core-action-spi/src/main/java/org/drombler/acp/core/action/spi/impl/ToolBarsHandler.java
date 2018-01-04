@@ -26,7 +26,7 @@ import org.drombler.acp.core.action.spi.ToggleMenuEntryDescriptor;
 import org.drombler.acp.core.action.spi.ToolBarDescriptor;
 import org.drombler.acp.core.action.spi.ToolBarFactory;
 import org.drombler.acp.core.commons.util.UnresolvedEntry;
-import org.drombler.acp.core.commons.util.concurrent.ApplicationExecutorProvider;
+import org.drombler.acp.core.commons.util.concurrent.ApplicationThreadExecutorProvider;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.service.component.ComponentContext;
@@ -37,7 +37,7 @@ import org.softsmithy.lib.util.PositionableAdapter;
  * @author puce
  */
 @Component(immediate = true)
-@Reference(name = "applicationExecutorProvider", referenceInterface = ApplicationExecutorProvider.class)
+@Reference(name = "applicationThreadExecutorProvider", referenceInterface = ApplicationThreadExecutorProvider.class)
 public class ToolBarsHandler<T, B> extends AbstractToolBarHandler<T, B> {
 
     private final ToolBarResolutionManager toolBarResolutionManager = new ToolBarResolutionManager();
@@ -53,11 +53,11 @@ public class ToolBarsHandler<T, B> extends AbstractToolBarHandler<T, B> {
         this.toolBarFactory = null;
     }
 
-    protected void bindApplicationExecutorProvider(ApplicationExecutorProvider applicationExecutorProvider) {
-        applicationExecutor = applicationExecutorProvider.getApplicationExecutor();
+    protected void bindApplicationThreadExecutorProvider(ApplicationThreadExecutorProvider applicationThreadExecutorProvider) {
+        applicationExecutor = applicationThreadExecutorProvider.getApplicationThreadExecutor();
     }
 
-    protected void unbindApplicationExecutorProvider(ApplicationExecutorProvider applicationExecutorProvider) {
+    protected void unbindApplicationThreadExecutorProvider(ApplicationThreadExecutorProvider applicationThreadExecutorProvider) {
         applicationExecutor = null;
     }
 
