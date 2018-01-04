@@ -23,7 +23,7 @@ import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
 import org.apache.commons.lang3.StringUtils;
-import org.drombler.acp.core.application.AbstractApplicationAnnotationProcessor;
+import org.drombler.acp.core.application.processing.AbstractApplicationAnnotationProcessor;
 import org.drombler.acp.core.data.FileExtension;
 import org.drombler.acp.core.data.FileExtensions;
 import org.drombler.acp.core.data.jaxb.FileExtensionType;

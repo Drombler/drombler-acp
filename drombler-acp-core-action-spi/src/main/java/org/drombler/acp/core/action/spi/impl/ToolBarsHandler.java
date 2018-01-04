@@ -26,7 +26,7 @@ import org.drombler.acp.core.action.spi.ToggleMenuEntryDescriptor;
 import org.drombler.acp.core.action.spi.ToolBarDescriptor;
 import org.drombler.acp.core.action.spi.ToolBarFactory;
 import org.drombler.acp.core.commons.util.UnresolvedEntry;
-import org.drombler.acp.startup.main.ApplicationExecutorProvider;
+import org.drombler.acp.core.commons.util.concurrent.ApplicationExecutorProvider;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.service.component.ComponentContext;

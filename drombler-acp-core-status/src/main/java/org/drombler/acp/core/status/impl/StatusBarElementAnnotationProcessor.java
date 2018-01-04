@@ -23,7 +23,7 @@ import javax.annotation.processing.SupportedSourceVersion;
 import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
-import org.drombler.acp.core.application.AbstractApplicationAnnotationProcessor;
+import org.drombler.acp.core.application.processing.AbstractApplicationAnnotationProcessor;
 import org.drombler.acp.core.status.StatusBarElement;
 import org.drombler.acp.core.status.jaxb.HorizontalAlignmentType;
 import org.drombler.acp.core.status.jaxb.StatusBarElementType;

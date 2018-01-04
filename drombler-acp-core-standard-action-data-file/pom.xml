@@ -101,12 +101,6 @@ Contributor(s): .
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>drombler-acp-startup-main</artifactId>
-            <version>${project.version}</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
             <artifactId>drombler-acp-core-data</artifactId>
             <version>${project.version}</version>
         </dependency>
@@ -131,6 +125,11 @@ Contributor(s): .
         <dependency>
             <groupId>org.apache.felix</groupId>
             <artifactId>org.apache.felix.scr.annotations</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.felix</groupId>
+            <artifactId>org.apache.felix.framework</artifactId>
             <scope>provided</scope>
         </dependency>
     </dependencies>

@@ -1,7 +1,6 @@
 package org.drombler.acp.core.commons.util.concurrent;
 
 import java.util.function.Consumer;
-import org.drombler.acp.startup.main.ApplicationExecutorProvider;
 
 /**
  * Executes a {@link Consumer} on the GUI-toolkit specific application thread.

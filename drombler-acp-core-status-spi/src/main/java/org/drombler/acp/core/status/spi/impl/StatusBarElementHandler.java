@@ -2,13 +2,13 @@ package org.drombler.acp.core.status.spi.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.drombler.acp.core.commons.util.concurrent.ApplicationExecutorProvider;
 import org.drombler.acp.core.context.ContextManagerProvider;
 import org.drombler.acp.core.status.jaxb.StatusBarElementType;
 import org.drombler.acp.core.status.jaxb.StatusBarElementsType;
 import org.drombler.acp.core.status.spi.StatusBarElementContainer;
 import org.drombler.acp.core.status.spi.StatusBarElementContainerProvider;
 import org.drombler.acp.core.status.spi.StatusBarElementDescriptor;
-import org.drombler.acp.startup.main.ApplicationExecutorProvider;
 import org.drombler.commons.client.geometry.HorizontalAlignment;
 import org.drombler.commons.context.ContextInjector;
 import org.drombler.commons.context.Contexts;
