@@ -20,6 +20,7 @@ import org.drombler.acp.core.action.jaxb.ActionsType;
 import org.drombler.acp.core.action.spi.ActionDescriptor;
 import org.drombler.acp.core.action.spi.ActionRegistry;
 import org.drombler.acp.core.commons.util.UnresolvedEntry;
+import org.drombler.acp.core.commons.util.concurrent.ApplicationThreadExecutorProvider;
 import org.drombler.acp.core.context.ContextManagerProvider;
 import org.drombler.commons.context.ContextInjector;
 import org.drombler.commons.context.ContextManager;
@@ -31,7 +32,6 @@ import org.osgi.service.component.annotations.ReferenceCardinality;
 import org.osgi.service.component.annotations.ReferencePolicy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.drombler.acp.core.commons.util.concurrent.ApplicationThreadExecutorProvider;
 
 /**
  *
