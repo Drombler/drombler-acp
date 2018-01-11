@@ -12,7 +12,7 @@
  *
  * Contributor(s): .
  */
-package org.drombler.acp.core.application;
+package org.drombler.acp.core.application.processing;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;

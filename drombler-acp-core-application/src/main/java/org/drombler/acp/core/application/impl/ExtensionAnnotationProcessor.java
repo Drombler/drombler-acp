@@ -30,9 +30,9 @@ import javax.tools.StandardLocation;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
-import org.drombler.acp.core.application.AbstractApplicationAnnotationProcessor;
 import org.drombler.acp.core.application.Extension;
 import org.drombler.acp.core.application.Extensions;
+import org.drombler.acp.core.application.processing.AbstractApplicationAnnotationProcessor;
 import static org.softsmithy.lib.lang.model.type.ModelTypeUtils.getTypeMirror;
 
 /**

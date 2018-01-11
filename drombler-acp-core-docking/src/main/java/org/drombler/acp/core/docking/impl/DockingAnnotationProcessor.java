@@ -31,7 +31,7 @@ import javax.lang.model.type.TypeMirror;
 import javax.lang.model.util.ElementFilter;
 import javax.tools.Diagnostic;
 import org.apache.commons.lang3.StringUtils;
-import org.drombler.acp.core.application.AbstractApplicationAnnotationProcessor;
+import org.drombler.acp.core.application.processing.AbstractApplicationAnnotationProcessor;
 import org.drombler.acp.core.docking.DockingState;
 import org.drombler.acp.core.docking.EditorDocking;
 import org.drombler.acp.core.docking.ViewDocking;

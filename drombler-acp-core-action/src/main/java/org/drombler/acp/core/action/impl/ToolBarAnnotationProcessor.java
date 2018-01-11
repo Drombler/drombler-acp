@@ -32,7 +32,7 @@ import org.drombler.acp.core.action.jaxb.ToolBarEntryType;
 import org.drombler.acp.core.action.jaxb.ToolBarToggleEntryType;
 import org.drombler.acp.core.action.jaxb.ToolBarType;
 import org.drombler.acp.core.action.jaxb.ToolBarsType;
-import org.drombler.acp.core.application.AbstractApplicationAnnotationProcessor;
+import org.drombler.acp.core.application.processing.AbstractApplicationAnnotationProcessor;
 
 /**
  *

@@ -20,6 +20,8 @@ package org.drombler.acp.startup.main;
  */
 public class MissingPropertyException extends Exception {
 
+    private static final long serialVersionUID = 6316141167207690543L;
+
     public MissingPropertyException() {
     }
 

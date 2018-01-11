@@ -2,13 +2,13 @@ package org.drombler.acp.core.status.spi.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.drombler.acp.core.commons.util.concurrent.ApplicationThreadExecutorProvider;
 import org.drombler.acp.core.context.ContextManagerProvider;
 import org.drombler.acp.core.status.jaxb.StatusBarElementType;
 import org.drombler.acp.core.status.jaxb.StatusBarElementsType;
 import org.drombler.acp.core.status.spi.StatusBarElementContainer;
 import org.drombler.acp.core.status.spi.StatusBarElementContainerProvider;
 import org.drombler.acp.core.status.spi.StatusBarElementDescriptor;
-import org.drombler.acp.startup.main.ApplicationExecutorProvider;
 import org.drombler.commons.client.geometry.HorizontalAlignment;
 import org.drombler.commons.context.ContextInjector;
 import org.drombler.commons.context.Contexts;
@@ -39,7 +39,7 @@ public class StatusBarElementHandler<T> {
     private StatusBarElementContainerProvider<T> statusBarElementContainerProvider;
 
     @Reference
-    private ApplicationExecutorProvider applicationExecutorProvider;
+    private ApplicationThreadExecutorProvider applicationThreadExecutorProvider;
 
     @Reference
     private ContextManagerProvider contextManagerProvider;
@@ -77,7 +77,7 @@ public class StatusBarElementHandler<T> {
     }
 
     private boolean isInitialized() {
-        return statusBarElementContainerProvider != null && applicationExecutorProvider != null && contextManagerProvider != null && contextInjector != null;
+        return statusBarElementContainerProvider != null && applicationThreadExecutorProvider != null && contextManagerProvider != null && contextInjector != null;
     }
 
     private void registerStatusBarElements(StatusBarElementsType statusBarElementsType, BundleContext context) {
@@ -104,7 +104,7 @@ public class StatusBarElementHandler<T> {
     }
 
     private void registerStatusBarElementInitialized(StatusBarElementDescriptor<? extends T> statusBarElementDescriptor) {
-        applicationExecutorProvider.getApplicationExecutor().execute(() -> {
+        applicationThreadExecutorProvider.getApplicationThreadExecutor().execute(() -> {
             try {
                 T statusBarElement = createStatusBarElement(statusBarElementDescriptor);
                 PositionableAdapter<? extends T> positionableStatusBarElement = new PositionableAdapter<>(statusBarElement, statusBarElementDescriptor.getPosition());

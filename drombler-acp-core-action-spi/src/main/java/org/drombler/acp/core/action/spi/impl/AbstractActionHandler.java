@@ -20,8 +20,8 @@ import org.drombler.acp.core.action.jaxb.ActionsType;
 import org.drombler.acp.core.action.spi.ActionDescriptor;
 import org.drombler.acp.core.action.spi.ActionRegistry;
 import org.drombler.acp.core.commons.util.UnresolvedEntry;
+import org.drombler.acp.core.commons.util.concurrent.ApplicationThreadExecutorProvider;
 import org.drombler.acp.core.context.ContextManagerProvider;
-import org.drombler.acp.startup.main.ApplicationExecutorProvider;
 import org.drombler.commons.context.ContextInjector;
 import org.drombler.commons.context.ContextManager;
 import org.osgi.framework.BundleContext;
@@ -42,7 +42,7 @@ public abstract class AbstractActionHandler<A, D extends ActionDescriptor<?>> {
     private static final Logger LOG = LoggerFactory.getLogger(AbstractActionHandler.class);
 
     @Reference
-    protected ApplicationExecutorProvider applicationExecutorProvider;
+    protected ApplicationThreadExecutorProvider applicationThreadExecutorProvider;
     @Reference
     protected ContextManagerProvider contextManagerProvider;
     private ContextInjector contextInjector;
@@ -73,7 +73,7 @@ public abstract class AbstractActionHandler<A, D extends ActionDescriptor<?>> {
     }
 
     protected boolean isInitialized() {
-        return contextManagerProvider != null && contextInjector != null && applicationExecutorProvider != null;
+        return contextManagerProvider != null && contextInjector != null && applicationThreadExecutorProvider != null;
     }
 
     protected abstract void registerActions(ActionsType actionType, BundleContext context);
@@ -100,7 +100,7 @@ public abstract class AbstractActionHandler<A, D extends ActionDescriptor<?>> {
     }
 
     private void registerActionTypeInitialized(final A actionType, final BundleContext context) {
-        applicationExecutorProvider.getApplicationExecutor().execute(() -> { // register local contexts on application thread
+        applicationThreadExecutorProvider.getApplicationThreadExecutor().execute(() -> { // register local contexts on application thread
             try {
                 D actionDescriptor = createActionDescriptor(actionType, context, getContextManager(), contextInjector);
                 getActionRegistry().registerActionDescriptor(actionDescriptor, context);
