@@ -161,7 +161,7 @@ public abstract class AbstractDataHandler<T> implements DataHandler<T> {
 
     protected void fireCloseEvent() {
         CloseEvent event = new CloseEvent(this);
-        ArrayList<CloseEventListener> closeEventListenersCopy = new ArrayList<>(closeEventListeners);
+        List<CloseEventListener> closeEventListenersCopy = new ArrayList<>(closeEventListeners);
         closeEventListenersCopy.forEach(listener -> listener.onClose(event));
     }
 
