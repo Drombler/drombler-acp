@@ -18,11 +18,14 @@ import java.util.EventListener;
 
 /**
  * TODO: more methods might be added in future
- * @author puce
+ * @param <ToolBar> the GUI-toolkit specific type of a tool bar
+ * @param <ToolBarButton> the GUI-toolkit specific base type of a tool bar button.
  */
 public interface ToolBarContainerListener<ToolBar, ToolBarButton> extends EventListener {
 
     void toolBarAdded(ToolBarContainerToolBarEvent<ToolBar, ToolBarButton> event);
+    void toolBarRemoved(ToolBarContainerToolBarEvent<ToolBar, ToolBarButton> event);
 
     void toolBarButtonAdded(ToolBarContainerToolBarButtonEvent<ToolBar, ToolBarButton> event);
+    void toolBarButtonRemoved(ToolBarContainerToolBarButtonEvent<ToolBar, ToolBarButton> event);
 }
