@@ -17,11 +17,22 @@ package org.drombler.acp.core.action.spi;
 import org.softsmithy.lib.util.PositionableAdapter;
 
 /**
+ * A {@link ToolBarContainer} tool bar button event.
  *
- * @author puce
+ * @param <ToolBar> the GUI-toolkit specific type of a tool bar
+ * @param <ToolBarButton> the GUI-toolkit specific base type of a tool bar button.
  */
 public class ToolBarContainerToolBarButtonEvent<ToolBar, ToolBarButton> extends AbstractToolBarContainerEvent<ToolBar, ToolBarButton, ToolBarButton> {
 
+    private static final long serialVersionUID = 7597269062649584187L;
+
+    /**
+     * Creates a new instance of this class
+     *
+     * @param source the source container
+     * @param toolBarId the tool bar id
+     * @param entry the tool bar button
+     */
     public ToolBarContainerToolBarButtonEvent(ToolBarContainer<ToolBar, ToolBarButton> source, String toolBarId, PositionableAdapter<? extends ToolBarButton> entry) {
         super(source, toolBarId, entry);
     }

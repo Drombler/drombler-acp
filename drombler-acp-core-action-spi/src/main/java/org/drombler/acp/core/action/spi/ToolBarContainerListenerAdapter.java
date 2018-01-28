@@ -15,18 +15,52 @@
 package org.drombler.acp.core.action.spi;
 
 /**
+ * An base class for {@link ToolBarContainerListener}s.
  *
- * @author puce
+ * The implemented methods do nothing by default.
+ *
+ * @param <ToolBar> the GUI-toolkit specific type of a tool bar
+ * @param <ToolBarButton> the GUI-toolkit specific base type of a tool bar button.
  */
 public class ToolBarContainerListenerAdapter<ToolBar, ToolBarButton> implements ToolBarContainerListener<ToolBar, ToolBarButton> {
 
+    /**
+     * {@inheritDoc }
+     *
+     * This implementation does nothing by default.
+     */
     @Override
     public void toolBarAdded(ToolBarContainerToolBarEvent<ToolBar, ToolBarButton> event) {
         // do nothing
     }
 
+    /**
+     * {@inheritDoc }
+     *
+     * This implementation does nothing by default.
+     */
+    @Override
+    public void toolBarRemoved(ToolBarContainerToolBarEvent<ToolBar, ToolBarButton> event) {
+        // do nothing
+    }
+
+    /**
+     * {@inheritDoc }
+     *
+     * This implementation does nothing by default.
+     */
     @Override
     public void toolBarButtonAdded(ToolBarContainerToolBarButtonEvent<ToolBar, ToolBarButton> event) {
+        // do nothing
+    }
+
+    /**
+     * {@inheritDoc }
+     *
+     * This implementation does nothing by default.
+     */
+    @Override
+    public void toolBarButtonRemoved(ToolBarContainerToolBarButtonEvent<ToolBar, ToolBarButton> event) {
         // do nothing
     }
 }
