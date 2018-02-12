@@ -1,0 +1,40 @@
+-classpath
+'/home/puce/.m2/repository/org/apache/felix/org.apache.felix.scr.annotations/1.12.0/org.apache.felix.scr.annotations-1.12.0.jar:/home/puce/.m2/repository/org/apache/felix/org.apache.felix.framework/5.6.6/org.apache.felix.framework-5.6.6.jar:/home/puce/.m2/repository/org/drombler/acp/drombler-acp-startup-main/0.11/drombler-acp-startup-main-0.11.jar:/home/puce/.m2/repository/org/drombler/commons/drombler-commons-client-core/0.11/drombler-commons-client-core-0.11.jar:/home/puce/.m2/repository/org/softsmithy/lib/softsmithy-lib-compiler/0.9/softsmithy-lib-compiler-0.9.jar:/home/puce/.m2/repository/org/apache/commons/commons-lang3/3.5/commons-lang3-3.5.jar:/home/puce/.m2/repository/org/drombler/acp/drombler-acp-core-commons/0.11/drombler-acp-core-commons-0.11.jar:/home/puce/.m2/repository/org/slf4j/slf4j-api/1.7.22/slf4j-api-1.7.22.jar'
+-encoding
+'UTF-8'
+-protected
+-sourcepath
+'/fastdata/Programming/Java/drombler/drombler-acp/releases/0.11/drombler-acp/drombler-acp-core-application/src/main/java:/fastdata/Programming/Java/drombler/drombler-acp/releases/0.11/drombler-acp/drombler-acp-core-application/target/generated-sources/xjc'
+-javafx
+-Xdoclint:accessibility
+-Xdoclint:html
+-Xdoclint:missing
+-Xdoclint:reference
+-author
+-bottom
+'Copyright &#169; 2012&#x2013;2018 <a href="http://www.drombler.com">Drombler</a>. All rights reserved.'
+-charset
+'UTF-8'
+-d
+'/fastdata/Programming/Java/drombler/drombler-acp/releases/0.11/drombler-acp/drombler-acp-core-application/target/site/apidocs'
+-docencoding
+'UTF-8'
+-docfilessubdirs
+-doctitle
+'Drombler ACP - Core - Application 0.11 API'
+-link
+'https://docs.oracle.com/javaee/7/api'
+-link
+'https://docs.oracle.com/javase/8/javafx/api'
+-link
+'http://www.softsmithy.org/softsmithy-lib/lib/0.9/docs/site/apidocs'
+-link
+'http://commons.apache.org/proper/commons-lang/apidocs'
+-link
+'http://www.slf4j.org/apidocs'
+-linkoffline
+'http://docs.oracle.com/javase/8/docs/api' '/fastdata/Programming/Java/drombler/drombler-acp/releases/0.11/drombler-acp/drombler-acp-core-application/target/javadoc-bundle-options'
+-use
+-version
+-windowtitle
+'Drombler ACP - Core - Application 0.11 API'
