@@ -17,6 +17,7 @@ package org.drombler.acp.core.action.spi;
 import org.apache.commons.lang3.StringUtils;
 import org.drombler.acp.core.action.jaxb.ActionType;
 import org.drombler.commons.context.ContextInjector;
+import org.drombler.commons.context.ContextManager;
 import org.osgi.framework.Bundle;
 import org.softsmithy.lib.util.ResourceLoader;
 
@@ -126,17 +127,23 @@ public class ActionDescriptor<T> {
     }
 
     public static ActionDescriptor<?> createActionDescriptor(ActionType actionType, Bundle bundle,
-            ContextInjector contextInjector) throws ClassNotFoundException, InstantiationException,
-            IllegalAccessException {
+            ContextManager contextManager, ContextInjector contextInjector)
+            throws ClassNotFoundException, InstantiationException, IllegalAccessException {
         Class<?> actionListenerClass = bundle.loadClass(StringUtils.stripToNull(actionType.getListenerClass()));
-        return createActionDescriptor(actionListenerClass, actionType, bundle, contextInjector);
+        return createActionDescriptor(actionListenerClass, actionType, bundle, contextManager, contextInjector);
     }
 
     private static <T> ActionDescriptor<T> createActionDescriptor(Class<T> actionListenerClass, ActionType actionType,
-            Bundle bundle, ContextInjector contextInjector) throws ClassNotFoundException, InstantiationException,
-            IllegalAccessException {
+            Bundle bundle, ContextManager contextManager, ContextInjector contextInjector)
+            throws ClassNotFoundException, InstantiationException, IllegalAccessException {
         ActionDescriptor<T> actionDescriptor = new ActionDescriptor<>(actionListenerClass);
-        ActionDescriptorUtils.configureActionDescriptor(actionDescriptor, actionType, bundle, contextInjector);
+        ActionDescriptorUtils.configureActionDescriptor(actionDescriptor, actionType, bundle, contextManager, contextInjector);
         return actionDescriptor;
     }
+
+    @Override
+    public String toString() {
+        return "ActionDescriptor[" + "id=" + id + ", displayName=" + displayName + ", listenerType=" + listenerType + ", accelerator=" + accelerator + ", icon=" + icon + ']';
+    }
+
 }

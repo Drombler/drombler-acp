@@ -31,7 +31,7 @@ import org.slf4j.LoggerFactory;
  * @param <F> the sorting strategy specific menu item supplier factory type
  * @author puce
  */
-public class MenuDescriptor<MenuItem, F extends MenuItemSupplierFactory<MenuItem>> extends AbstractMenuEntryDescriptor<MenuItem, F> {
+public class MenuDescriptor<MenuItem, F extends MenuItemSupplierFactory<MenuItem, F>> extends AbstractMenuEntryDescriptor<MenuItem, F> {
     private static final Logger LOG = LoggerFactory.getLogger(MenuDescriptor.class);
 
     private final String id;
@@ -205,5 +205,10 @@ public class MenuDescriptor<MenuItem, F extends MenuItemSupplierFactory<MenuItem
 //            unresolvedMenus.get(unresolvedPathId).add(menu);
 //        }
 //    }
+
+    @Override
+    public String toString() {
+        return "MenuDescriptor[" + "id=" + id + ", displayName=" + displayName + ", path=" + getPath() + ", sortingStrategy=" + sortingStrategy + ']';
+    }
 
 }

@@ -30,10 +30,10 @@ import org.drombler.acp.core.action.spi.ActionDescriptor;
 import org.drombler.acp.core.action.spi.MenuEntryDescriptor;
 import org.drombler.acp.core.commons.util.BundleUtils;
 import org.drombler.acp.core.commons.util.UnresolvedEntry;
+import org.drombler.acp.core.commons.util.concurrent.ApplicationThreadExecutorProvider;
 import org.drombler.acp.core.docking.jaxb.DockingsType;
 import org.drombler.acp.core.docking.spi.DockingDescriptorUtils;
 import org.drombler.acp.core.docking.spi.ViewDockingDescriptor;
-import org.drombler.acp.startup.main.ApplicationExecutorProvider;
 import org.drombler.commons.docking.DockableData;
 import org.drombler.commons.docking.DockableEntry;
 import org.drombler.commons.docking.DockablePreferences;
@@ -58,7 +58,7 @@ import org.softsmithy.lib.util.SetChangeListener;
     @Reference(name = "viewDockingDescriptor", referenceInterface = ViewDockingDescriptor.class,
             cardinality = ReferenceCardinality.OPTIONAL_MULTIPLE, policy = ReferencePolicy.DYNAMIC)
     ,
-    @Reference(name = "applicationExecutorProvider", referenceInterface = ApplicationExecutorProvider.class)
+    @Reference(name = "applicationThreadExecutorProvider", referenceInterface = ApplicationThreadExecutorProvider.class)
 })
 public class ViewDockingHandler<D, DATA extends DockableData, E extends DockableEntry<D, DATA>> extends AbstractDockableDockingHandler<D, DATA, E> {
 
@@ -73,11 +73,11 @@ public class ViewDockingHandler<D, DATA extends DockableData, E extends Dockable
     private final SetChangeListener<DockingAreaDescriptor> dockingAreaListener = new DockingAreaListener();
 //    private final BundleScope scope = new BundleScope();
 
-    protected void bindApplicationExecutorProvider(ApplicationExecutorProvider applicationExecutorProvider) {
-        applicationExecutor = applicationExecutorProvider.getApplicationExecutor();
+    protected void bindApplicationThreadExecutorProvider(ApplicationThreadExecutorProvider applicationThreadExecutorProvider) {
+        applicationExecutor = applicationThreadExecutorProvider.getApplicationThreadExecutor();
     }
 
-    protected void unbindApplicationExecutorProvider(ApplicationExecutorProvider applicationExecutorProvider) {
+    protected void unbindApplicationThreadExecutorProvider(ApplicationThreadExecutorProvider applicationThreadExecutorProvider) {
         applicationExecutor = null;
     }
 

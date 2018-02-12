@@ -14,8 +14,8 @@
  */
 package org.drombler.acp.core.docking.spi;
 
+import org.drombler.acp.core.commons.util.concurrent.ApplicationThreadExecutorProvider;
 import org.drombler.acp.core.data.spi.DataHandlerDescriptorRegistryProvider;
-import org.drombler.acp.startup.main.ApplicationExecutorProvider;
 import org.drombler.commons.data.AbstractDataHandlerDescriptor;
 import org.drombler.commons.data.DataHandlerDescriptorRegistry;
 import org.drombler.commons.docking.DockableData;
@@ -52,14 +52,14 @@ public final class Dockables {
         DockingAreaContainerProvider<D, DATA, E> dockingAreaContainerProvider
                 = bundleContext.getService(dockingAreaContainerProviderServiceReference);
 
-        ServiceReference<ApplicationExecutorProvider> applicationExecutorProviderServiceReference
-                = bundleContext.getServiceReference(ApplicationExecutorProvider.class);
-        ApplicationExecutorProvider applicationExecutorProvider
-                = bundleContext.getService(applicationExecutorProviderServiceReference);
+        ServiceReference<ApplicationThreadExecutorProvider> applicationThreadExecutorProviderServiceReference
+                = bundleContext.getServiceReference(ApplicationThreadExecutorProvider.class);
+        ApplicationThreadExecutorProvider applicationThreadExecutorProvider
+                = bundleContext.getService(applicationThreadExecutorProviderServiceReference);
 
-        applicationExecutorProvider.getApplicationExecutor().execute(() -> dockingAreaContainerProvider.getDockingAreaContainer().addDockable(viewEntry, true));
+        applicationThreadExecutorProvider.getApplicationThreadExecutor().execute(() -> dockingAreaContainerProvider.getDockingAreaContainer().addDockable(viewEntry, true));
 
-        bundleContext.ungetService(applicationExecutorProviderServiceReference);
+        bundleContext.ungetService(applicationThreadExecutorProviderServiceReference);
         bundleContext.ungetService(dockingAreaContainerProviderServiceReference);
     }
 
@@ -99,23 +99,23 @@ public final class Dockables {
         EditorDockingDescriptorRegistry<D> editorDockingDescriptorRegistry
                 = bundleContext.getService(editorRegistryServiceReference);
 
-        ServiceReference<ApplicationExecutorProvider> applicationExecutorProviderServiceReference
-                = bundleContext.getServiceReference(ApplicationExecutorProvider.class);
-        ApplicationExecutorProvider applicationExecutorProvider
-                = bundleContext.getService(applicationExecutorProviderServiceReference);
+        ServiceReference<ApplicationThreadExecutorProvider> applicationThreadExecutorProviderServiceReference
+                = bundleContext.getServiceReference(ApplicationThreadExecutorProvider.class);
+        ApplicationThreadExecutorProvider applicationThreadExecutorProvider
+                = bundleContext.getService(applicationThreadExecutorProviderServiceReference);
 
         EditorDockingDescriptor<? extends D> editorDockingDescriptor = editorDockingDescriptorRegistry.getEditorDockingDescriptor(content.getClass());
         AbstractDataHandlerDescriptor<?> dataHandlerDescriptor = dataHandlerDescriptorRegistryProvider.getDataHandlerDescriptorRegistry().getDataHandlerDescriptor(content);
 
         if (editorDockingDescriptor != null && dataHandlerDescriptor != null) {
-            applicationExecutorProvider.getApplicationExecutor().execute(() -> dockingAreaContainerProvider.getDockingAreaContainer().openEditorForContent(content, editorDockingDescriptor.
+            applicationThreadExecutorProvider.getApplicationThreadExecutor().execute(() -> dockingAreaContainerProvider.getDockingAreaContainer().openEditorForContent(content, editorDockingDescriptor.
                     getDockableClass(),
                     dataHandlerDescriptor.getIcon(), dataHandlerDescriptor.getResourceLoader()));
         } else {
             LOG.error("No editor or no data handler registered for the provided content!"); // TODO: better message
         }
 
-        bundleContext.ungetService(applicationExecutorProviderServiceReference);
+        bundleContext.ungetService(applicationThreadExecutorProviderServiceReference);
         bundleContext.ungetService(editorRegistryServiceReference);
         bundleContext.ungetService(dataHandlerDescriptorRegistryProviderServiceReference);
         bundleContext.ungetService(dockingAreaContainerProviderServiceReference);

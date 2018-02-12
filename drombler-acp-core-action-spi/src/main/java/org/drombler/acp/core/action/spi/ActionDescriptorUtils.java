@@ -18,6 +18,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.drombler.acp.core.action.jaxb.ActionType;
 import org.drombler.commons.client.util.ResourceBundleUtils;
 import org.drombler.commons.context.ContextInjector;
+import org.drombler.commons.context.ContextManager;
+import org.drombler.commons.context.Contexts;
 import org.osgi.framework.Bundle;
 
 /**
@@ -29,23 +31,22 @@ class ActionDescriptorUtils {
     private ActionDescriptorUtils() {
     }
 
-    public static <T> void configureActionDescriptor(ActionDescriptor<T> actionDescriptor, ActionType actionType,
-            Bundle bundle, ContextInjector contextInjector) throws ClassNotFoundException, InstantiationException,
-            IllegalAccessException {
+    public static <T> void configureActionDescriptor(ActionDescriptor<T> actionDescriptor, ActionType actionType, Bundle bundle,
+            ContextManager contextManager, ContextInjector contextInjector) throws ClassNotFoundException, InstantiationException, IllegalAccessException {
         actionDescriptor.setId(StringUtils.stripToNull(actionType.getId()));
         actionDescriptor.setDisplayName(ResourceBundleUtils.getPackageResourceStringPrefixed(
                 actionDescriptor.getListenerType(), actionType.getDisplayName()));
         actionDescriptor.setAccelerator(ResourceBundleUtils.getPackageResourceStringPrefixed(
                 actionDescriptor.getListenerType(), actionType.getAccelerator()));
         actionDescriptor.setIcon(StringUtils.stripToNull(actionType.getIcon()));
-        configureActionDescriptorListener(actionDescriptor, actionDescriptor.getListenerType(), contextInjector);
+        configureActionDescriptorListener(actionDescriptor, actionDescriptor.getListenerType(), contextManager, contextInjector);
     }
 
     private static <T> void configureActionDescriptorListener(ActionDescriptor<T> actionDescriptor,
-            Class<T> actionListenerClass, ContextInjector contextInjector) throws InstantiationException,
-            IllegalAccessException {
+            Class<T> actionListenerClass, ContextManager contextManager, ContextInjector contextInjector) throws InstantiationException, IllegalAccessException {
         T actionListener = actionListenerClass.newInstance();
-        contextInjector.inject(actionListener);
+        Contexts.configureObject(actionListener, contextManager, contextInjector);
         actionDescriptor.setListener(actionListener);
     }
+
 }

@@ -27,7 +27,7 @@ import org.drombler.acp.core.action.ToggleAction;
 import org.drombler.acp.core.action.jaxb.ActionType;
 import org.drombler.acp.core.action.jaxb.ActionsType;
 import org.drombler.acp.core.action.jaxb.ToggleActionType;
-import org.drombler.acp.core.application.AbstractApplicationAnnotationProcessor;
+import org.drombler.acp.core.application.processing.AbstractApplicationAnnotationProcessor;
 
 /**
  *

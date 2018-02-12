@@ -11,7 +11,7 @@ import java.util.Optional;
  * @see PositionSortingStrategy
  * @author puce
  */
-public interface MenuItemSortingStrategy<MenuItem, F extends MenuItemSupplierFactory<MenuItem>> {
+public interface MenuItemSortingStrategy<MenuItem, F extends MenuItemSupplierFactory<MenuItem, F>> {
 
     /**
      * Gets the instertion point of the new menu entry.

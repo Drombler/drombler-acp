@@ -14,12 +14,12 @@
  */
 package org.drombler.acp.core.action.spi;
 
-import org.drombler.acp.core.action.MenuItemSortingStrategy;
-import org.drombler.acp.core.action.MenuItemSupplierFactory;
-import org.drombler.acp.core.action.MenuItemSupplier;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import org.drombler.acp.core.action.MenuItemSortingStrategy;
+import org.drombler.acp.core.action.MenuItemSupplier;
+import org.drombler.acp.core.action.MenuItemSupplierFactory;
 
 /**
  * @param <MenuItem> the GUI toolkit specific type for menu items
@@ -27,7 +27,7 @@ import java.util.List;
  * @param <F> the sorting strategy specific menu item supplier factory type
  * @author puce
  */
-public abstract class AbstractMenuItemRootContainer<MenuItem, Menu extends MenuItem, F extends MenuItemSupplierFactory<MenuItem>> extends AbstractMenuItemContainer<MenuItem, Menu, F> implements
+public abstract class AbstractMenuItemRootContainer<MenuItem, Menu extends MenuItem, F extends MenuItemSupplierFactory<MenuItem, F>> extends AbstractMenuItemContainer<MenuItem, Menu, F> implements
         MenuItemRootContainer<MenuItem, Menu, F> {
 
     private final List<MenuItemContainerListener<MenuItem, Menu>> containerListeners

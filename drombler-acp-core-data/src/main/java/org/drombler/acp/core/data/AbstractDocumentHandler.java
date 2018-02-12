@@ -16,10 +16,7 @@ package org.drombler.acp.core.data;
 
 import java.io.IOException;
 import java.nio.file.Path;
-import org.drombler.acp.core.commons.util.SimpleServiceTrackerCustomizer;
-import org.drombler.commons.client.dialog.FileChooserProvider;
 import org.drombler.commons.data.DataCapabilityProvider;
-import org.osgi.util.tracker.ServiceTracker;
 
 /**
  * An abstract {@link Path}-based {@link DocumentHandler}. It observes registered {@link DataCapabilityProvider}s and adds the found data capabilities to it's local context.
@@ -32,9 +29,7 @@ public abstract class AbstractDocumentHandler extends AbstractDataHandler<Path> 
 
     public static final String PATH_PROPERTY_NAME = "path";
 
-    private final ServiceTracker<FileChooserProvider, FileChooserProvider> fileChooserProviderTracker;
     private Path path;
-    private FileChooserProvider fileChooserProvider;
     private final String defaultFileExtenion;
     private Path uniqueKey;
 
@@ -56,9 +51,6 @@ public abstract class AbstractDocumentHandler extends AbstractDataHandler<Path> 
     public AbstractDocumentHandler(String defaultFileExtenion, Path path) {
         setPath(path);
         this.defaultFileExtenion = defaultFileExtenion;
-        this.fileChooserProviderTracker = SimpleServiceTrackerCustomizer.createServiceTracker(FileChooserProvider.class, this::setFileChooserProvider);
-
-        this.fileChooserProviderTracker.open(true);
 //        SavableAs savableAs = new SavableAs() {
 //            @Override
 //            public void saveNew() {
@@ -85,10 +77,10 @@ public abstract class AbstractDocumentHandler extends AbstractDataHandler<Path> 
             throw new IllegalStateException("The path must not change once set!");
         }
         this.path = path;
-        getPropertyChangeSupport().firePropertyChange(PATH_PROPERTY_NAME, null, this.path);
-        getPropertyChangeSupport().firePropertyChange(TITLE_PROPERTY_NAME, null, this.path);
-        getPropertyChangeSupport().firePropertyChange(TOOLTIP_TEXT_PROPERTY_NAME, null, this.path);
         setUniqueKey(path);
+        getPropertyChangeSupport().firePropertyChange(PATH_PROPERTY_NAME, null, this.path);
+        getPropertyChangeSupport().firePropertyChange(TITLE_PROPERTY_NAME, null, getTitle());
+        getPropertyChangeSupport().firePropertyChange(TOOLTIP_TEXT_PROPERTY_NAME, null, getTooltipText());
     }
 
     @Override
@@ -114,33 +106,28 @@ public abstract class AbstractDocumentHandler extends AbstractDataHandler<Path> 
      * Saves the content to the file. Only call this method if the path is known.
      *
      * @throws IOException
-     * @see #saveNew(java.lang.String)
+     * @see #saveNew(java.nio.file.Path)
      */
     public void save() throws IOException {
         writeContent();
     }
 
     /**
-     * Saves the content to a file selected from the saveNew dialog. If a file has been selected, the path is set to the selected file.
+     * Saves the content to a file and updates the path property.
      *
-     * @param initialFileName the initial file name
-     * @return true, if a file has been selected and saved, else false
+     * The current path must be null!
+     *
+     * @param newPath the new document path
      * @throws IOException
      * @see #save()
      */
     // TODO: private
-    public boolean saveNew(String initialFileName) throws IOException {
+    public void saveNew(Path newPath) throws IOException {
         if (getPath() != null) {
             throw new IllegalStateException("The path must not change once set!");
         }
-        Path selectedPath = getFileChooserProvider().showSaveAsDialog(initialFileName);
-        if (selectedPath != null) {
-            setPath(selectedPath);
-            save();
-            return true;
-        } else {
-            return false;
-        }
+        setPath(newPath);
+        save();
     }
 
     /**
@@ -149,15 +136,6 @@ public abstract class AbstractDocumentHandler extends AbstractDataHandler<Path> 
      * @throws IOException
      */
     protected abstract void writeContent() throws IOException;
-
-    /**
-     * {@inheritDoc }
-     */
-    @Override
-    public void close() {
-        fileChooserProviderTracker.close();
-        super.close();
-    }
 
     @Override
     public Path getUniqueKey() {
@@ -173,19 +151,6 @@ public abstract class AbstractDocumentHandler extends AbstractDataHandler<Path> 
             }
             getPropertyChangeSupport().firePropertyChange(UNIQUE_KEY_PROPERTY_NAME, null, this.uniqueKey);
         }
-    }
-
-    /**
-     * The system wide FileChooserProvider used for the saveNew dialog.
-     *
-     * @return the fileChooserProvider the system wide FileChooserProvider
-     */
-    protected FileChooserProvider getFileChooserProvider() {
-        return fileChooserProvider;
-    }
-
-    private void setFileChooserProvider(FileChooserProvider fileChooserProvider) {
-        this.fileChooserProvider = fileChooserProvider;
     }
 
 }

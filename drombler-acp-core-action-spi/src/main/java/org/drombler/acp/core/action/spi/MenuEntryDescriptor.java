@@ -24,7 +24,7 @@ import org.drombler.acp.core.action.jaxb.MenuEntryType;
  * @param <F> the sorting strategy specific menu item supplier factory type
  * @author puce
  */
-public class MenuEntryDescriptor<MenuItem, F extends MenuItemSupplierFactory<MenuItem>> extends AbstractMenuEntryDescriptor<MenuItem, F> {
+public class MenuEntryDescriptor<MenuItem, F extends MenuItemSupplierFactory<MenuItem, F>> extends AbstractMenuEntryDescriptor<MenuItem, F> {
 
     private final String actionId;
 
@@ -44,5 +44,10 @@ public class MenuEntryDescriptor<MenuItem, F extends MenuItemSupplierFactory<Men
     public static <MenuItem> MenuEntryDescriptor<MenuItem, PositionableMenuItemAdapterFactory<MenuItem>> createMenuEntryDescriptor(MenuEntryType menuEntryType) {
         return new MenuEntryDescriptor<>(StringUtils.stripToNull(menuEntryType.getActionId()),
                 StringUtils.stripToEmpty(menuEntryType.getPath()), new PositionableMenuItemAdapterFactory<>(menuEntryType.getPosition()));
+    }
+
+    @Override
+    public String toString() {
+        return "MenuEntryDescriptor[actionId=" + actionId + ", path=" + getPath() + ']';
     }
 }

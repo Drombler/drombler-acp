@@ -22,9 +22,7 @@ import org.drombler.acp.core.action.Action;
 import org.drombler.acp.core.action.MenuEntry;
 import org.drombler.acp.core.action.ToolBarEntry;
 import org.drombler.commons.action.command.Savable;
-import org.drombler.commons.action.AbstractActionListener;
-import org.drombler.commons.context.ApplicationContextSensitive;
-import org.drombler.commons.context.Context;
+import org.drombler.commons.action.context.AbstractApplicationContextSensitiveActionListener;
 import org.drombler.commons.context.ContextEvent;
 
 /**
@@ -35,30 +33,24 @@ import org.drombler.commons.context.ContextEvent;
         accelerator = "Shortcut+Shift+S", icon = "saveAll.png")
 @MenuEntry(path = "File", position = 4210)
 @ToolBarEntry(toolBarId = "file", position = 60)
-public class SaveAllAction extends AbstractActionListener<Object> implements ApplicationContextSensitive {
+public class SaveAllAction extends AbstractApplicationContextSensitiveActionListener<Savable, Object> {
 
     private Collection<? extends Savable> savables = Collections.emptyList();
-    private Context applicationContext;
 
     public SaveAllAction() {
+        super(Savable.class);
         setEnabled(false);
     }
 
     @Override
     public void onAction(Object event) {
         List<Savable> currentSavables = new ArrayList<>(savables); // protect against modification during iteration TODO: needed?
-        currentSavables.forEach((savable) -> savable.save());
+        currentSavables.forEach(Savable::save);
     }
 
     @Override
-    public void setApplicationContext(Context applicationContext) {
-        this.applicationContext = applicationContext;
-        this.applicationContext.addContextListener(Savable.class, (ContextEvent event) -> contextChanged());
-        contextChanged();
-    }
-
-    private void contextChanged() {
-        savables = applicationContext.findAll(Savable.class);
+    protected void contextChanged(ContextEvent<Savable> event) {
+        savables = getApplicationContext().findAll(event.getType());
         setEnabled(!savables.isEmpty());
     }
 }

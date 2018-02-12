@@ -23,7 +23,7 @@ import org.drombler.acp.core.action.jaxb.ToggleMenuEntryType;
  *
  * @author puce
  */
-public class ToggleMenuEntryDescriptor<MenuItem, F extends MenuItemSupplierFactory<MenuItem>> extends MenuEntryDescriptor<MenuItem, F> {
+public class ToggleMenuEntryDescriptor<MenuItem, F extends MenuItemSupplierFactory<MenuItem, F>> extends MenuEntryDescriptor<MenuItem, F> {
 
     private final String toggleGroupId;
 

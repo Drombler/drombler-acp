@@ -14,19 +14,18 @@
  */
 package org.drombler.acp.core.data.spi.impl;
 
-import org.apache.felix.scr.annotations.Activate;
-import org.apache.felix.scr.annotations.Component;
-import org.apache.felix.scr.annotations.Deactivate;
-import org.apache.felix.scr.annotations.Reference;
-import org.apache.felix.scr.annotations.ReferenceCardinality;
-import org.apache.felix.scr.annotations.ReferencePolicy;
-import org.apache.felix.scr.annotations.References;
 import org.drombler.acp.core.data.jaxb.DataHandlersType;
 import org.drombler.acp.core.data.jaxb.DocumentHandlerType;
 import org.drombler.acp.core.data.spi.DocumentHandlerDescriptorRegistryProvider;
 import org.drombler.commons.data.file.DocumentHandlerDescriptor;
 import org.osgi.framework.BundleContext;
 import org.osgi.service.component.ComponentContext;
+import org.osgi.service.component.annotations.Activate;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Deactivate;
+import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ReferenceCardinality;
+import org.osgi.service.component.annotations.ReferencePolicy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,10 +34,6 @@ import org.slf4j.LoggerFactory;
  * @author puce
  */
 @Component(immediate = true)
-@References({
-    @Reference(name = "documentHandlerDescriptor", referenceInterface = DocumentHandlerDescriptor.class,
-            cardinality = ReferenceCardinality.OPTIONAL_MULTIPLE, policy = ReferencePolicy.DYNAMIC)
-})
 public class DocumentHandlerHandler extends AbstractDataHandlerHandler<DocumentHandlerDescriptor<?>> {
 
     private static final Logger LOG = LoggerFactory.getLogger(DocumentHandlerHandler.class);
@@ -46,19 +41,13 @@ public class DocumentHandlerHandler extends AbstractDataHandlerHandler<DocumentH
     @Reference
     private DocumentHandlerDescriptorRegistryProvider documentHandlerDescriptorRegistryProvider;
 
+    @Reference(cardinality = ReferenceCardinality.MULTIPLE, policy = ReferencePolicy.DYNAMIC)
     protected void bindDocumentHandlerDescriptor(DocumentHandlerDescriptor<?> handlerDescriptor) {
         resolveDataHandlerDescriptor(handlerDescriptor);
     }
 
     protected void unbindDocumentHandlerDescriptor(DocumentHandlerDescriptor<?> handlerDescriptor) {
-    }
-
-    protected void bindDocumentHandlerDescriptorRegistryProvider(DocumentHandlerDescriptorRegistryProvider documentHandlerDescriptorRegistryProvider) {
-        this.documentHandlerDescriptorRegistryProvider = documentHandlerDescriptorRegistryProvider;
-    }
-
-    protected void unbindDocumentHandlerDescriptorRegistryProvider(DocumentHandlerDescriptorRegistryProvider documentHandlerDescriptorRegistryProvider) {
-        this.documentHandlerDescriptorRegistryProvider = null;
+        // TODO
     }
 
     @Activate

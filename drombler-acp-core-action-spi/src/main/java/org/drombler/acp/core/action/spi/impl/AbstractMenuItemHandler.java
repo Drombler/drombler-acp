@@ -20,6 +20,7 @@ import org.apache.felix.scr.annotations.Reference;
 import org.apache.felix.scr.annotations.ReferenceCardinality;
 import org.apache.felix.scr.annotations.ReferencePolicy;
 import org.apache.felix.scr.annotations.References;
+import org.drombler.acp.core.action.MenuItemSupplierFactory;
 import org.drombler.acp.core.action.jaxb.MenusType;
 import org.drombler.acp.core.action.spi.AbstractMenuEntryDescriptor;
 import org.drombler.acp.core.action.spi.MenuBarMenuContainerProvider;
@@ -27,9 +28,8 @@ import org.drombler.acp.core.action.spi.MenuItemContainer;
 import org.drombler.acp.core.action.spi.MenuItemContainerListenerAdapter;
 import org.drombler.acp.core.action.spi.MenuItemContainerMenuEvent;
 import org.drombler.acp.core.action.spi.MenuItemRootContainer;
-import org.drombler.acp.core.action.MenuItemSupplierFactory;
 import org.drombler.acp.core.commons.util.UnresolvedEntry;
-import org.drombler.acp.startup.main.ApplicationExecutorProvider;
+import org.drombler.acp.core.commons.util.concurrent.ApplicationThreadExecutorProvider;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
@@ -42,7 +42,7 @@ import org.osgi.framework.ServiceReference;
     @Reference(name = "menusType", referenceInterface = MenusType.class,
     cardinality = ReferenceCardinality.OPTIONAL_MULTIPLE, policy = ReferencePolicy.DYNAMIC),
     @Reference(name = "menuBarMenuContainerProvider", referenceInterface = MenuBarMenuContainerProvider.class),
-    @Reference(name = "applicationExecutorProvider", referenceInterface = ApplicationExecutorProvider.class)
+    @Reference(name = "applicationThreadExecutorProvider", referenceInterface = ApplicationThreadExecutorProvider.class)
 })
 public abstract class AbstractMenuItemHandler<MenuItem, Menu extends MenuItem, M extends MenuItem, D extends AbstractMenuEntryDescriptor<MenuItem, ?>, Config> {
 
@@ -79,11 +79,11 @@ public abstract class AbstractMenuItemHandler<MenuItem, Menu extends MenuItem, M
         rootContainer = null;
     }
 
-    protected void bindApplicationExecutorProvider(ApplicationExecutorProvider applicationExecutorProvider) {
-        applicationExecutor = applicationExecutorProvider.getApplicationExecutor();
+    protected void bindApplicationThreadExecutorProvider(ApplicationThreadExecutorProvider applicationExecutorProvider) {
+        applicationExecutor = applicationExecutorProvider.getApplicationThreadExecutor();
     }
 
-    protected void unbindApplicationExecutorProvider(ApplicationExecutorProvider applicationExecutorProvider) {
+    protected void unbindApplicationThreadExecutorProvider(ApplicationThreadExecutorProvider applicationExecutorProvider) {
         applicationExecutor = null;
     }
 
@@ -145,10 +145,10 @@ public abstract class AbstractMenuItemHandler<MenuItem, Menu extends MenuItem, M
 
     protected abstract void registerUnresolvedMenuItem(D menuEntryDescriptor, BundleContext context);
 
-    protected <T extends MenuItemSupplierFactory<MenuItem>> void addToContainer(MenuItemContainer<MenuItem, Menu, T> parentContainer, M menuItem,
+    protected <F extends MenuItemSupplierFactory<MenuItem, F>> void addToContainer(MenuItemContainer<MenuItem, Menu, F> parentContainer, M menuItem,
             D menuEntryDescriptor) {
         //        if (parentContainer.isSupportingItems()) {
-        parentContainer.addMenuItem(menuItem, (T) menuEntryDescriptor.getMenuItemSupplierFactory());
+        parentContainer.addMenuItem(menuItem, (F) menuEntryDescriptor.getMenuItemSupplierFactory());
         //        }
     }
 
@@ -183,7 +183,7 @@ public abstract class AbstractMenuItemHandler<MenuItem, Menu extends MenuItem, M
         registerUnresolvedMenuEntry(resolutionManager, firstUnresolvedPathId, menuEntryDescriptor, context);
     }
 
-    private <T extends MenuItemSupplierFactory<MenuItem>> void registerUnresolvedMenuEntry(
+    private void registerUnresolvedMenuEntry(
             MenuItemResolutionManager<MenuItem, D> resolutionManager, String firstUnresolvedPathId,
             D menuEntryDescriptor, BundleContext context) {
         resolutionManager.addUnresolvedMenuEntry(firstUnresolvedPathId, new UnresolvedEntry<>(menuEntryDescriptor, context));

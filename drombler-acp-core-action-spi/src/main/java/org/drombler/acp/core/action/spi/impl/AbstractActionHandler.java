@@ -16,20 +16,20 @@ package org.drombler.acp.core.action.spi.impl;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.apache.felix.scr.annotations.Reference;
-import org.apache.felix.scr.annotations.ReferenceCardinality;
-import org.apache.felix.scr.annotations.ReferencePolicy;
-import org.apache.felix.scr.annotations.References;
 import org.drombler.acp.core.action.jaxb.ActionsType;
 import org.drombler.acp.core.action.spi.ActionDescriptor;
 import org.drombler.acp.core.action.spi.ActionRegistry;
 import org.drombler.acp.core.commons.util.UnresolvedEntry;
-import org.drombler.commons.context.ActiveContextProvider;
-import org.drombler.commons.context.ApplicationContextProvider;
+import org.drombler.acp.core.commons.util.concurrent.ApplicationThreadExecutorProvider;
+import org.drombler.acp.core.context.ContextManagerProvider;
 import org.drombler.commons.context.ContextInjector;
+import org.drombler.commons.context.ContextManager;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.component.ComponentContext;
+import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ReferenceCardinality;
+import org.osgi.service.component.annotations.ReferencePolicy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,39 +37,21 @@ import org.slf4j.LoggerFactory;
  *
  * @author puce
  */
-@References({
-    @Reference(name = "actionsType", referenceInterface = ActionsType.class,
-            cardinality = ReferenceCardinality.OPTIONAL_MULTIPLE, policy = ReferencePolicy.DYNAMIC)
-})
 public abstract class AbstractActionHandler<A, D extends ActionDescriptor<?>> {
 
     private static final Logger LOG = LoggerFactory.getLogger(AbstractActionHandler.class);
 
     @Reference
-    private ActiveContextProvider activeContextProvider;
+    protected ApplicationThreadExecutorProvider applicationThreadExecutorProvider;
     @Reference
-    private ApplicationContextProvider applicationContextProvider;
+    protected ContextManagerProvider contextManagerProvider;
     private ContextInjector contextInjector;
+
     private final List<D> actionDescriptors = new ArrayList<>();
     private final List<UnresolvedEntry<A>> unresolvedActions = new ArrayList<>();
     private final List<UnresolvedEntry<D>> unresolvedActionDescriptors = new ArrayList<>();
 
-    protected void bindActiveContextProvider(ActiveContextProvider activeContextProvider) {
-        this.activeContextProvider = activeContextProvider;
-    }
-
-    protected void unbindActiveContextProvider(ActiveContextProvider activeContextProvider) {
-        this.activeContextProvider = null;
-    }
-
-    protected void bindApplicationContextProvider(ApplicationContextProvider applicationContextProvider) {
-        this.applicationContextProvider = applicationContextProvider;
-    }
-
-    protected void unbindApplicationContextProvider(ApplicationContextProvider applicationContextProvider) {
-        this.applicationContextProvider = null;
-    }
-
+    @Reference(cardinality = ReferenceCardinality.MULTIPLE, policy = ReferencePolicy.DYNAMIC)
     protected void bindActionsType(ServiceReference<ActionsType> serviceReference) {
         BundleContext context = serviceReference.getBundle().getBundleContext();
         ActionsType actionsType = context.getService(serviceReference);
@@ -81,7 +63,7 @@ public abstract class AbstractActionHandler<A, D extends ActionDescriptor<?>> {
     }
 
     protected void activate(ComponentContext context) {
-        contextInjector = new ContextInjector(activeContextProvider, applicationContextProvider);
+        contextInjector = new ContextInjector(getContextManager());
         resolveUnresolvedItems();
     }
 
@@ -91,7 +73,7 @@ public abstract class AbstractActionHandler<A, D extends ActionDescriptor<?>> {
     }
 
     protected boolean isInitialized() {
-        return activeContextProvider != null && applicationContextProvider != null && contextInjector != null;
+        return contextManagerProvider != null && contextInjector != null && applicationThreadExecutorProvider != null;
     }
 
     protected abstract void registerActions(ActionsType actionType, BundleContext context);
@@ -111,18 +93,25 @@ public abstract class AbstractActionHandler<A, D extends ActionDescriptor<?>> {
 
     protected void registerActionType(final A actionType, final BundleContext context) {
         if (isInitialized()) {
-            try {
-                D actionDescriptor = createActionDescriptor(actionType, context);
-                getActionRegistry().registerActionDescriptor(actionDescriptor, context);
-            } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | RuntimeException ex) {
-                LOG.error(ex.getMessage(), ex);
-            }
+            registerActionTypeInitialized(actionType, context);
         } else {
             unresolvedActions.add(new UnresolvedEntry<>(actionType, context));
         }
     }
 
-    protected abstract D createActionDescriptor(A actionType, BundleContext context) throws IllegalAccessException, ClassNotFoundException, InstantiationException;
+    private void registerActionTypeInitialized(final A actionType, final BundleContext context) {
+        applicationThreadExecutorProvider.getApplicationThreadExecutor().execute(() -> { // register local contexts on application thread
+            try {
+                D actionDescriptor = createActionDescriptor(actionType, context, getContextManager(), contextInjector);
+                getActionRegistry().registerActionDescriptor(actionDescriptor, context);
+            } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | RuntimeException ex) {
+                LOG.error(ex.getMessage(), ex);
+            }
+        });
+    }
+
+    protected abstract D createActionDescriptor(A actionType, BundleContext context, ContextManager contextManager, ContextInjector contextInjector)
+            throws IllegalAccessException, ClassNotFoundException, InstantiationException;
 
     protected void closeActionDescriptor(D actionDescriptor) {
         try {
@@ -134,6 +123,7 @@ public abstract class AbstractActionHandler<A, D extends ActionDescriptor<?>> {
     }
 
     private void closeActionListener(Object listener) throws Exception {
+        getContextManager().removeLocalContext(listener);
         if (listener instanceof AutoCloseable) {
             ((AutoCloseable) listener).close();
         }
@@ -159,10 +149,7 @@ public abstract class AbstractActionHandler<A, D extends ActionDescriptor<?>> {
         unresolvedActionDescriptors.add(new UnresolvedEntry<>(actionDescriptor, context));
     }
 
-    /**
-     * @return the contextInjector
-     */
-    protected ContextInjector getContextInjector() {
-        return contextInjector;
+    private ContextManager getContextManager() {
+        return contextManagerProvider.getContextManager();
     }
 }

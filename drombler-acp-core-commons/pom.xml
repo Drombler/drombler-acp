@@ -19,7 +19,7 @@ Contributor(s): .
     <parent>
         <groupId>org.drombler.acp</groupId>
         <artifactId>drombler-acp-parent</artifactId>
-        <version>0.10</version>
+        <version>0.11</version>
         <relativePath>../drombler-acp-parent/pom.xml</relativePath>
     </parent>
   
@@ -67,12 +67,6 @@ Contributor(s): .
         </plugins>
     </build>
     <dependencies>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>drombler-acp-startup-main</artifactId>
-            <version>${project.version}</version>
-            <scope>provided</scope>        
-        </dependency>
         <dependency>
             <groupId>org.drombler.commons</groupId>
             <artifactId>drombler-commons-client-core</artifactId>

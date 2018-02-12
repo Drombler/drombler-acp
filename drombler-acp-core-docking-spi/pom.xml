@@ -18,7 +18,7 @@ Contributor(s): .
     <parent>
         <groupId>org.drombler.acp</groupId>
         <artifactId>drombler-acp-parent</artifactId>
-        <version>0.10</version>
+        <version>0.11</version>
         <relativePath>../drombler-acp-parent/pom.xml</relativePath>
     </parent>
     <artifactId>drombler-acp-core-docking-spi</artifactId>
@@ -78,12 +78,6 @@ Contributor(s): .
     </build>
     
     <dependencies>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>drombler-acp-startup-main</artifactId>
-            <version>${project.version}</version>
-            <scope>provided</scope>
-        </dependency>
 
         <dependency>
             <groupId>${project.groupId}</groupId>
@@ -145,6 +139,11 @@ Contributor(s): .
             <artifactId>softsmithy-lib-core</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.osgi</groupId>
+            <artifactId>org.osgi.service.component.annotations</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
             <groupId>org.apache.felix</groupId>
             <artifactId>org.apache.felix.scr.annotations</artifactId>
             <scope>provided</scope>
@@ -161,6 +160,11 @@ Contributor(s): .
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.felix</groupId>
+            <artifactId>org.apache.felix.framework</artifactId>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
    

@@ -22,7 +22,7 @@ import org.drombler.acp.core.action.MenuItemSupplierFactory;
  * @param <F> the sorting strategy specific menu item supplier factory type
  * @author puce
  */
-public interface MenuItemRootContainer<MenuItem, Menu extends MenuItem, F extends MenuItemSupplierFactory<MenuItem>> extends MenuItemContainer<MenuItem, Menu, F> {
+public interface MenuItemRootContainer<MenuItem, Menu extends MenuItem, F extends MenuItemSupplierFactory<MenuItem, F>> extends MenuItemContainer<MenuItem, Menu, F> {
 
     void addMenuContainerListener(MenuItemContainerListener<MenuItem, Menu> containerListener);
 

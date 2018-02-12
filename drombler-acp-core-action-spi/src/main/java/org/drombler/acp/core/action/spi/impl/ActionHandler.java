@@ -14,28 +14,28 @@
  */
 package org.drombler.acp.core.action.spi.impl;
 
-import org.apache.felix.scr.annotations.Activate;
-import org.apache.felix.scr.annotations.Component;
-import org.apache.felix.scr.annotations.Deactivate;
-import org.apache.felix.scr.annotations.Reference;
-import org.apache.felix.scr.annotations.ReferenceCardinality;
-import org.apache.felix.scr.annotations.ReferencePolicy;
 import org.drombler.acp.core.action.jaxb.ActionType;
 import org.drombler.acp.core.action.jaxb.ActionsType;
 import org.drombler.acp.core.action.spi.ActionDescriptor;
 import org.drombler.acp.core.action.spi.ActionFactory;
 import org.drombler.acp.core.action.spi.ActionRegistry;
+import org.drombler.commons.context.ContextInjector;
+import org.drombler.commons.context.ContextManager;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.component.ComponentContext;
+import org.osgi.service.component.annotations.Activate;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Deactivate;
+import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ReferenceCardinality;
+import org.osgi.service.component.annotations.ReferencePolicy;
 
 /**
  *
  * @author puce
  */
 @Component(immediate = true)
-@Reference(name = "actionDescriptor", referenceInterface = ActionDescriptor.class,
-        cardinality = ReferenceCardinality.OPTIONAL_MULTIPLE, policy = ReferencePolicy.DYNAMIC)
 public class ActionHandler<T> extends AbstractActionHandler<ActionType, ActionDescriptor<?>> {
 
     @Reference
@@ -43,6 +43,7 @@ public class ActionHandler<T> extends AbstractActionHandler<ActionType, ActionDe
 
     private final ActionRegistry<ActionDescriptor<?>> actionRegistry = new ActionRegistry<>((Class<ActionDescriptor<?>>) (Class<?>) ActionDescriptor.class);
 
+    @Reference(cardinality = ReferenceCardinality.MULTIPLE, policy = ReferencePolicy.DYNAMIC)
     protected void bindActionDescriptor(ServiceReference<ActionDescriptor<?>> serviceReference) {
         BundleContext context = serviceReference.getBundle().getBundleContext();
         ActionDescriptor<?> actionDescriptor = context.getService(serviceReference);
@@ -51,14 +52,6 @@ public class ActionHandler<T> extends AbstractActionHandler<ActionType, ActionDe
 
     protected void unbindActionDescriptor(ActionDescriptor<?> actionDescriptor) {
         unregisterActionDescriptor(actionDescriptor);
-    }
-
-    protected void bindActionFactory(ActionFactory<T> actionFactory) {
-        this.actionFactory = actionFactory;
-    }
-
-    protected void unbindActionFactory(ActionFactory<T> actionFactory) {
-        this.actionFactory = null;
     }
 
     @Activate
@@ -84,9 +77,9 @@ public class ActionHandler<T> extends AbstractActionHandler<ActionType, ActionDe
     }
 
     @Override
-    protected ActionDescriptor<?> createActionDescriptor(ActionType actionType, BundleContext context)
+    protected ActionDescriptor<?> createActionDescriptor(ActionType actionType, BundleContext context, ContextManager contextManager, ContextInjector contextInjector)
             throws IllegalAccessException, ClassNotFoundException, InstantiationException {
-        return ActionDescriptor.createActionDescriptor(actionType, context.getBundle(), getContextInjector());
+        return ActionDescriptor.createActionDescriptor(actionType, context.getBundle(), contextManager, contextInjector);
     }
 
     @Override

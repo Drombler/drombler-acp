@@ -1,10 +1,9 @@
 package org.drombler.acp.core.commons.util.concurrent;
 
 import java.util.function.Consumer;
-import org.drombler.acp.startup.main.ApplicationExecutorProvider;
 
 /**
- * Executes a {@link Consumer} on the GUI-toolkit specific application thread.
+ * Executes the wrapped {@link Consumer} on the GUI-toolkit specific application thread.
  *
  * @param <T> the input type
  *
@@ -12,17 +11,17 @@ import org.drombler.acp.startup.main.ApplicationExecutorProvider;
  */
 public class ApplicationThreadConsumer<T> implements Consumer<T> {
 
-    private final ApplicationExecutorProvider applicationExecutorProvider;
+    private final ApplicationThreadExecutorProvider applicationThreadExecutorProvider;
     private final Consumer<T> consumer;
 
     /**
      * Creates a new instance of this class.
      *
-     * @param applicationExecutorProvider the application executor provider
+     * @param applicationThreadExecutorProvider the application thread executor provider
      * @param consumer the consumer to call
      */
-    public ApplicationThreadConsumer(ApplicationExecutorProvider applicationExecutorProvider, Consumer<T> consumer) {
-        this.applicationExecutorProvider = applicationExecutorProvider;
+    public ApplicationThreadConsumer(ApplicationThreadExecutorProvider applicationThreadExecutorProvider, Consumer<T> consumer) {
+        this.applicationThreadExecutorProvider = applicationThreadExecutorProvider;
         this.consumer = consumer;
     }
 
@@ -31,7 +30,7 @@ public class ApplicationThreadConsumer<T> implements Consumer<T> {
      */
     @Override
     public void accept(T t) {
-        applicationExecutorProvider.getApplicationExecutor().execute(() -> consumer.accept(t));
+        applicationThreadExecutorProvider.getApplicationThreadExecutor().execute(() -> consumer.accept(t));
     }
 
 }

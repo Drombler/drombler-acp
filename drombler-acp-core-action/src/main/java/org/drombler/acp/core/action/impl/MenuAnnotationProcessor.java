@@ -32,7 +32,7 @@ import org.drombler.acp.core.action.jaxb.MenuEntryType;
 import org.drombler.acp.core.action.jaxb.MenuType;
 import org.drombler.acp.core.action.jaxb.MenusType;
 import org.drombler.acp.core.action.jaxb.ToggleMenuEntryType;
-import org.drombler.acp.core.application.AbstractApplicationAnnotationProcessor;
+import org.drombler.acp.core.application.processing.AbstractApplicationAnnotationProcessor;
 
 /**
  *

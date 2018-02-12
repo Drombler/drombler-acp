@@ -16,6 +16,8 @@ package org.drombler.acp.core.data;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import java.util.ArrayList;
+import java.util.List;
 import org.drombler.acp.core.commons.util.SimpleServiceTrackerCustomizer;
 import org.drombler.commons.context.Context;
 import org.drombler.commons.context.SimpleContext;
@@ -23,6 +25,8 @@ import org.drombler.commons.context.SimpleContextContent;
 import org.drombler.commons.data.DataCapabilityProvider;
 import org.drombler.commons.data.DataHandler;
 import org.osgi.util.tracker.ServiceTracker;
+import org.softsmithy.lib.util.CloseEvent;
+import org.softsmithy.lib.util.CloseEventListener;
 
 /**
  * An abstract {@link DataHandler}. It observes registered {@link DataCapabilityProvider}s and adds the found data capabilities to it's local context.
@@ -33,14 +37,16 @@ import org.osgi.util.tracker.ServiceTracker;
  * @see AbstractDocumentHandler
  * @author puce
  */
-public abstract class AbstractDataHandler<T> implements DataHandler<T>, AutoCloseable {
+public abstract class AbstractDataHandler<T> implements DataHandler<T> {
 
     private final SimpleContextContent contextContent = new SimpleContextContent();
     private final Context localContext = new SimpleContext(contextContent);
     private final ServiceTracker<DataCapabilityProvider, DataCapabilityProvider> dataCapabilityProviderTracker;
     private final PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);
+    private final List<CloseEventListener> closeEventListeners = new ArrayList<>();
 
     private boolean dirty = false;
+    private boolean initialized = true;
 
     /**
      * Creates a new instance of this class.
@@ -48,6 +54,11 @@ public abstract class AbstractDataHandler<T> implements DataHandler<T>, AutoClos
     public AbstractDataHandler() {
         this.dataCapabilityProviderTracker = SimpleServiceTrackerCustomizer.createServiceTracker(DataCapabilityProvider.class, this::addDataCapabilityProvider, this::removeDataCapabilityProvider);
         dataCapabilityProviderTracker.open(true);
+        addPropertyChangeListener(INITIALIZED_PROPERTY_NAME, evt -> {
+            if (!initialized) {
+                markDirty();
+            }
+        });
     }
 
     /**
@@ -56,6 +67,10 @@ public abstract class AbstractDataHandler<T> implements DataHandler<T>, AutoClos
     @Override
     public Context getLocalContext() {
         return localContext;
+    }
+
+    protected SimpleContextContent getContextContent() {
+        return contextContent;
     }
 
     private void addDataCapabilityProvider(DataCapabilityProvider<?> dataCapabilityProvider) {
@@ -87,7 +102,18 @@ public abstract class AbstractDataHandler<T> implements DataHandler<T>, AutoClos
         propertyChangeSupport.firePropertyChange(DIRTY_PROPERTY_NAME, oldDirty, this.dirty);
     }
 
-    protected PropertyChangeSupport getPropertyChangeSupport() {
+    @Override
+    public boolean isInitialized() {
+        return initialized;
+    }
+
+    protected void setInitialized(boolean initialized) {
+        boolean oldInitialized = this.initialized;
+        this.initialized = initialized;
+        propertyChangeSupport.firePropertyChange(INITIALIZED_PROPERTY_NAME, oldInitialized, this.initialized);
+    }
+
+    protected final PropertyChangeSupport getPropertyChangeSupport() {
         return propertyChangeSupport;
     }
 
@@ -95,7 +121,7 @@ public abstract class AbstractDataHandler<T> implements DataHandler<T>, AutoClos
      * {@inheritDoc }
      */
     @Override
-    public void addPropertyChangeListener(String propertyName, PropertyChangeListener listener) {
+    public final void addPropertyChangeListener(String propertyName, PropertyChangeListener listener) {
         propertyChangeSupport.addPropertyChangeListener(propertyName, listener);
     }
 
@@ -103,7 +129,7 @@ public abstract class AbstractDataHandler<T> implements DataHandler<T>, AutoClos
      * {@inheritDoc }
      */
     @Override
-    public void removePropertyChangeListener(String propertyName, PropertyChangeListener listener) {
+    public final void removePropertyChangeListener(String propertyName, PropertyChangeListener listener) {
         propertyChangeSupport.removePropertyChangeListener(propertyName, listener);
     }
 
@@ -113,6 +139,34 @@ public abstract class AbstractDataHandler<T> implements DataHandler<T>, AutoClos
     @Override
     public void close() {
         dataCapabilityProviderTracker.close();
+        fireCloseEvent();
+        closeEventListeners.clear();
     }
 
+    /**
+     * {@inheritDoc }
+     */
+    @Override
+    public void addCloseEventListener(CloseEventListener listener) {
+        closeEventListeners.add(listener);
+    }
+
+    /**
+     * {@inheritDoc }
+     */
+    @Override
+    public void removeCloseEventListener(CloseEventListener listener) {
+        closeEventListeners.remove(listener);
+    }
+
+    protected void fireCloseEvent() {
+        CloseEvent event = new CloseEvent(this);
+        List<CloseEventListener> closeEventListenersCopy = new ArrayList<>(closeEventListeners);
+        closeEventListenersCopy.forEach(listener -> listener.onClose(event));
+    }
+
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "[uniqueKey=" + getUniqueKey() + "]";
+    }
 }

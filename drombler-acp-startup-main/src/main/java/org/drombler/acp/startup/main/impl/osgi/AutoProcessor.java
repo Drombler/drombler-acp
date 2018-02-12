@@ -224,7 +224,7 @@ class AutoProcessor {
         try {
             Bundle b = frameworkContext.installBundle(location, null);
             setStartLevel(b, startLevel);
-        } catch (Exception ex) {
+        } catch (BundleException | RuntimeException ex) {
             System.err.println("Auto-properties install: " + location + " ("
                     + ex + ((ex.getCause() != null) ? " - " + ex.getCause() : "") + ")");
             if (ex.getCause() != null) {

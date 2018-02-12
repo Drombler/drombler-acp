@@ -11,7 +11,7 @@ import org.drombler.acp.core.action.MenuItemSupplierFactory;
  */
 public interface MenuMenuItemContainerFactory<MenuItem, Menu extends MenuItem> {
 
-    <F extends MenuItemSupplierFactory<MenuItem>> MenuItemContainer<MenuItem, Menu, F> createMenuMenuItemContainer(String id, Menu menu,
+    <F extends MenuItemSupplierFactory<MenuItem, F>> MenuItemContainer<MenuItem, Menu, F> createMenuMenuItemContainer(String id, Menu menu,
             MenuItemContainer<MenuItem, Menu, ?> parentMenuContainer,
             AbstractMenuItemRootContainer<MenuItem, Menu, ?> rootContainer,
             MenuItemSortingStrategy<MenuItem, F> menuItemSortingStrategy,

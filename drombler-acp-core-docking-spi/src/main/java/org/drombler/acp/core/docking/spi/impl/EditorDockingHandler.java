@@ -25,11 +25,11 @@ import org.apache.felix.scr.annotations.ReferenceCardinality;
 import org.apache.felix.scr.annotations.ReferencePolicy;
 import org.apache.felix.scr.annotations.References;
 import org.drombler.acp.core.commons.util.BundleUtils;
+import org.drombler.acp.core.commons.util.concurrent.ApplicationThreadExecutorProvider;
 import org.drombler.acp.core.docking.jaxb.DockingsType;
 import org.drombler.acp.core.docking.spi.DockingDescriptorUtils;
 import org.drombler.acp.core.docking.spi.EditorDockingDescriptor;
 import org.drombler.acp.core.docking.spi.EditorDockingDescriptorRegistry;
-import org.drombler.acp.startup.main.ApplicationExecutorProvider;
 import org.drombler.commons.docking.DockableData;
 import org.drombler.commons.docking.DockableEntry;
 import org.drombler.commons.docking.DockablePreferences;
@@ -52,7 +52,7 @@ import org.softsmithy.lib.util.SetChangeListener;
     @Reference(name = "editorDockingDescriptor", referenceInterface = EditorDockingDescriptor.class,
             cardinality = ReferenceCardinality.OPTIONAL_MULTIPLE, policy = ReferencePolicy.DYNAMIC)
     ,
-    @Reference(name = "applicationExecutorProvider", referenceInterface = ApplicationExecutorProvider.class)})
+    @Reference(name = "applicationThreadExecutorProvider", referenceInterface = ApplicationThreadExecutorProvider.class)})
 public class EditorDockingHandler<D, DATA extends DockableData, E extends DockableEntry<D, DATA>> extends AbstractDockableDockingHandler<D, DATA, E> {
 
     private static final Logger LOG = LoggerFactory.getLogger(EditorDockingHandler.class);
@@ -65,11 +65,11 @@ public class EditorDockingHandler<D, DATA extends DockableData, E extends Dockab
     private Executor applicationExecutor;
 
 
-    protected void bindApplicationExecutorProvider(ApplicationExecutorProvider applicationExecutorProvider) {
-        applicationExecutor = applicationExecutorProvider.getApplicationExecutor();
+    protected void bindApplicationThreadExecutorProvider(ApplicationThreadExecutorProvider applicationExecutorProvider) {
+        applicationExecutor = applicationExecutorProvider.getApplicationThreadExecutor();
     }
 
-    protected void unbindApplicationExecutorProvider(ApplicationExecutorProvider applicationExecutorProvider) {
+    protected void unbindApplicationThreadExecutorProvider(ApplicationThreadExecutorProvider applicationExecutorProvider) {
         applicationExecutor = null;
     }
 

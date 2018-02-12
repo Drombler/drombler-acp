@@ -11,7 +11,7 @@ package org.drombler.acp.core.action;
  * @see TextMenuItemSortingStrategy
  * @author puce
  */
-public class IdentityMenuItemSupplierFactory<MenuItem> implements MenuItemSupplierFactory<MenuItem> {
+public class IdentityMenuItemSupplierFactory<MenuItem> implements MenuItemSupplierFactory<MenuItem, IdentityMenuItemSupplierFactory<MenuItem>> {
 
     /**
      * {@inheritDoc }
@@ -21,5 +21,14 @@ public class IdentityMenuItemSupplierFactory<MenuItem> implements MenuItemSuppli
         return new IdentityMenuItemSupplier<>(menuItem);
     }
 
+    @Override
+    public IdentityMenuItemSupplierFactory<MenuItem> toPreviousSeparatorSupplierFactory() {
+        return this;
+    }
+
+    @Override
+    public IdentityMenuItemSupplierFactory<MenuItem> toNextSeparatorSupplierFactory() {
+        return this;
+    }
 
 }

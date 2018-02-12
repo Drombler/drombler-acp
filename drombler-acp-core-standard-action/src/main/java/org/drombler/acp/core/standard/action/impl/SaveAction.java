@@ -18,9 +18,7 @@ import org.drombler.acp.core.action.Action;
 import org.drombler.acp.core.action.MenuEntry;
 import org.drombler.acp.core.action.ToolBarEntry;
 import org.drombler.commons.action.command.Savable;
-import org.drombler.commons.action.AbstractActionListener;
-import org.drombler.commons.context.ActiveContextSensitive;
-import org.drombler.commons.context.Context;
+import org.drombler.commons.action.context.AbstractActiveContextSensitiveActionListener;
 import org.drombler.commons.context.ContextEvent;
 
 /**
@@ -31,12 +29,12 @@ import org.drombler.commons.context.ContextEvent;
         accelerator = "Shortcut+S", icon = "save.gif")
 @MenuEntry(path = "File", position = 4200)
 @ToolBarEntry(toolBarId = "file", position = 50)
-public class SaveAction extends AbstractActionListener<Object> implements ActiveContextSensitive {
+public class SaveAction extends AbstractActiveContextSensitiveActionListener<Savable, Object> {
 
     private Savable savable;
-    private Context activeContext;
 
     public SaveAction() {
+        super(Savable.class);
         setEnabled(false);
     }
 
@@ -46,14 +44,8 @@ public class SaveAction extends AbstractActionListener<Object> implements Active
     }
 
     @Override
-    public void setActiveContext(Context activeContext) {
-        this.activeContext = activeContext;
-        this.activeContext.addContextListener(Savable.class, (ContextEvent event) -> contextChanged());
-        contextChanged();
-    }
-
-    private void contextChanged() {
-        savable = activeContext.find(Savable.class);
+    protected void contextChanged(ContextEvent<Savable> contextEvent) {
+        savable = getActiveContext().find(contextEvent.getType());
         setEnabled(savable != null);
     }
 }

@@ -20,11 +20,11 @@ import org.apache.felix.scr.annotations.Deactivate;
 import org.apache.felix.scr.annotations.Reference;
 import org.apache.felix.scr.annotations.ReferenceCardinality;
 import org.apache.felix.scr.annotations.ReferencePolicy;
+import org.drombler.acp.core.action.MenuItemSupplierFactory;
 import org.drombler.acp.core.action.jaxb.MenusType;
 import org.drombler.acp.core.action.spi.MenuDescriptor;
 import org.drombler.acp.core.action.spi.MenuFactory;
 import org.drombler.acp.core.action.spi.MenuItemContainer;
-import org.drombler.acp.core.action.MenuItemSupplierFactory;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.service.component.ComponentContext;
@@ -90,8 +90,8 @@ public class MenuHandler<MenuItem, Menu extends MenuItem> extends AbstractMenuIt
 //        }
 //    }
     @Override
-    protected <T extends MenuItemSupplierFactory<MenuItem>> void addToContainer(MenuItemContainer<MenuItem, Menu, T> parentContainer, Menu menu, MenuDescriptor<MenuItem, ?> menuDescriptor) {
-        parentContainer.addMenu(menuDescriptor.getId(), menu, (T) menuDescriptor.getMenuItemSupplierFactory(), menuDescriptor.getSortingStrategy());
+    protected <F extends MenuItemSupplierFactory<MenuItem, F>> void addToContainer(MenuItemContainer<MenuItem, Menu, F> parentContainer, Menu menu, MenuDescriptor<MenuItem, ?> menuDescriptor) {
+        parentContainer.addMenu(menuDescriptor.getId(), menu, (F) menuDescriptor.getMenuItemSupplierFactory(), menuDescriptor.getSortingStrategy());
     }
 
     @Override

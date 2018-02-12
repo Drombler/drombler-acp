@@ -32,7 +32,7 @@ import org.drombler.acp.core.action.jaxb.ToolBarEntryType;
 import org.drombler.acp.core.action.jaxb.ToolBarToggleEntryType;
 import org.drombler.acp.core.action.jaxb.ToolBarType;
 import org.drombler.acp.core.action.jaxb.ToolBarsType;
-import org.drombler.acp.core.application.AbstractApplicationAnnotationProcessor;
+import org.drombler.acp.core.application.processing.AbstractApplicationAnnotationProcessor;
 
 /**
  *
@@ -114,6 +114,8 @@ public class ToolBarAnnotationProcessor extends AbstractApplicationAnnotationPro
     }
 
     private void registerToolBarToggleEntry(ToolBarToggleEntry toolBarEntryAnnotation, ToggleAction actionAnnotation, Element element) {
+        init(element);
+
         ToolBarToggleEntryType toolBarToggleEntry = new ToolBarToggleEntryType();
         String actionAnnotationActionId = actionAnnotation != null ? actionAnnotation.id() : null;
         configureToolBarEntry(toolBarToggleEntry, actionAnnotationActionId, toolBarEntryAnnotation.actionId(),

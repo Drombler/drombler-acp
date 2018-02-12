@@ -18,7 +18,7 @@ Contributor(s): .
     <parent>
         <groupId>org.drombler.acp</groupId>
         <artifactId>drombler-acp-parent</artifactId>
-        <version>0.10</version>
+        <version>0.11</version>
         <relativePath>drombler-acp-parent/pom.xml</relativePath>
     </parent>
     <artifactId>drombler-acp</artifactId>
@@ -61,6 +61,7 @@ Contributor(s): .
         <module>drombler-acp-parent</module>
         <module>drombler-acp-startup-main</module>
         <module>drombler-acp-core-application</module>
+        <module>drombler-acp-core-context</module>
         <module>drombler-acp-core-commons</module>
         <module>drombler-acp-core-action</module>
         <module>drombler-acp-core-action-spi</module>
@@ -69,6 +70,8 @@ Contributor(s): .
         <module>drombler-acp-core-docking</module>
         <module>drombler-acp-core-docking-spi</module>
         <module>drombler-acp-core-docking-spi-l10n-de</module>
+        <module>drombler-acp-core-status</module>
+        <module>drombler-acp-core-status-spi</module>
         <module>drombler-acp-core-standard-action</module>
         <module>drombler-acp-core-standard-action-data-file-l10n-de</module>
         <module>drombler-acp-core-standard-action-data-file</module>
@@ -94,6 +97,11 @@ Contributor(s): .
             <dependency>
                 <groupId>${project.groupId}</groupId>
                 <artifactId>drombler-acp-core-application</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>drombler-acp-core-context</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
@@ -149,6 +157,16 @@ Contributor(s): .
             <dependency>
                 <groupId>${project.groupId}</groupId>
                 <artifactId>drombler-acp-core-standard-docking</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>drombler-acp-core-status</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>drombler-acp-core-status-spi</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>

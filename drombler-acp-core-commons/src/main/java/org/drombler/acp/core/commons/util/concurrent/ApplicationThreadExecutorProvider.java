@@ -12,7 +12,7 @@
  *
  * Contributor(s): .
  */
-package org.drombler.acp.startup.main;
+package org.drombler.acp.core.commons.util.concurrent;
 
 import java.util.concurrent.Executor;
 
@@ -23,7 +23,7 @@ import java.util.concurrent.Executor;
  * @author puce
  */
 @FunctionalInterface
-public interface ApplicationExecutorProvider {
+public interface ApplicationThreadExecutorProvider {
 
     /**
      * Gets an {@link Executor}, which makes sure a given command gets executed on the GUI-toolkit specific application
@@ -32,5 +32,5 @@ public interface ApplicationExecutorProvider {
      * @return an {@link Executor}, which makes sure a given command gets executed on the GUI-toolkit specific
      * application thread
      */
-    Executor getApplicationExecutor();
+    Executor getApplicationThreadExecutor();
 }
