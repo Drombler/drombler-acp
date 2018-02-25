@@ -7,7 +7,6 @@ import org.drombler.acp.core.commons.util.concurrent.ApplicationThreadExecutorPr
 import org.drombler.acp.core.settings.jaxb.SettingsType;
 import org.drombler.acp.core.settings.spi.AbstractSettingsCategoryDescriptor;
 import org.drombler.acp.core.settings.spi.SettingsCategoryContainer;
-import org.drombler.acp.core.settings.spi.SettingsCategoryContainerProvider;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.component.ComponentContext;
@@ -19,15 +18,15 @@ import org.osgi.service.component.annotations.ReferencePolicy;
  *
  * @author puce
  */
-public abstract class AbstractSettingsCategoryHandler<D extends AbstractSettingsCategoryDescriptor> {
+public abstract class AbstractSettingsCategoryHandler<T, D extends AbstractSettingsCategoryDescriptor> {
 
     private final List<D> unresolvedSettingsCategoryDescriptors = new ArrayList<>();
 
     @Reference
-    private SettingsCategoryContainerProvider settingsCategoryContainerProvider;
+    protected SettingsCategoryContainer<T> settingsCategoryContainer;
 
     @Reference
-    private ApplicationThreadExecutorProvider applicationThreadExecutorProvider;
+    protected ApplicationThreadExecutorProvider applicationThreadExecutorProvider;
 
     @Reference(cardinality = ReferenceCardinality.MULTIPLE, policy = ReferencePolicy.DYNAMIC)
     protected void bindSettingsType(ServiceReference<SettingsType> serviceReference) {
@@ -49,8 +48,8 @@ public abstract class AbstractSettingsCategoryHandler<D extends AbstractSettings
 
     protected abstract void registerSettingsType(SettingsType settingsType, BundleContext context);
 
-    public SettingsCategoryContainer getSettingsCategoryContainer() {
-        return settingsCategoryContainerProvider.getSettingsCategoryContainer();
+    public SettingsCategoryContainer<T> getSettingsCategoryContainer() {
+        return settingsCategoryContainer;
     }
 
     private void resolveSettingsCategoryDescriptors() {
@@ -70,7 +69,7 @@ public abstract class AbstractSettingsCategoryHandler<D extends AbstractSettings
     }
 
     protected boolean isInitialized() {
-        return settingsCategoryContainerProvider != null;
+        return settingsCategoryContainer != null;
     }
 
     protected abstract void resolveSettingsCategoryDescriptorInitialized(D settingsCategoryDescriptor);

@@ -15,7 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @Component(immediate = true)
-public class ParentOnlySettingsCategoryHandler extends AbstractSettingsCategoryHandler<ParentOnlySettingsCategoryDescriptor> {
+public class ParentOnlySettingsCategoryHandler<T> extends AbstractSettingsCategoryHandler<T, ParentOnlySettingsCategoryDescriptor> {
 
     private static final Logger LOG = LoggerFactory.getLogger(ParentOnlySettingsCategoryHandler.class);
 

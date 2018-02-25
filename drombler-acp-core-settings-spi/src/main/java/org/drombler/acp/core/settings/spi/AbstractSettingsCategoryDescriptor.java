@@ -3,6 +3,7 @@ package org.drombler.acp.core.settings.spi;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import org.apache.commons.lang3.StringUtils;
 import org.drombler.acp.core.settings.jaxb.AbstractSettingsCategoryType;
 
 public abstract class AbstractSettingsCategoryDescriptor {
@@ -78,7 +79,7 @@ public abstract class AbstractSettingsCategoryDescriptor {
     }
 
     public static void configureSettingsCategoryDescriptor(AbstractSettingsCategoryDescriptor descriptor, AbstractSettingsCategoryType settingsCategory) {
-        descriptor.setPath(splitPath(settingsCategory.getPath()));
+        descriptor.setPath(splitPath(StringUtils.stripToEmpty(settingsCategory.getPath())));
     }
 
     private static List<String> splitPath(String path) {

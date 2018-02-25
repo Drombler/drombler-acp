@@ -15,16 +15,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @Component(immediate = true)
-public class CustomSettingsCategoryHandler extends AbstractSettingsCategoryHandler<CustomSettingsCategoryDescriptor<?>> {
+public class CustomSettingsCategoryHandler<T> extends AbstractSettingsCategoryHandler<T, CustomSettingsCategoryDescriptor<? extends T>> {
 
     private static final Logger LOG = LoggerFactory.getLogger(CustomSettingsCategoryHandler.class);
 
     @Reference(cardinality = ReferenceCardinality.MULTIPLE, policy = ReferencePolicy.DYNAMIC)
-    protected void bindCustomSettingsCategoryDescriptor(CustomSettingsCategoryDescriptor<?> descriptor) {
+    protected void bindCustomSettingsCategoryDescriptor(CustomSettingsCategoryDescriptor<? extends T> descriptor) {
         resolveSettingsCategoryDescriptor(descriptor);
     }
 
-    protected void unbindCustomSettingsCategoryDescriptor(CustomSettingsCategoryDescriptor<?> descriptor) {
+    protected void unbindCustomSettingsCategoryDescriptor(CustomSettingsCategoryDescriptor<? extends T> descriptor) {
     }
 
     @Activate
@@ -54,7 +54,7 @@ public class CustomSettingsCategoryHandler extends AbstractSettingsCategoryHandl
     }
 
     @Override
-    protected void resolveSettingsCategoryDescriptorInitialized(CustomSettingsCategoryDescriptor<?> settingsCategoryDescriptor) {
+    protected void resolveSettingsCategoryDescriptorInitialized(CustomSettingsCategoryDescriptor<? extends T> settingsCategoryDescriptor) {
         getApplicationThreadExecutor().execute(() -> getSettingsCategoryContainer().addCategory(settingsCategoryDescriptor));
     }
 
