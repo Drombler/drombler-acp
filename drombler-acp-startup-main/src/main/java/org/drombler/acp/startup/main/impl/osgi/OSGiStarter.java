@@ -20,8 +20,8 @@ import java.util.Map;
 import java.util.ServiceLoader;
 import org.drombler.acp.startup.main.DromblerACPConfiguration;
 import org.drombler.acp.startup.main.ServiceLoaderException;
-import org.drombler.acp.startup.main.impl.BootServiceStarter;
 import org.drombler.acp.startup.main.impl.PropertiesUtils;
+import org.drombler.commons.client.startup.main.BootServiceStarter;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.FrameworkEvent;
@@ -120,6 +120,15 @@ public class OSGiStarter implements BootServiceStarter {
     @Override
     public boolean isRunning() {
         return getFramework().getState() == Bundle.ACTIVE;
+    }
+
+    /**
+     * This starter is required for OSGi applications.
+     * @return true
+     */
+    @Override
+    public boolean isRequired() {
+        return true;
     }
 
 }

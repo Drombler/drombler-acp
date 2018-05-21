@@ -16,115 +16,50 @@ package org.drombler.acp.startup.main;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.text.MessageFormat;
-import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.Executors;
-import java.util.stream.Collectors;
 import org.drombler.acp.startup.main.impl.AdditionalArgumentsProviderImpl;
-import org.drombler.acp.startup.main.impl.BootServiceStarter;
 import org.drombler.acp.startup.main.impl.osgi.OSGiStarter;
-import org.drombler.acp.startup.main.impl.singleinstance.SingleInstanceStarter;
+import org.drombler.commons.client.startup.main.ApplicationInstanceListener;
+import org.drombler.commons.client.startup.main.cli.CommandLineArgs;
+import org.drombler.commons.client.startup.main.DromblerClientStarter;
+import org.drombler.commons.client.startup.main.MissingPropertyException;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.FrameworkEvent;
 import org.osgi.framework.launch.Framework;
 
-public class DromblerACPStarter {
+public class DromblerACPStarter<T extends DromblerACPConfiguration> extends DromblerClientStarter<T> {
 
 //    private static final Logger LOG = LoggerFactory.getLogger(DromblerACPStarter.class); // TODO: outside OSGi Framework...?
     public static void main(String[] args) throws URISyntaxException, IOException,
             MissingPropertyException, BundleException, InterruptedException, Exception {
         CommandLineArgs commandLineArgs = CommandLineArgs.parseCommandLineArgs(args);
-        DromblerACPStarter main = new DromblerACPStarter(new DromblerACPConfiguration(commandLineArgs));
-        main.init();
-        main.start();
+        DromblerACPStarter<DromblerACPConfiguration> main = new DromblerACPStarter<>(new DromblerACPConfiguration(commandLineArgs));
+        if (main.init()) {
+            main.start();
+        }
     }
 
     private final OSGiStarter osgiStarter;
-    private final SingleInstanceStarter singleInstanceStarter;
-    private final List<BootServiceStarter> starters;
-    private final DromblerACPConfiguration configuration;
-    private boolean stopped = false;
 
     /**
      *
      * @param configuration
      */
-    public DromblerACPStarter(DromblerACPConfiguration configuration) {
-        this.configuration = configuration;
+    public DromblerACPStarter(T configuration) {
+        super(configuration);
         this.osgiStarter = new OSGiStarter(configuration, true);
-        this.singleInstanceStarter = new SingleInstanceStarter(configuration);
-        this.starters = Arrays.asList(singleInstanceStarter, osgiStarter).stream()
-                .filter(BootServiceStarter::isActive)
-                .collect(Collectors.toList());
+        addAdditionalStarters(osgiStarter);
     }
 
-    public boolean init() throws Exception {
-        boolean initialized = true;
-        for (BootServiceStarter starter : starters) {
-            if (!starter.init()) {
-                initialized = false;
-                break;
-            }
-        }
-        return initialized;
-    }
-
+    @Override
     public void start() {
-        starters.stream().
-                map(starter -> {
-                    Thread starterThread = Executors.defaultThreadFactory().newThread(() -> {
-                        try {
-                            registerShutdownHook(starter);
-                            starter.startAndWait();
-                        } catch (Exception ex) {
-                            logError(ex);
-                        }
-            });
-            starterThread.setDaemon(true);
-            starterThread.setName("Boot Service Starter Thread - " + starter.getName());
-                    return starterThread;
-                }).
-                forEach(Thread::start);
-        osgiStarter.getFramework().getBundleContext().addFrameworkListener(event -> {
-            if (event.getType() == FrameworkEvent.STARTED) {
-                fireAdditionalArguments(configuration.getCommandLineArgs().getAdditionalArguments());
-            }
-        });
-        if (singleInstanceStarter.isActive()) {
-            singleInstanceStarter.setApplicationInstanceListener(this::fireAdditionalArguments);
-        }
-    }
-
-    private void registerShutdownHook(BootServiceStarter starter) {
-        Runtime.getRuntime().addShutdownHook(new Thread(starter.getName() + " Shutdown Hook") {
-
-            @Override
-            public void run() {
-                try {
-                    if (starter.isRunning()) {
-                        starter.stop();
+        super.start();
+        getFramework().getBundleContext().
+                addFrameworkListener((FrameworkEvent event) -> {
+                    if (event.getType() == FrameworkEvent.STARTED) {
+                        fireAdditionalArguments(getConfiguration().getCommandLineArgs().getAdditionalArguments());
                     }
-                } catch (Exception ex) {
-                    System.err.println("Error stopping starter " + starter.getName() + ": " + ex);
-                }
-            }
-        });
-    }
-
-    public synchronized void stop() {
-        if (!stopped) {
-            stopped = true;
-            starters.stream()
-                    .forEach(starter -> {
-                        try {
-                            starter.stop();
-                        } catch (Exception ex) {
-                            logError(ex);
-                        }
-                    });
-        }
-
+                });
     }
 
     private void fireAdditionalArguments(List<String> additionalArguments) {
@@ -133,20 +68,13 @@ public class DromblerACPStarter {
 
     }
 
-    public Framework getFramework() {
+    public final Framework getFramework() {
         return osgiStarter.getFramework();
     }
 
-    private void logInfo(String messageFormat, Object... arguments) {
-        // TODO: replace with SLF4J Logger once available on classpath
-        // Note: the message format is different!
-        System.out.println(MessageFormat.format(messageFormat, arguments));
-    }
-
-    private void logError(Exception ex) {
-        // TODO: replace with SLF4J Logger once available on classpath
-        // Note: the message format is different!
-        ex.printStackTrace();
+    @Override
+    protected ApplicationInstanceListener getApplicationInstanceListener() {
+        return this::fireAdditionalArguments;
     }
 
 }
