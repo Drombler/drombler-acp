@@ -26,11 +26,20 @@ import org.drombler.acp.core.action.MenuItemSupplierFactory;
  */
 public interface MenuItemContainer<MenuItem, Menu extends MenuItem, F extends MenuItemSupplierFactory<MenuItem, F>> {
 
+    /**
+     * Adds a sub-menu to this menu item container.
+     *
+     * @param id the id of the sub-menu
+     * @param menu the sub-menu to add
+     * @param supplierFactory the {@link MenuItemSupplierFactory} of this container
+     * @param sortingStrategy the menu item sorting strategy of the sub-menu
+     */
     void addMenu(String id, Menu menu, F supplierFactory, MenuItemSortingStrategy<MenuItem, ?> sortingStrategy);
 
     void addMenuItem(MenuItem menuItem, F supplierFactory);
 
     MenuItemSortingStrategy<MenuItem, F> getMenuItemSortingStrategy(); // TODO: correct? or MenuItemSortingStrategy<MenuItem, ?> ?
+
     /**
      * @return the menuContainers
      */
