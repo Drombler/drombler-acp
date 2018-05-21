@@ -1,36 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-        COMMON DEVELOPMENT AND DISTRIBUTION LICENSE (CDDL) Notice
+         COMMON DEVELOPMENT AND DISTRIBUTION LICENSE (CDDL) Notice
 
-The contents of this file are subject to the COMMON DEVELOPMENT AND DISTRIBUTION LICENSE (CDDL)
-Version 1.0 (the "License"); you may not use this file except in
-compliance with the License. A copy of the License is available at
-http://www.opensource.org/licenses/cddl1.txt
+ The contents of this file are subject to the COMMON DEVELOPMENT AND DISTRIBUTION LICENSE (CDDL)
+ Version 1.0 (the "License"); you may not use this file except in
+ compliance with the License. A copy of the License is available at
+ http://www.opensource.org/licenses/cddl1.txt
 
-The Original Code is Drombler.org. The Initial Developer of the
-Original Code is Florian Brunner (Sourceforge.net user: puce).
-Copyright 2012 Drombler.org. All Rights Reserved.
+ The Original Code is Drombler.org. The Initial Developer of the
+ Original Code is Florian Brunner (GitHub user: puce77).
+ Copyright 2018 Drombler.org. All Rights Reserved.
 
-Contributor(s): .
+ Contributor(s): .
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-
     <parent>
         <groupId>org.drombler.acp</groupId>
         <artifactId>drombler-acp-parent</artifactId>
         <version>0.12-SNAPSHOT</version>
         <relativePath>../drombler-acp-parent/pom.xml</relativePath>
     </parent>
-    <artifactId>drombler-acp-core-settings-spi</artifactId>
+
+    <artifactId>drombler-acp-core-standard-settings</artifactId>
     <packaging>bundle</packaging>
 
-    <name>Drombler ACP - Core - Settings - SPI</name>
-    <description>SPI for building a declarative settings support for Drombler ACP.</description>
+    <name>Drombler ACP - Core - Standard - Settings</name>
+    <description>Standard core Settings.</description>
     <inceptionYear>2018</inceptionYear>
     <!-- required for Javadoc (apidocs) linking -->
     <url>http://www.drombler.org/drombler-acp/${project.version}/docs/site</url>
-    
+
     <scm>
         <connection>${scm.connection}</connection>
         <developerConnection>${scm.developerConnection}</developerConnection>
@@ -49,6 +49,8 @@ Contributor(s): .
         <scm.connection>${scm.parent.connection}</scm.connection>
         <scm.developerConnection>${scm.parent.developerConnection}</scm.developerConnection>
         <scm.url>${scm.parent.url}</scm.url>
+        
+        <reporting.javadoc.skip>true</reporting.javadoc.skip>
     </properties>
 
     <!-- Not inherited!?? -->
@@ -62,40 +64,24 @@ Contributor(s): .
                 <groupId>org.apache.felix</groupId>
                 <artifactId>maven-bundle-plugin</artifactId>
                 <extensions>true</extensions>
+            </plugin>
+            <plugin>
+                <artifactId>maven-javadoc-plugin</artifactId>
                 <configuration>
-                    <instructions>
-                        <_dsannotations-options>inherit</_dsannotations-options>
-                    </instructions>
+                    <!-- No published classes. -->
+                    <skip>true</skip>
                 </configuration>
             </plugin>
         </plugins>
     </build>
-    <dependencies>  
-        <dependency>
-            <groupId>org.osgi</groupId>
-            <artifactId>org.osgi.service.component.annotations</artifactId>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.osgi</groupId>
-            <artifactId>osgi.core</artifactId>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.osgi</groupId>
-            <artifactId>org.osgi.compendium</artifactId>
-            <scope>provided</scope>
-        </dependency>
-        
+
+   
+    <dependencies>
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>drombler-acp-core-settings</artifactId>
             <version>${project.version}</version>
         </dependency>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>drombler-acp-startup-main</artifactId>
-            <version>${project.version}</version>
-        </dependency>
+       
     </dependencies>
 </project>

@@ -69,7 +69,4 @@ public class BusinessObjectHandlerHandler extends AbstractDataHandlerHandler<Bus
             LOG.error(ex.getMessage(), ex);
         }
     }
-
-
-
 }

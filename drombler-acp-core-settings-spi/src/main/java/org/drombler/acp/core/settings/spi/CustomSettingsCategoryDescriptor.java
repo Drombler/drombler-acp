@@ -2,7 +2,7 @@ package org.drombler.acp.core.settings.spi;
 
 import static org.drombler.acp.core.commons.util.BundleUtils.loadClass;
 import org.drombler.acp.core.settings.jaxb.CustomSettingsCategoryType;
-import static org.drombler.commons.client.util.ResourceBundleUtils.getPackageResourceStringPrefixed;
+import static org.drombler.commons.client.util.ResourceBundleUtils.getClassResourceStringPrefixed;
 import org.osgi.framework.Bundle;
 
 public class CustomSettingsCategoryDescriptor<T> extends AbstractSettingsCategoryDescriptor {
@@ -28,8 +28,8 @@ public class CustomSettingsCategoryDescriptor<T> extends AbstractSettingsCategor
 
     private static <T> CustomSettingsCategoryDescriptor<T> createCustomSettingsCategoryDescriptor(CustomSettingsCategoryType customSettingsCategory, Class<T> contentPaneClass) {
         CustomSettingsCategoryDescriptor<T> descriptor = new CustomSettingsCategoryDescriptor<>(customSettingsCategory.getId(), customSettingsCategory.getPosition(), contentPaneClass);
-        descriptor.setDisplayName(getPackageResourceStringPrefixed(contentPaneClass, customSettingsCategory.getDisplayName()));
-        descriptor.setDisplayDescription(getPackageResourceStringPrefixed(contentPaneClass, customSettingsCategory.getDisplayDescription()));
+        descriptor.setDisplayName(getClassResourceStringPrefixed(contentPaneClass, customSettingsCategory.getDisplayName()));
+        descriptor.setDisplayDescription(getClassResourceStringPrefixed(contentPaneClass, customSettingsCategory.getDisplayDescription()));
         AbstractSettingsCategoryDescriptor.configureSettingsCategoryDescriptor(descriptor, customSettingsCategory);
         return descriptor;
     }

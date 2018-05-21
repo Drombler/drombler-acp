@@ -5,6 +5,7 @@ import org.softsmithy.lib.util.PositionableAdapter;
 /**
  *
  * @author puce
+ * @param <T>
  */
 public interface StatusBarElementContainer<T> {
 

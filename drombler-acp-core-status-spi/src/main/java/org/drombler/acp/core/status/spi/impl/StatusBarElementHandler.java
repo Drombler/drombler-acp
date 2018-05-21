@@ -92,7 +92,6 @@ public class StatusBarElementHandler<T> {
         } catch (ClassNotFoundException ex) {
             LOG.error(ex.getMessage(), ex);
         }
-
     }
 
     private void registerStatusBarElement(StatusBarElementDescriptor<? extends T> statusBarElementDescriptor) {

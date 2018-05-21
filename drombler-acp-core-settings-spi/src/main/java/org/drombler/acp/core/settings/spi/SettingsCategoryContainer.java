@@ -10,4 +10,7 @@ public interface SettingsCategoryContainer<T> {
     void addCategory(ParentOnlySettingsCategoryDescriptor settingsCategoryDescriptor);
 
     void addCategory(CustomSettingsCategoryDescriptor<? extends T> settingsCategoryDescriptor);
+
+    void openDialog();
+
 }

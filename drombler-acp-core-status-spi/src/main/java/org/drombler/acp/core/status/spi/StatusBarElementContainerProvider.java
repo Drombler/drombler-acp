@@ -3,6 +3,7 @@ package org.drombler.acp.core.status.spi;
 /**
  *
  * @author puce
+ * @param <T>
  */
 
 

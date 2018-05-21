@@ -90,13 +90,18 @@ Contributor(s): .
    
     <dependencies>
         <dependency>
-            <groupId>org.drombler.acp</groupId>
+            <groupId>${project.groupId}</groupId>
             <artifactId>drombler-acp-core-action</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.drombler.acp</groupId>
+            <groupId>${project.groupId}</groupId>
             <artifactId>drombler-acp-core-commons</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>drombler-acp-core-settings-spi</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
@@ -119,6 +124,11 @@ Contributor(s): .
         <dependency>
             <groupId>org.apache.felix</groupId>
             <artifactId>org.apache.felix.scr.annotations</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.osgi</groupId>
+            <artifactId>osgi.core</artifactId>
             <scope>provided</scope>
         </dependency>
     </dependencies>
