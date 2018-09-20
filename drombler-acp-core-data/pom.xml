@@ -4,7 +4,7 @@
     <parent>
         <groupId>org.drombler.acp</groupId>
         <artifactId>drombler-acp-parent</artifactId>
-        <version>0.12</version>
+        <version>0.13</version>
         <relativePath>../drombler-acp-parent/pom.xml</relativePath>
     </parent>
 
@@ -108,7 +108,7 @@
         </dependency>
         <dependency>
             <groupId>org.drombler.commons</groupId>
-            <artifactId>drombler-commons-data</artifactId>
+            <artifactId>drombler-commons-data-core</artifactId>
         </dependency>
         <dependency>
             <groupId>org.drombler.acp</groupId>

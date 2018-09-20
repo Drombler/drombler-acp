@@ -18,12 +18,12 @@ Contributor(s): .
     <parent>
         <groupId>org.drombler</groupId>
         <artifactId>drombler-oss-parent</artifactId>
-        <version>2.11</version>
+        <version>3.1</version>
         <relativePath />
     </parent>
     <groupId>org.drombler.acp</groupId>
     <artifactId>drombler-acp-parent</artifactId>
-    <version>0.12</version>
+    <version>0.13</version>
     <packaging>pom</packaging>
     
     <name>Drombler ACP - Parent</name>
@@ -69,7 +69,7 @@ Contributor(s): .
         <!--<url.parent>http://www.drombler.org/drombler-acp/${project.version}/docs/site</url.parent>-->
         
         <!-- Dependency Versions Defaults -->
-        <drombler-commons.version>0.12</drombler-commons.version>
+        <drombler-commons.version>0.13</drombler-commons.version>
 
     </properties>
 

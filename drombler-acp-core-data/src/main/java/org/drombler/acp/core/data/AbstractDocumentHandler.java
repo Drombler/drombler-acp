@@ -25,13 +25,9 @@ import org.drombler.commons.data.DataCapabilityProvider;
  *
  * @author puce
  */
-public abstract class AbstractDocumentHandler extends AbstractDataHandler<Path> {
+public abstract class AbstractDocumentHandler extends AbstractPathHandler {
 
-    public static final String PATH_PROPERTY_NAME = "path";
-
-    private Path path;
     private final String defaultFileExtenion;
-    private Path uniqueKey;
 
     /**
      * Creates a new instance of this class with an unkown (null) document path.
@@ -49,7 +45,7 @@ public abstract class AbstractDocumentHandler extends AbstractDataHandler<Path> 
      * @param defaultFileExtenion the default file extension for the document type
      */
     public AbstractDocumentHandler(String defaultFileExtenion, Path path) {
-        setPath(path);
+        super(path);
         this.defaultFileExtenion = defaultFileExtenion;
 //        SavableAs savableAs = new SavableAs() {
 //            @Override
@@ -58,39 +54,6 @@ public abstract class AbstractDocumentHandler extends AbstractDataHandler<Path> 
 //
 //            }
 //        };
-    }
-
-    /**
-     * The path of the document or null if it does not exist yet.
-     *
-     * @return the path the path of the document or null if it does not exist yet
-     */
-    public Path getPath() {
-        return path;
-    }
-
-    /**
-     * @param path the path to set
-     */
-    private void setPath(Path path) {
-        if (this.path != null) {
-            throw new IllegalStateException("The path must not change once set!");
-        }
-        this.path = path;
-        setUniqueKey(path);
-        getPropertyChangeSupport().firePropertyChange(PATH_PROPERTY_NAME, null, this.path);
-        getPropertyChangeSupport().firePropertyChange(TITLE_PROPERTY_NAME, null, getTitle());
-        getPropertyChangeSupport().firePropertyChange(TOOLTIP_TEXT_PROPERTY_NAME, null, getTooltipText());
-    }
-
-    @Override
-    public String getTitle() {
-        return getPath() != null ? getPath().getFileName().toString() : null;
-    }
-
-    @Override
-    public String getTooltipText() {
-        return getPath() != null ? getPath().toString() : null;
     }
 
     /**
@@ -136,21 +99,5 @@ public abstract class AbstractDocumentHandler extends AbstractDataHandler<Path> 
      * @throws IOException
      */
     protected abstract void writeContent() throws IOException;
-
-    @Override
-    public Path getUniqueKey() {
-        return uniqueKey;
-    }
-
-    private void setUniqueKey(Path path) {
-        if (path != null && uniqueKey == null) {
-            try {
-                uniqueKey = path.toRealPath();
-            } catch (IOException ex) {
-                uniqueKey = path;
-            }
-            getPropertyChangeSupport().firePropertyChange(UNIQUE_KEY_PROPERTY_NAME, null, this.uniqueKey);
-        }
-    }
 
 }
