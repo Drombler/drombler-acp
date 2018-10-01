@@ -29,8 +29,7 @@ import org.drombler.commons.context.ContextEvent;
  *
  * @author puce
  */
-@Action(id = "standard.saveAll", category = "core", displayName = "%saveAll.displayName",
-        accelerator = "Shortcut+Shift+S", icon = "saveAll.png")
+@Action(id = "standard.saveAll", category = "core", displayName = "%saveAll.displayName", accelerator = "Shortcut+Shift+S", icon = "saveAll.png")
 @MenuEntry(path = "File", position = 4210)
 @ToolBarEntry(toolBarId = "file", position = 60)
 public class SaveAllAction extends AbstractApplicationContextSensitiveActionListener<Savable, Object> {
