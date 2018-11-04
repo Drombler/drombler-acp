@@ -16,7 +16,7 @@
     <description>Declarative data support for Drombler ACP.</description>
     <inceptionYear>2016</inceptionYear>
     <!-- required for Javadoc (apidocs) linking -->
-    <url>http://www.drombler.org/drombler-acp/${project.version}/docs/site</url>
+    <url>https://www.drombler.org/drombler-acp/${project.version}/docs/site</url>
     
     <scm>
         <connection>${scm.connection}</connection>
