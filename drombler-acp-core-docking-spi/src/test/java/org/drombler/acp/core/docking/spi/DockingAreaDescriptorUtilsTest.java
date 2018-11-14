@@ -1,5 +1,3 @@
-package org.drombler.acp.core.docking.spi;
-
 /*
  *         COMMON DEVELOPMENT AND DISTRIBUTION LICENSE (CDDL) Notice
  *
@@ -14,8 +12,10 @@ package org.drombler.acp.core.docking.spi;
  *
  * Contributor(s): .
  */
-import static org.junit.Assert.assertNotNull;
-import org.junit.Test;
+package org.drombler.acp.core.docking.spi;
+
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import org.junit.jupiter.api.Test;
 
 /**
  *
