@@ -47,6 +47,7 @@ public abstract class AbstractDataHandler<T> implements DataHandler<T> {
 
     private boolean dirty = false;
     private boolean initialized = true;
+    private boolean closed = false;
 
     /**
      * Creates a new instance of this class.
@@ -137,7 +138,14 @@ public abstract class AbstractDataHandler<T> implements DataHandler<T> {
      * {@inheritDoc }
      */
     @Override
-    public void close() {
+    public final void close() {
+        if (!closed) {
+            this.closed = true;
+            doClose();
+        }
+    }
+
+    protected void doClose() {
         dataCapabilityProviderTracker.close();
         fireCloseEvent();
         closeEventListeners.clear();

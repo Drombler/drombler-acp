@@ -14,6 +14,7 @@
  */
 package org.drombler.acp.core.action.spi.impl;
 
+import org.drombler.acp.core.action.spi.ActionResolutionManager;
 import org.apache.felix.scr.annotations.Activate;
 import org.apache.felix.scr.annotations.Component;
 import org.apache.felix.scr.annotations.Deactivate;

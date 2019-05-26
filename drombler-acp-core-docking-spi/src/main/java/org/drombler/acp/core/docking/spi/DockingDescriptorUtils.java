@@ -36,20 +36,20 @@ public class DockingDescriptorUtils {
         return createViewDockingDescriptor(docking, dockableClass);
     }
 
-    private static <D, DATA extends DockableData, E extends DockableEntry<D, DATA>> ViewDockingDescriptor<D, DATA, E> createViewDockingDescriptor(ViewDockingType docking,
+    private static <D, DATA extends DockableData, E extends DockableEntry<D, DATA>> ViewDockingDescriptor<D, DATA, E> createViewDockingDescriptor(ViewDockingType viewDocking,
             Class<D> dockableClass) throws ClassNotFoundException {
-        String id = StringUtils.stripToNull(docking.getId());
-        String displayName = docking.getDisplayName();
-        String icon = StringUtils.stripToNull(docking.getIcon());
-        String areaId = StringUtils.stripToNull(docking.getAreaId());
-        String resourceBundleBaseName = docking.getResourceBundleBaseName();
-        String accelerator = docking.getAccelerator();
+        String id = StringUtils.stripToNull(viewDocking.getId());
+        String displayName = viewDocking.getDisplayName();
+        String icon = StringUtils.stripToNull(viewDocking.getIcon());
+        String areaId = StringUtils.stripToNull(viewDocking.getAreaId());
+        String resourceBundleBaseName = viewDocking.getResourceBundleBaseName();
+        String accelerator = viewDocking.getAccelerator();
 
         ViewDockingDescriptor<D, DATA, E> dockingDescriptor = new ViewDockingDescriptor<>(dockableClass, id, displayName, icon, accelerator, resourceBundleBaseName);
         dockingDescriptor.setAreaId(areaId);
-        dockingDescriptor.setPosition(docking.getPosition());
+        dockingDescriptor.setPosition(viewDocking.getPosition());
         dockingDescriptor.setActivateDockableMenuEntryDescriptor(new MenuEntryDescriptor(dockingDescriptor.getId(),
-                getWindowPath(docking), new PositionableMenuItemAdapterFactory<>(docking.getMenuEntry().getPosition())));
+                getWindowPath(viewDocking), new PositionableMenuItemAdapterFactory<>(viewDocking.getMenuEntry().getPosition())));
         return dockingDescriptor;
     }
 
