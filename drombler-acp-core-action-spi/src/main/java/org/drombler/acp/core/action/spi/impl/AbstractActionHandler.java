@@ -123,7 +123,7 @@ public abstract class AbstractActionHandler<A, D extends ActionDescriptor<?>> {
     }
 
     private void closeActionListener(Object listener) throws Exception {
-        getContextManager().removeLocalContext(listener);
+        getContextManager().unregisterLocalContext(listener);
         if (listener instanceof AutoCloseable) {
             ((AutoCloseable) listener).close();
         }
