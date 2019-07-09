@@ -16,9 +16,9 @@ package org.drombler.acp.startup.main;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.util.List;
 import org.drombler.acp.startup.main.impl.AdditionalArgumentsProviderImpl;
 import org.drombler.acp.startup.main.impl.osgi.OSGiStarter;
+import org.drombler.commons.client.startup.main.ApplicationInstanceEvent;
 import org.drombler.commons.client.startup.main.ApplicationInstanceListener;
 import org.drombler.commons.client.startup.main.cli.CommandLineArgs;
 import org.drombler.commons.client.startup.main.DromblerClientStarter;
@@ -57,14 +57,14 @@ public class DromblerACPStarter<T extends DromblerACPConfiguration> extends Drom
         getFramework().getBundleContext().
                 addFrameworkListener((FrameworkEvent event) -> {
                     if (event.getType() == FrameworkEvent.STARTED) {
-                        fireAdditionalArguments(getConfiguration().getCommandLineArgs().getAdditionalArguments());
+                        fireAdditionalArguments(new ApplicationInstanceEvent(this, getConfiguration().getCommandLineArgs().getAdditionalArguments()));
                     }
                 });
     }
 
-    private void fireAdditionalArguments(List<String> additionalArguments) {
+    private void fireAdditionalArguments(ApplicationInstanceEvent event) {
         osgiStarter.getFramework().getBundleContext().registerService(AdditionalArgumentsProvider.class,
-                new AdditionalArgumentsProviderImpl(additionalArguments), null);
+                new AdditionalArgumentsProviderImpl(event.getAdditionalArgs()), null);
 
     }
 

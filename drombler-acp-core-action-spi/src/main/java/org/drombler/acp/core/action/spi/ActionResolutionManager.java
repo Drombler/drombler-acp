@@ -12,7 +12,7 @@
  *
  * Contributor(s): .
  */
-package org.drombler.acp.core.action.spi.impl;
+package org.drombler.acp.core.action.spi;
 
 import java.util.ArrayList;
 import java.util.HashMap;
