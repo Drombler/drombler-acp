@@ -12,10 +12,9 @@ public interface MenuItemSupplier<MenuItem> {
     /**
      * Gets a menu item.
      *
-     * TODO: remove T?
-     *
      * @param <T> the type of the provided menu item
      * @return a menu item
      */
+    // TODO: remove T?
     <T extends MenuItem> T getMenuItem();
 }
