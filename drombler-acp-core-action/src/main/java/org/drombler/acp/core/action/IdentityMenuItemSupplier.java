@@ -17,13 +17,12 @@ package org.drombler.acp.core.action;
 /**
  * This simple {@link MenuItemSupplier} just provides the menu item given at construction time.
  *
- * TODO: good name?
- *
  * @param <MenuItem> the GUI toolkit specific type for menu items
  * @see MenuItemSortingStrategy
  * @see TextMenuItemSortingStrategy
  * @author puce
  */
+// TODO: good name?
 public class IdentityMenuItemSupplier<MenuItem> implements MenuItemSupplier<MenuItem> {
 
     private final MenuItem menuItem;

@@ -41,11 +41,10 @@ public @interface MenuEntry {
     /**
      * A slash '/' delimited path of Menu IDs.
      *
-     * TODO: return a String array of Menu IDs instead of a '/' delimited path?
-     *
      * @return a slash '/' delimited path of Menu IDs
      * @see Menu
      */
+    // TODO: return a String array of Menu IDs instead of a '/' delimited path?
     String path();
 
     /**

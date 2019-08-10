@@ -21,7 +21,9 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * This annotation registers an Action.
+ * This annotation registers an Action.<br>
+ * <br>
+ * Action can be used to configure and synchronize e.g. menu items and toolbar buttons.
  *
  * @author puce
  */
