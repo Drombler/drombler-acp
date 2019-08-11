@@ -41,10 +41,12 @@ public class ViewDockingManager<D, DATA extends DockableData, E extends Dockable
     }
 
     /**
-     * Only call this method on the application thread!
+     * Adds a view to the {@link DockingAreaContainer}.<br>
+     * <br>
+     * Note: Only call this method on the application thread!
      *
-     * @param dockingDescriptor
-     * @param context
+     * @param dockingDescriptor the view to add
+     * @return true, if the view as added, else false
      */
     public boolean addView(final ViewDockingDescriptor<D, DATA, E> dockingDescriptor) {
         E viewEntry = dockingAreaContainer.openAndRegisterNewView(dockingDescriptor.getDockableClass(), false,
