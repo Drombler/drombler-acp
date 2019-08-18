@@ -22,12 +22,16 @@ import org.osgi.framework.Bundle;
 import org.softsmithy.lib.util.ResourceLoader;
 
 /**
+ * An action descriptor.
  *
  * @author puce
  * @param <T> the listener type
  */
 public class ActionDescriptor<T> {
 
+    /**
+     * The action id key used register and lookup actions by id.
+     */
     public static String ID_KEY = "id";
 
     private final Class<T> listenerType;
@@ -39,93 +43,154 @@ public class ActionDescriptor<T> {
     private T listener;
     private final ResourceLoader resourceLoader;
 
+    /**
+     * Creates a new instance of this class.
+     *
+     * @param listenerType the action listener type
+     */
     public ActionDescriptor(Class<T> listenerType) {
         this(listenerType, new ResourceLoader(listenerType));
     }
 
+    /**
+     * Creates a new instance of this class.
+     *
+     * @param listenerType the action listener type
+     * @param resourceLoader the resource loader
+     */
     public ActionDescriptor(Class<T> listenerType, ResourceLoader resourceLoader) {
         this.listenerType = listenerType;
         this.resourceLoader = resourceLoader;
     }
 
     /**
-     * @return the id
+     * Gets the action id.
+     *
+     * @return the action id
      */
     public String getId() {
         return id;
     }
 
     /**
-     * @param id the id to set
+     * Sets the action id.
+     *
+     * @param id the action id to set
      */
     public void setId(String id) {
         this.id = id;
     }
 
     /**
-     * @return the displayName
+     * Gets the display name.
+     *
+     * @return the display name
      */
     public String getDisplayName() {
         return displayName;
     }
 
     /**
-     * @param displayName the displayName to set
+     * Sets the display name.
+     *
+     * @param displayName the display name to set
      */
     public void setDisplayName(String displayName) {
         this.displayName = displayName;
     }
 
     /**
-     * @return the acceleratorKey
+     * Gets the accelerator.
+     *
+     * @return the accelerator
      */
     public String getAccelerator() {
         return accelerator;
     }
 
     /**
-     * @param acceleratorKey the acceleratorKey to set
+     * Sets the accelerator.
+     *
+     * @param accelerator the accelerator to set
      */
-    public void setAccelerator(String acceleratorKey) {
-        this.accelerator = acceleratorKey;
+    public void setAccelerator(String accelerator) {
+        this.accelerator = accelerator;
     }
 
     /**
-     * @return the icon
+     * Gets the icon name pattern to resolve the icons to be used for this action.
+     *
+     * Note that this property only specifies the name pattern. Drombler ACP looks for &lt;icon-base-name&gt;16.&lt;icon-extension&gt; for menu items (expected to be 16x16 pixels) and
+     * &lt;icon-base-name&gt;24.&lt;icon-extension&gt; for toolbar buttons (expected to be 24x24 pixels). So if icon is &quot;test.png&quot;, Drombler ACP would look for test16.png (for menu items)
+     * and test24.png (for toolbar buttons).
+     *
+     * @return the icon name pattern
      */
     public String getIcon() {
         return icon;
     }
 
     /**
-     * @param icon the icon to set
+     * Sets the icon name pattern to resolve the icons to be used for this action.
+     *
+     * Note that this property only specifies the name pattern. Drombler ACP looks for &lt;icon-base-name&gt;16.&lt;icon-extension&gt; for menu items (expected to be 16x16 pixels) and
+     * &lt;icon-base-name&gt;24.&lt;icon-extension&gt; for toolbar buttons (expected to be 24x24 pixels). So if icon is &quot;test.png&quot;, Drombler ACP would look for test16.png (for menu items)
+     * and test24.png (for toolbar buttons).
+     *
+     * @param icon the icon name pattern
      */
     public void setIcon(String icon) {
         this.icon = icon;
     }
 
+    /**
+     * Gets the action listener.
+     *
+     * @return the action listener
+     */
     public T getListener() {
         return listener;
     }
 
     /**
-     * @param listener the listener to set
+     * Sets the action listener.
+     *
+     * @param listener the action listener to set
      */
     public void setListener(T listener) {
         this.listener = listener;
     }
 
     /**
-     * @return the listenerType
+     * Gets the action listener type
+     *
+     * @return the action listener type
      */
     public Class<T> getListenerType() {
         return listenerType;
     }
 
+    /**
+     * Gets the resource loader to load resources such as icons.
+     *
+     * @return the resource loader
+     */
     public ResourceLoader getResourceLoader() {
         return resourceLoader;
     }
 
+    /**
+     * Creates an instance of an {@link ActionDescriptor} from an {@link ActionType} unmarshalled from the application.xml.
+     *
+     * @param actionType the unmarshalled ActionType
+     * @param bundle the OSGi bundle
+     * @param contextManager the context manager
+     * @param contextInjector the context injector
+     * @return a ActionDescriptor
+     * @throws ClassNotFoundException
+     * @throws InstantiationException
+     * @throws IllegalAccessException
+     */
     public static ActionDescriptor<?> createActionDescriptor(ActionType actionType, Bundle bundle,
             ContextManager contextManager, ContextInjector contextInjector)
             throws ClassNotFoundException, InstantiationException, IllegalAccessException {
@@ -141,6 +206,9 @@ public class ActionDescriptor<T> {
         return actionDescriptor;
     }
 
+    /**
+     * {@inheritDoc }
+     */
     @Override
     public String toString() {
         return "ActionDescriptor[" + "id=" + id + ", displayName=" + displayName + ", listenerType=" + listenerType + ", accelerator=" + accelerator + ", icon=" + icon + ']';

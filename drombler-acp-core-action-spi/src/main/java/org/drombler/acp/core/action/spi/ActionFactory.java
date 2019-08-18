@@ -15,13 +15,27 @@
 package org.drombler.acp.core.action.spi;
 
 /**
+ * An action factory. <br>
+ * <br>
+ * This is a SPI interface and must be implemented by a GUI toolkit specific extension.
  *
  * @author puce
  * @param <T> the action type
  */
 public interface ActionFactory<T> {
 
+    /**
+     * Creates a GUI toolkit specific action based on the provided action descriptor.
+     *
+     * @param actionDescriptor the action descriptor
+     * @return a GUI toolkit specific action
+     */
     T createAction(ActionDescriptor<?> actionDescriptor);
-    
+
+    /**
+     * Gets the action class.
+     *
+     * @return the action class
+     */
     Class<T> getActionClass();
 }
