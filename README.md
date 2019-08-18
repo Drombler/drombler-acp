@@ -7,6 +7,8 @@
  * **Declarative programming model**: Annotations can be used at many places to register elements such as menus, toolbars and GUI components.
  * **Drombler Commons**: *Drombler Commons* is a collection of reusable libraries and frameworks. They ship with OSGi meta data but don't require an OSGi environment. Read more about *Drombler Commons* here: [Drombler Commons](https://github.com/Drombler/drombler-commons)
 
+See the [documentation](http://www.drombler.org/drombler-acp) for the Javadoc and information about the available Maven modules (available from Maven Central).
+
 ## Implementations
 
  * [DromblerFX](https://github.com/Drombler/drombler-fx) (*JavaFX*-based)
