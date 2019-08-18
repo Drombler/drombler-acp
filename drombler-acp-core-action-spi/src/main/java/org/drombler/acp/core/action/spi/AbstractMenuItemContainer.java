@@ -45,6 +45,16 @@ public abstract class AbstractMenuItemContainer<MenuItem, Menu extends MenuItem,
     private final MenuMenuItemContainerFactory<MenuItem, Menu> menuMenuItemContainerFactory;
     private final SeparatorMenuItemFactory<? extends MenuItem> separatorMenuItemFactory;
 
+    /**
+     * Creates a new instance of this class.
+     *
+     * @param id the path id of this menu item container
+     * @param supportingItems flag if menu items are supported or just menus
+     * @param parentMenuContainer the parent menu item container
+     * @param menuItemSortingStrategy the sorting strategy
+     * @param menuMenuItemContainerFactory the menu item container factory
+     * @param separatorMenuItemFactory the separator menu item factory
+     */
     public AbstractMenuItemContainer(String id, boolean supportingItems, MenuItemContainer<MenuItem, Menu, ?> parentMenuContainer,
             MenuItemSortingStrategy<MenuItem, F> menuItemSortingStrategy,
             MenuMenuItemContainerFactory<MenuItem, Menu> menuMenuItemContainerFactory,
@@ -147,6 +157,11 @@ public abstract class AbstractMenuItemContainer<MenuItem, Menu extends MenuItem,
         }
     }
 
+    /**
+     * Gets the menus.
+     *
+     * @return the menus
+     */
     protected abstract List<? super Menu> getMenus();
 
     /**
@@ -158,6 +173,11 @@ public abstract class AbstractMenuItemContainer<MenuItem, Menu extends MenuItem,
         fireMenuItemAddedEvent(supplierFactory.createMenuItemSupplier(menuItem));
     }
 
+    /**
+     * Gets the menu items.
+     *
+     * @return the menu items.
+     */
     protected abstract List<MenuItem> getItems();
 
     /**
@@ -168,6 +188,11 @@ public abstract class AbstractMenuItemContainer<MenuItem, Menu extends MenuItem,
         return supportingItems;
     }
 
+    /**
+     * Gets the root container of this container.
+     *
+     * @return the root container of this container
+     */
     protected abstract AbstractMenuItemRootContainer<MenuItem, Menu, ?> getMenuItemRootContainer();
 
     /**

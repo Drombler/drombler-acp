@@ -21,25 +21,44 @@ import java.util.Map;
 import org.drombler.acp.core.commons.util.UnresolvedEntry;
 
 /**
- * 
+ * An action resolution manager which manages entries, which depend on actions which have not yet been registered.
+ *
  * @author puce
  */
 public class ActionResolutionManager<T> {
 
-    private final Map<String, List<UnresolvedEntry<T>>> unresolvedToolBarEntryDescriptors = new HashMap<>();
+    private final Map<String, List<UnresolvedEntry<T>>> unresolvedEntries = new HashMap<>();
 
-    public void addUnresolvedEntry(String actionId, UnresolvedEntry<T> unresolvedToolBarEntry) {
-        if (!unresolvedToolBarEntryDescriptors.containsKey(actionId)) {
-            unresolvedToolBarEntryDescriptors.put(actionId, new ArrayList<>());
+    /**
+     * Adds an unresolved entry.
+     *
+     * @param actionId the action id of the action the entry depends on
+     * @param unresolvedEntry the unresolved entry
+     */
+    public void addUnresolvedEntry(String actionId, UnresolvedEntry<T> unresolvedEntry) {
+        if (!unresolvedEntries.containsKey(actionId)) {
+            unresolvedEntries.put(actionId, new ArrayList<>());
         }
-        unresolvedToolBarEntryDescriptors.get(actionId).add(unresolvedToolBarEntry);
+        unresolvedEntries.get(actionId).add(unresolvedEntry);
     }
 
+    /**
+     * Checks if this manager contains any unresolved entries for the specified action id.
+     *
+     * @param actionId the action id
+     * @return true, if this manager contains any unresolved entries for the specified action id, else false
+     */
     public boolean containsUnresolvedEntries(String actionId) {
-        return unresolvedToolBarEntryDescriptors.containsKey(actionId);
+        return unresolvedEntries.containsKey(actionId);
     }
 
+    /**
+     * Gets and removes all unresolved entries associated with the provided action id.
+     *
+     * @param actionId the action id
+     * @return the unresolved entries associated with the provided action id
+     */
     public List<UnresolvedEntry<T>> removeUnresolvedEntries(String actionId) {
-        return unresolvedToolBarEntryDescriptors.remove(actionId);
+        return unresolvedEntries.remove(actionId);
     }
 }

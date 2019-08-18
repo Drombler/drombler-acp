@@ -17,11 +17,20 @@ package org.drombler.acp.core.action.spi;
 import org.drombler.acp.core.action.PositionableMenuItemAdapterFactory;
 
 /**
+ * The provider which provides the menu bar based menu container.<br>
+ * <br>
+ * This is a SPI interface and must be implemented by a GUI toolkit specific extension.
+ *
  * @param <MenuItem> the GUI toolkit specific type for menu items
  * @param <Menu> the GUI toolkit specific type for menus
  * @author puce
  */
 public interface MenuBarMenuContainerProvider<MenuItem, Menu extends MenuItem> {
 
+    /**
+     * Gets the menu bar based menu container.
+     *
+     * @return the menu bar based menu container
+     */
     MenuItemRootContainer<MenuItem, Menu, PositionableMenuItemAdapterFactory<MenuItem>> getMenuBarMenuContainer();
 }

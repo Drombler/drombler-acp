@@ -14,11 +14,13 @@
  */
 package org.drombler.acp.core.action.spi;
 
-import org.drombler.acp.core.action.MenuItemSupplier;
 import java.util.EventObject;
 import java.util.List;
+import org.drombler.acp.core.action.MenuItemSupplier;
 
 /**
+ * A base class for {@link MenuItemContainer} menu item events.
+ *
  * @param <MenuItem> the GUI toolkit specific type for menu items
  * @param <Menu> the GUI toolkit specific type for menus
  * @param <M> the type of the menu item
@@ -29,6 +31,13 @@ public abstract class AbstractMenuItemContainerMenuItemEvent<MenuItem, Menu exte
     private final MenuItemSupplier<? extends M> menuItem;
     private final List<String> path;
 
+    /**
+     * Creates a new instance of this class.
+     *
+     * @param source the source container of this event
+     * @param menuItem the menu item
+     * @param path the path of the menu item
+     */
     public AbstractMenuItemContainerMenuItemEvent(MenuItemContainer<MenuItem, Menu, ?> source, MenuItemSupplier<? extends M> menuItem, List<String> path) {
         super(source);
         this.menuItem = menuItem;
@@ -36,13 +45,17 @@ public abstract class AbstractMenuItemContainerMenuItemEvent<MenuItem, Menu exte
     }
 
     /**
-     * @return the path
+     * Gets the path of the menu item.
+     *
+     * @return the path of the menu item
      */
     public List<String> getPath() {
         return path;
     }
 
     /**
+     * Gets the menu item.
+     *
      * @return the menuItem
      */
     public MenuItemSupplier<? extends M> getMenuItem() {
