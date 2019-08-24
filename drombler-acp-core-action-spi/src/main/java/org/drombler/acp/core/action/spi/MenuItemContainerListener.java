@@ -17,7 +17,9 @@ package org.drombler.acp.core.action.spi;
 import java.util.EventListener;
 
 /**
- * TODO: more methods might be added in future
+ * A listener for {@link MenuItemContainerMenuEvent}s .<br>
+ * <br>
+ * Note: more methods might be added in future
  *
  * @param <MenuItem> the GUI toolkit specific type for menu items
  * @param <Menu> the GUI toolkit specific type for menus
@@ -25,7 +27,17 @@ import java.util.EventListener;
  */
 public interface MenuItemContainerListener<MenuItem, Menu extends MenuItem> extends EventListener {
 
+    /**
+     * Callback for menu added events.
+     *
+     * @param event the menu added event
+     */
     void menuAdded(MenuItemContainerMenuEvent<MenuItem, Menu> event);
 
+    /**
+     * Callback for menu item added events.
+     *
+     * @param event the menu item added event
+     */
     void menuItemAdded(MenuItemContainerMenuItemEvent<MenuItem, Menu> event);
 }
