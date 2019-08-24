@@ -28,19 +28,19 @@ import org.drombler.acp.core.action.MenuItemSupplier;
  */
 public abstract class AbstractMenuItemContainerMenuItemEvent<MenuItem, Menu extends MenuItem, M extends MenuItem> extends EventObject {
 
-    private final MenuItemSupplier<? extends M> menuItem;
+    private final MenuItemSupplier<? extends M> menuItemSupplier;
     private final List<String> path;
 
     /**
      * Creates a new instance of this class.
      *
      * @param source the source container of this event
-     * @param menuItem the menu item
+     * @param menuItemSupplier the menu item suppleir
      * @param path the path of the menu item
      */
-    public AbstractMenuItemContainerMenuItemEvent(MenuItemContainer<MenuItem, Menu, ?> source, MenuItemSupplier<? extends M> menuItem, List<String> path) {
+    public AbstractMenuItemContainerMenuItemEvent(MenuItemContainer<MenuItem, Menu, ?> source, MenuItemSupplier<? extends M> menuItemSupplier, List<String> path) {
         super(source);
-        this.menuItem = menuItem;
+        this.menuItemSupplier = menuItemSupplier;
         this.path = path;
     }
 
@@ -54,11 +54,11 @@ public abstract class AbstractMenuItemContainerMenuItemEvent<MenuItem, Menu exte
     }
 
     /**
-     * Gets the menu item.
+     * Gets the menu item supplier.
      *
-     * @return the menuItem
+     * @return the menu item supplier
      */
-    public MenuItemSupplier<? extends M> getMenuItem() {
-        return menuItem;
+    public MenuItemSupplier<? extends M> getMenuItemSupplier() {
+        return menuItemSupplier;
     }
 }
