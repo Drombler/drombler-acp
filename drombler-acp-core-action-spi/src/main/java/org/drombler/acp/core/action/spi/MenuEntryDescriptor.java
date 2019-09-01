@@ -55,7 +55,7 @@ public class MenuEntryDescriptor<MenuItem, F extends MenuItemSupplierFactory<Men
     }
 
     /**
-     * Creates an instance of an {@link MenuEntryDescriptor} from a {@link MenuEntryType} unmarshalled from the application.xml.
+     * Creates an instance of a {@link MenuEntryDescriptor} from a {@link MenuEntryType} unmarshalled from the application.xml.
      *
      * @param <MenuItem> the GUI toolkit specific type for menu items
      * @param menuEntryType the unmarshalled MenuEntryType
