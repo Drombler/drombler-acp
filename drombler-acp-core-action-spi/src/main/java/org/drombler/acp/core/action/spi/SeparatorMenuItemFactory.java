@@ -27,7 +27,7 @@ public interface SeparatorMenuItemFactory<S> {
     /**
      * Creates a GUI toolkit specific separator menu item component.
      *
-     * @return
+     * @return a GUI toolkit specific separator menu item component
      */
     S createSeparatorMenuItem();
 }

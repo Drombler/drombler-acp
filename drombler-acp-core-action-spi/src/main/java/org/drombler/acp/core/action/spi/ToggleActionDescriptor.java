@@ -23,20 +23,44 @@ import org.osgi.framework.Bundle;
 import org.softsmithy.lib.util.ResourceLoader;
 
 /**
+ * A toggle action descriptor.
  *
  * @author puce
  * @param <T> the listener type
  */
 public class ToggleActionDescriptor<T> extends ActionDescriptor<T> { // TODO: extend CheckActionDescriptor or ActionDescriptor? ToggleActionListener extends CheckActionListener...
 
+    /**
+     * Creates a new instance of this class.
+     *
+     * @param actionListenerClass
+     */
     public ToggleActionDescriptor(Class<T> actionListenerClass) {
         super(actionListenerClass);
     }
 
+    /**
+     * Creates a new instance of this class.
+     *
+     * @param listenerType the listener type
+     * @param resourceLoader the resource loader
+     */
     public ToggleActionDescriptor(Class<T> listenerType, ResourceLoader resourceLoader) {
         super(listenerType, resourceLoader);
     }
 
+    /**
+     * Creates an instance of a {@link ToggleActionDescriptor} from a {@link ToggleActionType} unmarshalled from the application.xml.
+     *
+     * @param actionType the unmarshalled ActionType
+     * @param bundle the OSGi bundle
+     * @param contextManager the context manager
+     * @param contextInjector the context injector
+     * @return a ToggleActionDescriptor
+     * @throws ClassNotFoundException
+     * @throws InstantiationException
+     * @throws IllegalAccessException
+     */
     public static ToggleActionDescriptor<?> createToggleActionDescriptor(ToggleActionType actionType, Bundle bundle,
             ContextManager contextManager, ContextInjector contextInjector) throws ClassNotFoundException, InstantiationException, IllegalAccessException {
         Class<?> actionListenerClass = bundle.loadClass(StringUtils.stripToNull(actionType.getListenerClass()));
