@@ -26,7 +26,7 @@ package org.drombler.acp.core.action.spi;
 public interface MenuItemFactory<T, A> {
 
     /**
-     * Creates a new menu item from the specified action.
+     * Creates a GUI toolkit specific menu item component from the specified action.
      *
      * @param action the action for the menu item
      * @param iconSize the icon size

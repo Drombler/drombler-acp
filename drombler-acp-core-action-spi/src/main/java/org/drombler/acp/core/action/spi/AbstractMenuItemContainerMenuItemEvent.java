@@ -35,7 +35,7 @@ public abstract class AbstractMenuItemContainerMenuItemEvent<MenuItem, Menu exte
      * Creates a new instance of this class.
      *
      * @param source the source container of this event
-     * @param menuItemSupplier the menu item suppleir
+     * @param menuItemSupplier the menu item supplier
      * @param path the path of the menu item
      */
     public AbstractMenuItemContainerMenuItemEvent(MenuItemContainer<MenuItem, Menu, ?> source, MenuItemSupplier<? extends M> menuItemSupplier, List<String> path) {

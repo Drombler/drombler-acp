@@ -17,6 +17,11 @@ package org.drombler.acp.core.action.spi;
 import org.drombler.acp.core.action.MenuItemSupplierFactory;
 
 /**
+ * A menu item root container.<br>
+ * <br>
+ *
+ * This is a SPI interface and must be implemented by a GUI toolkit specific extension.
+ *
  * @param <MenuItem> the GUI toolkit specific type for menu items
  * @param <Menu> the GUI toolkit specific type for menus
  * @param <F> the sorting strategy specific menu item supplier factory type
@@ -24,7 +29,17 @@ import org.drombler.acp.core.action.MenuItemSupplierFactory;
  */
 public interface MenuItemRootContainer<MenuItem, Menu extends MenuItem, F extends MenuItemSupplierFactory<MenuItem, F>> extends MenuItemContainer<MenuItem, Menu, F> {
 
+    /**
+     * Adds a {@link MenuItemContainerListener}.
+     *
+     * @param containerListener the container listener to add
+     */
     void addMenuContainerListener(MenuItemContainerListener<MenuItem, Menu> containerListener);
 
+    /**
+     * Removes a {@link MenuItemContainerListener}.
+     *
+     * @param containerListener the container listener to remove
+     */
     void removeMenuContainerListener(MenuItemContainerListener<MenuItem, Menu> containerListener);
 }
