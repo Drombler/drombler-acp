@@ -15,10 +15,19 @@
 package org.drombler.acp.core.action.spi;
 
 /**
+ * A separator menu item factory to create a GUI toolkit specific separator menu item component.<br>
+ * <br>
+ * This is a SPI interface and must be implemented by a GUI toolkit specific extension.
  *
  * @author puce
+ * @param <S> the GUI toolkit specific type for separator menu items
  */
 public interface SeparatorMenuItemFactory<S> {
 
+    /**
+     * Creates a GUI toolkit specific separator menu item component.
+     *
+     * @return a GUI toolkit specific separator menu item component
+     */
     S createSeparatorMenuItem();
 }

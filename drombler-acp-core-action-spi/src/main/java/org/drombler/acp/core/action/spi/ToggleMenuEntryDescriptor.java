@@ -20,30 +20,57 @@ import org.drombler.acp.core.action.PositionableMenuItemAdapterFactory;
 import org.drombler.acp.core.action.jaxb.ToggleMenuEntryType;
 
 /**
+ * A toggle menu entry desciptor.
  *
  * @author puce
+ * @param <ToggleMenuItem> the GUI toolkit specific type for toggle menu items
+ * @param <F> the sorting strategy specific menu item supplier factory type
  */
-public class ToggleMenuEntryDescriptor<MenuItem, F extends MenuItemSupplierFactory<MenuItem, F>> extends MenuEntryDescriptor<MenuItem, F> {
+public class ToggleMenuEntryDescriptor<ToggleMenuItem, F extends MenuItemSupplierFactory<ToggleMenuItem, F>> extends MenuEntryDescriptor<ToggleMenuItem, F> {
 
     private final String toggleGroupId;
 
+    /**
+     * Creates a new instance of this class.
+     *
+     * @param actionId the id of the toggle action for this toggle menu entry
+     * @param toggleGroupId the toggle group id or null if the toggle menu entry should not be part of a toggle group
+     * @param path the path
+     * @param menuItemSupplierFactory the menu item supplier factory
+     */
     public ToggleMenuEntryDescriptor(String actionId, String toggleGroupId, String path, F menuItemSupplierFactory) {
         super(actionId, path, menuItemSupplierFactory);
         this.toggleGroupId = toggleGroupId;
     }
 
+    /**
+     * Creates a new instance of this class. The toggle group id is set to null, so the toggle menu entry won't be part of a toggle group
+     *
+     * @param actionId he id of the toggle action for this toggle menu entry
+     * @param path the path
+     * @param menuItemSupplierFactory the menu item supplier factory
+     */
     public ToggleMenuEntryDescriptor(String actionId, String path, F menuItemSupplierFactory) {
         this(actionId, null, path, menuItemSupplierFactory);
     }
 
     /**
-     * @return the toggleGroupId
+     * Gets the toggle group id or null if the toggle menu entry should not be part of a toggle group.
+     *
+     * @return the toggle group id or null if the toggle menu entry should not be part of a toggle group
      */
     public String getToggleGroupId() {
         return toggleGroupId;
     }
 
-    public static <MenuItem> ToggleMenuEntryDescriptor<MenuItem, PositionableMenuItemAdapterFactory<MenuItem>> createToggleMenuEntryDescriptor(ToggleMenuEntryType menuEntryType) {
+    /**
+     * Creates an instance of a {@link ToggleMenuEntryDescriptor} from a {@link ToggleMenuEntryType} unmarshalled from the application.xml.
+     *
+     * @param <ToggleMenuItem> the GUI toolkit specific type for toggle menu items
+     * @param menuEntryType the unmarshalled MenuEntryType
+     * @return a ToggleMenuEntryDescriptor
+     */
+    public static <ToggleMenuItem> ToggleMenuEntryDescriptor<ToggleMenuItem, PositionableMenuItemAdapterFactory<ToggleMenuItem>> createToggleMenuEntryDescriptor(ToggleMenuEntryType menuEntryType) {
         return new ToggleMenuEntryDescriptor<>(StringUtils.stripToNull(menuEntryType.getActionId()),
                 StringUtils.stripToNull(menuEntryType.getToggleGroupId()),
                 StringUtils.stripToEmpty(menuEntryType.getPath()),
