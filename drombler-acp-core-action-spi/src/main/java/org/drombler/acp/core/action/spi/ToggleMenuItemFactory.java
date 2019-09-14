@@ -15,10 +15,24 @@
 package org.drombler.acp.core.action.spi;
 
 /**
+ * A toggle menu item factory to create a GUI toolkit specific toggle menu item component from a toggle action.<br>
+ * <br>
+ * This is a SPI interface and must be implemented by a GUI toolkit specific extension.
  *
  * @author puce
+ * @param <MenuItem> the GUI toolkit specific type for menu items
+ * @param <ToggleMenuItem> the GUI toolkit specific type for toggle menu items
+ * @param <ToggleAction> the toggle action type
  */
-public interface ToggleMenuItemFactory<T, A> {
+public interface ToggleMenuItemFactory<MenuItem, ToggleMenuItem extends MenuItem, ToggleAction> {
 
-    T createToggleMenuItem(ToggleMenuEntryDescriptor toggleMenuEntryDescriptor, A action, int iconSize);
+    /**
+     * Creates a GUI toolkit specific toggle menu item component from the specified toggle action.
+     *
+     * @param toggleMenuEntryDescriptor the toggle menu entry descriptor
+     * @param toggleAction the toggle action for the toggle menu item
+     * @param iconSize the icon size
+     * @return a new toggle menu item
+     */
+    ToggleMenuItem createToggleMenuItem(ToggleMenuEntryDescriptor<MenuItem, ToggleMenuItem, ?> toggleMenuEntryDescriptor, ToggleAction toggleAction, int iconSize);
 }

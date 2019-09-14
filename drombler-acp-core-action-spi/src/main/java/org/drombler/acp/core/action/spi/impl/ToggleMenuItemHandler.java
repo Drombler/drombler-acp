@@ -14,7 +14,6 @@
  */
 package org.drombler.acp.core.action.spi.impl;
 
-import org.drombler.acp.core.action.spi.ActionResolutionManager;
 import org.apache.felix.scr.annotations.Activate;
 import org.apache.felix.scr.annotations.Component;
 import org.apache.felix.scr.annotations.Deactivate;
@@ -24,6 +23,7 @@ import org.apache.felix.scr.annotations.ReferencePolicy;
 import org.drombler.acp.core.action.jaxb.MenusType;
 import org.drombler.acp.core.action.spi.ActionDescriptor;
 import org.drombler.acp.core.action.spi.ActionRegistry;
+import org.drombler.acp.core.action.spi.ActionResolutionManager;
 import org.drombler.acp.core.action.spi.ToggleActionFactory;
 import org.drombler.acp.core.action.spi.ToggleMenuEntryDescriptor;
 import org.drombler.acp.core.action.spi.ToggleMenuItemFactory;
@@ -43,14 +43,14 @@ import org.osgi.util.tracker.ServiceTrackerCustomizer;
 @Reference(name = "toggleMenuEntryDescriptor", referenceInterface = ToggleMenuEntryDescriptor.class,
 cardinality = ReferenceCardinality.OPTIONAL_MULTIPLE, policy = ReferencePolicy.DYNAMIC)
 public class ToggleMenuItemHandler<MenuItem, Menu extends MenuItem, ToggleMenuItem extends MenuItem, ToggleAction>
-        extends AbstractMenuItemHandler<MenuItem, Menu, ToggleMenuItem, ToggleMenuEntryDescriptor<MenuItem, ?>, MenuItemConfig<ToggleAction>> {
+        extends AbstractMenuItemHandler<MenuItem, Menu, ToggleMenuItem, ToggleMenuEntryDescriptor<MenuItem, ToggleMenuItem, ?>, MenuItemConfig<ToggleAction>> {
 
     @Reference
-    private ToggleMenuItemFactory<ToggleMenuItem, ToggleAction> toggleMenuItemFactory;
+    private ToggleMenuItemFactory<MenuItem, ToggleMenuItem, ToggleAction> toggleMenuItemFactory;
     @Reference
     private ToggleActionFactory<ToggleAction> toggleActionFactory;
     private final ActionRegistry<?> actionRegistry = new ActionRegistry<>(ActionDescriptor.class);
-    private final ActionResolutionManager<ToggleMenuEntryDescriptor> actionResolutionManager = new ActionResolutionManager<>();
+    private final ActionResolutionManager<ToggleMenuEntryDescriptor<MenuItem, ToggleMenuItem, ?>> actionResolutionManager = new ActionResolutionManager<>();
     private ServiceTracker<ToggleAction, ServiceReference<ToggleAction>> tracker;
 
     protected void bindToggleMenuEntryDescriptor(ServiceReference<ToggleMenuEntryDescriptor> serviceReference) {
@@ -63,11 +63,11 @@ public class ToggleMenuItemHandler<MenuItem, Menu extends MenuItem, ToggleMenuIt
         // TODO
     }
 
-    protected void bindToggleMenuItemFactory(ToggleMenuItemFactory<ToggleMenuItem, ToggleAction> toggleMenuItemFactory) {
+    protected void bindToggleMenuItemFactory(ToggleMenuItemFactory<MenuItem, ToggleMenuItem, ToggleAction> toggleMenuItemFactory) {
         this.toggleMenuItemFactory = toggleMenuItemFactory;
     }
 
-    protected void unbindToggleMenuItemFactory(ToggleMenuItemFactory<ToggleMenuItem, ToggleAction> toggleMenuItemFactory) {
+    protected void unbindToggleMenuItemFactory(ToggleMenuItemFactory<MenuItem, ToggleMenuItem, ToggleAction> toggleMenuItemFactory) {
         this.toggleMenuItemFactory = null;
     }
 
@@ -127,11 +127,11 @@ public class ToggleMenuItemHandler<MenuItem, Menu extends MenuItem, ToggleMenuIt
     protected void resolveMenuItem(MenusType menusType, Bundle bundle, BundleContext context) {
         menusType.getToggleMenuEntry().stream()
                 .map(ToggleMenuEntryDescriptor::createToggleMenuEntryDescriptor)
-                .forEach(menuEntryDescriptor -> resolveMenuItem((ToggleMenuEntryDescriptor<MenuItem, ?>) menuEntryDescriptor, context)); // TODO: possible to avoid cast?
+                .forEach(menuEntryDescriptor -> resolveMenuItem((ToggleMenuEntryDescriptor<MenuItem, ToggleMenuItem, ?>) menuEntryDescriptor, context)); // TODO: possible to avoid cast?
     }
 
     @Override
-    protected MenuItemConfig<ToggleAction> createConfig(ToggleMenuEntryDescriptor menuEntryDescriptor,
+    protected MenuItemConfig<ToggleAction> createConfig(ToggleMenuEntryDescriptor<MenuItem, ToggleMenuItem, ?> menuEntryDescriptor,
             BundleContext context) {
         ToggleAction action = actionRegistry.getAction(menuEntryDescriptor.getActionId(),
                 toggleActionFactory.getToggleActionClass(), context);
@@ -143,14 +143,14 @@ public class ToggleMenuItemHandler<MenuItem, Menu extends MenuItem, ToggleMenuIt
     }
 
     @Override
-    protected ToggleMenuItem createMenuItem(ToggleMenuEntryDescriptor<MenuItem, ?> menuEntryDescriptor,
+    protected ToggleMenuItem createMenuItem(ToggleMenuEntryDescriptor<MenuItem, ToggleMenuItem, ?> menuEntryDescriptor,
             MenuItemConfig<ToggleAction> config) {
 //        System.out.println(actionFactory.getToggleActionClass().getName() + ": " + menuEntryDescriptor.getActionId());
         return toggleMenuItemFactory.createToggleMenuItem(menuEntryDescriptor, config.getAction(), config.getIconSize());
     }
 
     @Override
-    protected void registerUnresolvedMenuItem(ToggleMenuEntryDescriptor menuEntryDescriptor, BundleContext context) {
+    protected void registerUnresolvedMenuItem(ToggleMenuEntryDescriptor<MenuItem, ToggleMenuItem, ?> menuEntryDescriptor, BundleContext context) {
         actionResolutionManager.addUnresolvedEntry(menuEntryDescriptor.getActionId(),
                 new UnresolvedEntry<>(menuEntryDescriptor, context));
     }
