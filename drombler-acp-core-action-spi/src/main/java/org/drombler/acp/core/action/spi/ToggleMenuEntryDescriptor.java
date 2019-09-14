@@ -23,10 +23,11 @@ import org.drombler.acp.core.action.jaxb.ToggleMenuEntryType;
  * A toggle menu entry desciptor.
  *
  * @author puce
+ * @param <MenuItem> the GUI toolkit specific type for menu items
  * @param <ToggleMenuItem> the GUI toolkit specific type for toggle menu items
  * @param <F> the sorting strategy specific menu item supplier factory type
  */
-public class ToggleMenuEntryDescriptor<ToggleMenuItem, F extends MenuItemSupplierFactory<ToggleMenuItem, F>> extends MenuEntryDescriptor<ToggleMenuItem, F> {
+public class ToggleMenuEntryDescriptor<MenuItem, ToggleMenuItem extends MenuItem, F extends MenuItemSupplierFactory<MenuItem, F>> extends MenuEntryDescriptor<MenuItem, F> {
 
     private final String toggleGroupId;
 
@@ -66,11 +67,13 @@ public class ToggleMenuEntryDescriptor<ToggleMenuItem, F extends MenuItemSupplie
     /**
      * Creates an instance of a {@link ToggleMenuEntryDescriptor} from a {@link ToggleMenuEntryType} unmarshalled from the application.xml.
      *
+     * @param <MenuItem> the GUI toolkit specific type for menu items
      * @param <ToggleMenuItem> the GUI toolkit specific type for toggle menu items
      * @param menuEntryType the unmarshalled MenuEntryType
      * @return a ToggleMenuEntryDescriptor
      */
-    public static <ToggleMenuItem> ToggleMenuEntryDescriptor<ToggleMenuItem, PositionableMenuItemAdapterFactory<ToggleMenuItem>> createToggleMenuEntryDescriptor(ToggleMenuEntryType menuEntryType) {
+    public static <MenuItem, ToggleMenuItem extends MenuItem> ToggleMenuEntryDescriptor<MenuItem, ToggleMenuItem, PositionableMenuItemAdapterFactory<MenuItem>> createToggleMenuEntryDescriptor(
+            ToggleMenuEntryType menuEntryType) {
         return new ToggleMenuEntryDescriptor<>(StringUtils.stripToNull(menuEntryType.getActionId()),
                 StringUtils.stripToNull(menuEntryType.getToggleGroupId()),
                 StringUtils.stripToEmpty(menuEntryType.getPath()),

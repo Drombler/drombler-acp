@@ -15,9 +15,11 @@
 package org.drombler.acp.startup.main;
 
 /**
- * The Main Window provider.
- *
- * The returned Main Window should only be used for window positioning purposes and as a parent of dialogs.
+ * The Main Window provider.<br>
+ * <br>
+ * The returned Main Window should only be used for window positioning purposes and as a parent of dialogs.<br>
+ * <br>
+ * This is a SPI interface and must be implemented by a GUI toolkit specific extension.
  *
  * @param <T> the GUI toolkit specific type of the Main Window
  * @author puce

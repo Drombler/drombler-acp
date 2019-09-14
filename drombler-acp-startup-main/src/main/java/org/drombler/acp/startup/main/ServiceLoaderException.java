@@ -15,6 +15,7 @@
 package org.drombler.acp.startup.main;
 
 /**
+ * A service loader exception.
  *
  * @author puce
  */
@@ -22,17 +23,36 @@ package org.drombler.acp.startup.main;
 public class ServiceLoaderException extends RuntimeException {
     private static final long serialVersionUID = -326132137354684616L;
 
+    /**
+     * Creates a new instance of this class.
+     */
     public ServiceLoaderException() {
     }
 
+    /**
+     * Creates a new instance of this class.
+     *
+     * @param message the message
+     */
     public ServiceLoaderException(String message) {
         super(message);
     }
 
+    /**
+     * Creates a new instance of this class.
+     *
+     * @param message the message
+     * @param cause the cause
+     */
     public ServiceLoaderException(String message, Throwable cause) {
         super(message, cause);
     }
 
+    /**
+     * Creates a new instance of this class.
+     *
+     * @param cause the cause
+     */
     public ServiceLoaderException(Throwable cause) {
         super(cause);
     }
