@@ -53,13 +53,13 @@ public class ToggleMenuItemHandler<MenuItem, Menu extends MenuItem, ToggleMenuIt
     private final ActionResolutionManager<ToggleMenuEntryDescriptor<MenuItem, ToggleMenuItem, ?>> actionResolutionManager = new ActionResolutionManager<>();
     private ServiceTracker<ToggleAction, ServiceReference<ToggleAction>> tracker;
 
-    protected void bindToggleMenuEntryDescriptor(ServiceReference<ToggleMenuEntryDescriptor> serviceReference) {
+    protected void bindToggleMenuEntryDescriptor(ServiceReference<ToggleMenuEntryDescriptor<MenuItem, ToggleMenuItem, ?>> serviceReference) {
         BundleContext context = serviceReference.getBundle().getBundleContext();
-        ToggleMenuEntryDescriptor menuEntryDescriptor = context.getService(serviceReference);
+        ToggleMenuEntryDescriptor<MenuItem, ToggleMenuItem, ?> menuEntryDescriptor = context.getService(serviceReference);
         resolveMenuItem(menuEntryDescriptor, context);
     }
 
-    protected void unbindToggleMenuEntryDescriptor(ServiceReference<ToggleMenuEntryDescriptor> serviceReference) {
+    protected void unbindToggleMenuEntryDescriptor(ServiceReference<ToggleMenuEntryDescriptor<MenuItem, ToggleMenuItem, ?>> serviceReference) {
         // TODO
     }
 
