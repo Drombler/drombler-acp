@@ -9,11 +9,11 @@ import org.drombler.commons.client.geometry.HorizontalAlignment;
 import org.osgi.framework.Bundle;
 
 /**
+ * A status bar element descriptor.
  *
  * @author puce
+ * @param <T> the type of the status bar element
  */
-
-
 public class StatusBarElementDescriptor<T> {
     //TODO: not safe as changes to DockingAreaKind are missed at compile time. 
     // Possible solutions:
@@ -42,10 +42,11 @@ public class StatusBarElementDescriptor<T> {
     private final int position;
 
     /**
+     * Creates a new instance of this class.
      *
-     * @param statusBarElementClass
-     * @param horizontalAlignment
-     * @param position
+     * @param statusBarElementClass the status bar element class
+     * @param horizontalAlignment the horizontal alignment
+     * @param position the preferred position
      */
     public StatusBarElementDescriptor(Class<T> statusBarElementClass, HorizontalAlignment horizontalAlignment, int position) {
         this.statusBarElementClass = statusBarElementClass;
@@ -54,26 +55,40 @@ public class StatusBarElementDescriptor<T> {
     }
 
     /**
-     * @return the statusBarElementClass
+     * Gets the status bar element class.
+     *
+     * @return the status bar element class
      */
     public Class<T> getStatusBarElementClass() {
         return statusBarElementClass;
     }
 
     /**
-     * @return the horizontalAlignment
+     * Gets the horizontal alignment.
+     *
+     * @return the horizontal alignment
      */
     public HorizontalAlignment getHorizontalAlignment() {
         return horizontalAlignment;
     }
 
     /**
-     * @return the position
+     * Gets the preferred position.
+     *
+     * @return the preferred position
      */
     public int getPosition() {
         return position;
     }
 
+    /**
+     * Creates an instance of a {@link StatusBarElementDescriptor} from a {@link StatusBarElementType} unmarshalled from the application.xml.
+     *
+     * @param statusBarElement the unmarshalled status bar element
+     * @param bundle the bundle of the application.xml
+     * @return a ToggleMenuEntryDescriptor
+     * @throws java.lang.ClassNotFoundException
+     */
     public static StatusBarElementDescriptor<?> createStatusBarElementDescriptor(StatusBarElementType statusBarElement, Bundle bundle) throws ClassNotFoundException {
         Class<?> statusBarElementClass = loadClass(bundle, statusBarElement.getStatusBarElementClass());
         return createStatusBarElementDescriptor(statusBarElement, statusBarElementClass);
