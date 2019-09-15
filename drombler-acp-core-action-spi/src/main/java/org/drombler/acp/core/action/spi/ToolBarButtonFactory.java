@@ -15,10 +15,20 @@
 package org.drombler.acp.core.action.spi;
 
 /**
+ * A tool bar button factory to create a GUI toolkit specific tool bar button from an action.<br>
+ * <br>
+ * This is a SPI interface and must be implemented by a GUI toolkit specific extension.
  *
  * @author puce
  */
 public interface ToolBarButtonFactory<B, A> {
 
+    /**
+     * Creates a GUI toolkit specific tool bar button from the specified action.
+     *
+     * @param action the action
+     * @param iconSize the icon size for tool bar buttons
+     * @return a new tool bar button
+     */
     B createToolBarButton(A action, int iconSize);
 }

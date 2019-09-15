@@ -15,7 +15,7 @@
 package org.drombler.acp.core.action.spi;
 
 /**
- * A menu item factory to create a GUI toolkit specific menu item component from a action.<br>
+ * A menu item factory to create a GUI toolkit specific menu item component from an action.<br>
  * <br>
  * This is a SPI interface and must be implemented by a GUI toolkit specific extension.
  *

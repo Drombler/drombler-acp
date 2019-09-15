@@ -19,7 +19,7 @@ import java.util.EventListener;
 /**
  * A {@link ToolBarContainer} listener.
  *
- * TODO: more methods might be added in future
+ * Note: more methods might be added in future
  *
  * @param <ToolBar> the GUI-toolkit specific type of a tool bar
  * @param <ToolBarButton> the GUI-toolkit specific base type of a tool bar button.
