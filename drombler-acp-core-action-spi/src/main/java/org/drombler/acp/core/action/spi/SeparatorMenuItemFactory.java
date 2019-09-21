@@ -19,8 +19,8 @@ package org.drombler.acp.core.action.spi;
  * <br>
  * This is a SPI interface and must be implemented by a GUI toolkit specific extension.
  *
- * @author puce
  * @param <S> the GUI toolkit specific type for separator menu items
+ * @author puce
  */
 public interface SeparatorMenuItemFactory<S> {
 

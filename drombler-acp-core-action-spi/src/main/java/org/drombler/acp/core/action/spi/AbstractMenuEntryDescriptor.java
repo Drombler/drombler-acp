@@ -35,7 +35,7 @@ public abstract class AbstractMenuEntryDescriptor<MenuItem, F extends MenuItemSu
     /**
      * Creates a new instance of this class.
      *
-     * @param path a slash '/' delimited path of Menu IDs.
+     * @param path a slash '/' delimited path of menu IDs.
      * @param menuItemSupplierFactory the {@link MenuItemSupplierFactory}
      */
     protected AbstractMenuEntryDescriptor(String path, F menuItemSupplierFactory) {
@@ -64,9 +64,9 @@ public abstract class AbstractMenuEntryDescriptor<MenuItem, F extends MenuItemSu
 //    }
 
     /**
-     * Gets the slash '/' delimited path of Menu IDs.
+     * Gets the slash '/' delimited path of menu IDs.
      *
-     * @return the path the slash '/' delimited path of Menu IDs
+     * @return the path the slash '/' delimited path of menu IDs
      */
     public List<String> getPath() {
         return path;

@@ -21,7 +21,7 @@ package org.drombler.acp.core.action.spi;
  *
  * @author puce
  * @param <T> the GUI toolkit specific type for menu items
- * @param <A> the action type
+ * @param <A> the GUI toolkit specific type for actions
  */
 public interface MenuItemFactory<T, A> {
 

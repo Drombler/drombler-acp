@@ -19,6 +19,8 @@ package org.drombler.acp.core.action.spi;
  * <br>
  * This is a SPI interface and must be implemented by a GUI toolkit specific extension.
  *
+ * @param <B> the GUI toolkit specific type for tool bar buttons
+ * @param <A> the GUI toolkit specific type for actions
  * @author puce
  */
 public interface ToolBarButtonFactory<B, A> {
