@@ -51,10 +51,9 @@ public @interface Menu {
     String displayName();
 
     /**
-     * A slash '/' delimited path of Menu IDs. If it is omitted, then the menu will be registered directly in the menu
-     * bar.
+     * A slash '/' delimited path of menu IDs. If it is omitted, then the menu will be registered directly in the menu bar.
      *
-     * @return a slash '/' delimited path of Menu IDs
+     * @return a slash '/' delimited path of menu IDs
      */
     String path() default "";
 
