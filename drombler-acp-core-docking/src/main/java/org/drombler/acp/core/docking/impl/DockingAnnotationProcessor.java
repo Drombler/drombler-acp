@@ -166,7 +166,7 @@ public class DockingAnnotationProcessor extends AbstractApplicationAnnotationPro
         if (dockings == null) {
             dockings = new DockingsType();
             addExtensionConfigurations(dockings);
-            addJAXBRootClasses(DockingsType.class);
+            addJAXBRootClass(DockingsType.class);
         }
         addOriginatingElements(element); // TODO: needed?
     }

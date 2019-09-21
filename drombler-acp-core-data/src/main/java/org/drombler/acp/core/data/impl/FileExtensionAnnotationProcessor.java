@@ -67,7 +67,7 @@ public class FileExtensionAnnotationProcessor extends AbstractApplicationAnnotat
         if (fileExtensions == null) {
             fileExtensions = new FileExtensionsType();
             addExtensionConfigurations(fileExtensions);
-            addJAXBRootClasses(FileExtensionsType.class);
+            addJAXBRootClass(FileExtensionsType.class);
         }
         addOriginatingElements(element); // TODO: needed?
     }

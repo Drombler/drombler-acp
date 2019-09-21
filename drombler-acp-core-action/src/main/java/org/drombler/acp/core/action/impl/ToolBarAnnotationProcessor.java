@@ -98,7 +98,7 @@ public class ToolBarAnnotationProcessor extends AbstractApplicationAnnotationPro
         if (toolBars == null) {
             toolBars = new ToolBarsType();
             addExtensionConfigurations(toolBars);
-            addJAXBRootClasses(ToolBarsType.class);
+            addJAXBRootClass(ToolBarsType.class);
         }
         addOriginatingElements(element); // TODO: needed?
     }

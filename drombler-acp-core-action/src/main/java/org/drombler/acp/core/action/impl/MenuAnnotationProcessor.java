@@ -101,7 +101,7 @@ public class MenuAnnotationProcessor extends AbstractApplicationAnnotationProces
         if (menus == null) {
             menus = new MenusType();
             addExtensionConfigurations(menus);
-            addJAXBRootClasses(MenusType.class);
+            addJAXBRootClass(MenusType.class);
         }
         addOriginatingElements(element); // TODO: needed?
     }

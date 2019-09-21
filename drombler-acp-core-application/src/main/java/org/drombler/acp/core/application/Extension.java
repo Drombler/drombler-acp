@@ -8,7 +8,11 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Registers an extension.
+ * Registers an extension using an extension file.<br>
+ * <br>
+ * An extension file is similar to the application file, but just contains a single extension point configuration.
+ * <br>
+ * Use this annotation if registration by file is more convenient than registration by annotations or if there are no corresponding annotations for the extension point.
  *
  * @author puce
  */
@@ -25,6 +29,11 @@ public @interface Extension {
      */
     String extensionFile();
 
+    /**
+     * The extension JAXB root class.
+     *
+     * @return the extension JAXB root class
+     */
     Class<?> extensionJAXBRootClass();
 
 }

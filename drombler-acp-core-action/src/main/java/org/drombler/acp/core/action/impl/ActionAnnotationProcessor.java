@@ -65,7 +65,7 @@ public class ActionAnnotationProcessor extends AbstractApplicationAnnotationProc
         if (actions == null) {
             actions = new ActionsType();
             addExtensionConfigurations(actions);
-            addJAXBRootClasses(ActionsType.class);
+            addJAXBRootClass(ActionsType.class);
         }
         addOriginatingElements(element); // TODO: needed?
     }

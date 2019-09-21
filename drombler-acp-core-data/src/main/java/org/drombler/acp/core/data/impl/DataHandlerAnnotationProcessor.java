@@ -66,7 +66,7 @@ public class DataHandlerAnnotationProcessor extends AbstractApplicationAnnotatio
         if (dataHandlers == null) {
             dataHandlers = new DataHandlersType();
             addExtensionConfigurations(dataHandlers);
-            addJAXBRootClasses(DataHandlersType.class);
+            addJAXBRootClass(DataHandlersType.class);
         }
         addOriginatingElements(element); // TODO: needed?
     }

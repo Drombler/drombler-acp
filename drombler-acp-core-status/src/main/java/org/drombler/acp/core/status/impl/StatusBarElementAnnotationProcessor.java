@@ -85,7 +85,7 @@ public class StatusBarElementAnnotationProcessor extends AbstractApplicationAnno
         if (statusBarElements == null) {
             statusBarElements = new StatusBarElementsType();
             addExtensionConfigurations(statusBarElements);
-            addJAXBRootClasses(StatusBarElementsType.class);
+            addJAXBRootClass(StatusBarElementsType.class);
         }
         addOriginatingElements(element); // TODO: needed?
     }
