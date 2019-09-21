@@ -34,7 +34,7 @@ public class ToolBarDescriptor implements Positionable {
     private int position;
     private boolean visible;
     private ToggleActionDescriptor<?> showToolBarActionDescriptor;
-    private ToggleMenuEntryDescriptor showToolBarToggleMenuEntryDescriptor;
+    private ToggleMenuEntryDescriptor<?, ?, ?> showToolBarToggleMenuEntryDescriptor;
 
     /**
      * Creates a new instance of this class.
@@ -137,7 +137,7 @@ public class ToolBarDescriptor implements Positionable {
      *
      * @return the show tool bar ToggleMenuEntryDescriptor
      */
-    public ToggleMenuEntryDescriptor getShowToolBarToggleMenuEntryDescriptor() {
+    public ToggleMenuEntryDescriptor<?, ?, ?> getShowToolBarToggleMenuEntryDescriptor() {
         return showToolBarToggleMenuEntryDescriptor;
     }
 
@@ -146,7 +146,7 @@ public class ToolBarDescriptor implements Positionable {
      *
      * @param showToolBarToggleMenuEntryDescriptor the show tool bar ToggleMenuEntryDescriptor
      */
-    public void setShowToolBarToggleMenuEntryDescriptor(ToggleMenuEntryDescriptor showToolBarToggleMenuEntryDescriptor) {
+    public void setShowToolBarToggleMenuEntryDescriptor(ToggleMenuEntryDescriptor<?, ?, ?> showToolBarToggleMenuEntryDescriptor) {
         this.showToolBarToggleMenuEntryDescriptor = showToolBarToggleMenuEntryDescriptor;
     }
 
@@ -168,11 +168,10 @@ public class ToolBarDescriptor implements Positionable {
                 toolBarType.getDisplayName(), bundle));
         toolBarDescriptor.setPosition(toolBarType.getPosition());
         toolBarDescriptor.setVisible(toolBarType.isVisible());
-        ToggleActionDescriptor<ShowToolBarAction<T, B>> actionDescriptor = createShowToolBarActionDescriptor(
-                toolBarDescriptor,
-                toolBarContainer);
+        ToggleActionDescriptor<ShowToolBarAction<T, B>> actionDescriptor
+                = createShowToolBarActionDescriptor(toolBarDescriptor, toolBarContainer);
         toolBarDescriptor.setShowToolBarActionDescriptor(actionDescriptor);
-        toolBarDescriptor.setShowToolBarToggleMenuEntryDescriptor(new ToggleMenuEntryDescriptor(actionDescriptor.getId(),
+        toolBarDescriptor.setShowToolBarToggleMenuEntryDescriptor(new ToggleMenuEntryDescriptor<>(actionDescriptor.getId(),
                 "View/Toolbars", new PositionableMenuItemAdapterFactory<>(toolBarType.getPosition())));
         return toolBarDescriptor;
     }
