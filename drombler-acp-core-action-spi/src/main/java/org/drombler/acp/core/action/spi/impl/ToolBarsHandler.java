@@ -104,7 +104,7 @@ public class ToolBarsHandler<T, B> extends AbstractToolBarHandler<T, B> {
                         toolBarDescriptor.getShowToolBarActionDescriptor(),
                         null);
                 context.registerService(ToggleMenuEntryDescriptor.class,
-                        toolBarDescriptor.getShowToolBarCheckMenuEntryDescriptor(), null);
+                        toolBarDescriptor.getShowToolBarToggleMenuEntryDescriptor(), null);
             };
             applicationExecutor.execute(runnable);
         } else {

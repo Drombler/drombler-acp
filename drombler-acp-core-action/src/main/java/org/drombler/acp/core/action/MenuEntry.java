@@ -31,20 +31,20 @@ import java.lang.annotation.Target;
 public @interface MenuEntry {
 
     /**
-     * The id of the Action to be registered as a menu item. This property can be omitted, if there is an @Action
-     * annotation on the same class.
+     * The id of the Action to be registered as a menu item. This property can be omitted, if there is an {@link Action} annotation on the same class.
      *
      * @return the id of the Action to be registered as a menu item
+     * @see Action#id()
      */
     String actionId() default "";
 
     /**
-     * A slash '/' delimited path of Menu IDs.
+     * A slash '/' delimited path of menu IDs.
      *
-     * @return a slash '/' delimited path of Menu IDs
+     * @return a slash '/' delimited path of menu IDs
      * @see Menu
      */
-    // TODO: return a String array of Menu IDs instead of a '/' delimited path?
+    // TODO: return a String array of menu IDs instead of a '/' delimited path?
     String path();
 
     /**

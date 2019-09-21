@@ -23,6 +23,7 @@ import org.osgi.framework.Bundle;
 import org.softsmithy.lib.util.Positionable;
 
 /**
+ * A tool bar descriptor.
  *
  * @author puce
  */
@@ -33,31 +34,53 @@ public class ToolBarDescriptor implements Positionable {
     private int position;
     private boolean visible;
     private ToggleActionDescriptor<?> showToolBarActionDescriptor;
-    private ToggleMenuEntryDescriptor showToolBarCheckMenuEntryDescriptor;
+    private ToggleMenuEntryDescriptor<?, ?, ?> showToolBarToggleMenuEntryDescriptor;
 
+    /**
+     * Creates a new instance of this class.
+     */
+    public ToolBarDescriptor() {
+    }
+
+    /**
+     * Gets the tool bar id.
+     *
+     * @return the tool bar id
+     */
     public String getId() {
         return id;
     }
 
     /**
-     * @param id the id to set
+     * Sets the tool bar id.
+     *
+     * @param id the tool bar id
      */
     public void setId(String id) {
         this.id = id;
     }
 
+    /**
+     * Gets the display name.
+     *
+     * @return the display name
+     */
     public String getDisplayName() {
         return displayName;
     }
 
     /**
-     * @param displayName the displayName to set
+     * Sets the display name.
+     *
+     * @param displayName the display name
      */
     public void setDisplayName(String displayName) {
         this.displayName = displayName;
     }
 
     /**
+     * Gets the position.
+     *
      * @return the position
      */
     @Override
@@ -66,26 +89,77 @@ public class ToolBarDescriptor implements Positionable {
     }
 
     /**
-     * @param position the position to set
+     * Sets the position.
+     *
+     * @param position the position
      */
     public void setPosition(int position) {
         this.position = position;
     }
 
     /**
-     * @return the visible
+     * Indicates if the tool bar should be visible by default.
+     *
+     * @return true, if the tool bar should be visible by default, else false
      */
     public boolean isVisible() {
         return visible;
     }
 
     /**
-     * @param visible the visible to set
+     * Sets if the tool bar should be visible by default.
+     *
+     * @param visible true, if the tool bar should be visible by default, else false
      */
     public void setVisible(boolean visible) {
         this.visible = visible;
     }
+    /**
+     * Gets the show tool bar {@link ToggleActionDescriptor}.
+     *
+     * @return the show tool bar ToggleActionDescriptor
+     */
+    public ToggleActionDescriptor<?> getShowToolBarActionDescriptor() {
+        return showToolBarActionDescriptor;
+    }
 
+    /**
+     * Sets the show tool bar {@link ToggleActionDescriptor}.
+     *
+     * @param showToolBarActionDescriptor the show tool bar ToggleActionDescriptor
+     */
+    public void setShowToolBarActionDescriptor(ToggleActionDescriptor<?> showToolBarActionDescriptor) {
+        this.showToolBarActionDescriptor = showToolBarActionDescriptor;
+    }
+
+    /**
+     * Gets the show tool bar {@link ToggleMenuEntryDescriptor}.
+     *
+     * @return the show tool bar ToggleMenuEntryDescriptor
+     */
+    public ToggleMenuEntryDescriptor<?, ?, ?> getShowToolBarToggleMenuEntryDescriptor() {
+        return showToolBarToggleMenuEntryDescriptor;
+    }
+
+    /**
+     * Sets the show tool bar {@link ToggleMenuEntryDescriptor}.
+     *
+     * @param showToolBarToggleMenuEntryDescriptor the show tool bar ToggleMenuEntryDescriptor
+     */
+    public void setShowToolBarToggleMenuEntryDescriptor(ToggleMenuEntryDescriptor<?, ?, ?> showToolBarToggleMenuEntryDescriptor) {
+        this.showToolBarToggleMenuEntryDescriptor = showToolBarToggleMenuEntryDescriptor;
+    }
+
+    /**
+     * Creates an instance of a {@link ToolBarDescriptor} from a {@link ToolBarType} unmarshalled from the application.xml.
+     *
+     * @param <T> the GUI-toolkit specific type of a tool bar
+     * @param <B> the GUI-toolkit specific base type of a tool bar button.
+     * @param toolBarType the unmarshalled ToolBarType
+     * @param bundle the OSGi bundle of the application.xml
+     * @param toolBarContainer the tool bar container which manages the tool bar
+     * @return a ToolBarDescriptor
+     */
     public static <T, B> ToolBarDescriptor createToolBarDescriptor(ToolBarType toolBarType, Bundle bundle, ToolBarContainer<T, B> toolBarContainer) {
         ToolBarDescriptor toolBarDescriptor = new ToolBarDescriptor();
 
@@ -94,11 +168,10 @@ public class ToolBarDescriptor implements Positionable {
                 toolBarType.getDisplayName(), bundle));
         toolBarDescriptor.setPosition(toolBarType.getPosition());
         toolBarDescriptor.setVisible(toolBarType.isVisible());
-        ToggleActionDescriptor<ShowToolBarAction<T, B>> actionDescriptor = createShowToolBarActionDescriptor(
-                toolBarDescriptor,
-                toolBarContainer);
+        ToggleActionDescriptor<ShowToolBarAction<T, B>> actionDescriptor
+                = createShowToolBarActionDescriptor(toolBarDescriptor, toolBarContainer);
         toolBarDescriptor.setShowToolBarActionDescriptor(actionDescriptor);
-        toolBarDescriptor.setShowToolBarCheckMenuEntryDescriptor(new ToggleMenuEntryDescriptor(actionDescriptor.getId(),
+        toolBarDescriptor.setShowToolBarToggleMenuEntryDescriptor(new ToggleMenuEntryDescriptor<>(actionDescriptor.getId(),
                 "View/Toolbars", new PositionableMenuItemAdapterFactory<>(toolBarType.getPosition())));
         return toolBarDescriptor;
     }
@@ -113,25 +186,4 @@ public class ToolBarDescriptor implements Positionable {
         return actionDescriptor;
     }
 
-    public ToggleActionDescriptor<?> getShowToolBarActionDescriptor() {
-        return showToolBarActionDescriptor;
-    }
-
-    /**
-     * @param showToolBarActionDescriptor the showToolBarActionDescriptor to set
-     */
-    public void setShowToolBarActionDescriptor(ToggleActionDescriptor<?> showToolBarActionDescriptor) {
-        this.showToolBarActionDescriptor = showToolBarActionDescriptor;
-    }
-
-    public ToggleMenuEntryDescriptor getShowToolBarCheckMenuEntryDescriptor() {
-        return showToolBarCheckMenuEntryDescriptor;
-    }
-
-    /**
-     * @param showToolBarCheckMenuEntryDescriptor the showToolBarCheckMenuEntryDescriptor to set
-     */
-    public void setShowToolBarCheckMenuEntryDescriptor(ToggleMenuEntryDescriptor showToolBarCheckMenuEntryDescriptor) {
-        this.showToolBarCheckMenuEntryDescriptor = showToolBarCheckMenuEntryDescriptor;
-    }
 }

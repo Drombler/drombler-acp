@@ -27,7 +27,7 @@ public class ToolBarContainerToolBarEvent<ToolBar, ToolBarButton> extends Abstra
     private static final long serialVersionUID = -6938552167875413556L;
 
     /**
-     * Creates a new instance of this class
+     * Creates a new instance of this class.
      *
      * @param source the source container
      * @param toolBarId the tool bar id
