@@ -36,11 +36,20 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
+import org.drombler.acp.core.application.ExtensionPoint;
 import org.drombler.acp.core.application.impl.ApplicationTracker;
 import org.drombler.acp.core.application.jaxb.ApplicationType;
 import org.drombler.acp.core.application.jaxb.ExtensionsType;
 
 /**
+ * A base class for annotation processors to register extensions in the application.xml file.<br>
+ * <br>
+ * Implementations must add:
+ * <ul>
+ * <li>{@link #addExtensionConfigurations(java.lang.Object)} </li>
+ * <li>{@link #addOriginatingElements(javax.lang.model.element.Element...)} </li>
+ * <li>either {@link #addJAXBRootClass(java.lang.Class)} or {@link #addJAXBPackage(java.lang.String) }</li>
+ * </ul>
  *
  * @author puce
  */
@@ -52,9 +61,23 @@ public abstract class AbstractApplicationAnnotationProcessor extends AbstractPro
     private static FileObject APPLICATION_FILE_OBJECT = null;
 
     static {
-        addJAXBRootClasses(ApplicationType.class);
+        addJAXBRootClass(ApplicationType.class);
     }
 
+    /**
+     * Creates a new instance of this class.
+     */
+    public AbstractApplicationAnnotationProcessor() {
+    }
+
+    /**
+     * Calls {@link #handleProcess(java.util.Set, javax.annotation.processing.RoundEnvironment) } and then writes the application file, if the processing is over.
+     *
+     * @param annotations the annotations
+     * @param roundEnv the round environment
+     * @return true, if the set of annotations is claimed, else false
+     * @see RoundEnvironment#processingOver()
+     */
     @Override
     public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
         boolean claimed = handleProcess(annotations, roundEnv);
@@ -64,6 +87,20 @@ public abstract class AbstractApplicationAnnotationProcessor extends AbstractPro
         return claimed;
     }
 
+    /**
+     * Handles the specific annotations. <br>
+     * <br>
+     * Implementations must add:
+     * <ul>
+     * <li>{@link #addExtensionConfigurations(java.lang.Object)} </li>
+     * <li>{@link #addOriginatingElements(javax.lang.model.element.Element...)} </li>
+     * <li>either {@link #addJAXBRootClass(java.lang.Class)} or {@link #addJAXBPackage(java.lang.String) }</li>
+     * </ul>
+     *
+     * @param annotations the annotations
+     * @param roundEnv the round environment
+     * @return true, if the set of annotations is claimed, else false
+     */
     protected abstract boolean handleProcess(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv);
 
     private void writeApplicationFile() {
@@ -88,6 +125,12 @@ public abstract class AbstractApplicationAnnotationProcessor extends AbstractPro
         }
     }
 
+    /**
+     * Creates a JAXB context.
+     *
+     * @return a JAXB context
+     * @throws JAXBException
+     */
     protected JAXBContext createJAXBContext() throws JAXBException {
         return JAXBContext.newInstance(String.join(":", JAXB_PACKAGES.toArray(new String[JAXB_PACKAGES.size()])), ApplicationType.class.getClassLoader());
     }
@@ -129,18 +172,40 @@ public abstract class AbstractApplicationAnnotationProcessor extends AbstractPro
         }
     }
 
-    protected static void addJAXBRootClasses(Class<?> jaxbRootClasses) {
-        JAXB_PACKAGES.add(jaxbRootClasses.getPackage().getName());
+    /**
+     * Adds the JAXB root class of the extension point.
+     *
+     * @param jaxbRootClass the JAXB root class of the extension point
+     * @see ExtensionPoint#getJAXBRootClass()
+     */
+    protected static void addJAXBRootClass(Class<?> jaxbRootClass) {
+        JAXB_PACKAGES.add(jaxbRootClass.getPackage().getName());
     }
 
+    /**
+     * Adds the JAXB package of the extension point.
+     *
+     * @param jaxbPackageName the JAXB package name of the extension point
+     * @see ExtensionPoint#getJAXBRootClass()
+     */
     protected static void addJAXBPackage(String jaxbPackageName) {
         JAXB_PACKAGES.add(jaxbPackageName);
     }
 
+    /**
+     * Adds an extension configuration (an instance of a JAXB root class of the extension point).
+     *
+     * @param extensionConfigurations an extension configuration to add
+     */
     protected static void addExtensionConfigurations(Object extensionConfigurations) {
         EXTENSION_CONFIGURATIONS.add(extensionConfigurations);
     }
 
+    /**
+     * Adds the originating elements.
+     *
+     * @param originatingElements the originating elements
+     */
     protected static void addOriginatingElements(Element... originatingElements) {
         ORIGINATING_ELEMENTS.addAll(Arrays.asList(originatingElements));
     }

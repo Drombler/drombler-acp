@@ -14,16 +14,28 @@
  */
 package org.drombler.acp.core.application;
 
+import org.drombler.acp.core.application.processing.AbstractApplicationAnnotationProcessor;
+
 /**
- * The Extension Point interface. Extensions can be registered in the application.xml file.
+ * The Extension Point interface. Extensions can be registered in the application file.<br>
+ * <br>
+ * Note: More method might be added in the future!<br>
+ * <br>
+ * This is a SPI interface. Modules which want to add support for new Extension Points must register an implementation of this interface as an OSGi service per Extension Point.<br>
+ * <br>
+ * It's a good practice to provide annotations and an annotation processor to generate the extension point configuration. Also consider to provide a type-safe descriptor class.
  *
- * Note: More method might be added in the future!
- *
- * @author puce
  * @param <T> the type of the JAXB root class of this Extension Point.
+ * @see AbstractApplicationAnnotationProcessor
+ * @author puce
  */
 public interface ExtensionPoint<T> {
 
+    /**
+     * Gets the extension JAXB root class.
+     *
+     * @return the extension JAXB root class
+     */
     Class<T> getJAXBRootClass();
 
 //    Collection<T> getExtensions();
