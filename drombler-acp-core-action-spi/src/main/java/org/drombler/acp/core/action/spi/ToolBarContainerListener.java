@@ -17,8 +17,8 @@ package org.drombler.acp.core.action.spi;
 import java.util.EventListener;
 
 /**
- * A {@link ToolBarContainer} listener.
- *
+ * A {@link ToolBarContainer} listener.<br>
+ * <br>
  * Note: more methods might be added in future
  *
  * @param <ToolBar> the GUI-toolkit specific type of a tool bar
