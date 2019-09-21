@@ -20,7 +20,11 @@ Contributor(s): .
     <element name="statusBarElements">
         <complexType>
             <sequence>
-                <element name="statusBarElement" type="tns:StatusBarElementType" minOccurs="0" maxOccurs="unbounded" />
+                <element name="statusBarElement" type="tns:StatusBarElementType" minOccurs="0" maxOccurs="unbounded" >
+                    <annotation>
+                        <documentation></documentation>
+                    </annotation>
+                </element>
             </sequence>
         </complexType>
     </element>
@@ -28,9 +32,21 @@ Contributor(s): .
     
     <complexType name="StatusBarElementType">
         <sequence>
-            <element name="horizontalAlignment" type="tns:HorizontalAlignmentType"/>
-            <element name="position" type="int"/>
-            <element name="statusBarElementClass" type="string"/>
+            <element name="horizontalAlignment" type="tns:HorizontalAlignmentType">
+                <annotation>
+                    <documentation></documentation>
+                </annotation>
+            </element>
+            <element name="position" type="int">
+                <annotation>
+                    <documentation></documentation>
+                </annotation>
+            </element>
+            <element name="statusBarElementClass" type="string">
+                <annotation>
+                    <documentation></documentation>
+                </annotation>
+            </element>
         </sequence>
     </complexType>
     

@@ -20,9 +20,21 @@ Contributor(s): .
     <element name="menus">
         <complexType>
             <sequence>
-                <element name="menu" type="tns:MenuType" minOccurs="0" maxOccurs="unbounded" />
-                <element name="menuEntry" type="tns:MenuEntryType" minOccurs="0" maxOccurs="unbounded" />
-                <element name="toggleMenuEntry" type="tns:ToggleMenuEntryType" minOccurs="0" maxOccurs="unbounded" />
+                <element name="menu" type="tns:MenuType" minOccurs="0" maxOccurs="unbounded" >
+                    <annotation>
+                        <documentation></documentation>
+                    </annotation>
+                </element>
+                <element name="menuEntry" type="tns:MenuEntryType" minOccurs="0" maxOccurs="unbounded" >
+                    <annotation>
+                        <documentation></documentation>
+                    </annotation>
+                </element>
+                <element name="toggleMenuEntry" type="tns:ToggleMenuEntryType" minOccurs="0" maxOccurs="unbounded" >
+                    <annotation>
+                        <documentation></documentation>
+                    </annotation>
+                </element>
             </sequence>
         </complexType>
     </element>
@@ -30,20 +42,52 @@ Contributor(s): .
     
     <complexType name="MenuType">
         <sequence>
-            <element name="displayName" type="string" />
-            <element name="path" type="string"/>
-            <element name="position" type="int"/>
-            <element name="package" type="string"/>
+            <element name="displayName" type="string" >
+                <annotation>
+                    <documentation></documentation>
+                </annotation>
+            </element>
+            <element name="path" type="string">
+                <annotation>
+                    <documentation></documentation>
+                </annotation>
+            </element>
+            <element name="position" type="int">
+                <annotation>
+                    <documentation></documentation>
+                </annotation>
+            </element>
+            <element name="package" type="string">
+                <annotation>
+                    <documentation></documentation>
+                </annotation>
+            </element>
         </sequence>
-        <attribute name="id" type="string" use="required"/>
+        <attribute name="id" type="string" use="required">
+            <annotation>
+                <documentation></documentation>
+            </annotation>
+        </attribute>
     </complexType>
     
     <complexType name="MenuEntryType">
         <sequence>
-            <element name="path" type="string"/>
-            <element name="position" type="int"/>
+            <element name="path" type="string">
+                <annotation>
+                    <documentation></documentation>
+                </annotation>
+            </element>
+            <element name="position" type="int">
+                <annotation>
+                    <documentation></documentation>
+                </annotation>
+            </element>
         </sequence>
-        <attribute name="actionId" type="string" use="required"/>
+        <attribute name="actionId" type="string" use="required">
+            <annotation>
+                <documentation></documentation>
+            </annotation>
+        </attribute>
     </complexType>
     
     
@@ -51,7 +95,11 @@ Contributor(s): .
         <complexContent>
             <extension base="tns:MenuEntryType">
                 <sequence>
-                    <element name="toggleGroupId" type="string" minOccurs="0"/>
+                    <element name="toggleGroupId" type="string" minOccurs="0">
+                        <annotation>
+                            <documentation></documentation>
+                        </annotation>
+                    </element>
                 </sequence>
             </extension>
         </complexContent>

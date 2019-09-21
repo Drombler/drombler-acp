@@ -20,8 +20,16 @@ Contributor(s): .
     <element name="dockings">
         <complexType>
             <sequence>
-                <element name="viewDocking" type="tns:ViewDockingType" minOccurs="0" maxOccurs="unbounded" />
-                <element name="editorDocking" type="tns:EditorDockingType" minOccurs="0" maxOccurs="unbounded" />
+                <element name="viewDocking" type="tns:ViewDockingType" minOccurs="0" maxOccurs="unbounded" >
+                    <annotation>
+                        <documentation></documentation>
+                    </annotation>
+                </element>
+                <element name="editorDocking" type="tns:EditorDockingType" minOccurs="0" maxOccurs="unbounded" >
+                    <annotation>
+                        <documentation></documentation>
+                    </annotation>
+                </element>
             </sequence>
         </complexType>
     </element>
@@ -30,16 +38,48 @@ Contributor(s): .
         <complexContent>
             <extension base="tns:AbstractDockingType">
                 <sequence>
-                    <element name="areaId" type="string" />
+                    <element name="areaId" type="string" >
+                        <annotation>
+                            <documentation></documentation>
+                        </annotation>
+                    </element>
                     <!--            <element name="singleton" type="boolean" />-->
-                    <element name="icon" type="string" minOccurs="0" />
-                    <element name="state" type="tns:DockingStateType" />
-                    <element name="position" type="int" />
+            <element name="icon" type="string" minOccurs="0" >
+                <annotation>
+                    <documentation></documentation>
+                </annotation>
+            </element>
+            <element name="state" type="tns:DockingStateType" >
+                <annotation>
+                    <documentation></documentation>
+                </annotation>
+            </element>
+            <element name="position" type="int" >
+                <annotation>
+                    <documentation></documentation>
+                </annotation>
+            </element>
                     <!--            <element name="singleton" type="boolean" />-->
-                    <element name="displayName" type="string" />
-                    <element name="accelerator" type="string" minOccurs="0"/>
-                    <element name="menuEntry" type="tns:WindowMenuEntryType"/>
-                    <element name="resourceBundleBaseName" type="string" minOccurs="0" />
+            <element name="displayName" type="string" >
+                <annotation>
+                    <documentation></documentation>
+                </annotation>
+            </element>
+            <element name="accelerator" type="string" minOccurs="0">
+                <annotation>
+                    <documentation></documentation>
+                </annotation>
+            </element>
+            <element name="menuEntry" type="tns:WindowMenuEntryType">
+                <annotation>
+                    <documentation></documentation>
+                </annotation>
+            </element>
+            <element name="resourceBundleBaseName" type="string" minOccurs="0" >
+                <annotation>
+                    <documentation></documentation>
+                </annotation>
+            </element>
                 </sequence>
             </extension>
         </complexContent>
@@ -49,7 +89,11 @@ Contributor(s): .
         <complexContent>
             <extension base="tns:AbstractDockingType">
                 <sequence>
-                    <element name="contentType" type="string"/>
+                    <element name="contentType" type="string">
+                        <annotation>
+                            <documentation></documentation>
+                        </annotation>
+                    </element>
                 </sequence>
             </extension>
         </complexContent>
@@ -57,9 +101,17 @@ Contributor(s): .
     
     <complexType name="AbstractDockingType">
         <sequence>
-            <element name="dockableClass" type="string"/>
+            <element name="dockableClass" type="string">
+                <annotation>
+                    <documentation></documentation>
+                </annotation>
+            </element>
         </sequence>
-        <attribute name="id" type="string" use="required"/>
+        <attribute name="id" type="string" use="required">
+            <annotation>
+                <documentation></documentation>
+            </annotation>
+        </attribute>
     </complexType>
     
     <simpleType name="DockingStateType">
@@ -74,8 +126,16 @@ Contributor(s): .
     
     <complexType name="WindowMenuEntryType">
         <sequence>
-            <element name="path" type="string"/>
-            <element name="position" type="int"/>
+            <element name="path" type="string">
+                <annotation>
+                    <documentation></documentation>
+                </annotation>
+            </element>
+            <element name="position" type="int">
+                <annotation>
+                    <documentation></documentation>
+                </annotation>
+            </element>
         </sequence>
     </complexType>
 </schema>

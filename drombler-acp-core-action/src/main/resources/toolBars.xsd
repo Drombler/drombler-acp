@@ -20,36 +20,84 @@ Contributor(s): .
     <element name="toolBars">
         <complexType>
             <sequence>
-                <element name="toolBar" type="tns:ToolBarType" minOccurs="0" maxOccurs="unbounded" />
-                <element name="toolBarEntry" type="tns:ToolBarEntryType" minOccurs="0" maxOccurs="unbounded" />
-                <element name="toolBarToggleEntry" type="tns:ToolBarToggleEntryType" minOccurs="0" maxOccurs="unbounded" />
+                <element name="toolBar" type="tns:ToolBarType" minOccurs="0" maxOccurs="unbounded" >
+                    <annotation>
+                        <documentation></documentation>
+                    </annotation>
+                </element>
+                <element name="toolBarEntry" type="tns:ToolBarEntryType" minOccurs="0" maxOccurs="unbounded" >
+                    <annotation>
+                        <documentation></documentation>
+                    </annotation>
+                </element>
+                <element name="toolBarToggleEntry" type="tns:ToolBarToggleEntryType" minOccurs="0" maxOccurs="unbounded" >
+                    <annotation>
+                        <documentation></documentation>
+                    </annotation>
+                </element>
             </sequence>
         </complexType>
     </element>
     
     <complexType name="ToolBarType">
         <sequence>
-            <element name="displayName" type="string"/>
-            <element name="position" type="int"/>
-            <element name="visible" type="boolean"/>
-            <element name="package" type="string"/>
+            <element name="displayName" type="string">
+                <annotation>
+                    <documentation></documentation>
+                </annotation>
+            </element>
+            <element name="position" type="int">
+                <annotation>
+                    <documentation></documentation>
+                </annotation>
+            </element>
+            <element name="visible" type="boolean">
+                <annotation>
+                    <documentation></documentation>
+                </annotation>
+            </element>
+            <element name="package" type="string">
+                <annotation>
+                    <documentation></documentation>
+                </annotation>
+            </element>
         </sequence>
-        <attribute name="id" type="string" use="required"/>
+        <attribute name="id" type="string" use="required">
+            <annotation>
+                <documentation></documentation>
+            </annotation>
+        </attribute>
     </complexType>
     
     <complexType name="ToolBarEntryType">
         <sequence>
-            <element name="toolBarId" type="string"/>
-            <element name="position" type="int"/>
+            <element name="toolBarId" type="string">
+                <annotation>
+                    <documentation></documentation>
+                </annotation>
+            </element>
+            <element name="position" type="int">
+                <annotation>
+                    <documentation></documentation>
+                </annotation>
+            </element>
         </sequence>
-        <attribute name="actionId" type="string" use="required"/>
+        <attribute name="actionId" type="string" use="required">
+            <annotation>
+                <documentation></documentation>
+            </annotation>
+        </attribute>
     </complexType>
     
     <complexType name="ToolBarToggleEntryType">
         <complexContent>
             <extension base="tns:ToolBarEntryType">
                 <sequence>
-                    <element name="toggleGroupId" type="string" minOccurs="0"/>
+                    <element name="toggleGroupId" type="string" minOccurs="0">
+                        <annotation>
+                            <documentation></documentation>
+                        </annotation>
+                    </element>
                 </sequence>
             </extension>
         </complexContent>

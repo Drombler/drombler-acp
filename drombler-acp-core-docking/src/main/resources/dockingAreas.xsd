@@ -20,20 +20,48 @@ Contributor(s): .
     <element name="dockingAreas">
         <complexType>
             <sequence>
-                <element name="dockingArea" type="tns:DockingAreaType" minOccurs="0" maxOccurs="unbounded" />
+                <element name="dockingArea" type="tns:DockingAreaType" minOccurs="0" maxOccurs="unbounded" >
+                    <annotation>
+                        <documentation></documentation>
+                    </annotation>
+                </element>
             </sequence>
         </complexType>
     </element>
 
     <complexType name="DockingAreaType">
         <sequence>
-            <element name="kind" type="tns:DockingAreaKindType" />
-            <element name="position" type="int" />
-            <element name="paths" type="tns:DockingAreaPathsType" />
-            <element name="permanent" type="boolean" />
-            <element name="layoutConstraints" type="tns:LayoutConstraintsType"/>
+            <element name="kind" type="tns:DockingAreaKindType" >
+                <annotation>
+                    <documentation></documentation>
+                </annotation>
+            </element>
+            <element name="position" type="int" >
+                <annotation>
+                    <documentation></documentation>
+                </annotation>
+            </element>
+            <element name="paths" type="tns:DockingAreaPathsType" >
+                <annotation>
+                    <documentation></documentation>
+                </annotation>
+            </element>
+            <element name="permanent" type="boolean" >
+                <annotation>
+                    <documentation></documentation>
+                </annotation>
+            </element>
+            <element name="layoutConstraints" type="tns:LayoutConstraintsType">
+                <annotation>
+                    <documentation></documentation>
+                </annotation>
+            </element>
         </sequence>
-        <attribute name="id" type="string" use="required"/>
+        <attribute name="id" type="string" use="required">
+            <annotation>
+                <documentation></documentation>
+            </annotation>
+        </attribute>
     </complexType>
     
     <simpleType name="DockingAreaKindType">
@@ -45,14 +73,26 @@ Contributor(s): .
     
     <complexType name="DockingAreaPathsType">
         <sequence>
-            <element name="path" type="int" minOccurs="1" maxOccurs="unbounded" />
+            <element name="path" type="int" minOccurs="1" maxOccurs="unbounded" >
+                <annotation>
+                    <documentation></documentation>
+                </annotation>
+            </element>
         </sequence>
     </complexType>
 
     <complexType name="LayoutConstraintsType">
         <sequence>
-            <element name="prefWidth" type="double" minOccurs="1" maxOccurs="1" />
-            <element name="prefHeight" type="double" minOccurs="1" maxOccurs="1" />
+            <element name="prefWidth" type="double" minOccurs="1" maxOccurs="1" >
+                <annotation>
+                    <documentation></documentation>
+                </annotation>
+            </element>
+            <element name="prefHeight" type="double" minOccurs="1" maxOccurs="1" >
+                <annotation>
+                    <documentation></documentation>
+                </annotation>
+            </element>
         </sequence>
     </complexType>
 </schema>

@@ -20,16 +20,32 @@ Contributor(s): .
     <element name="dataHandlers">
         <complexType>
             <sequence>
-                <element name="businessObjectHandler" type="tns:BusinessObjectHandlerType" minOccurs="0" maxOccurs="unbounded" />
-                <element name="documentHandler" type="tns:DocumentHandlerType" minOccurs="0" maxOccurs="unbounded" />
+                <element name="businessObjectHandler" type="tns:BusinessObjectHandlerType" minOccurs="0" maxOccurs="unbounded" >
+                    <annotation>
+                        <documentation></documentation>
+                    </annotation>
+                </element>
+                <element name="documentHandler" type="tns:DocumentHandlerType" minOccurs="0" maxOccurs="unbounded" >
+                    <annotation>
+                        <documentation></documentation>
+                    </annotation>
+                </element>
             </sequence>
         </complexType>
     </element>
 
     <complexType name="DataHandlerType">
         <sequence>
-            <element name="icon" type="string" minOccurs="0" />
-            <element name="handlerClass" type="string"/>
+            <element name="icon" type="string" minOccurs="0" >
+                <annotation>
+                    <documentation></documentation>
+                </annotation>
+            </element>
+            <element name="handlerClass" type="string">
+                <annotation>
+                    <documentation></documentation>
+                </annotation>
+            </element>
         </sequence>
     </complexType>
     
@@ -37,7 +53,11 @@ Contributor(s): .
         <complexContent>
             <extension base="tns:DataHandlerType">
                 <sequence>
-                    <element name="mimeType" type="string" />
+                    <element name="mimeType" type="string" >
+                        <annotation>
+                            <documentation></documentation>
+                        </annotation>
+                    </element>
                 </sequence>
             </extension>
         </complexContent>

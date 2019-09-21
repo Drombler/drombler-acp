@@ -28,13 +28,47 @@ Contributor(s): .
 
     <complexType name="ActionType">
         <sequence>
-            <element name="displayName" type="string" />
-            <element name="accelerator" type="string" minOccurs="0" />
-            <element name="icon" type="string" minOccurs="0" />
-            <element name="listenerClass" type="string"/>
+            <element name="displayName" type="string" >
+                <annotation>
+                    <documentation>The text to be displayed, e.g. as the text for menu items or the tooltip for toolbar buttons. 
+                        If the value starts with '%' the rest of the value is interpreted as a property key and the value gets looked-up in 
+                        the Bundle.properties file (or a locale specific derivation of this file), which has to be in the same package 
+                        as the listenerClass.
+                    </documentation>
+                </annotation>
+            </element>
+            <element name="accelerator" type="string" minOccurs="0"  >
+                <annotation>
+                    <documentation>The accelerator to be used for this action.</documentation>
+                </annotation>
+            </element>
+            <element name="icon" type="string" minOccurs="0"  >
+                <annotation>
+                    <documentation>The icon name pattern to resolve the icons to be used for this action.
+                        Note that this only specifies the name pattern. Drombler ACP looks for
+                        &lt;icon-base-name&gt;16.&lt;icon-extension&gt; for menu items (expected to be 16x16 pixels) and
+                        &lt;icon-base-name&gt;24.&lt;icon-extension&gt; for toolbar buttons (expected to be 24x24 pixels). 
+                        So if icon is &quot;test.png&quot;, Drombler ACP would look for test16.png (for menu items) and
+                        test24.png (for toolbar buttons).
+                    </documentation>
+                </annotation>
+            </element>
+            <element name="listenerClass" type="string" >
+                <annotation>
+                    <documentation></documentation>
+                </annotation>
+            </element>
         </sequence>
-        <attribute name="id" type="string" use="required"/>
-        <attribute name="category" type="string" use="required"/>
+        <attribute name="id" type="string" use="required">
+            <annotation>
+                <documentation>The id of this action. An action can be referenced by its id from other elements such as menu entries and tool bar entries.</documentation>
+            </annotation>
+        </attribute>
+        <attribute name="category" type="string" use="required">
+            <annotation>
+                <documentation>The category is used to group actions (currently this has not effect, but might be used in future).</documentation>
+            </annotation>
+        </attribute>
     </complexType>
     
     <complexType name="ToggleActionType">

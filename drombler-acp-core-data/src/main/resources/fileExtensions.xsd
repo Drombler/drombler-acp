@@ -20,19 +20,39 @@ Contributor(s): .
     <element name="fileExtensions">
         <complexType>
             <sequence>
-                <element name="fileExtension" type="tns:FileExtensionType" minOccurs="0" maxOccurs="unbounded" />
+                <element name="fileExtension" type="tns:FileExtensionType" minOccurs="0" maxOccurs="unbounded" >
+                    <annotation>
+                        <documentation></documentation>
+                    </annotation>
+                </element>
             </sequence>
         </complexType>
     </element>
 
     <complexType name="FileExtensionType">
         <sequence>
-            <element name="displayName" type="string" />
-            <element name="mimeType" type="string" />
+            <element name="displayName" type="string" >
+                <annotation>
+                    <documentation></documentation>
+                </annotation>
+            </element>
+            <element name="mimeType" type="string" >
+                <annotation>
+                    <documentation></documentation>
+                </annotation>
+            </element>
             <sequence>
-                <element name="fileExtension" type="string" maxOccurs="unbounded"/>
+                <element name="fileExtension" type="string" maxOccurs="unbounded">
+                    <annotation>
+                        <documentation></documentation>
+                    </annotation>
+                </element>
             </sequence>
-            <element name="package" type="string"/>
+            <element name="package" type="string">
+                <annotation>
+                    <documentation></documentation>
+                </annotation>
+            </element>
         </sequence>
     </complexType>
     
