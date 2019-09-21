@@ -14,4 +14,4 @@ See the [documentation](https://www.drombler.org/drombler-acp) for the Javadoc a
  * [Drombler FX](https://github.com/Drombler/drombler-fx) (*JavaFX*-based)
 
 ## Issues
-Please file issue to [Drombler FX](https://github.com/Drombler/drombler-fx/issues) for the time being.
+Please file issues to [Drombler FX](https://github.com/Drombler/drombler-fx/issues) for the time being.
