@@ -7,6 +7,16 @@ import org.osgi.framework.ServiceReference;
 import org.osgi.util.tracker.ServiceTracker;
 import org.osgi.util.tracker.ServiceTrackerCustomizer;
 
+/**
+ * A simple {@link ServiceTrackerCustomizer} implementation which delegates the work to {@link Consumer}s.
+ *
+ * @param <T> the type of the tracked object
+ * @see #createServiceTracker(java.lang.Class, java.util.function.Consumer)
+ * @see #createServiceTracker(org.osgi.framework.BundleContext, java.lang.Class, java.util.function.Consumer)
+ * @see #createServiceTracker(java.lang.Class, java.util.function.Consumer, java.util.function.Consumer)
+ * @see #createServiceTracker(org.osgi.framework.BundleContext, java.lang.Class, java.util.function.Consumer, java.util.function.Consumer)
+ * @author puce
+ */
 public class SimpleServiceTrackerCustomizer<T> implements ServiceTrackerCustomizer<T, T> {
 
     private final BundleContext context;

@@ -23,7 +23,7 @@ import org.osgi.framework.Bundle;
  *
  * @author puce
  */
-public class OSGiResourceBundleUtils {
+public final class OSGiResourceBundleUtils {
 
     private OSGiResourceBundleUtils() {
     }
