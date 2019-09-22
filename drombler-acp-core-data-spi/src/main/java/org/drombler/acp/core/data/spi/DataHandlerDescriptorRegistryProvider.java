@@ -17,10 +17,18 @@ package org.drombler.acp.core.data.spi;
 import org.drombler.commons.data.DataHandlerDescriptorRegistry;
 
 /**
+ * A {@link DataHandlerDescriptorRegistry} provider.<br>
+ * <br>
+ * This module also provides an implementation registered as OSGi service.
  *
  * @author puce
  */
 public interface DataHandlerDescriptorRegistryProvider {
 
+    /**
+     * Gets a {@link DataHandlerDescriptorRegistry}.
+     *
+     * @return a DataHandlerDescriptorRegistry
+     */
     DataHandlerDescriptorRegistry getDataHandlerDescriptorRegistry();
 }
