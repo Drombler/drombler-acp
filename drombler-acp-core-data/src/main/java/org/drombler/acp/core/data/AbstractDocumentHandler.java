@@ -19,9 +19,9 @@ import java.nio.file.Path;
 import org.drombler.commons.data.DataCapabilityProvider;
 
 /**
- * An abstract {@link Path}-based {@link DocumentHandler}. It observes registered {@link DataCapabilityProvider}s and adds the found data capabilities to it's local context.
- *
- * You can use this class as a base class for your own document handler implementations.
+ * An abstract base class for {@link Path}-based {@link DocumentHandler}s.<br>
+ * <br>
+ * It observes registered {@link DataCapabilityProvider}s and adds the found data capabilities to it's local context.
  *
  * @author puce
  */

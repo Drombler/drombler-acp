@@ -29,9 +29,9 @@ import org.softsmithy.lib.util.CloseEvent;
 import org.softsmithy.lib.util.CloseEventListener;
 
 /**
- * An abstract {@link DataHandler}. It observes registered {@link DataCapabilityProvider}s and adds the found data capabilities to it's local context.
- *
- * You can use this class as a base class for your own data handler implementations.
+ * An abstract base class for {@link DataHandler}s.<br>
+ * <br>
+ * It observes registered {@link DataCapabilityProvider}s and adds the found data capabilities to it's local context.
  *
  * @param <T> the type of the unique key of this data handler
  * @see AbstractDocumentHandler
@@ -70,6 +70,11 @@ public abstract class AbstractDataHandler<T> implements DataHandler<T> {
         return localContext;
     }
 
+    /**
+     * Gets the context content.
+     *
+     * @return the context content
+     */
     protected SimpleContextContent getContextContent() {
         return contextContent;
     }
@@ -83,15 +88,24 @@ public abstract class AbstractDataHandler<T> implements DataHandler<T> {
         contextContent.remove(dataCapabilityProvider.getDataCapability(this));
     }
 
+    /**
+     * {@inheritDoc }
+     */
     @Override
     public void markDirty() {
         setDirty(true);
     }
 
+    /**
+     * Sets the dirty flag to false.
+     */
     protected void markClean() {
         setDirty(false);
     }
 
+    /**
+     * {@inheritDoc }
+     */
     @Override
     public boolean isDirty() {
         return dirty;
@@ -103,17 +117,32 @@ public abstract class AbstractDataHandler<T> implements DataHandler<T> {
         propertyChangeSupport.firePropertyChange(DIRTY_PROPERTY_NAME, oldDirty, this.dirty);
     }
 
+    /**
+     * {@inheritDoc }
+     */
     @Override
     public boolean isInitialized() {
         return initialized;
     }
 
+    /**
+     * Sets the initialized flag.<br>
+     * <br>
+     * This is a bound property.
+     *
+     * @param initialized
+     */
     protected void setInitialized(boolean initialized) {
         boolean oldInitialized = this.initialized;
         this.initialized = initialized;
         propertyChangeSupport.firePropertyChange(INITIALIZED_PROPERTY_NAME, oldInitialized, this.initialized);
     }
 
+    /**
+     * Gets the {@link PropertyChangeSupport}.
+     *
+     * @return the PropertyChangeSupport
+     */
     protected final PropertyChangeSupport getPropertyChangeSupport() {
         return propertyChangeSupport;
     }
@@ -136,6 +165,8 @@ public abstract class AbstractDataHandler<T> implements DataHandler<T> {
 
     /**
      * {@inheritDoc }
+     *
+     * @see #doClose()
      */
     @Override
     public final void close() {
@@ -145,6 +176,9 @@ public abstract class AbstractDataHandler<T> implements DataHandler<T> {
         }
     }
 
+    /**
+     * Closes this data handler.
+     */
     protected void doClose() {
         dataCapabilityProviderTracker.close();
         fireCloseEvent();
@@ -167,12 +201,18 @@ public abstract class AbstractDataHandler<T> implements DataHandler<T> {
         closeEventListeners.remove(listener);
     }
 
+    /**
+     * Fires the {@link CloseEvent}.
+     */
     protected void fireCloseEvent() {
         CloseEvent event = new CloseEvent(this);
         List<CloseEventListener> closeEventListenersCopy = new ArrayList<>(closeEventListeners);
         closeEventListenersCopy.forEach(listener -> listener.onClose(event));
     }
 
+    /**
+     * {@inheritDoc }
+     */
     @Override
     public String toString() {
         return getClass().getSimpleName() + "[uniqueKey=" + getUniqueKey() + "]";
