@@ -46,7 +46,7 @@ import org.drombler.acp.core.application.jaxb.ExtensionsType;
  * <br>
  * Implementations must add:
  * <ul>
- * <li>{@link #addExtensionConfigurations(java.lang.Object)} </li>
+ * <li>{@link #addExtensionConfiguration(java.lang.Object)} </li>
  * <li>{@link #addOriginatingElements(javax.lang.model.element.Element...)} </li>
  * <li>either {@link #addJAXBRootClass(java.lang.Class)} or {@link #addJAXBPackage(java.lang.String) }</li>
  * </ul>
@@ -92,7 +92,7 @@ public abstract class AbstractApplicationAnnotationProcessor extends AbstractPro
      * <br>
      * Implementations must add:
      * <ul>
-     * <li>{@link #addExtensionConfigurations(java.lang.Object)} </li>
+     * <li>{@link #addExtensionConfiguration(java.lang.Object)} </li>
      * <li>{@link #addOriginatingElements(javax.lang.model.element.Element...)} </li>
      * <li>either {@link #addJAXBRootClass(java.lang.Class)} or {@link #addJAXBPackage(java.lang.String) }</li>
      * </ul>
@@ -195,10 +195,11 @@ public abstract class AbstractApplicationAnnotationProcessor extends AbstractPro
     /**
      * Adds an extension configuration (an instance of a JAXB root class of the extension point).
      *
-     * @param extensionConfigurations an extension configuration to add
+     * @param extensionConfiguration an extension configuration to add
+     * @see #addJAXBRootClass(java.lang.Class)
      */
-    protected static void addExtensionConfigurations(Object extensionConfigurations) {
-        EXTENSION_CONFIGURATIONS.add(extensionConfigurations);
+    protected static void addExtensionConfiguration(Object extensionConfiguration) {
+        EXTENSION_CONFIGURATIONS.add(extensionConfiguration);
     }
 
     /**
