@@ -22,8 +22,8 @@ import java.lang.annotation.Target;
 import org.softsmithy.lib.util.UniqueKeyProvider;
 
 /**
- * Registers an editor dockable.
- *
+ * Registers an editor dockable.<br>
+ * <br>
  * The annotated editor requires a constructor with a single parameter of type {@link #contentType() }. The contentType is usually a data handler.
  *
  * @author puce

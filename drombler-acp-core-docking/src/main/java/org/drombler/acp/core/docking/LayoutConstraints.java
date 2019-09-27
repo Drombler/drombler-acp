@@ -18,9 +18,12 @@ import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+import org.drombler.commons.docking.LayoutConstraintsDescriptor;
 
 /**
+ * The Layout constraints.
  *
+ * @see LayoutConstraintsDescriptor
  * @author puce
  */
 @Documented
@@ -28,7 +31,17 @@ import java.lang.annotation.Target;
 @Target({})
 public @interface LayoutConstraints {
 
+    /**
+     * The preferred width of the Docking Area. Can be negative to indicate a flexible width.
+     *
+     * @return the preferred width of the Docking Area. Can be negative to indicate a flexible width.
+     */
     double prefWidth() default -1;
 
+    /**
+     * The preferred height of the Docking Area. Can be negative to indicate a flexible height.
+     *
+     * @return the preferred height of the Docking Area. Can be negative to indicate a flexible height.
+     */
     double prefHeight() default -1;
 }
