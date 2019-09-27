@@ -22,6 +22,7 @@ import java.lang.annotation.Target;
 /**
  * A window menu entry.
  *
+ * @see ViewDocking#menuEntry()
  * @author puce
  */
 @Documented
@@ -30,10 +31,9 @@ import java.lang.annotation.Target;
 public @interface WindowMenuEntry {
 
     /**
-     * A slash '/' delimited path of menu IDs.
+     * A slash '/' delimited path of menu IDs starting from the default location.
      *
-     * @return a slash '/' delimited path of menu IDs
-     * @see Menu
+     * @return a slash '/' delimited path of menu IDs starting from the default location.
      */
     // TODO: return a String array of menu IDs instead of a '/' delimited path?
     String path() default "";
