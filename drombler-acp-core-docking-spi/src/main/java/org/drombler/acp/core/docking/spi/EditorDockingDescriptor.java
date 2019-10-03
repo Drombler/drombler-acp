@@ -15,6 +15,7 @@
 package org.drombler.acp.core.docking.spi;
 
 /**
+ * An editor docking descriptor.
  *
  * @author puce
  * @param <D> the type of the editor
@@ -23,13 +24,22 @@ public class EditorDockingDescriptor<D> extends AbstractDockableDockingDescripto
 
     private final Class<?> contentType;
 
+    /**
+     * Creates a new instance of this class.
+     *
+     * @param editorClass the type of the editor
+     * @param id the id of the editor
+     * @param contentType the content type of the editor
+     */
     public EditorDockingDescriptor(Class<D> editorClass, String id, Class<?> contentType) {
         super(editorClass, id);
         this.contentType = contentType;
     }
 
     /**
-     * @return the contentType
+     * Gets the content type of the editor.
+     *
+     * @return the content type of the editor
      */
     public Class<?> getContentType() {
         return contentType;

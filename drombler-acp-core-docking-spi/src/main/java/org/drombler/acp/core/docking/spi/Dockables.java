@@ -29,10 +29,11 @@ import org.slf4j.LoggerFactory;
 import org.softsmithy.lib.util.UniqueKeyProvider;
 
 /**
- * TODO: Move to API? But DockingAreaContainerProvider is a SPI interface...
+ * A utility class for Dockables.
  *
  * @author puce
  */
+// TODO: Move to API? But DockingAreaContainerProvider is a SPI interface...
 public final class Dockables {
 
     private static final Logger LOG = LoggerFactory.getLogger(Dockables.class);
@@ -40,6 +41,14 @@ public final class Dockables {
     private Dockables() {
     }
 
+    /**
+     * Opens a View.
+     *
+     * @param <D> the Dockable type
+     * @param <DATA> the Dockable data type
+     * @param <E> the Dockable entry type
+     * @param viewEntry the view entry to open
+     */
     public static <D, DATA extends DockableData, E extends DockableEntry<D, DATA>> void openView(E viewEntry) {
         // TODO: cache ServiceReference? or even DockingAreaContainerProvider?
         // TODO: check if the code is safe, if the services disappear

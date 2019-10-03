@@ -15,29 +15,40 @@
 package org.drombler.acp.core.docking.spi;
 
 /**
+ * An abstract base class for Dockable docking descriptors.
  *
  * @author puce
- * @param <D> the type of the dockable
+ * @param <D> the type of the Dockable
  */
 public class AbstractDockableDockingDescriptor<D> {
 
     private final Class<D> dockableClass;
     private final String id;
 
+    /**
+     * Creates a new instance of this class.
+     *
+     * @param dockableClass the type of the Dockable
+     * @param id the id of the Dockable
+     */
     public AbstractDockableDockingDescriptor(Class<D> dockableClass, String id) {
         this.dockableClass = dockableClass;
         this.id = id;
     }
 
     /**
-     * @return the id
+     * Gets the id of the Dockable.
+     *
+     * @return the id of the Dockable
      */
     public String getId() {
         return id;
     }
 
     /**
-     * @return the dockableClass
+     * Gets the type of the Dockable.
+     *
+     * @return the type of the Dockable
      */
     public Class<D> getDockableClass() {
         return dockableClass;
