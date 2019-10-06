@@ -23,6 +23,9 @@ import java.util.ResourceBundle;
 import org.drombler.commons.client.util.ResourceBundleUtils;
 
 /**
+ * Registers an view dockable.<br>
+ * <br>
+ * Views are singleton dockables.
  *
  * @author puce
  */
@@ -89,10 +92,11 @@ public @interface ViewDocking {
     WindowMenuEntry menuEntry();
 
     /**
-     * The {@link ResourceBundle} base name. If the resource key is prefixed with '%', the resourceBundleBaseName will be used to look up a {@link ResourceBundle}.<br>
+     * The {@link ResourceBundle} base name.<br>
      * <br>
      * <ul>
-     * <li>If resourceBundleBaseName is empty, a {@link ResourceBundle} will be looked up which is in the same package as the annotated view and has a base     * name equal to the simple name of the annotated view.</li>
+     * <li>If resourceBundleBaseName is empty, a {@link ResourceBundle} will be looked up which is in the same package as the annotated view and has a base name equal to the simple name of the
+     * annotated view.</li>
      * <li>If resourceBundleBaseName equals 'Bundle', the package {@link ResourceBundle} gets looked up.</li>
      * <li>Else a {@link ResourceBundle} for the resourceBundleBaseName gets looked up using the same {@link ClassLoader} as the annotated view.</li>
      * </ul>

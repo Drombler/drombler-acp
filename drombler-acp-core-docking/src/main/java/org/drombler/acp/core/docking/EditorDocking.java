@@ -24,7 +24,9 @@ import org.softsmithy.lib.util.UniqueKeyProvider;
 /**
  * Registers an editor dockable.<br>
  * <br>
- * The annotated editor requires a constructor with a single parameter of type {@link #contentType() }. The contentType is usually a data handler.
+ * The annotated editor requires a constructor with a single parameter of type {@link #contentType() }. The contentType is usually a data handler.<br>
+ * <br>
+ * A new editor dockable will be created for each provided content (see the Docking SPI package for helper classes).
  *
  * @author puce
  */

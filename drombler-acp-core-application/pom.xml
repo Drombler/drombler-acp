@@ -118,8 +118,6 @@ Contributor(s): .
         <dependency>
             <groupId>org.softsmithy.lib</groupId>
             <artifactId>softsmithy-lib-compiler</artifactId>
-            <!-- only required during build -->
-            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
