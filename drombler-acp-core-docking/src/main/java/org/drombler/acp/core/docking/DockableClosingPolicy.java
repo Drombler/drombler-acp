@@ -15,10 +15,11 @@
 package org.drombler.acp.core.docking;
 
 /**
+ * Not supported yet!
  *
  * @author puce
  */
-public enum DockableClosingPolicy {
+enum DockableClosingPolicy {
 
     ALL,
     SELECTED,

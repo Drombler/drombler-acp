@@ -25,15 +25,31 @@ import org.drombler.commons.docking.DockableEntry;
 import org.osgi.framework.Bundle;
 
 /**
+ * A utility class for docking descriptors.
  *
+ * @see ViewDockingDescriptor
+ * @see EditorDockingDescriptor
  * @author puce
  */
-public class DockingDescriptorUtils {
+public final class DockingDescriptorUtils {
 
-    public static ViewDockingDescriptor<?, ?, ?> createViewDockingDescriptor(ViewDockingType docking, Bundle bundle) throws
+    private DockingDescriptorUtils() {
+    }
+
+    /**
+     * Creates an instance of a {@link ViewDockingDescriptor} from a {@link ViewDockingType} unmarshalled from the application.xml.
+     *
+     * @param viewDockingType the unmarshalled ViewDockingType
+     * @param bundle the OSGi bundle
+     * @return a ViewDockingDescriptor
+     * @throws ClassNotFoundException
+     * @throws InstantiationException
+     * @throws IllegalAccessException
+     */
+    public static ViewDockingDescriptor<?, ?, ?> createViewDockingDescriptor(ViewDockingType viewDockingType, Bundle bundle) throws
             ClassNotFoundException, InstantiationException, IllegalAccessException {
-        final Class<?> dockableClass = loadClass(bundle, docking.getDockableClass());
-        return createViewDockingDescriptor(docking, dockableClass);
+        final Class<?> dockableClass = loadClass(bundle, viewDockingType.getDockableClass());
+        return createViewDockingDescriptor(viewDockingType, dockableClass);
     }
 
     private static <D, DATA extends DockableData, E extends DockableEntry<D, DATA>> ViewDockingDescriptor<D, DATA, E> createViewDockingDescriptor(ViewDockingType viewDocking,
@@ -62,10 +78,18 @@ public class DockingDescriptorUtils {
         return sb.toString();
     }
 
-    public static EditorDockingDescriptor<?> createEditorDockingDescriptor(EditorDockingType docking, Bundle bundle)
+    /**
+     * Creates an instance of an {@link EditorDockingDescriptor} from an {@link EditorDockingType} unmarshalled from the application.xml.
+     *
+     * @param editorDockingType the unmarshalled EditorDockingType
+     * @param bundle the OSGi bundle
+     * @return an EditorDockingDescriptor
+     * @throws ClassNotFoundException
+     */
+    public static EditorDockingDescriptor<?> createEditorDockingDescriptor(EditorDockingType editorDockingType, Bundle bundle)
             throws ClassNotFoundException {
-        final Class<?> dockableClass = bundle.loadClass(StringUtils.stripToNull(docking.getDockableClass()));
-        return createEditorDockingDescriptor(docking, dockableClass, bundle);
+        final Class<?> dockableClass = bundle.loadClass(StringUtils.stripToNull(editorDockingType.getDockableClass()));
+        return createEditorDockingDescriptor(editorDockingType, dockableClass, bundle);
     }
 
     private static <D> EditorDockingDescriptor<D> createEditorDockingDescriptor(EditorDockingType docking, Class<D> dockableClass, Bundle bundle)

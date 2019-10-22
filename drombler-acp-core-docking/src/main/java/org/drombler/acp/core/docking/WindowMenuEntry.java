@@ -20,7 +20,9 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
+ * A window menu entry.
  *
+ * @see ViewDocking#menuEntry()
  * @author puce
  */
 @Documented
@@ -28,7 +30,18 @@ import java.lang.annotation.Target;
 @Target({})
 public @interface WindowMenuEntry {
 
-    String path();
+    /**
+     * A slash '/' delimited path of menu IDs starting from the default location.
+     *
+     * @return a slash '/' delimited path of menu IDs starting from the default location.
+     */
+    // TODO: return a String array of menu IDs instead of a '/' delimited path?
+    String path() default "";
 
+    /**
+     * The position to order the menu items in a menu. It's a best practice to leave out some positions between entries to allow other bundles to register entries between some existing ones.
+     *
+     * @return the position to order the menu items in a menu
+     */
     int position();
 }

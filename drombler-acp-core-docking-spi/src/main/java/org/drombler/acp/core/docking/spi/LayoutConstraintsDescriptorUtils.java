@@ -18,6 +18,7 @@ import org.drombler.acp.core.docking.jaxb.LayoutConstraintsType;
 import org.drombler.commons.docking.LayoutConstraintsDescriptor;
 
 /**
+ * A utility class for {@link LayoutConstraintsDescriptor}s.
  *
  * @author puce
  */
@@ -26,6 +27,12 @@ public final class LayoutConstraintsDescriptorUtils {
     private LayoutConstraintsDescriptorUtils() {
     }
 
+    /**
+     * Creates an instance of a {@link LayoutConstraintsDescriptor} from a {@link LayoutConstraintsType} unmarshalled from the application.xml.
+     *
+     * @param layoutConstraints the unmarshalled LayoutConstraintsType
+     * @return a LayoutConstraintsDescriptor
+     */
     public static LayoutConstraintsDescriptor createLayoutConstraintsDescriptor(LayoutConstraintsType layoutConstraints) {
         return LayoutConstraintsDescriptor.getLayoutConstraints(layoutConstraints.getPrefWidth(),
                 layoutConstraints.getPrefHeight());

@@ -24,10 +24,11 @@ import org.drombler.commons.docking.DockingAreaDescriptor;
 import org.drombler.commons.docking.DockingAreaKind;
 
 /**
+ * A utility class for {@link DockingAreaDescriptor}s.
  *
  * @author puce
  */
-public class DockingAreaDescriptorUtils {
+public final class DockingAreaDescriptorUtils {
 
     //TODO: not safe as changes to DockingAreaKind are missed at compile time. 
     // Possible solutions:
@@ -52,6 +53,12 @@ public class DockingAreaDescriptorUtils {
     private DockingAreaDescriptorUtils() {
     }
 
+    /**
+     * Creates an instance of a {@link DockingAreaDescriptor} from a {@link DockingAreaType} unmarshalled from the application.xml.
+     *
+     * @param dockingArea the unmarshalled DockingAreaType
+     * @return a DockingAreaDescriptor
+     */
     public static DockingAreaDescriptor createDockingAreaDescriptor(DockingAreaType dockingArea) {
         DockingAreaDescriptor dockingAreaDescriptor = new DockingAreaDescriptor();
         dockingAreaDescriptor.setId(StringUtils.stripToNull(dockingArea.getId()));

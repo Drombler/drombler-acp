@@ -20,10 +20,13 @@ import java.lang.annotation.Repeatable;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+import org.drombler.commons.docking.DockingAreaDescriptor;
 import org.drombler.commons.docking.DockingAreaKind;
 
 /**
+ * This annotation registers a Docking Area.
  *
+ * @see DockingAreaDescriptor
  * @author puce
  */
 @Documented
@@ -32,15 +35,46 @@ import org.drombler.commons.docking.DockingAreaKind;
 @Repeatable(DockingAreas.class)
 public @interface DockingArea {
 
+    /**
+     * The Docking Area ID.
+     *
+     * @return the Docking Area ID
+     */
     String id();
 
+    /**
+     * The Docking Area kind.
+     *
+     * @return the Docking Area kind
+     */
     DockingAreaKind kind() default DockingAreaKind.VIEW;
 
+    /**
+     * The preferred position of the Docking Area in the parent split pane. It's a best practice to leave out some positions between entries to allow other bundles to register entries between some
+     * existing ones.
+     *
+     * @return the preferred position of the Docking Area in the parent split pane
+     */
     int position();
 
+    /**
+     * The path positions of the parent split pane.
+     *
+     * @return the path positions of the parent split pane
+     */
     int[] path();
 
+    /**
+     * Flag which indicates if the Docking Area is visible also when it's empty (permanently visible) or if the Docking Area is only visible when it's not empty.
+     *
+     * @return true if permanently visible, else false
+     */
     boolean permanent() default false;
 
+    /**
+     * The layout constraints.
+     *
+     * @return the layout constraints
+     */
     LayoutConstraints layoutConstraints() default @LayoutConstraints;
 }
