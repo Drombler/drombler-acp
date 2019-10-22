@@ -15,9 +15,6 @@
 package org.drombler.acp.core.standard.action.impl;
 
 import org.drombler.commons.action.AbstractActionListener;
-import org.drombler.acp.core.action.Action;
-import org.drombler.acp.core.action.MenuEntry;
-import org.drombler.acp.core.action.ToolBarEntry;
 
 /*
  * To change this template, choose Tools | Templates and open the template in the editor.
@@ -26,7 +23,8 @@ import org.drombler.acp.core.action.ToolBarEntry;
  *
  * @author puce
  */
-@Action(id = "standard.copy", category = "core", displayName = "%copy.displayName", accelerator = "Shortcut+C", icon = "copy.png")
+//@Action(id = "standard.copy", category = "core", displayName = "%copy.displayName", accelerator = "Shortcut+C", icon = "copy.png",
+//        resourceBundleBaseName = ResourceBundleUtils.PACKAGE_RESOURCE_BUNDLE_BASE_NAME)
 //@MenuEntry(path = "Edit", position = 2110)
 //@ToolBarEntry(toolBarId = "edit", position = 60)
 public class CopyAction extends AbstractActionListener<Object> {

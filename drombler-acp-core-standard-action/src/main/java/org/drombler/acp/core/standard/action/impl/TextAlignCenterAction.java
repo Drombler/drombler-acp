@@ -15,15 +15,13 @@
 package org.drombler.acp.core.standard.action.impl;
 
 import org.drombler.commons.action.AbstractToggleActionListener;
-import org.drombler.acp.core.action.ToggleAction;
-import org.drombler.acp.core.action.ToggleMenuEntry;
-import org.drombler.acp.core.action.ToolBarToggleEntry;
 
 /**
  *
  * @author puce
  */
-@ToggleAction(id = "standard.text.alignCenter", category = "core", displayName = "%textAlignCenter.displayName", accelerator = "Shortcut+E", icon = "cut.png")
+//@ToggleAction(id = "standard.text.alignCenter", category = "core", displayName = "%textAlignCenter.displayName", accelerator = "Shortcut+E", icon = "cut.png",
+//        resourceBundleBaseName = ResourceBundleUtils.PACKAGE_RESOURCE_BUNDLE_BASE_NAME)
 //@ToggleMenuEntry(path = "Edit/Align", position = 1200, toggleGroupId="text.align")
 //@ToolBarToggleEntry(toolBarId = "align", position = 150, toggleGroupId="text.align")
 public class TextAlignCenterAction extends AbstractToggleActionListener<Object> {

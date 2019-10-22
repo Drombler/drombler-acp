@@ -14,6 +14,7 @@
  */
 package org.drombler.acp.core.action.spi;
 
+import java.util.ResourceBundle;
 import org.apache.commons.lang3.StringUtils;
 import org.drombler.acp.core.action.jaxb.ActionType;
 import org.drombler.commons.client.util.ResourceBundleUtils;
@@ -33,11 +34,13 @@ class ActionDescriptorUtils {
 
     public static <T> void configureActionDescriptor(ActionDescriptor<T> actionDescriptor, ActionType actionType, Bundle bundle,
             ContextManager contextManager, ContextInjector contextInjector) throws ClassNotFoundException, InstantiationException, IllegalAccessException {
+        boolean bundleRequired = ResourceBundleUtils.isPrefixedResourceString(actionType.getDisplayName()) || ResourceBundleUtils.isPrefixedResourceString(actionType.getAccelerator());
+        ResourceBundle resourceBundle = bundleRequired
+                ? ResourceBundleUtils.getConditionalResourceBundle(actionDescriptor.getListenerType(), actionType.getResourceBundleBaseName())
+                : null;
         actionDescriptor.setId(StringUtils.stripToNull(actionType.getId()));
-        actionDescriptor.setDisplayName(ResourceBundleUtils.getPackageResourceStringPrefixed(
-                actionDescriptor.getListenerType(), actionType.getDisplayName()));
-        actionDescriptor.setAccelerator(ResourceBundleUtils.getPackageResourceStringPrefixed(
-                actionDescriptor.getListenerType(), actionType.getAccelerator()));
+        actionDescriptor.setDisplayName(ResourceBundleUtils.getResourceStringPrefixed(actionType.getDisplayName(), resourceBundle));
+        actionDescriptor.setAccelerator(ResourceBundleUtils.getResourceStringPrefixed(actionType.getAccelerator(), resourceBundle));
         actionDescriptor.setIcon(StringUtils.stripToNull(actionType.getIcon()));
         configureActionDescriptorListener(actionDescriptor, actionDescriptor.getListenerType(), contextManager, contextInjector);
     }

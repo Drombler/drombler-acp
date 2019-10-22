@@ -19,6 +19,7 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+import org.drombler.commons.client.util.ResourceBundleUtils;
 
 /**
  * This annotation registers a toggle action.<br>
@@ -73,4 +74,20 @@ public @interface ToggleAction {
      * @return the icon name pattern
      */
     String icon() default "";
+
+    /**
+     * The {@link ResourceBundle} base name.<br>
+     * <br>
+     * <ul>
+     * <li>If resourceBundleBaseName is empty, a {@link ResourceBundle} will be looked up which is in the same package as the annotated toggle action class and has a base name equal to the simple name
+     * of the annotated toggle action class.</li>
+     * <li>If resourceBundleBaseName equals 'Bundle', the package {@link ResourceBundle} gets looked up.</li>
+     * <li>Else a {@link ResourceBundle} for the resourceBundleBaseName gets looked up using the same {@link ClassLoader} as the annotated toggle action class.</li>
+     * </ul>
+     *
+     * @return the base name of the ResourceBundle, 'Bundle' (for the package ResourceBundle) or empty (for the class ResourceBundle).
+     * @see ResourceBundleUtils#PACKAGE_RESOURCE_BUNDLE_BASE_NAME
+     * @see ResourceBundleUtils#getResourceBundle(java.lang.Class, java.lang.String, java.lang.String)
+     */
+    String resourceBundleBaseName() default "";
 }

@@ -23,7 +23,7 @@ import org.osgi.util.tracker.ServiceTracker;
  * @author puce
  */
 // TODO: close AutoCloseable Actions
-@Action(id = "open", category = "core", displayName = "%open.displayName", accelerator = "Shortcut+O")
+@Action(id = "open", category = "core", displayName = "%displayName", accelerator = "Shortcut+O")
 @MenuEntry(path = "File", position = 1010)
 public class OpenFilesAction extends AbstractActionListener<Object> implements AutoCloseable {
 
