@@ -15,9 +15,6 @@
 package org.drombler.acp.core.standard.action.impl;
 
 import org.drombler.commons.action.AbstractActionListener;
-import org.drombler.acp.core.action.Action;
-import org.drombler.acp.core.action.MenuEntry;
-import org.drombler.acp.core.action.ToolBarEntry;
 
 /*
  * To change this template, choose Tools | Templates and open the template in the editor.
@@ -26,7 +23,8 @@ import org.drombler.acp.core.action.ToolBarEntry;
  *
  * @author puce
  */
-@Action(id = "standard.delete", category = "core", displayName = "%delete.displayName", accelerator = "Delete", icon = "delete.png")
+//@Action(id = "standard.delete", category = "core", displayName = "%delete.displayName", accelerator = "Delete", icon = "delete.png",
+//        resourceBundleBaseName = ResourceBundleUtils.PACKAGE_RESOURCE_BUNDLE_BASE_NAME)
 //@MenuEntry(path = "Edit", position = 2130)
 //@ToolBarEntry(toolBarId = "edit", position = 80)
 public class DeleteAction extends AbstractActionListener<Object> {

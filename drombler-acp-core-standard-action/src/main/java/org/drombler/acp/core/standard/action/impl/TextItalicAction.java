@@ -15,15 +15,13 @@
 package org.drombler.acp.core.standard.action.impl;
 
 import org.drombler.commons.action.AbstractToggleActionListener;
-import org.drombler.acp.core.action.ToggleAction;
-import org.drombler.acp.core.action.ToggleMenuEntry;
-import org.drombler.acp.core.action.ToolBarToggleEntry;
 
 /**
  *
  * @author puce
  */
-@ToggleAction(id = "standard.text.italic", category = "core", displayName = "%textItalic.displayName", accelerator = "Shortcut+I", icon = "undo.png")
+//@ToggleAction(id = "standard.text.italic", category = "core", displayName = "%textItalic.displayName", accelerator = "Shortcut+I", icon = "undo.png",
+//        resourceBundleBaseName = ResourceBundleUtils.PACKAGE_RESOURCE_BUNDLE_BASE_NAME)
 //@ToggleMenuEntry(path = "Edit", position = 3210)
 //@ToolBarToggleEntry(toolBarId = "edit", position = 260)
 public class TextItalicAction extends AbstractToggleActionListener<Object> {
