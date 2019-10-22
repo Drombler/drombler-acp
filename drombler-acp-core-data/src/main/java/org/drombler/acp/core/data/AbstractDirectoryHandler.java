@@ -2,6 +2,7 @@ package org.drombler.acp.core.data;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
+import org.drombler.commons.data.DataHandler;
 
 /**
  * An abstract base class for directory-based {@link DataHandler}s.

@@ -103,7 +103,7 @@ public @interface ViewDocking {
      *
      * @return the base name of the ResourceBundle, 'Bundle' (for the package ResourceBundle) or empty (for the class ResourceBundle).
      * @see ResourceBundleUtils#PACKAGE_RESOURCE_BUNDLE_BASE_NAME
-     * @see ResourceBundleUtils#getResourceBundle(java.lang.Class, java.lang.String, java.lang.String)
+     * @see ResourceBundleUtils#getConditionalResourceBundle(java.lang.Class, java.lang.String)
      */
     String resourceBundleBaseName() default "";
 }
