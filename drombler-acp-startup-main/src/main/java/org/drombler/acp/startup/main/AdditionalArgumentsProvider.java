@@ -17,12 +17,11 @@ package org.drombler.acp.startup.main;
 import java.util.List;
 
 /**
- * Provides the list of additional arguments passed to the application.
- *
- * Note: If this is a single instance application an new instance of this service is registered for every application start notification.
- *
- * With the OSGi annotations (Declarative Services) you can listen for multiple instances with the following method annotation:
- *
+ * Provides the list of additional arguments passed to the application.<br>
+ * <br>
+ * Note: If this is a single instance application a new instance of this service is registered for every application start notification.<br>
+ * <br>
+ * With the OSGi annotations (Declarative Services) you can listen for multiple instances with the following method annotation:<br>
  * {@code  @Reference(cardinality = ReferenceCardinality.MULTIPLE, policy = ReferencePolicy.DYNAMIC)}
  *
  * @author puce
