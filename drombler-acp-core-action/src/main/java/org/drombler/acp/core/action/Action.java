@@ -19,6 +19,7 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+import java.util.ResourceBundle;
 import org.drombler.commons.client.util.ResourceBundleUtils;
 
 /**
@@ -90,7 +91,7 @@ public @interface Action {
      *
      * @return the base name of the ResourceBundle, 'Bundle' (for the package ResourceBundle) or empty (for the class ResourceBundle).
      * @see ResourceBundleUtils#PACKAGE_RESOURCE_BUNDLE_BASE_NAME
-     * @see ResourceBundleUtils#getResourceBundle(java.lang.Class, java.lang.String, java.lang.String)
+     * @see ResourceBundleUtils#getConditionalResourceBundle(java.lang.Class, java.lang.String)
      */
     String resourceBundleBaseName() default "";
 }
