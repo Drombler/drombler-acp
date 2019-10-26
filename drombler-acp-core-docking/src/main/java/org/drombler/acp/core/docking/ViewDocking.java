@@ -44,7 +44,9 @@ public @interface ViewDocking {
     String areaId();
 
     /**
-     * The position to order the views in a Docking Area. It's a best practice to leave out some positions between entries to allow other bundles to register entries between some existing ones.
+     * The position to order the views in a Docking Area. <br>
+     * <br>
+     * It's a best practice to leave out some positions between entries to allow other bundles to register entries between some existing ones.
      *
      * @return the position to order the views in a Docking Area
      */
@@ -52,23 +54,27 @@ public @interface ViewDocking {
 
 //    boolean singleton() default true;
     /**
-     * The text to be displayed, e.g. as the text for tabs or menu items. If the value starts with '%' the rest of the value is interpreted as a property key and the value gets looked-up in the
-     * Bundle.properties file (or a locale specific derivation of this file), which has to be in the same package as the annotated view.
+     * The text to be displayed, e.g. as the text for tabs or menu items. <br>
+     * <br>
+     * If the value starts with '%' the rest of the value is interpreted as a property key and the value gets looked-up in the resource bundle.
      *
      * @return the text to be displayed for this view
+     * @see #resourceBundleBaseName()
      */
     String displayName();
 
     /**
-     * The accelerator key combination to open this view.
+     * The accelerator key combination to open this view. <br>
+     * <br>
+     * If the value starts with '%' the rest of the value is interpreted as a property key and the value gets looked-up in the resource bundle.
      *
      * @return the accelerator key combination to open this view
      */
     String accelerator() default "";
 
     /**
-     * The icon name pattern to resolve the icons to be used for this view.
-     *
+     * The icon name pattern to resolve the icons to be used for this view.<br>
+     * <br>
      * Note that this only specifies the name pattern. Drombler ACP looks for &lt;icon-base-name&gt;16.&lt;icon-extension&gt; for tabs and menu items (expected to be 16x16 pixels) and
      * &lt;icon-base-name&gt;24.&lt;icon-extension&gt; for toolbar buttons (expected to be 24x24 pixels). So if icon is &quot;test.png&quot;, Drombler ACP would look for test16.png (for tabs and menu
      * items) and test24.png (for toolbar buttons).
