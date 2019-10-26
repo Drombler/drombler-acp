@@ -35,8 +35,8 @@ import org.drombler.commons.client.util.ResourceBundleUtils;
 public @interface Action {
 
     /**
-     * The id of this action.
-     *
+     * The id of this action. <br>
+     * <br>
      * An action can be referenced from other annotations such as {@link MenuEntry} and {@link ToolBarEntry} by its id.
      *
      * @return the id of this action
@@ -51,25 +51,28 @@ public @interface Action {
     String category();
 
     /**
-     * The text to be displayed, e.g. as the text for menu items or the tooltip for toolbar buttons. If the value starts
-     * with '%' the rest of the value is interpreted as a property key and the value gets looked-up in the
-     * Bundle.properties file (or a locale specific derivation of this file), which has to be in the same package as the
-     * annotated action.
+     * The text to be displayed, e.g. as the text for menu items or the tooltip for toolbar buttons. <br>
+     * <br>
+     * If the value starts with '%' the rest of the value is interpreted as a property key and the value gets looked-up in the resource bundle.
      *
      * @return the text to be displayed for this action
+     * @see #resourceBundleBaseName()
      */
     String displayName();
 
     /**
-     * The accelerator to be used for this action.
+     * The accelerator to be used for this action.  <br>
+     * <br>
+     * If the value starts with '%' the rest of the value is interpreted as a property key and the value gets looked-up in the resource bundle.
      *
      * @return the accelerator to be used for this action
+     * @see #resourceBundleBaseName()
      */
     String accelerator() default "";
 
     /**
-     * The icon name pattern to resolve the icons to be used for this action.
-     *
+     * The icon name pattern to resolve the icons to be used for this action. <br>
+     * <br>
      * Note that this only specifies the name pattern. Drombler ACP looks for
      * &lt;icon-base-name&gt;16.&lt;icon-extension&gt; for menu items (expected to be 16x16 pixels) and
      * &lt;icon-base-name&gt;24.&lt;icon-extension&gt; for toolbar buttons (expected to be 24x24 pixels). So if icon is &quot;test.png&quot;, Drombler ACP would look for test16.png (for menu items) and
