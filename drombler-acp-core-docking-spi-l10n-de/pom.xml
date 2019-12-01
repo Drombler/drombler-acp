@@ -94,11 +94,4 @@ Contributor(s): .
     </build>
 
    
-    <dependencies>
-        <dependency>
-            <groupId>org.drombler.acp</groupId>
-            <artifactId>drombler-acp-core-docking-spi</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-    </dependencies>
 </project>
