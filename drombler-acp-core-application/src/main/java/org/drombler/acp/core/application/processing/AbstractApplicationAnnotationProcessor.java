@@ -46,9 +46,9 @@ import org.drombler.acp.core.application.jaxb.ExtensionsType;
  * <br>
  * Implementations must add:
  * <ul>
- * <li>{@link #addExtensionConfiguration(java.lang.Object)} </li>
- * <li>{@link #addOriginatingElements(javax.lang.model.element.Element...)} </li>
- * <li>either {@link #addJAXBRootClass(java.lang.Class)} or {@link #addJAXBPackage(java.lang.String) }</li>
+ * <li>an instance of the JAXB root element: {@link #addExtensionConfiguration(java.lang.Object)} </li>
+ * <li>the model elements with the annotations: {@link #addOriginatingElements(javax.lang.model.element.Element...)} </li>
+ * <li>either the JAXB root element type: {@link #addJAXBRootClass(java.lang.Class)} or the package of the JAXB root element type: {@link #addJAXBPackage(java.lang.String) }</li>
  * </ul>
  *
  * @author puce
