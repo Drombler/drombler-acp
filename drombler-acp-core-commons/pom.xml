@@ -19,7 +19,7 @@ Contributor(s): .
     <parent>
         <groupId>org.drombler.acp</groupId>
         <artifactId>drombler-acp-parent</artifactId>
-        <version>0.13</version>
+        <version>0.14</version>
         <relativePath>../drombler-acp-parent/pom.xml</relativePath>
     </parent>
   
@@ -30,7 +30,7 @@ Contributor(s): .
     <description>Drombler ACP utility classes.</description>
     <inceptionYear>2012</inceptionYear>
     <!-- required for Javadoc (apidocs) linking -->
-    <url>http://www.drombler.org/drombler-acp/${project.version}/docs/site</url>
+    <url>https://www.drombler.org/drombler-acp/${project.version}/docs/site</url>
 
     <scm>
         <connection>${scm.connection}</connection>
@@ -64,6 +64,17 @@ Contributor(s): .
                 <artifactId>maven-bundle-plugin</artifactId>
                 <extensions>true</extensions>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <configuration>
+                    <archive>
+                        <manifestEntries>
+                            <Automatic-Module-Name>org.drombler.acp.core.commons</Automatic-Module-Name>
+                        </manifestEntries>
+                    </archive>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
     <dependencies>
@@ -77,8 +88,13 @@ Contributor(s): .
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
             <scope>test</scope>
         </dependency>
     </dependencies>

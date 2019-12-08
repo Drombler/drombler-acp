@@ -15,13 +15,27 @@
 package org.drombler.acp.core.action.spi;
 
 /**
+ * A toggle action factory. <br>
+ * <br>
+ * This is a SPI interface and must be implemented by a GUI toolkit specific extension.
  *
  * @author puce
  * @param <T> toggle action type
  */
 public interface ToggleActionFactory<T> {
 
-    T createToggleAction(ActionDescriptor<?> actionDescriptor);
+    /**
+     * Creates a GUI toolkit specific toggle action based on the provided toggle action descriptor.
+     *
+     * @param actionDescriptor the toggle action descriptor
+     * @return a GUI toolkit specific toggle action
+     */
+    T createToggleAction(ToggleActionDescriptor<?> actionDescriptor);
 
+    /**
+     * Gets the toggle action class.
+     *
+     * @return the toggle action class
+     */
     Class<T> getToggleActionClass();
 }

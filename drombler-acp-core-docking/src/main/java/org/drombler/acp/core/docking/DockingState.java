@@ -15,7 +15,10 @@
 package org.drombler.acp.core.docking;
 
 /**
+ * The docking state.<br>
+ * <br>
  * Not supported yet!
+ *
  * @author puce
  */
 public enum DockingState {

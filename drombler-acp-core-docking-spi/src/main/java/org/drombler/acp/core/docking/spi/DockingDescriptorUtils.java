@@ -25,31 +25,47 @@ import org.drombler.commons.docking.DockableEntry;
 import org.osgi.framework.Bundle;
 
 /**
+ * A utility class for docking descriptors.
  *
+ * @see ViewDockingDescriptor
+ * @see EditorDockingDescriptor
  * @author puce
  */
-public class DockingDescriptorUtils {
+public final class DockingDescriptorUtils {
 
-    public static ViewDockingDescriptor<?, ?, ?> createViewDockingDescriptor(ViewDockingType docking, Bundle bundle) throws
-            ClassNotFoundException, InstantiationException, IllegalAccessException {
-        final Class<?> dockableClass = loadClass(bundle, docking.getDockableClass());
-        return createViewDockingDescriptor(docking, dockableClass);
+    private DockingDescriptorUtils() {
     }
 
-    private static <D, DATA extends DockableData, E extends DockableEntry<D, DATA>> ViewDockingDescriptor<D, DATA, E> createViewDockingDescriptor(ViewDockingType docking,
+    /**
+     * Creates an instance of a {@link ViewDockingDescriptor} from a {@link ViewDockingType} unmarshalled from the application.xml.
+     *
+     * @param viewDockingType the unmarshalled ViewDockingType
+     * @param bundle the OSGi bundle
+     * @return a ViewDockingDescriptor
+     * @throws ClassNotFoundException
+     * @throws InstantiationException
+     * @throws IllegalAccessException
+     */
+    public static ViewDockingDescriptor<?, ?, ?> createViewDockingDescriptor(ViewDockingType viewDockingType, Bundle bundle) throws
+            ClassNotFoundException, InstantiationException, IllegalAccessException {
+        final Class<?> dockableClass = loadClass(bundle, viewDockingType.getDockableClass());
+        return createViewDockingDescriptor(viewDockingType, dockableClass);
+    }
+
+    private static <D, DATA extends DockableData, E extends DockableEntry<D, DATA>> ViewDockingDescriptor<D, DATA, E> createViewDockingDescriptor(ViewDockingType viewDocking,
             Class<D> dockableClass) throws ClassNotFoundException {
-        String id = StringUtils.stripToNull(docking.getId());
-        String displayName = docking.getDisplayName();
-        String icon = StringUtils.stripToNull(docking.getIcon());
-        String areaId = StringUtils.stripToNull(docking.getAreaId());
-        String resourceBundleBaseName = docking.getResourceBundleBaseName();
-        String accelerator = docking.getAccelerator();
+        String id = StringUtils.stripToNull(viewDocking.getId());
+        String displayName = viewDocking.getDisplayName();
+        String icon = StringUtils.stripToNull(viewDocking.getIcon());
+        String areaId = StringUtils.stripToNull(viewDocking.getAreaId());
+        String resourceBundleBaseName = viewDocking.getResourceBundleBaseName();
+        String accelerator = viewDocking.getAccelerator();
 
         ViewDockingDescriptor<D, DATA, E> dockingDescriptor = new ViewDockingDescriptor<>(dockableClass, id, displayName, icon, accelerator, resourceBundleBaseName);
         dockingDescriptor.setAreaId(areaId);
-        dockingDescriptor.setPosition(docking.getPosition());
+        dockingDescriptor.setPosition(viewDocking.getPosition());
         dockingDescriptor.setActivateDockableMenuEntryDescriptor(new MenuEntryDescriptor(dockingDescriptor.getId(),
-                getWindowPath(docking), new PositionableMenuItemAdapterFactory<>(docking.getMenuEntry().getPosition())));
+                getWindowPath(viewDocking), new PositionableMenuItemAdapterFactory<>(viewDocking.getMenuEntry().getPosition())));
         return dockingDescriptor;
     }
 
@@ -62,10 +78,18 @@ public class DockingDescriptorUtils {
         return sb.toString();
     }
 
-    public static EditorDockingDescriptor<?> createEditorDockingDescriptor(EditorDockingType docking, Bundle bundle)
+    /**
+     * Creates an instance of an {@link EditorDockingDescriptor} from an {@link EditorDockingType} unmarshalled from the application.xml.
+     *
+     * @param editorDockingType the unmarshalled EditorDockingType
+     * @param bundle the OSGi bundle
+     * @return an EditorDockingDescriptor
+     * @throws ClassNotFoundException
+     */
+    public static EditorDockingDescriptor<?> createEditorDockingDescriptor(EditorDockingType editorDockingType, Bundle bundle)
             throws ClassNotFoundException {
-        final Class<?> dockableClass = bundle.loadClass(StringUtils.stripToNull(docking.getDockableClass()));
-        return createEditorDockingDescriptor(docking, dockableClass, bundle);
+        final Class<?> dockableClass = bundle.loadClass(StringUtils.stripToNull(editorDockingType.getDockableClass()));
+        return createEditorDockingDescriptor(editorDockingType, dockableClass, bundle);
     }
 
     private static <D> EditorDockingDescriptor<D> createEditorDockingDescriptor(EditorDockingType docking, Class<D> dockableClass, Bundle bundle)

@@ -15,10 +15,20 @@
 package org.drombler.acp.core.action.spi;
 
 /**
+ * A tool bar factory to create a GUI toolkit specific tool bar.<br>
+ * <br>
+ * This is a SPI interface and must be implemented by a GUI toolkit specific extension.
  *
+ * @param <T> the GUI toolkit specific type for tool bars
  * @author puce
  */
 public interface ToolBarFactory<T> {
 
+    /**
+     * Creates a GUI toolkit specific tool bar.
+     *
+     * @param toolBarDescriptor the tool bar descriptor
+     * @return a new tool bar
+     */
     T createToolBar(ToolBarDescriptor toolBarDescriptor);
 }

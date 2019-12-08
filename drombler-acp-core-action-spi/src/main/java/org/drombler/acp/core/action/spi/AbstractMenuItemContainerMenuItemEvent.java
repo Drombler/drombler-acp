@@ -14,11 +14,13 @@
  */
 package org.drombler.acp.core.action.spi;
 
-import org.drombler.acp.core.action.MenuItemSupplier;
 import java.util.EventObject;
 import java.util.List;
+import org.drombler.acp.core.action.MenuItemSupplier;
 
 /**
+ * A base class for {@link MenuItemContainer} menu item events.
+ *
  * @param <MenuItem> the GUI toolkit specific type for menu items
  * @param <Menu> the GUI toolkit specific type for menus
  * @param <M> the type of the menu item
@@ -26,26 +28,37 @@ import java.util.List;
  */
 public abstract class AbstractMenuItemContainerMenuItemEvent<MenuItem, Menu extends MenuItem, M extends MenuItem> extends EventObject {
 
-    private final MenuItemSupplier<? extends M> menuItem;
+    private final MenuItemSupplier<? extends M> menuItemSupplier;
     private final List<String> path;
 
-    public AbstractMenuItemContainerMenuItemEvent(MenuItemContainer<MenuItem, Menu, ?> source, MenuItemSupplier<? extends M> menuItem, List<String> path) {
+    /**
+     * Creates a new instance of this class.
+     *
+     * @param source the source container of this event
+     * @param menuItemSupplier the menu item supplier
+     * @param path the path of the menu item
+     */
+    public AbstractMenuItemContainerMenuItemEvent(MenuItemContainer<MenuItem, Menu, ?> source, MenuItemSupplier<? extends M> menuItemSupplier, List<String> path) {
         super(source);
-        this.menuItem = menuItem;
+        this.menuItemSupplier = menuItemSupplier;
         this.path = path;
     }
 
     /**
-     * @return the path
+     * Gets the path of the menu item.
+     *
+     * @return the path of the menu item
      */
     public List<String> getPath() {
         return path;
     }
 
     /**
-     * @return the menuItem
+     * Gets the menu item supplier.
+     *
+     * @return the menu item supplier
      */
-    public MenuItemSupplier<? extends M> getMenuItem() {
-        return menuItem;
+    public MenuItemSupplier<? extends M> getMenuItemSupplier() {
+        return menuItemSupplier;
     }
 }

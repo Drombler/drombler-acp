@@ -1,6 +1,6 @@
 package org.drombler.acp.core.status.impl;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 
 /**
@@ -11,7 +11,7 @@ import org.junit.Test;
 
 public class StatusBarElementAnnotationProcessorTest {
 
-    private StatusBarElementAnnotationProcessor testee = new StatusBarElementAnnotationProcessor();
+    private final StatusBarElementAnnotationProcessor testee = new StatusBarElementAnnotationProcessor();
 
     @Test
     public void testClassLoading() {

@@ -14,10 +14,12 @@
  */
 package org.drombler.acp.core.action.spi;
 
-import org.drombler.acp.core.action.MenuItemSupplier;
 import java.util.List;
+import org.drombler.acp.core.action.MenuItemSupplier;
 
 /**
+ * A {@link MenuItemContainer} menu event.
+ *
  * @param <MenuItem> the GUI toolkit specific type for menu items
  * @param <Menu> the GUI toolkit specific type for menus
  * @author puce
@@ -28,13 +30,23 @@ public class MenuItemContainerMenuEvent<MenuItem, Menu extends MenuItem> extends
 
     private final String menuId;
 
-    public MenuItemContainerMenuEvent(MenuItemContainer<MenuItem, Menu, ?> source, MenuItemSupplier<? extends Menu> menu, String menuId, List<String> path) {
-        super(source, menu, path);
+    /**
+     * Creates a new instance of this class.
+     *
+     * @param source the source of this event
+     * @param menuSupplier the menu supplier
+     * @param menuId the id of the menu
+     * @param path the path of the menu
+     */
+    public MenuItemContainerMenuEvent(MenuItemContainer<MenuItem, Menu, ?> source, MenuItemSupplier<? extends Menu> menuSupplier, String menuId, List<String> path) {
+        super(source, menuSupplier, path);
         this.menuId = menuId;
     }
 
     /**
-     * @return the menuId
+     * Gets the id of the menu.
+     *
+     * @return the id of the menu
      */
     public String getMenuId() {
         return menuId;

@@ -41,6 +41,7 @@ import org.drombler.acp.core.docking.jaxb.DockingsType;
 import org.drombler.acp.core.docking.jaxb.EditorDockingType;
 import org.drombler.acp.core.docking.jaxb.ViewDockingType;
 import org.drombler.acp.core.docking.jaxb.WindowMenuEntryType;
+import org.softsmithy.lib.lang.model.type.ModelTypeUtils;
 
 /**
  *
@@ -94,7 +95,7 @@ public class DockingAnnotationProcessor extends AbstractApplicationAnnotationPro
     }
 
     private void registerEditorDocking(EditorDocking dockingAnnotation, Element element) {
-        TypeMirror contentType = getContentType(dockingAnnotation);
+        TypeMirror contentType = ModelTypeUtils.getTypeMirror(dockingAnnotation::contentType);
         if (contentType != null) {
             if (ElementFilter.typesIn(Collections.singletonList(element)).stream()
                     .anyMatch(typeElement -> checkForContentTypeConstructor(typeElement, contentType))) {
@@ -111,16 +112,6 @@ public class DockingAnnotationProcessor extends AbstractApplicationAnnotationPro
                     Diagnostic.Kind.ERROR, "Couldn't retrieve the contentType information.",
                     element);
         }
-    }
-
-    private TypeMirror getContentType(EditorDocking dockingAnnotation) {
-        TypeMirror contentType = null;
-        try {
-            dockingAnnotation.contentType();
-        } catch (MirroredTypeException mte) {
-            contentType = mte.getTypeMirror();
-        }
-        return contentType;
     }
 
     private boolean checkForContentTypeConstructor(TypeElement type, TypeMirror contentType) {
@@ -165,8 +156,8 @@ public class DockingAnnotationProcessor extends AbstractApplicationAnnotationPro
     private void init(Element element) {
         if (dockings == null) {
             dockings = new DockingsType();
-            addExtensionConfigurations(dockings);
-            addJAXBRootClasses(DockingsType.class);
+            addExtensionConfiguration(dockings);
+            addJAXBRootClass(DockingsType.class);
         }
         addOriginatingElements(element); // TODO: needed?
     }

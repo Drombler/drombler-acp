@@ -24,6 +24,7 @@ import org.drombler.acp.core.action.jaxb.MenusType;
 import org.drombler.acp.core.action.spi.ActionDescriptor;
 import org.drombler.acp.core.action.spi.ActionFactory;
 import org.drombler.acp.core.action.spi.ActionRegistry;
+import org.drombler.acp.core.action.spi.ActionResolutionManager;
 import org.drombler.acp.core.action.spi.MenuEntryDescriptor;
 import org.drombler.acp.core.action.spi.MenuItemFactory;
 import org.drombler.acp.core.commons.util.UnresolvedEntry;
@@ -51,13 +52,13 @@ public class MenuItemHandler<MenuItem, Menu extends MenuItem, Action> extends Ab
     private final ActionResolutionManager<MenuEntryDescriptor> actionResolutionManager = new ActionResolutionManager<>();
     private ServiceTracker<Action, ServiceReference<Action>> tracker;
 
-    protected void bindMenuEntryDescriptor(ServiceReference<MenuEntryDescriptor> serviceReference) {
+    protected void bindMenuEntryDescriptor(ServiceReference<MenuEntryDescriptor<MenuItem, ?>> serviceReference) {
         BundleContext context = serviceReference.getBundle().getBundleContext();
-        MenuEntryDescriptor menuEntryDescriptor = context.getService(serviceReference);
+        MenuEntryDescriptor<MenuItem, ?> menuEntryDescriptor = context.getService(serviceReference);
         resolveMenuItem(menuEntryDescriptor, context);
     }
 
-    protected void unbindMenuEntryDescriptor(ServiceReference<MenuEntryDescriptor> serviceReference) {
+    protected void unbindMenuEntryDescriptor(ServiceReference<MenuEntryDescriptor<MenuItem, ?>> serviceReference) {
         // TODO
     }
 
@@ -123,8 +124,8 @@ public class MenuItemHandler<MenuItem, Menu extends MenuItem, Action> extends Ab
     @Override
     protected void resolveMenuItem(MenusType menusType, Bundle bundle, BundleContext context) {
         menusType.getMenuEntry().stream()
-                .map(MenuEntryDescriptor::createMenuEntryDescriptor)
-                .forEach(menuEntryDescriptor -> resolveMenuItem((MenuEntryDescriptor<MenuItem, ?>) menuEntryDescriptor, context)); // TODO: possible to avoid cast?
+                .map(MenuEntryDescriptor::<MenuItem>createMenuEntryDescriptor)
+                .forEach(menuEntryDescriptor -> resolveMenuItem(menuEntryDescriptor, context));
     }
 
     @Override

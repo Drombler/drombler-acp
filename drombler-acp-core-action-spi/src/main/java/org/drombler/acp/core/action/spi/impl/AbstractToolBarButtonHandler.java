@@ -14,6 +14,7 @@
  */
 package org.drombler.acp.core.action.spi.impl;
 
+import org.drombler.acp.core.action.spi.ActionResolutionManager;
 import java.util.concurrent.Executor;
 import org.apache.felix.scr.annotations.Activate;
 import org.apache.felix.scr.annotations.Deactivate;
@@ -44,7 +45,7 @@ public abstract class AbstractToolBarButtonHandler<ToolBar, ToolBarButton, Actio
     private final ActionRegistry<?> actionRegistry = new ActionRegistry<>(ActionDescriptor.class);
     private final ActionResolutionManager<D> actionResolutionManager = new ActionResolutionManager<>();
     private Executor applicationExecutor;
-    private ServiceTracker<Action, ServiceReference<Action>> tracker;
+    private ServiceTracker<Action, ServiceReference<Action>> actionTracker;
 
     protected void bindApplicationThreadExecutorProvider(ApplicationThreadExecutorProvider applicationThreadExecutorProvider) {
         applicationExecutor = applicationThreadExecutorProvider.getApplicationThreadExecutor();
@@ -57,8 +58,8 @@ public abstract class AbstractToolBarButtonHandler<ToolBar, ToolBarButton, Actio
     @Activate
     @Override
     protected void activate(ComponentContext context) {
-        tracker = createActionTracker(context);
-        tracker.open();
+        actionTracker = createActionTracker(context);
+        actionTracker.open();
         getToolBarContainer().addToolBarContainerListener(
                     new ToolBarContainerListenerAdapter<ToolBar, ToolBarButton>() {
 
@@ -73,7 +74,7 @@ public abstract class AbstractToolBarButtonHandler<ToolBar, ToolBarButton, Actio
     @Deactivate
     @Override
     protected void deactivate(ComponentContext context) {
-        tracker.close();
+        actionTracker.close();
         super.deactivate(context);
     }
 

@@ -64,8 +64,8 @@ public class ActionAnnotationProcessor extends AbstractApplicationAnnotationProc
     private void init(Element element) {
         if (actions == null) {
             actions = new ActionsType();
-            addExtensionConfigurations(actions);
-            addJAXBRootClasses(ActionsType.class);
+            addExtensionConfiguration(actions);
+            addJAXBRootClass(ActionsType.class);
         }
         addOriginatingElements(element); // TODO: needed?
     }
@@ -75,7 +75,7 @@ public class ActionAnnotationProcessor extends AbstractApplicationAnnotationProc
 
         ActionType action = new ActionType();
         configureAction(action, actionAnnotation.id(), actionAnnotation.category(), actionAnnotation.displayName(),
-                actionAnnotation.accelerator(), actionAnnotation.icon(), element);
+                actionAnnotation.accelerator(), actionAnnotation.icon(), element, actionAnnotation.resourceBundleBaseName());
         actions.getAction().add(action);
     }
 
@@ -84,17 +84,18 @@ public class ActionAnnotationProcessor extends AbstractApplicationAnnotationProc
 
         ToggleActionType action = new ToggleActionType();
         configureAction(action, actionAnnotation.id(), actionAnnotation.category(), actionAnnotation.displayName(),
-                actionAnnotation.accelerator(), actionAnnotation.icon(), element);
+                actionAnnotation.accelerator(), actionAnnotation.icon(), element, actionAnnotation.resourceBundleBaseName());
         actions.getToggleAction().add(action);
     }
 
     private void configureAction(ActionType action, String id, String category, String displayName, String accelerator,
-            String icon, Element element) {
+            String icon, Element element, String resourceBundleBaseName) {
         action.setId(StringUtils.stripToNull(id));
         action.setCategory(StringUtils.stripToNull(category));
         action.setDisplayName(StringUtils.stripToNull(displayName));
         action.setAccelerator(StringUtils.stripToNull(accelerator));
         action.setIcon(StringUtils.stripToNull(icon));
         action.setListenerClass(element.asType().toString());
+        action.setResourceBundleBaseName(StringUtils.stripToNull(resourceBundleBaseName));
     }
 }

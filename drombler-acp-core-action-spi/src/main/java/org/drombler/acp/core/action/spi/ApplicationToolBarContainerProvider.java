@@ -15,10 +15,20 @@
 package org.drombler.acp.core.action.spi;
 
 /**
+ * The application tool bar container provider.<br>
+ * <br>
+ * This is a SPI interface and must be implemented by a GUI toolkit specific extension.
  *
  * @author puce
+ * @param <T> the GUI-toolkit specific type of a tool bar
+ * @param <B> the GUI-toolkit specific base type of a tool bar button.
  */
 public interface ApplicationToolBarContainerProvider<T, B> {
 
+    /**
+     * Gets the application tool bar container.
+     *
+     * @return the application tool bar container
+     */
     ToolBarContainer<T, B> getApplicationToolBarContainer();
 }

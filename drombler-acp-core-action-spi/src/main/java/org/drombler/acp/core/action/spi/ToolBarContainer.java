@@ -17,11 +17,13 @@ package org.drombler.acp.core.action.spi;
 import org.softsmithy.lib.util.PositionableAdapter;
 
 /**
- * A GUI-toolkit agnostic service provider interface for tool bar container.
- *
+ * A tool bar container, which manages tool bars and tool bar buttons.<br>
+ * <br>
  * A tool bar container can contain multiple tool bars each identified by an unique id.
- *
- * The tool bars can be visible or hidden.
+ * <br>
+ * The tool bars can be visible or hidden.<br>
+ * <br>
+ * This is a SPI interface and must be implemented by a GUI toolkit specific extension.
  *
  * @param <T> the GUI-toolkit specific type of a tool bar
  * @param <B> the GUI-toolkit specific base type of a tool bar button.

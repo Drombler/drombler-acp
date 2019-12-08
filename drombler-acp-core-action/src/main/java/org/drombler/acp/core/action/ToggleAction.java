@@ -19,8 +19,13 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+import java.util.ResourceBundle;
+import org.drombler.commons.client.util.ResourceBundleUtils;
 
 /**
+ * This annotation registers a toggle action.<br>
+ * <br>
+ * A toggle action can be used to configure and synchronize e.g. toggle menu items and toolbar toggle buttons.
  *
  * @author puce
  */
@@ -29,13 +34,66 @@ import java.lang.annotation.Target;
 @Target(ElementType.TYPE)
 public @interface ToggleAction {
 
+    /**
+     * The id of this toggle action. <br>
+     * <br>
+     * A toggle action can be referenced from other annotations such as {@link ToggleMenuEntry} and {@link ToolBarToggleEntry} by its id.
+     *
+     * @return the id of this toggle action
+     */
     String id();
-    
+
+    /**
+     * The category is used to group actions (currently this has not effect, but might be used in future).
+     *
+     * @return the category of this toggle action
+     */
     String category();
-    
+
+    /**
+     * The text to be displayed, e.g. as the text for toggle menu items or the tooltip for toolbar toggle buttons. <br>
+     * <br>
+     * If the value starts with '%' the rest of the value is interpreted as a property key and the value gets looked-up in the resource bundle.
+     *
+     * @return the text to be displayed for this toggle action
+     * @see #resourceBundleBaseName()
+     */
     String displayName();
 
+    /**
+     * The accelerator to be used for this toggle action. <br>
+     * <br>
+     * If the value starts with '%' the rest of the value is interpreted as a property key and the value gets looked-up in the resource bundle.
+     *
+     * @return the accelerator to be used for this toggle action
+     * @see #resourceBundleBaseName()
+     */
     String accelerator() default "";
-    
+
+    /**
+     * The icon name pattern to resolve the icons to be used for this toggle action. <br>
+     * <br>
+     * Note that this only specifies the name pattern. Drombler ACP looks for &lt;icon-base-name&gt;16.&lt;icon-extension&gt; for menu items (expected to be 16x16 pixels) and
+     * &lt;icon-base-name&gt;24.&lt;icon-extension&gt; for toolbar buttons (expected to be 24x24 pixels). So if icon is &quot;test.png&quot;, Drombler ACP would look for test16.png (for menu items)
+     * and test24.png (for toolbar buttons).
+     *
+     * @return the icon name pattern
+     */
     String icon() default "";
+
+    /**
+     * The {@link ResourceBundle} base name.<br>
+     * <br>
+     * <ul>
+     * <li>If resourceBundleBaseName is empty, a {@link ResourceBundle} will be looked up which is in the same package as the annotated toggle action class and has a base name equal to the simple name
+     * of the annotated toggle action class.</li>
+     * <li>If resourceBundleBaseName equals 'Bundle', the package {@link ResourceBundle} gets looked up.</li>
+     * <li>Else a {@link ResourceBundle} for the resourceBundleBaseName gets looked up using the same {@link ClassLoader} as the annotated toggle action class.</li>
+     * </ul>
+     *
+     * @return the base name of the ResourceBundle, 'Bundle' (for the package ResourceBundle) or empty (for the class ResourceBundle).
+     * @see ResourceBundleUtils#PACKAGE_RESOURCE_BUNDLE_BASE_NAME
+     * @see ResourceBundleUtils#getConditionalResourceBundle(java.lang.Class, java.lang.String)
+     */
+    String resourceBundleBaseName() default "";
 }

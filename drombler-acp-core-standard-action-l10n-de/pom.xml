@@ -18,7 +18,7 @@ Contributor(s): .
     <parent>
         <groupId>org.drombler.acp</groupId>
         <artifactId>drombler-acp-parent</artifactId>
-        <version>0.13</version>
+        <version>0.14</version>
         <relativePath>../drombler-acp-parent/pom.xml</relativePath>
     </parent>
 
@@ -29,7 +29,7 @@ Contributor(s): .
     <description>L10n (German) for the standard core Actions.</description>
     <inceptionYear>2012</inceptionYear>
     <!-- required for Javadoc (apidocs) linking -->
-    <url>http://www.drombler.org/drombler-acp/${project.version}/docs/site</url>
+    <url>https://www.drombler.org/drombler-acp/${project.version}/docs/site</url>
 
     <scm>
         <connection>${scm.connection}</connection>
@@ -79,15 +79,18 @@ Contributor(s): .
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <configuration>
+                    <archive>
+                        <manifestEntries>
+                            <Automatic-Module-Name>org.drombler.acp.core.standard.action.l10n.de</Automatic-Module-Name>
+                        </manifestEntries>
+                    </archive>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 
-   
-    <dependencies>
-        <dependency>
-            <groupId>org.drombler.acp</groupId>
-            <artifactId>drombler-acp-core-standard-action</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-    </dependencies>
 </project>

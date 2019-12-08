@@ -82,7 +82,7 @@ public class ExtensionAnnotationProcessor extends AbstractApplicationAnnotationP
         init(extensionAnnotation, element);
         try {
             Object extension = readExtensionFile(extensionAnnotation.extensionFile());
-            addExtensionConfigurations(extension);
+            addExtensionConfiguration(extension);
         } catch (JAXBException | IOException ex) {
             processingEnv.getMessager().printMessage(Diagnostic.Kind.ERROR, ex.getMessage(), element);
         }

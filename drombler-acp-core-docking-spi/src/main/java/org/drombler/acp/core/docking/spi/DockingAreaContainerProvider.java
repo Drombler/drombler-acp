@@ -19,6 +19,9 @@ import org.drombler.commons.docking.DockableEntry;
 import org.drombler.commons.docking.context.DockingAreaContainer;
 
 /**
+ * A {@link DockingAreaContainer} provider.<br>
+ * <br>
+ * This is a SPI interface and must be implemented by a GUI toolkit specific extension.
  *
  * @author puce
  * @param <D>
@@ -27,5 +30,10 @@ import org.drombler.commons.docking.context.DockingAreaContainer;
  */
 public interface DockingAreaContainerProvider<D, DATA extends DockableData, E extends DockableEntry<D, DATA>> {
 
+    /**
+     * Gets the {@link DockingAreaContainer}.
+     *
+     * @return the DockingAreaContainer
+     */
     DockingAreaContainer<D, DATA, E> getDockingAreaContainer();
 }

@@ -20,6 +20,8 @@ import java.util.List;
 import org.drombler.acp.core.action.MenuItemSupplierFactory;
 
 /**
+ * A base class for menu entry descriptors.
+ *
  * @param <MenuItem> the GUI toolkit specific type for menu items
  * @param <F> the sorting strategy specific menu item supplier factory type
  * @author puce
@@ -31,9 +33,10 @@ public abstract class AbstractMenuEntryDescriptor<MenuItem, F extends MenuItemSu
     private final F menuItemSupplierFactory;
 
     /**
+     * Creates a new instance of this class.
      *
-     * @param path
-     * @param menuItemSupplierFactory
+     * @param path a slash '/' delimited path of menu IDs.
+     * @param menuItemSupplierFactory the {@link MenuItemSupplierFactory}
      */
     protected AbstractMenuEntryDescriptor(String path, F menuItemSupplierFactory) {
         this.path = splitPath(path);
@@ -61,13 +64,17 @@ public abstract class AbstractMenuEntryDescriptor<MenuItem, F extends MenuItemSu
 //    }
 
     /**
-     * @return the path
+     * Gets the slash '/' delimited path of menu IDs.
+     *
+     * @return the path the slash '/' delimited path of menu IDs
      */
     public List<String> getPath() {
         return path;
     }
 
     /**
+     * Gets the {@link MenuItemSupplierFactory}.
+     *
      * @return the menuItemSupplierFactory
      */
     public F getMenuItemSupplierFactory() {

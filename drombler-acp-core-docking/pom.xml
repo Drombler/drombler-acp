@@ -18,7 +18,7 @@ Contributor(s): .
     <parent>
         <groupId>org.drombler.acp</groupId>
         <artifactId>drombler-acp-parent</artifactId>
-        <version>0.13</version>
+        <version>0.14</version>
         <relativePath>../drombler-acp-parent/pom.xml</relativePath>
     </parent>
     <artifactId>drombler-acp-core-docking</artifactId>
@@ -28,7 +28,7 @@ Contributor(s): .
     <description>A declarative, modular and GUI toolkit agnostic, abstract Docking Framework.</description>
     <inceptionYear>2012</inceptionYear>
     <!-- required for Javadoc (apidocs) linking -->
-    <url>http://www.drombler.org/drombler-acp/${project.version}/docs/site</url>
+    <url>https://www.drombler.org/drombler-acp/${project.version}/docs/site</url>
 
     <scm>
         <connection>${scm.connection}</connection>
@@ -64,6 +64,17 @@ Contributor(s): .
                 <groupId>org.apache.felix</groupId>
                 <artifactId>maven-bundle-plugin</artifactId>
                 <extensions>true</extensions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <configuration>
+                    <archive>
+                        <manifestEntries>
+                            <Automatic-Module-Name>org.drombler.acp.core.docking</Automatic-Module-Name>
+                        </manifestEntries>
+                    </archive>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.jvnet.jaxb2.maven2</groupId>
@@ -122,6 +133,10 @@ Contributor(s): .
             <artifactId>softsmithy-lib-core</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.softsmithy.lib</groupId>
+            <artifactId>softsmithy-lib-compiler</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.apache.felix</groupId>
             <artifactId>org.apache.felix.scr.annotations</artifactId>
             <scope>provided</scope>
@@ -132,8 +147,13 @@ Contributor(s): .
             <scope>runtime</scope>
         </dependency>
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
             <scope>test</scope>
         </dependency>
     </dependencies>

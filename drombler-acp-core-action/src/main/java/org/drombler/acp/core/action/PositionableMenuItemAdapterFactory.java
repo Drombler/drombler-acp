@@ -30,11 +30,17 @@ public class PositionableMenuItemAdapterFactory<MenuItem> implements MenuItemSup
         return new PositionableMenuItemAdapter<>(menuItem, position);
     }
 
+    /**
+     * {@inheritDoc }
+     */
     @Override
     public PositionableMenuItemAdapterFactory<MenuItem> toPreviousSeparatorSupplierFactory() {
         return new PositionableMenuItemAdapterFactory<>(position / SEPARATOR_STEPS * SEPARATOR_STEPS);
     }
 
+    /**
+     * {@inheritDoc }
+     */
     @Override
     public PositionableMenuItemAdapterFactory<MenuItem> toNextSeparatorSupplierFactory() {
         return new PositionableMenuItemAdapterFactory<>((position + SEPARATOR_STEPS) / SEPARATOR_STEPS * SEPARATOR_STEPS);

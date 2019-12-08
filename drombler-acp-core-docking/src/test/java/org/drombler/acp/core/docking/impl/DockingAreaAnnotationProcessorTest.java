@@ -14,9 +14,9 @@
  */
 package org.drombler.acp.core.docking.impl;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+
+
 
 /**
  *
@@ -24,17 +24,8 @@ import org.junit.Test;
  */
 public class DockingAreaAnnotationProcessorTest {
 
-    private DockingAreaAnnotationProcessor processor;
+    private final DockingAreaAnnotationProcessor processor = new DockingAreaAnnotationProcessor();
 
-
-    @Before
-    public void setUp() {
-        processor = new DockingAreaAnnotationProcessor();
-    }
-
-    @After
-    public void tearDown() {
-    }
 
     @Test
     public void testClassLoading() {

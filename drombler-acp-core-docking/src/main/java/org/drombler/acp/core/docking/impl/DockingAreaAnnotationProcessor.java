@@ -110,8 +110,8 @@ public class DockingAreaAnnotationProcessor extends AbstractApplicationAnnotatio
     private void init(Element element) {
         if (dockingAreas == null) {
             dockingAreas = new DockingAreasType();
-            addExtensionConfigurations(dockingAreas);
-            addJAXBRootClasses(DockingAreasType.class);
+            addExtensionConfiguration(dockingAreas);
+            addJAXBRootClass(DockingAreasType.class);
         }
         addOriginatingElements(element); // TODO: needed?
     }

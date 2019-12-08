@@ -19,14 +19,15 @@ import org.drombler.acp.core.action.MenuEntry;
 import org.drombler.acp.core.action.ToolBarEntry;
 import org.drombler.commons.action.command.Savable;
 import org.drombler.commons.action.context.AbstractActiveContextSensitiveActionListener;
+import org.drombler.commons.client.util.ResourceBundleUtils;
 import org.drombler.commons.context.ContextEvent;
 
 /**
  *
  * @author puce
  */
-@Action(id = "standard.save", category = "core", displayName = "%save.displayName",
-        accelerator = "Shortcut+S", icon = "save.gif")
+@Action(id = "standard.save", category = "core", displayName = "%save.displayName", accelerator = "Shortcut+S", icon = "save.gif",
+        resourceBundleBaseName = ResourceBundleUtils.PACKAGE_RESOURCE_BUNDLE_BASE_NAME)
 @MenuEntry(path = "File", position = 4200)
 @ToolBarEntry(toolBarId = "file", position = 50)
 public class SaveAction extends AbstractActiveContextSensitiveActionListener<Savable, Object> {

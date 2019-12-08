@@ -17,11 +17,18 @@ package org.drombler.acp.core.data.spi;
 import org.drombler.commons.data.file.FileExtensionDescriptorRegistry;
 
 /**
+ * A {@link FileExtensionDescriptorRegistry} provider.<br>
+ * <br>
+ * This module also provides an implementation registered as OSGi service.
  *
  * @author puce
  */
-
-
 public interface FileExtensionDescriptorRegistryProvider {
+
+    /**
+     * Gets a {@link FileExtensionDescriptorRegistry}.
+     *
+     * @return a FileExtensionDescriptorRegistry
+     */
     FileExtensionDescriptorRegistry getFileExtensionDescriptorRegistry();
 }

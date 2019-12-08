@@ -27,17 +27,29 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
+ * A menu descriptor.
+ *
  * @param <MenuItem> the GUI toolkit specific type for menu items
  * @param <F> the sorting strategy specific menu item supplier factory type
  * @author puce
  */
 public class MenuDescriptor<MenuItem, F extends MenuItemSupplierFactory<MenuItem, F>> extends AbstractMenuEntryDescriptor<MenuItem, F> {
+
     private static final Logger LOG = LoggerFactory.getLogger(MenuDescriptor.class);
 
     private final String id;
     private final String displayName;
     private final MenuItemSortingStrategy<MenuItem, ?> sortingStrategy;
 
+    /**
+     * Creates a new instance of this class.
+     *
+     * @param id the id of this menu
+     * @param displayName the display name of this menu. Typically the display name is localized.
+     * @param path the path of menu ids of this menu
+     * @param menuItemSupplierFactory a menu item supplier factory
+     * @param sortingStrategy a sorting strategy
+     */
     public MenuDescriptor(String id, String displayName, String path, F menuItemSupplierFactory, MenuItemSortingStrategy<MenuItem, ?> sortingStrategy) {
         super(path, menuItemSupplierFactory);
         this.id = id;
@@ -86,24 +98,44 @@ public class MenuDescriptor<MenuItem, F extends MenuItemSupplierFactory<MenuItem
 //    public List<Integer> getPathPositions() {
 //        throw new UnsupportedOperationException("Not yet implemented");
 //    }
+    /**
+     * Gets the display name. Typically the display name is localized.
+     *
+     * @return the display name
+     */
     public String getDisplayName() {
         return displayName;
     }
 
+    /**
+     * Gets the id.
+     *
+     * @return the id
+     */
     public String getId() {
         return id;
     }
 
     /**
-     * @return the sortingStrategy
+     * Gets the sorting strategy.
+     *
+     * @return the sorting strategy
      */
     public MenuItemSortingStrategy<MenuItem, ?> getSortingStrategy() {
         return sortingStrategy;
     }
 
-    public static MenuDescriptor createMenuDescriptor(MenuType menuType, Bundle bundle) {
+    /**
+     * Creates an instance of an {@link MenuDescriptor} from a {@link MenuType} unmarshalled from the application.xml.
+     *
+     * @param <MenuItem> the GUI toolkit specific type for menu items
+     * @param menuType the unmarshalled MenuType
+     * @param bundle the OSGi bundle
+     * @return a MenuDescriptor
+     */
+    public static <MenuItem> MenuDescriptor<MenuItem, PositionableMenuItemAdapterFactory<MenuItem>> createMenuDescriptor(MenuType menuType, Bundle bundle) {
         try {
-            return new MenuDescriptor(StringUtils.stripToNull(menuType.getId()),
+            return new MenuDescriptor<>(StringUtils.stripToNull(menuType.getId()),
                     OSGiResourceBundleUtils.getPackageResourceStringPrefixed(menuType.getPackage(),
                             menuType.getDisplayName(), bundle),
                     StringUtils.stripToEmpty(menuType.getPath()),
@@ -206,6 +238,9 @@ public class MenuDescriptor<MenuItem, F extends MenuItemSupplierFactory<MenuItem
 //        }
 //    }
 
+    /**
+     * {@inheritDoc }
+     */
     @Override
     public String toString() {
         return "MenuDescriptor[" + "id=" + id + ", displayName=" + displayName + ", path=" + getPath() + ", sortingStrategy=" + sortingStrategy + ']';

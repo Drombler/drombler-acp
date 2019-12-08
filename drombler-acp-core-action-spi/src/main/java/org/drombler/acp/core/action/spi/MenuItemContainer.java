@@ -19,6 +19,10 @@ import org.drombler.acp.core.action.MenuItemSortingStrategy;
 import org.drombler.acp.core.action.MenuItemSupplierFactory;
 
 /**
+ * A menu item container.<br>
+ * <br>
+ * This is a SPI interface and must be implemented by a GUI toolkit specific extension.
+ *
  * @param <MenuItem> the GUI toolkit specific type for menu items
  * @param <Menu> the GUI toolkit specific type for menus
  * @param <F> the sorting strategy specific menu item supplier factory type
@@ -36,20 +40,54 @@ public interface MenuItemContainer<MenuItem, Menu extends MenuItem, F extends Me
      */
     void addMenu(String id, Menu menu, F supplierFactory, MenuItemSortingStrategy<MenuItem, ?> sortingStrategy);
 
+    /**
+     * Adds a menu item to this menu item container.
+     *
+     * @param menuItem the menu item to add
+     * @param supplierFactory the {@link MenuItemSupplierFactory} of this container
+     */
     void addMenuItem(MenuItem menuItem, F supplierFactory);
 
+    /**
+     * Gets the sorting strategy.
+     *
+     * @return the sorting strategy
+     */
     MenuItemSortingStrategy<MenuItem, F> getMenuItemSortingStrategy(); // TODO: correct? or MenuItemSortingStrategy<MenuItem, ?> ?
 
     /**
-     * @return the menuContainers
+     * Gets the menu item container for the sub-menu with the specified id.
+     *
+     * @param id the id of the sub-menu
+     * @return the menuContainers the menu item container for the sub-menu with the specified id
      */
     MenuItemContainer<MenuItem, Menu, ?> getMenuContainer(String id);
 
+    /**
+     * Gets the parent menu container, if any, else null.
+     *
+     * @return the parent menu container, if any, else null
+     */
     MenuItemContainer<MenuItem, Menu, ?> getParentMenuContainer();
 
+    /**
+     * Flag which indicates if this menu item container also supports menu items or just menus.
+     *
+     * @return true, if this menu item container also supports menu item, false if it only supports menus.
+     */
     boolean isSupportingItems();
 
+    /**
+     * Gets the path of menu ids.
+     *
+     * @return the path of menu ids
+     */
     List<String> getPath();
 
+    /**
+     * Gets the id (or null for root containers).
+     *
+     * @return the id (or null for root containers)
+     */
     String getId();
 }

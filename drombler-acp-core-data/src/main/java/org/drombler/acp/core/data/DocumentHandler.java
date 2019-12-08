@@ -24,10 +24,11 @@ import org.drombler.commons.context.LocalContextProvider;
 import org.drombler.commons.data.DataCapabilityProvider;
 
 /**
- * Registers a document handler. A document handler usually knows how to read, save etc. a particular kind of document. A document handler is usally {@link Path} based.
- *
- * To fully integrate with the framework it should implement {@link LocalContextProvider}, observe registered {@link DataCapabilityProvider}s and add the found data capabilities to it's local context.
- *
+ * Registers a document handler. A document handler usually knows how to read, save etc. a particular kind of document. A document handler is usally {@link Path} based.<br>
+ * <br>
+ * To fully integrate with the framework it should implement {@link LocalContextProvider}, observe registered {@link DataCapabilityProvider}s and add the found data capabilities to it's local
+ * context.<br>
+ * <br>
  * The easiest way to implement a document handler is to extend {@link AbstractDocumentHandler}, but it's not required.
  *
  * @see AbstractDocumentHandler

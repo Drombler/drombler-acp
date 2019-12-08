@@ -20,19 +20,19 @@ import java.net.URISyntaxException;
 import java.nio.file.Path;
 import java.util.Properties;
 import org.apache.felix.framework.util.Util;
-import org.drombler.commons.client.startup.main.cli.CommandLineArgs;
 import org.drombler.commons.client.startup.main.DromblerClientConfiguration;
 import org.drombler.commons.client.startup.main.MissingPropertyException;
+import org.drombler.commons.client.startup.main.cli.CommandLineArgs;
 
 /**
- *
- * @author puce
+ * The Drombler ACP configuration. Subclasses may add additional properties or change the configuration such as the application layout.
  */
 public class DromblerACPConfiguration extends DromblerClientConfiguration {
 
     /**
+     * Creates a new instance of this class.
      *
-     * @param commandLineArgs
+     * @param commandLineArgs the command line args
      * @throws URISyntaxException
      * @throws IOException
      * @throws MissingPropertyException
@@ -42,12 +42,21 @@ public class DromblerACPConfiguration extends DromblerClientConfiguration {
         super(commandLineArgs);
     }
 
+    /**
+     * Determines the installation directory path of this application. Drombler ACP expects the following application installation layout: {@code <install-dir>/bin/lib/<jar>}
+     *
+     * @param mainJarPath the path to the JAR file containing the main starter
+     * @return the installation directory path of this application
+     */
     @Override
     protected Path determineInstallDirPath(Path mainJarPath) {
         // <install-dir>/bin/lib/<jar>
         return mainJarPath.getParent().getParent().getParent();
     }
 
+    /**
+     * {@inheritDoc }
+     */
     @Override
     protected Properties loadDefaultConfigProps() throws IOException {
         Properties properties = new Properties(super.loadDefaultConfigProps());
@@ -57,6 +66,11 @@ public class DromblerACPConfiguration extends DromblerClientConfiguration {
         return properties;
     }
 
+    /**
+     * Resolves properties with variables.
+     *
+     * @param configProps the properties to resolve
+     */
     @Override
     protected void resolveProperties(Properties configProps) throws IllegalArgumentException {
         super.resolveProperties(configProps);
@@ -66,6 +80,11 @@ public class DromblerACPConfiguration extends DromblerClientConfiguration {
         }
     }
 
+    /**
+     * Copies and sets some additional system properties to the provided config properties.
+       *
+     * @param configProps the source properties to copy to
+     */
     @Override
     protected void copySystemProperties(Properties configProps) {
         super.copySystemProperties(configProps);

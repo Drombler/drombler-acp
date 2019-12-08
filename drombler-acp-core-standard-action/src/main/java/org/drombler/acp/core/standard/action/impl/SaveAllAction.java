@@ -23,14 +23,15 @@ import org.drombler.acp.core.action.MenuEntry;
 import org.drombler.acp.core.action.ToolBarEntry;
 import org.drombler.commons.action.command.Savable;
 import org.drombler.commons.action.context.AbstractApplicationContextSensitiveActionListener;
+import org.drombler.commons.client.util.ResourceBundleUtils;
 import org.drombler.commons.context.ContextEvent;
 
 /**
  *
  * @author puce
  */
-@Action(id = "standard.saveAll", category = "core", displayName = "%saveAll.displayName",
-        accelerator = "Shortcut+Shift+S", icon = "saveAll.png")
+@Action(id = "standard.saveAll", category = "core", displayName = "%saveAll.displayName", accelerator = "Shortcut+Shift+S", icon = "saveAll.png",
+        resourceBundleBaseName = ResourceBundleUtils.PACKAGE_RESOURCE_BUNDLE_BASE_NAME)
 @MenuEntry(path = "File", position = 4210)
 @ToolBarEntry(toolBarId = "file", position = 60)
 public class SaveAllAction extends AbstractApplicationContextSensitiveActionListener<Savable, Object> {

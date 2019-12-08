@@ -41,11 +41,11 @@ public class MenuHandler<MenuItem, Menu extends MenuItem> extends AbstractMenuIt
     @Reference
     private MenuFactory<Menu> menuFactory;
 
-    protected void bindMenuDescriptor(MenuDescriptor menuDescriptor) {
+    protected void bindMenuDescriptor(MenuDescriptor<MenuItem, ?> menuDescriptor) {
         resolveMenu(menuDescriptor);
     }
 
-    protected void unbindMenuDescriptor(MenuDescriptor menuDescriptor) {
+    protected void unbindMenuDescriptor(MenuDescriptor<MenuItem, ?> menuDescriptor) {
         // TODO
     }
 
@@ -66,14 +66,14 @@ public class MenuHandler<MenuItem, Menu extends MenuItem> extends AbstractMenuIt
     protected void deactivate(ComponentContext context) {
     }
 
-    private void resolveMenu(MenuDescriptor entry) {
+    private void resolveMenu(MenuDescriptor<MenuItem, ?> entry) {
         resolveMenuItem(entry, null); // TODO: good to pass null? better abstraction?
     }
 
     @Override
     protected void resolveMenuItem(MenusType menusType, Bundle bundle, BundleContext context) {
         menusType.getMenu().stream().
-                map(menu -> MenuDescriptor.createMenuDescriptor(menu, bundle)).
+                map(menu -> MenuDescriptor.<MenuItem>createMenuDescriptor(menu, bundle)).
                 forEach(menuDescriptor -> resolveMenu(menuDescriptor));
     }
 
@@ -100,17 +100,17 @@ public class MenuHandler<MenuItem, Menu extends MenuItem> extends AbstractMenuIt
     }
 
     @Override
-    protected MenuConfig createConfig(MenuDescriptor menuEntryDescriptor, BundleContext context) {
+    protected MenuConfig createConfig(MenuDescriptor<MenuItem, ?> menuEntryDescriptor, BundleContext context) {
         return MenuConfig.getInstance();
     }
 
     @Override
-    protected Menu createMenuItem(MenuDescriptor menuEntryDescriptor, MenuConfig config) {
+    protected Menu createMenuItem(MenuDescriptor<MenuItem, ?> menuEntryDescriptor, MenuConfig config) {
         return menuFactory.createMenu(menuEntryDescriptor);
     }
 
     @Override
-    protected void registerUnresolvedMenuItem(MenuDescriptor menuEntryDescriptor, BundleContext context) {
+    protected void registerUnresolvedMenuItem(MenuDescriptor<MenuItem, ?> menuEntryDescriptor, BundleContext context) {
         // nothing to do
     }
 }

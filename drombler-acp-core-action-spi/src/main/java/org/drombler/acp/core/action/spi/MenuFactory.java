@@ -15,10 +15,20 @@
 package org.drombler.acp.core.action.spi;
 
 /**
+ * A menu factory to create a GUI toolkit specific menu component from a {@link MenuDescriptor}.<br>
+ * <br>
+ * This is a SPI interface and must be implemented by a GUI toolkit specific extension.
  *
+ * @param <T> the GUI toolkit specific type for menus
  * @author puce
  */
 public interface MenuFactory<T> {
 
-    T createMenu(MenuDescriptor menuDescriptor);
+    /**
+     * Create a GUI toolkit specific menu component from a {@link MenuDescriptor}.
+     *
+     * @param menuDescriptor the menu descriptor
+     * @return a GUI toolkit specific menu component
+     */
+    T createMenu(MenuDescriptor<?, ?> menuDescriptor);
 }

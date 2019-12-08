@@ -22,6 +22,8 @@ import org.drombler.acp.core.action.MenuItemSupplier;
 import org.drombler.acp.core.action.MenuItemSupplierFactory;
 
 /**
+ * A base class for menu item root containers.
+ *
  * @param <MenuItem> the GUI toolkit specific type for menu items
  * @param <Menu> the GUI toolkit specific type for menus
  * @param <F> the sorting strategy specific menu item supplier factory type
@@ -33,33 +35,50 @@ public abstract class AbstractMenuItemRootContainer<MenuItem, Menu extends MenuI
     private final List<MenuItemContainerListener<MenuItem, Menu>> containerListeners
             = Collections.synchronizedList(new ArrayList<>()); // TODO: synchronized needed?
 
+    /**
+     * Creates a new instance of this class
+     *
+     * @param supportingItems flag if menu items are supported or just menus
+     * @param menuItemSortingStrategy the sorting strategy
+     * @param menuMenuItemContainerFactory the menu item container factory
+     * @param separatorMenuItemFactory the separator menu item factory
+     */
     public AbstractMenuItemRootContainer(boolean supportingItems, MenuItemSortingStrategy menuItemSortingStrategy, MenuMenuItemContainerFactory<MenuItem, Menu> menuMenuItemContainerFactory,
             SeparatorMenuItemFactory<? extends MenuItem> separatorMenuItemFactory) {
         super(null, supportingItems, null, menuItemSortingStrategy, menuMenuItemContainerFactory, separatorMenuItemFactory);
     }
 
+    /**
+     * {@inheritDoc }
+     */
     @Override
     public void addMenuContainerListener(MenuItemContainerListener<MenuItem, Menu> containerListener) {
         containerListeners.add(containerListener);
     }
 
+    /**
+     * {@inheritDoc }
+     */
     @Override
     public void removeMenuContainerListener(MenuItemContainerListener<MenuItem, Menu> containerListener) {
         containerListeners.remove(containerListener);
     }
 
-    void fireMenuAddedEvent(MenuItemSupplier<? extends Menu> menuSupplier, String id, List<String> path) {
+    /* package-private */ void fireMenuAddedEvent(MenuItemSupplier<? extends Menu> menuSupplier, String id, List<String> path) {
         MenuItemContainerMenuEvent<MenuItem, Menu> event = new MenuItemContainerMenuEvent<>(getMenuItemRootContainer(),
                 menuSupplier, id, path);
         containerListeners.forEach(containerListener -> containerListener.menuAdded(event));
     }
 
-    void fireMenuItemAddedEvent(MenuItemSupplier<? extends MenuItem> menuItemSupplier, List<String> path) {
+    /* package-private */ void fireMenuItemAddedEvent(MenuItemSupplier<? extends MenuItem> menuItemSupplier, List<String> path) {
         MenuItemContainerMenuItemEvent<MenuItem, Menu> event = new MenuItemContainerMenuItemEvent<>(
                 getMenuItemRootContainer(), menuItemSupplier, path);
         containerListeners.stream().forEach((containerListener) -> containerListener.menuItemAdded(event));
     }
 
+    /**
+     * {@inheritDoc }
+     */
     @Override
     protected AbstractMenuItemRootContainer<MenuItem, Menu, F> getMenuItemRootContainer() {
         return this;

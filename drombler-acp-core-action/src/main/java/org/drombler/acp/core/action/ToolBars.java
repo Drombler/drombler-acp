@@ -22,8 +22,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * The containing annotation type for the repeatable annotation {@link ToolBar}.
- *
+ * The containing annotation type for the repeatable annotation {@link ToolBar}.<br>
+ * <br>
  * Note: Since {@link ToolBar} is a {@link Repeatable} annotation, this containing annotation type is usually not needed
  * to be declared explicitly.
  *
