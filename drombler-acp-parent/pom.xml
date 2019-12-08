@@ -69,7 +69,7 @@ Contributor(s): .
         <!--<url.parent>https://www.drombler.org/drombler-acp/${project.version}/docs/site</url.parent>-->
         
         <!-- Dependency Versions Defaults -->
-        <drombler-commons.version>0.14-SNAPSHOT</drombler-commons.version>
+        <drombler-commons.version>0.14</drombler-commons.version>
 
     </properties>
 
