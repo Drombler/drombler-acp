@@ -20,7 +20,7 @@ Contributor(s): .
     <parent>
         <groupId>org.drombler.acp</groupId>
         <artifactId>drombler-acp-parent</artifactId>
-        <version>0.14-SNAPSHOT</version>
+        <version>0.14</version>
         <relativePath>../drombler-acp-parent/pom.xml</relativePath>
     </parent>
 
