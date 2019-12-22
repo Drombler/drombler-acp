@@ -30,7 +30,8 @@ import org.drombler.commons.context.ContextEvent;
  *
  * @author puce
  */
-@Action(id = "standard.saveAll", category = "core", displayName = "%saveAll.displayName", accelerator = "Shortcut+Shift+S", icon = "saveAll.png",
+@Action(id = "standard.saveAll", category = "core", displayName = "%saveAll.displayName",
+        accelerator = "Shortcut+Shift+S", icon = "saveAll.png",
         resourceBundleBaseName = ResourceBundleUtils.PACKAGE_RESOURCE_BUNDLE_BASE_NAME)
 @MenuEntry(path = "File", position = 4210)
 @ToolBarEntry(toolBarId = "file", position = 60)

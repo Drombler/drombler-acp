@@ -23,7 +23,7 @@ Contributor(s): .
     </parent>
     <groupId>org.drombler.acp</groupId>
     <artifactId>drombler-acp-parent</artifactId>
-    <version>0.14</version>
+    <version>1.0</version>
     <packaging>pom</packaging>
     
     <name>Drombler ACP - Parent</name>
@@ -69,7 +69,7 @@ Contributor(s): .
         <!--<url.parent>https://www.drombler.org/drombler-acp/${project.version}/docs/site</url.parent>-->
         
         <!-- Dependency Versions Defaults -->
-        <drombler-commons.version>0.14</drombler-commons.version>
+        <drombler-commons.version>1.0</drombler-commons.version>
 
     </properties>
 
