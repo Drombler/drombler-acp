@@ -43,7 +43,7 @@ import org.drombler.acp.core.application.processing.AbstractApplicationAnnotatio
     "org.drombler.acp.core.action.Menu",
     "org.drombler.acp.core.action.MenuEntry",
     "org.drombler.acp.core.action.ToggleMenuEntry"})
-@SupportedSourceVersion(SourceVersion.RELEASE_8)
+@SupportedSourceVersion(SourceVersion.RELEASE_11)
 public class MenuAnnotationProcessor extends AbstractApplicationAnnotationProcessor {
 
     private MenusType menus;

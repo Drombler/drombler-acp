@@ -35,7 +35,7 @@ import org.drombler.commons.client.geometry.HorizontalAlignment;
  * @author puce
  */
 @SupportedAnnotationTypes({"org.drombler.acp.core.status.StatusBarElement"})
-@SupportedSourceVersion(SourceVersion.RELEASE_8)
+@SupportedSourceVersion(SourceVersion.RELEASE_11)
 public class StatusBarElementAnnotationProcessor extends AbstractApplicationAnnotationProcessor {
     //TODO: not safe as changes to HorizontalAlignment are missed at compile time. 
     // Possible solutions:

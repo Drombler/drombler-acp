@@ -48,7 +48,7 @@ import org.softsmithy.lib.lang.model.type.ModelTypeUtils;
  * @author puce
  */
 @SupportedAnnotationTypes({"org.drombler.acp.core.docking.ViewDocking", "org.drombler.acp.core.docking.EditorDocking"})
-@SupportedSourceVersion(SourceVersion.RELEASE_8)
+@SupportedSourceVersion(SourceVersion.RELEASE_11)
 public class DockingAnnotationProcessor extends AbstractApplicationAnnotationProcessor {
 
     //TODO: not safe as changes to DockingAreaKind are missed at compile time. 

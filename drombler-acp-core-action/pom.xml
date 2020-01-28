@@ -67,17 +67,6 @@ Contributor(s): .
                 <extensions>true</extensions>
             </plugin>
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <configuration>
-                    <archive>
-                        <manifestEntries>
-                            <Automatic-Module-Name>org.drombler.acp.core.action</Automatic-Module-Name>
-                        </manifestEntries>
-                    </archive>
-                </configuration>
-            </plugin>
-            <plugin>
                 <groupId>org.apache.felix</groupId>
                 <artifactId>maven-scr-plugin</artifactId>
                 <executions>
@@ -112,12 +101,6 @@ Contributor(s): .
         </plugins>
     </build>
     <dependencies>
-        <dependency>
-            <groupId>org.drombler.acp</groupId>
-            <artifactId>drombler-acp-startup-main</artifactId>
-            <version>${project.version}</version>
-            <scope>provided</scope>
-        </dependency>
         <dependency>
             <groupId>org.drombler.acp</groupId>
             <artifactId>drombler-acp-core-application</artifactId>
