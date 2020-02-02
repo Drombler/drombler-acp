@@ -19,11 +19,14 @@ import org.drombler.acp.core.action.impl.MenuAnnotationProcessor;
 import org.drombler.acp.core.action.impl.ToolBarAnnotationProcessor;
 module org.drombler.acp.core.action {
     exports org.drombler.acp.core.action;
+    exports org.drombler.acp.core.action.jaxb;
 
     provides Processor with ActionAnnotationProcessor, MenuAnnotationProcessor, ToolBarAnnotationProcessor;
 
     requires java.compiler;
     requires org.drombler.acp.core.application;
     requires transitive org.softsmithy.lib.core;
+    requires transitive java.xml.bind;
     requires org.apache.commons.lang3;
+    requires org.drombler.commons.client.core;
 }

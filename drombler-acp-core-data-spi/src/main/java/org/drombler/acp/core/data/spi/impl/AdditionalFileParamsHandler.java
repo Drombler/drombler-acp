@@ -28,7 +28,7 @@ import org.drombler.acp.core.context.ContextManagerProvider;
 import org.drombler.acp.core.data.spi.DataHandlerRegistryProvider;
 import org.drombler.acp.core.data.spi.DocumentHandlerDescriptorRegistryProvider;
 import org.drombler.acp.core.data.spi.FileExtensionDescriptorRegistryProvider;
-import org.drombler.acp.startup.main.AdditionalArgumentsProvider;
+import org.drombler.commons.client.startup.main.AdditionalArgumentsProvider;
 import org.drombler.commons.context.ContextInjector;
 import org.drombler.commons.data.file.DocumentHandlerDescriptor;
 import org.drombler.commons.data.file.FileExtensionDescriptor;

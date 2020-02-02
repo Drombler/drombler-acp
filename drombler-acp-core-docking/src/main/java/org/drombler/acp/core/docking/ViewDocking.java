@@ -20,7 +20,6 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import java.util.ResourceBundle;
-import org.drombler.commons.client.util.ResourceBundleUtils;
 
 /**
  * Registers an view dockable.<br>
@@ -108,8 +107,8 @@ public @interface ViewDocking {
      * </ul>
      *
      * @return the base name of the ResourceBundle, 'Bundle' (for the package ResourceBundle) or empty (for the class ResourceBundle).
-     * @see ResourceBundleUtils#PACKAGE_RESOURCE_BUNDLE_BASE_NAME
-     * @see ResourceBundleUtils#getConditionalResourceBundle(java.lang.Class, java.lang.String)
+     * @see org.drombler.commons.client.util.ResourceBundleUtils#PACKAGE_RESOURCE_BUNDLE_BASE_NAME
+     * @see org.drombler.commons.client.util.ResourceBundleUtils#getConditionalResourceBundle(java.lang.Class, java.lang.String)
      */
     String resourceBundleBaseName() default "";
 }

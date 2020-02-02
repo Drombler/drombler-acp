@@ -17,5 +17,5 @@ module org.drombler.acp.core.context {
     exports org.drombler.acp.core.context;
 
     requires transitive org.drombler.commons.context;
-    requires org.osgi.service.component.annotations;
+    requires osgi.cmpn;
 }

@@ -27,7 +27,7 @@ import org.osgi.framework.Bundle;
  *
  * @author puce
  */
-class ActionDescriptorUtils {
+/*package-private*/ final class ActionDescriptorUtils {
 
     private ActionDescriptorUtils() {
     }

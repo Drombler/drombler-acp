@@ -14,12 +14,12 @@
  */
 package org.drombler.acp.core.docking.spi.impl;
 
-import org.apache.felix.scr.annotations.Reference;
 import org.drombler.acp.core.docking.spi.DockingAreaContainerProvider;
 import org.drombler.commons.docking.DockableData;
 import org.drombler.commons.docking.DockableEntry;
 import org.drombler.commons.docking.DockablePreferences;
 import org.drombler.commons.docking.context.DockingAreaContainer;
+import org.osgi.service.component.annotations.Reference;
 
 /**
  *
@@ -28,9 +28,9 @@ import org.drombler.commons.docking.context.DockingAreaContainer;
  * @param <DATA>
  * @param <E>
  */
-@Reference(name = "dockingAreaContainerProvider", referenceInterface = DockingAreaContainerProvider.class)
 public abstract class AbstractDockingHandler<D, DATA extends DockableData, E extends DockableEntry<D, DATA>> {
 
+    @Reference
     private DockingAreaContainerProvider<D, DATA, E> dockingAreaContainerProvider;
 
     protected void bindDockingAreaContainerProvider(DockingAreaContainerProvider<D, DATA, E> dockingAreaContainerProvider) {

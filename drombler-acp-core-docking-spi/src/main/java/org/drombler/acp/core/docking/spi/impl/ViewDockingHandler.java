@@ -19,13 +19,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Executor;
-import org.apache.felix.scr.annotations.Activate;
-import org.apache.felix.scr.annotations.Component;
-import org.apache.felix.scr.annotations.Deactivate;
-import org.apache.felix.scr.annotations.Reference;
-import org.apache.felix.scr.annotations.ReferenceCardinality;
-import org.apache.felix.scr.annotations.ReferencePolicy;
-import org.apache.felix.scr.annotations.References;
 import org.drombler.acp.core.action.spi.ActionDescriptor;
 import org.drombler.acp.core.action.spi.MenuEntryDescriptor;
 import org.drombler.acp.core.commons.util.BundleUtils;
@@ -43,6 +36,12 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.component.ComponentContext;
+import org.osgi.service.component.annotations.Activate;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Deactivate;
+import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ReferenceCardinality;
+import org.osgi.service.component.annotations.ReferencePolicy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.softsmithy.lib.util.SetChangeEvent;
@@ -54,12 +53,6 @@ import org.softsmithy.lib.util.SetChangeListener;
  * @author puce
  */
 @Component(immediate = true)
-@References({
-    @Reference(name = "viewDockingDescriptor", referenceInterface = ViewDockingDescriptor.class,
-            cardinality = ReferenceCardinality.OPTIONAL_MULTIPLE, policy = ReferencePolicy.DYNAMIC)
-    ,
-    @Reference(name = "applicationThreadExecutorProvider", referenceInterface = ApplicationThreadExecutorProvider.class)
-})
 public class ViewDockingHandler<D, DATA extends DockableData, E extends DockableEntry<D, DATA>> extends AbstractDockableDockingHandler<D, DATA, E> {
 
     private static final Logger LOG = LoggerFactory.getLogger(ViewDockingHandler.class);
@@ -73,6 +66,7 @@ public class ViewDockingHandler<D, DATA extends DockableData, E extends Dockable
     private final SetChangeListener<DockingAreaDescriptor> dockingAreaListener = new DockingAreaListener();
 //    private final BundleScope scope = new BundleScope();
 
+    @Reference
     protected void bindApplicationThreadExecutorProvider(ApplicationThreadExecutorProvider applicationThreadExecutorProvider) {
         applicationExecutor = applicationThreadExecutorProvider.getApplicationThreadExecutor();
     }
@@ -81,6 +75,7 @@ public class ViewDockingHandler<D, DATA extends DockableData, E extends Dockable
         applicationExecutor = null;
     }
 
+    @Reference(cardinality = ReferenceCardinality.MULTIPLE, policy = ReferencePolicy.DYNAMIC)
     protected void bindViewDockingDescriptor(ServiceReference<ViewDockingDescriptor<D, DATA, E>> serviceReference) {
         BundleContext context = serviceReference.getBundle().getBundleContext();
         ViewDockingDescriptor<D, DATA, E> dockingDescriptor = context.getService(serviceReference);

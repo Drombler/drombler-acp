@@ -67,18 +67,6 @@ Contributor(s): .
                 <extensions>true</extensions>
             </plugin>
             <plugin>
-                <groupId>org.apache.felix</groupId>
-                <artifactId>maven-scr-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>generate-scr-scrdescriptor</id>
-                        <goals>
-                            <goal>scr</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
                 <groupId>org.jvnet.jaxb2.maven2</groupId>
                 <artifactId>maven-jaxb2-plugin</artifactId>
                 <executions>
@@ -107,6 +95,10 @@ Contributor(s): .
             <version>${project.version}</version>
         </dependency>
         <dependency>
+            <groupId>org.drombler.commons</groupId>
+            <artifactId>drombler-commons-client-core</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
         </dependency>
@@ -115,14 +107,19 @@ Contributor(s): .
             <artifactId>softsmithy-lib-core</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.apache.felix</groupId>
-            <artifactId>org.apache.felix.scr.annotations</artifactId>
-            <scope>provided</scope>
+            <groupId>javax.xml.bind</groupId>
+            <artifactId>jaxb-api</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.apache.felix</groupId>
-            <artifactId>org.apache.felix.scr</artifactId>
-            <scope>runtime</scope>
+            <groupId>javax.annotation</groupId>
+            <artifactId>javax.annotation-api</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>org.osgi</groupId>
+            <artifactId>osgi.cmpn</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
     </dependencies>
 </project>

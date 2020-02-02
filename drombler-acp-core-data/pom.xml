@@ -54,29 +54,6 @@
                 <extensions>true</extensions>
             </plugin>
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <configuration>
-                    <archive>
-                        <manifestEntries>
-                            <Automatic-Module-Name>org.drombler.acp.core.data</Automatic-Module-Name>
-                        </manifestEntries>
-                    </archive>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.felix</groupId>
-                <artifactId>maven-scr-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>generate-scr-scrdescriptor</id>
-                        <goals>
-                            <goal>scr</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
                 <groupId>org.jvnet.jaxb2.maven2</groupId>
                 <artifactId>maven-jaxb2-plugin</artifactId>
                 <executions>
@@ -94,24 +71,18 @@
     </build>
     <dependencies>
         <dependency>
-            <groupId>org.drombler.acp</groupId>
+            <groupId>${project.groupId}</groupId>
             <artifactId>drombler-acp-core-application</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>drombler-acp-core-commons</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.felix</groupId>
-            <artifactId>org.apache.felix.scr.annotations</artifactId>
-            <!-- only needed during compile-time -->
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.felix</groupId>
-            <artifactId>org.apache.felix.scr</artifactId>
-            <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>org.drombler.commons</groupId>
@@ -122,9 +93,13 @@
             <artifactId>drombler-commons-data-core</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.drombler.acp</groupId>
-            <artifactId>drombler-acp-startup-main</artifactId>
-            <version>${project.version}</version>
+            <groupId>org.osgi</groupId>
+            <artifactId>osgi.core</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.osgi</groupId>
+            <artifactId>osgi.cmpn</artifactId>
             <scope>provided</scope>
         </dependency>
     </dependencies>

@@ -16,13 +16,14 @@ package org.drombler.acp.startup.main;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
-import org.drombler.acp.startup.main.impl.AdditionalArgumentsProviderImpl;
 import org.drombler.acp.startup.main.impl.osgi.OSGiStarter;
+import org.drombler.commons.client.startup.main.AdditionalArgumentsProvider;
 import org.drombler.commons.client.startup.main.ApplicationInstanceEvent;
 import org.drombler.commons.client.startup.main.ApplicationInstanceListener;
 import org.drombler.commons.client.startup.main.BootServiceStarter;
 import org.drombler.commons.client.startup.main.DromblerClientStarter;
 import org.drombler.commons.client.startup.main.MissingPropertyException;
+import org.drombler.commons.client.startup.main.SimpleAdditionalArgumentsProvider;
 import org.drombler.commons.client.startup.main.cli.CommandLineArgs;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.FrameworkEvent;
@@ -89,8 +90,10 @@ public class DromblerACPStarter<T extends DromblerACPConfiguration> extends Drom
     }
 
     private void fireAdditionalArguments(ApplicationInstanceEvent event) {
-        osgiStarter.getFramework().getBundleContext().registerService(AdditionalArgumentsProvider.class,
-                new AdditionalArgumentsProviderImpl(event.getAdditionalArgs()), null);
+        if (!event.getAdditionalArgs().isEmpty()) {
+            osgiStarter.getFramework().getBundleContext().registerService(AdditionalArgumentsProvider.class,
+                    new SimpleAdditionalArgumentsProvider(event.getAdditionalArgs()), null);
+        }
 
     }
 

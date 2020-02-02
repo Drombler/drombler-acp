@@ -67,29 +67,6 @@ Contributor(s): .
                 <extensions>true</extensions>
             </plugin>
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <configuration>
-                    <archive>
-                        <manifestEntries>
-                            <Automatic-Module-Name>org.drombler.acp.core.status</Automatic-Module-Name>
-                        </manifestEntries>
-                    </archive>
-                </configuration>
-            </plugin>
-            <!--            <plugin>
-                <groupId>org.apache.felix</groupId>
-                <artifactId>maven-scr-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>generate-scr-scrdescriptor</id>
-                        <goals>
-                            <goal>scr</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>-->
-            <plugin>
                 <groupId>org.jvnet.jaxb2.maven2</groupId>
                 <artifactId>maven-jaxb2-plugin</artifactId>
                 <executions>
@@ -123,30 +100,17 @@ Contributor(s): .
             <groupId>org.drombler.acp</groupId>
             <artifactId>drombler-acp-core-application</artifactId>
             <version>${project.version}</version>
-        </dependency><!--
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-lang3</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.softsmithy.lib</groupId>
-            <artifactId>softsmithy-lib-core</artifactId>
+            <groupId>org.drombler.commons</groupId>
+            <artifactId>drombler-commons-client-core</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.apache.felix</groupId>
-            <artifactId>org.apache.felix.scr.annotations</artifactId>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.felix</groupId>
-            <artifactId>org.apache.felix.scr</artifactId>
-            <scope>runtime</scope>
-        </dependency>-->
         <dependency>
             <groupId>org.osgi</groupId>
-            <artifactId>org.osgi.service.component.annotations</artifactId>
+            <artifactId>osgi.cmpn</artifactId>
             <scope>provided</scope>
         </dependency>
+        
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
@@ -162,5 +126,6 @@ Contributor(s): .
             <artifactId>hamcrest-core</artifactId>
             <scope>test</scope>
         </dependency>
+
     </dependencies>
 </project>

@@ -14,12 +14,6 @@
  */
 package org.drombler.acp.core.action.spi.impl;
 
-import org.apache.felix.scr.annotations.Activate;
-import org.apache.felix.scr.annotations.Component;
-import org.apache.felix.scr.annotations.Deactivate;
-import org.apache.felix.scr.annotations.Reference;
-import org.apache.felix.scr.annotations.ReferenceCardinality;
-import org.apache.felix.scr.annotations.ReferencePolicy;
 import org.drombler.acp.core.action.jaxb.MenusType;
 import org.drombler.acp.core.action.spi.ActionDescriptor;
 import org.drombler.acp.core.action.spi.ActionFactory;
@@ -32,6 +26,12 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.component.ComponentContext;
+import org.osgi.service.component.annotations.Activate;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Deactivate;
+import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ReferenceCardinality;
+import org.osgi.service.component.annotations.ReferencePolicy;
 import org.osgi.util.tracker.ServiceTracker;
 import org.osgi.util.tracker.ServiceTrackerCustomizer;
 
@@ -40,8 +40,6 @@ import org.osgi.util.tracker.ServiceTrackerCustomizer;
  * @author puce
  */
 @Component(immediate = true)
-@Reference(name = "menuEntryDescriptor", referenceInterface = MenuEntryDescriptor.class,
-        cardinality = ReferenceCardinality.OPTIONAL_MULTIPLE, policy = ReferencePolicy.DYNAMIC)
 public class MenuItemHandler<MenuItem, Menu extends MenuItem, Action> extends AbstractMenuItemHandler<MenuItem, Menu, MenuItem, MenuEntryDescriptor<MenuItem, ?>, MenuItemConfig<Action>> {
 
     @Reference
@@ -52,6 +50,7 @@ public class MenuItemHandler<MenuItem, Menu extends MenuItem, Action> extends Ab
     private final ActionResolutionManager<MenuEntryDescriptor> actionResolutionManager = new ActionResolutionManager<>();
     private ServiceTracker<Action, ServiceReference<Action>> tracker;
 
+    @Reference(cardinality = ReferenceCardinality.MULTIPLE, policy = ReferencePolicy.DYNAMIC)
     protected void bindMenuEntryDescriptor(ServiceReference<MenuEntryDescriptor<MenuItem, ?>> serviceReference) {
         BundleContext context = serviceReference.getBundle().getBundleContext();
         MenuEntryDescriptor<MenuItem, ?> menuEntryDescriptor = context.getService(serviceReference);
@@ -60,22 +59,6 @@ public class MenuItemHandler<MenuItem, Menu extends MenuItem, Action> extends Ab
 
     protected void unbindMenuEntryDescriptor(ServiceReference<MenuEntryDescriptor<MenuItem, ?>> serviceReference) {
         // TODO
-    }
-
-    protected void bindMenuItemFactory(MenuItemFactory<MenuItem, Action> menuItemFactory) {
-        this.menuItemFactory = menuItemFactory;
-    }
-
-    protected void unbindMenuItemFactory(MenuItemFactory<MenuItem, Action> menuItemFactory) {
-        this.menuItemFactory = null;
-    }
-
-    protected void bindActionFactory(ActionFactory<Action> actionFactory) {
-        this.actionFactory = actionFactory;
-    }
-
-    protected void unbindActionFactory(ActionFactory<Action> actionFactory) {
-        this.actionFactory = null;
     }
 
     @Activate

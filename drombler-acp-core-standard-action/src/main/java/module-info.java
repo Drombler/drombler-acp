@@ -13,19 +13,13 @@
  * Contributor(s): .
  */
 import javax.annotation.processing.Processor;
-import org.drombler.acp.core.application.impl.ExtensionAnnotationProcessor;
 
-module org.drombler.acp.core.application {
-    exports org.drombler.acp.core.application;
-    exports org.drombler.acp.core.application.jaxb;
-    exports org.drombler.acp.core.application.processing;
-
-    provides Processor with ExtensionAnnotationProcessor;
-
-    requires org.softsmithy.lib.compiler;
-    requires org.slf4j;
-    requires osgi.core;
-    requires osgi.cmpn;
-    requires transitive java.xml.bind;
-    requires java.annotation;
+module org.drombler.acp.core.standard.action {
+    uses Processor;
+    requires java.compiler;
+    requires org.drombler.acp.core.action;
+    requires org.drombler.commons.action.core;
+    requires org.drombler.commons.action.command;
+    requires org.drombler.commons.action.context;
+    requires org.drombler.commons.client.core;
 }
