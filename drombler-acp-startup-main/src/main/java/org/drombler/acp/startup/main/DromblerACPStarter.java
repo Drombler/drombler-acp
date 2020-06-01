@@ -90,9 +90,9 @@ public class DromblerACPStarter<T extends DromblerACPConfiguration> extends Drom
     }
 
     private void fireAdditionalArguments(ApplicationInstanceEvent event) {
-        if (!event.getAdditionalArgs().isEmpty()) {
+        if (!event.getAdditionalArguments().isEmpty()) {
             osgiStarter.getFramework().getBundleContext().registerService(AdditionalArgumentsProvider.class,
-                    new SimpleAdditionalArgumentsProvider(event.getAdditionalArgs()), null);
+                    new SimpleAdditionalArgumentsProvider(event.getAdditionalArguments()), null);
         }
 
     }

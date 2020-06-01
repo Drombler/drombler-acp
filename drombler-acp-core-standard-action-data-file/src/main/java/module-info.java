@@ -20,5 +20,6 @@ module org.drombler.acp.core.standard.action.data.file {
     requires org.drombler.acp.core.data.spi;
     requires org.drombler.commons.action.core;
     requires org.drombler.commons.client.core;
+    requires osgi.core;
 
 }

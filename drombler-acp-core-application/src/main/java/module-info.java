@@ -15,6 +15,9 @@
 import javax.annotation.processing.Processor;
 import org.drombler.acp.core.application.impl.ExtensionAnnotationProcessor;
 
+/**
+ *
+ */
 module org.drombler.acp.core.application {
     exports org.drombler.acp.core.application;
     exports org.drombler.acp.core.application.jaxb;
@@ -28,4 +31,5 @@ module org.drombler.acp.core.application {
     requires osgi.cmpn;
     requires transitive java.xml.bind;
     requires java.annotation;
+    requires jakarta.activation;
 }

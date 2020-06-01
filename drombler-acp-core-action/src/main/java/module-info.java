@@ -29,4 +29,5 @@ module org.drombler.acp.core.action {
     requires transitive java.xml.bind;
     requires org.apache.commons.lang3;
     requires org.drombler.commons.client.core;
+    requires java.annotation;
 }

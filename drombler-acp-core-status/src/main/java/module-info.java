@@ -25,5 +25,7 @@ module org.drombler.acp.core.status {
     requires java.compiler;
     requires org.drombler.acp.core.application;
     requires org.drombler.commons.client.core;
+    requires java.annotation;
+
 
 }

@@ -18,6 +18,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Writer;
+import java.nio.file.NoSuchFileException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -151,7 +152,7 @@ public abstract class AbstractApplicationAnnotationProcessor extends AbstractPro
             Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
             try (InputStream is = applicationXmlFileObject.openInputStream()) {
                 return (ApplicationType) unmarshaller.unmarshal(is);
-            } catch (FileNotFoundException ex) {
+            } catch (FileNotFoundException | NoSuchFileException ex) { // TODO: is FileNotFoundException still possible?
                 return null;
             }
         } else {
