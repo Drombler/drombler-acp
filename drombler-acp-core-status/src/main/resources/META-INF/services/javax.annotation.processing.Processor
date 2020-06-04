@@ -7,7 +7,7 @@
 #
 # The Original Code is Drombler.org. The Initial Developer of the
 # Original Code is Florian Brunner (Sourceforge.net user: puce).
-# Copyright 2016 Drombler.org. All Rights Reserved.
+# Copyright 2012 Drombler.org. All Rights Reserved.
 #
 # Contributor(s): .
-org.drombler.acp.core.application.impl.ExtensionAnnotationProcessor
+org.drombler.acp.core.status.impl.StatusBarElementAnnotationProcessor
