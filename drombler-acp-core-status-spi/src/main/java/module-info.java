@@ -22,4 +22,6 @@ module org.drombler.acp.core.status.spi {
     requires org.drombler.commons.client.core;
     requires org.softsmithy.lib.core;
     requires org.slf4j;
+    requires osgi.core;
+    requires osgi.cmpn;
 }

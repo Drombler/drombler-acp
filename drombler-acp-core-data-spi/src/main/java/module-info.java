@@ -23,4 +23,6 @@ module org.drombler.acp.core.data.spi {
     requires org.drombler.acp.core.commons;
     requires org.drombler.acp.core.context;
     requires org.drombler.commons.client.startup.main;
+    requires org.apache.commons.lang3;
+    requires org.slf4j;
 }

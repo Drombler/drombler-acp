@@ -14,10 +14,10 @@
  */
 package org.drombler.acp.core.action.spi.impl;
 
-import org.drombler.commons.action.AbstractToggleActionListener;
 import org.drombler.acp.core.action.spi.ToolBarContainer;
 import org.drombler.acp.core.action.spi.ToolBarContainerListenerAdapter;
 import org.drombler.acp.core.action.spi.ToolBarContainerToolBarEvent;
+import org.drombler.commons.action.AbstractToggleActionListener;
 
 /**
  *
@@ -32,7 +32,7 @@ public class ShowToolBarAction<ToolBar, ToolBarButton> extends AbstractToggleAct
         this.toolBarId = toolBarId;
         this.toolBarContainer = toolBarContainer;
         toolBarContainer.addToolBarContainerListener(toolBarId,
-                new ToolBarContainerListenerAdapter<ToolBar, ToolBarButton>() {
+                new ToolBarContainerListenerAdapter<>() {
 
                     @Override
                     public void toolBarAdded(ToolBarContainerToolBarEvent<ToolBar, ToolBarButton> event) {

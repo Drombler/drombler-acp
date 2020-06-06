@@ -23,5 +23,7 @@ module org.drombler.acp.core.action.spi {
     requires org.apache.commons.lang3;
     requires org.drombler.commons.action.core;
     requires org.drombler.commons.client.core;
+    requires osgi.core;
     requires osgi.cmpn;
+    requires org.slf4j;
 }
