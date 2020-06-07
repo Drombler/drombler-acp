@@ -40,7 +40,7 @@ import org.drombler.commons.docking.DockingAreaKind;
  */
 @SupportedAnnotationTypes({"org.drombler.acp.core.docking.DockingAreas",
     "org.drombler.acp.core.docking.DockingArea"})
-@SupportedSourceVersion(SourceVersion.RELEASE_8)
+@SupportedSourceVersion(SourceVersion.RELEASE_11)
 public class DockingAreaAnnotationProcessor extends AbstractApplicationAnnotationProcessor {
 
     //TODO: not safe as changes to DockingAreaKind are missed at compile time. 

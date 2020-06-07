@@ -15,10 +15,6 @@
 package org.drombler.acp.core.action.spi.impl;
 
 import java.util.concurrent.Executor;
-import org.apache.felix.scr.annotations.Activate;
-import org.apache.felix.scr.annotations.Component;
-import org.apache.felix.scr.annotations.Deactivate;
-import org.apache.felix.scr.annotations.Reference;
 import org.drombler.acp.core.action.jaxb.ToolBarType;
 import org.drombler.acp.core.action.jaxb.ToolBarsType;
 import org.drombler.acp.core.action.spi.ToggleActionDescriptor;
@@ -30,6 +26,10 @@ import org.drombler.acp.core.commons.util.concurrent.ApplicationThreadExecutorPr
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.service.component.ComponentContext;
+import org.osgi.service.component.annotations.Activate;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Deactivate;
+import org.osgi.service.component.annotations.Reference;
 import org.softsmithy.lib.util.PositionableAdapter;
 
 /**
@@ -37,7 +37,6 @@ import org.softsmithy.lib.util.PositionableAdapter;
  * @author puce
  */
 @Component(immediate = true)
-@Reference(name = "applicationThreadExecutorProvider", referenceInterface = ApplicationThreadExecutorProvider.class)
 public class ToolBarsHandler<T, B> extends AbstractToolBarHandler<T, B> {
 
     private final ToolBarResolutionManager toolBarResolutionManager = new ToolBarResolutionManager();
@@ -45,14 +44,7 @@ public class ToolBarsHandler<T, B> extends AbstractToolBarHandler<T, B> {
     private ToolBarFactory<T> toolBarFactory;
     private Executor applicationExecutor;
 
-    protected void bindToolBarFactory(ToolBarFactory<T> toolBarFactory) {
-        this.toolBarFactory = toolBarFactory;
-    }
-
-    protected void unbindToolBarFactory(ToolBarFactory<T> toolBarFactory) {
-        this.toolBarFactory = null;
-    }
-
+    @Reference
     protected void bindApplicationThreadExecutorProvider(ApplicationThreadExecutorProvider applicationThreadExecutorProvider) {
         applicationExecutor = applicationThreadExecutorProvider.getApplicationThreadExecutor();
     }

@@ -2,17 +2,15 @@ package org.drombler.acp.core.docking.spi.impl;
 
 import java.util.HashMap;
 import java.util.Map;
-import org.apache.felix.scr.annotations.Component;
-import org.apache.felix.scr.annotations.Service;
 import org.drombler.acp.core.docking.spi.EditorDockingDescriptor;
 import org.drombler.acp.core.docking.spi.EditorDockingDescriptorRegistry;
+import org.osgi.service.component.annotations.Component;
 
 /**
  *
  * @author puce
  */
 @Component
-@Service
 public class EditorDockingDescriptorRegistryImpl<D> implements EditorDockingDescriptorRegistry<D> {
 
     private final Map<Class<?>, EditorDockingDescriptor<? extends D>> editors = new HashMap<>();

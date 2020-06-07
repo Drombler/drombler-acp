@@ -14,12 +14,6 @@
  */
 package org.drombler.acp.core.action.spi.impl;
 
-import org.apache.felix.scr.annotations.Activate;
-import org.apache.felix.scr.annotations.Component;
-import org.apache.felix.scr.annotations.Deactivate;
-import org.apache.felix.scr.annotations.Reference;
-import org.apache.felix.scr.annotations.ReferenceCardinality;
-import org.apache.felix.scr.annotations.ReferencePolicy;
 import org.drombler.acp.core.action.MenuItemSupplierFactory;
 import org.drombler.acp.core.action.jaxb.MenusType;
 import org.drombler.acp.core.action.spi.MenuDescriptor;
@@ -28,33 +22,30 @@ import org.drombler.acp.core.action.spi.MenuItemContainer;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.service.component.ComponentContext;
+import org.osgi.service.component.annotations.Activate;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Deactivate;
+import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ReferenceCardinality;
+import org.osgi.service.component.annotations.ReferencePolicy;
 
 /**
  *
  * @author puce
  */
 @Component(immediate = true)
-@Reference(name = "menuDescriptor", referenceInterface = MenuDescriptor.class,
-cardinality = ReferenceCardinality.OPTIONAL_MULTIPLE, policy = ReferencePolicy.DYNAMIC)
 public class MenuHandler<MenuItem, Menu extends MenuItem> extends AbstractMenuItemHandler<MenuItem, Menu, Menu, MenuDescriptor<MenuItem, ?>, MenuConfig> {
 
     @Reference
     private MenuFactory<Menu> menuFactory;
 
+    @Reference(cardinality = ReferenceCardinality.MULTIPLE, policy = ReferencePolicy.DYNAMIC)
     protected void bindMenuDescriptor(MenuDescriptor<MenuItem, ?> menuDescriptor) {
         resolveMenu(menuDescriptor);
     }
 
     protected void unbindMenuDescriptor(MenuDescriptor<MenuItem, ?> menuDescriptor) {
         // TODO
-    }
-
-    protected void bindMenuFactory(MenuFactory<Menu> menuFactory) {
-        this.menuFactory = menuFactory;
-    }
-
-    protected void unbindMenuFactory(MenuFactory<Menu> menuFactory) {
-        this.menuFactory = null;
     }
 
     @Activate

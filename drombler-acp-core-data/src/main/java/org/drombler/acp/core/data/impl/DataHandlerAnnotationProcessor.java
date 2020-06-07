@@ -38,7 +38,7 @@ import org.drombler.acp.core.data.jaxb.DocumentHandlerType;
     "org.drombler.acp.core.data.DocumentHandler",
     "org.drombler.acp.core.data.BusinessObjectHandler"
 })
-@SupportedSourceVersion(SourceVersion.RELEASE_8)
+@SupportedSourceVersion(SourceVersion.RELEASE_11)
 public class DataHandlerAnnotationProcessor extends AbstractApplicationAnnotationProcessor {
 
     private DataHandlersType dataHandlers;

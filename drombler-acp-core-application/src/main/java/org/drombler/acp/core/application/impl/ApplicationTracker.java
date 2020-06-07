@@ -27,12 +27,6 @@ import java.util.stream.Collectors;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
-import org.apache.felix.scr.annotations.Activate;
-import org.apache.felix.scr.annotations.Component;
-import org.apache.felix.scr.annotations.Deactivate;
-import org.apache.felix.scr.annotations.Reference;
-import org.apache.felix.scr.annotations.ReferenceCardinality;
-import org.apache.felix.scr.annotations.ReferencePolicy;
 import org.drombler.acp.core.application.ExtensionPoint;
 import org.drombler.acp.core.application.jaxb.ApplicationType;
 import org.drombler.acp.core.application.jaxb.ExtensionsType;
@@ -40,6 +34,9 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleEvent;
 import org.osgi.framework.ServiceRegistration;
+import org.osgi.service.component.annotations.Activate;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Deactivate;
 import org.osgi.util.tracker.BundleTracker;
 import org.osgi.util.tracker.BundleTrackerCustomizer;
 import org.slf4j.Logger;
@@ -50,8 +47,6 @@ import org.slf4j.LoggerFactory;
  * @author puce
  */
 @Component
-@Reference(name = "extensionPoint", referenceInterface = ExtensionPoint.class,
-        cardinality = ReferenceCardinality.OPTIONAL_MULTIPLE, policy = ReferencePolicy.DYNAMIC)
 public class ApplicationTracker {
 
     public static final String APPLICATION_XML_RELATIVE_NAME = "META-INF/drombler/application.xml";

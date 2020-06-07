@@ -16,10 +16,6 @@ package org.drombler.acp.core.action.spi.impl;
 
 import java.util.List;
 import java.util.concurrent.Executor;
-import org.apache.felix.scr.annotations.Reference;
-import org.apache.felix.scr.annotations.ReferenceCardinality;
-import org.apache.felix.scr.annotations.ReferencePolicy;
-import org.apache.felix.scr.annotations.References;
 import org.drombler.acp.core.action.MenuItemSupplierFactory;
 import org.drombler.acp.core.action.jaxb.MenusType;
 import org.drombler.acp.core.action.spi.AbstractMenuEntryDescriptor;
@@ -33,17 +29,14 @@ import org.drombler.acp.core.commons.util.concurrent.ApplicationThreadExecutorPr
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
+import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ReferenceCardinality;
+import org.osgi.service.component.annotations.ReferencePolicy;
 
 /**
  *
  * @author puce
  */
-@References({
-    @Reference(name = "menusType", referenceInterface = MenusType.class,
-    cardinality = ReferenceCardinality.OPTIONAL_MULTIPLE, policy = ReferencePolicy.DYNAMIC),
-    @Reference(name = "menuBarMenuContainerProvider", referenceInterface = MenuBarMenuContainerProvider.class),
-    @Reference(name = "applicationThreadExecutorProvider", referenceInterface = ApplicationThreadExecutorProvider.class)
-})
 public abstract class AbstractMenuItemHandler<MenuItem, Menu extends MenuItem, M extends MenuItem, D extends AbstractMenuEntryDescriptor<MenuItem, ?>, Config> {
 
     private static final String ROOT_PATH_ID = "";
@@ -51,6 +44,7 @@ public abstract class AbstractMenuItemHandler<MenuItem, Menu extends MenuItem, M
     private final MenuItemResolutionManager<MenuItem, D> menuItemResolutionManager = new MenuItemResolutionManager<>();
     private MenuItemRootContainer<MenuItem, Menu, ?> rootContainer;
 
+    @Reference(cardinality = ReferenceCardinality.MULTIPLE, policy = ReferencePolicy.DYNAMIC)
     protected void bindMenusType(ServiceReference<MenusType> serviceReference) {
         Bundle bundle = serviceReference.getBundle();
         BundleContext context = bundle.getBundleContext();
@@ -62,6 +56,7 @@ public abstract class AbstractMenuItemHandler<MenuItem, Menu extends MenuItem, M
         // TODO
     }
 
+    @Reference
     protected void bindMenuBarMenuContainerProvider(MenuBarMenuContainerProvider<MenuItem, Menu> menuBarMenuContainerProvider) {
         rootContainer = menuBarMenuContainerProvider.getMenuBarMenuContainer();
         rootContainer.addMenuContainerListener(new MenuItemContainerListenerAdapter<MenuItem, Menu>() {
@@ -79,6 +74,7 @@ public abstract class AbstractMenuItemHandler<MenuItem, Menu extends MenuItem, M
         rootContainer = null;
     }
 
+    @Reference
     protected void bindApplicationThreadExecutorProvider(ApplicationThreadExecutorProvider applicationExecutorProvider) {
         applicationExecutor = applicationExecutorProvider.getApplicationThreadExecutor();
     }

@@ -17,13 +17,6 @@ package org.drombler.acp.core.docking.spi.impl;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executor;
-import org.apache.felix.scr.annotations.Activate;
-import org.apache.felix.scr.annotations.Component;
-import org.apache.felix.scr.annotations.Deactivate;
-import org.apache.felix.scr.annotations.Reference;
-import org.apache.felix.scr.annotations.ReferenceCardinality;
-import org.apache.felix.scr.annotations.ReferencePolicy;
-import org.apache.felix.scr.annotations.References;
 import org.drombler.acp.core.commons.util.BundleUtils;
 import org.drombler.acp.core.commons.util.concurrent.ApplicationThreadExecutorProvider;
 import org.drombler.acp.core.docking.jaxb.DockingsType;
@@ -38,6 +31,12 @@ import org.drombler.commons.docking.context.DockingAreaContainer;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.service.component.ComponentContext;
+import org.osgi.service.component.annotations.Activate;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Deactivate;
+import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ReferenceCardinality;
+import org.osgi.service.component.annotations.ReferencePolicy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.softsmithy.lib.util.SetChangeEvent;
@@ -48,11 +47,6 @@ import org.softsmithy.lib.util.SetChangeListener;
  * @author puce
  */
 @Component(immediate = true)
-@References({
-    @Reference(name = "editorDockingDescriptor", referenceInterface = EditorDockingDescriptor.class,
-            cardinality = ReferenceCardinality.OPTIONAL_MULTIPLE, policy = ReferencePolicy.DYNAMIC)
-    ,
-    @Reference(name = "applicationThreadExecutorProvider", referenceInterface = ApplicationThreadExecutorProvider.class)})
 public class EditorDockingHandler<D, DATA extends DockableData, E extends DockableEntry<D, DATA>> extends AbstractDockableDockingHandler<D, DATA, E> {
 
     private static final Logger LOG = LoggerFactory.getLogger(EditorDockingHandler.class);
@@ -64,7 +58,7 @@ public class EditorDockingHandler<D, DATA extends DockableData, E extends Dockab
     private EditorDockingDescriptorRegistry<D> editorRegistry;
     private Executor applicationExecutor;
 
-
+    @Reference
     protected void bindApplicationThreadExecutorProvider(ApplicationThreadExecutorProvider applicationExecutorProvider) {
         applicationExecutor = applicationExecutorProvider.getApplicationThreadExecutor();
     }
@@ -73,6 +67,7 @@ public class EditorDockingHandler<D, DATA extends DockableData, E extends Dockab
         applicationExecutor = null;
     }
 
+    @Reference(cardinality = ReferenceCardinality.MULTIPLE, policy = ReferencePolicy.DYNAMIC)
     protected void bindEditorDockingDescriptor(EditorDockingDescriptor<? extends D> dockingDescriptor) {
         resolveEditorDockingDescriptor(dockingDescriptor);
     }

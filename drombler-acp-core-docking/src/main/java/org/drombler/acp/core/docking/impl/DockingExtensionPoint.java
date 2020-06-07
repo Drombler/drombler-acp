@@ -14,17 +14,15 @@
  */
 package org.drombler.acp.core.docking.impl;
 
-import org.apache.felix.scr.annotations.Component;
-import org.apache.felix.scr.annotations.Service;
 import org.drombler.acp.core.application.ExtensionPoint;
 import org.drombler.acp.core.docking.jaxb.DockingsType;
+import org.osgi.service.component.annotations.Component;
 
 /**
  *
  * @author puce
  */
 @Component
-@Service
 public class DockingExtensionPoint implements ExtensionPoint<DockingsType> {
 
     @Override

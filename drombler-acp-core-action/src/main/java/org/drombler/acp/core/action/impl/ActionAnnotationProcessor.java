@@ -37,7 +37,7 @@ import org.drombler.acp.core.application.processing.AbstractApplicationAnnotatio
     "org.drombler.acp.core.action.Action",
     "org.drombler.acp.core.action.ToggleAction"
 })
-@SupportedSourceVersion(SourceVersion.RELEASE_8)
+@SupportedSourceVersion(SourceVersion.RELEASE_11)
 public class ActionAnnotationProcessor extends AbstractApplicationAnnotationProcessor {
 
     private ActionsType actions;

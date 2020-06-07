@@ -13,3 +13,4 @@
 org.drombler.acp.core.action.impl.ActionAnnotationProcessor
 org.drombler.acp.core.action.impl.MenuAnnotationProcessor
 org.drombler.acp.core.action.impl.ToolBarAnnotationProcessor
+
