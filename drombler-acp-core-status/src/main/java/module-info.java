@@ -13,8 +13,9 @@
  * Contributor(s): .
  */
 
-import javax.annotation.processing.Processor;
 import org.drombler.acp.core.status.impl.StatusBarElementAnnotationProcessor;
+
+import javax.annotation.processing.Processor;
 
 module org.drombler.acp.core.status {
     exports org.drombler.acp.core.status;
@@ -25,7 +26,7 @@ module org.drombler.acp.core.status {
     requires java.compiler;
     requires org.drombler.acp.core.application;
     requires org.drombler.commons.client.core;
-    requires java.annotation;
+    requires osgi.cmpn;
 
 
 }

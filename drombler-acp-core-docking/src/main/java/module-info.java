@@ -13,9 +13,10 @@
  * Contributor(s): .
  */
 
-import javax.annotation.processing.Processor;
 import org.drombler.acp.core.docking.impl.DockingAnnotationProcessor;
 import org.drombler.acp.core.docking.impl.DockingAreaAnnotationProcessor;
+
+import javax.annotation.processing.Processor;
 
 module org.drombler.acp.core.docking {
     exports org.drombler.acp.core.docking;
@@ -28,4 +29,5 @@ module org.drombler.acp.core.docking {
     requires org.drombler.acp.core.application;
     requires org.softsmithy.lib.compiler;
     requires org.apache.commons.lang3;
+    requires osgi.cmpn;
 }

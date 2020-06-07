@@ -13,10 +13,11 @@
  * Contributor(s): .
  */
 
-import javax.annotation.processing.Processor;
 import org.drombler.acp.core.action.impl.ActionAnnotationProcessor;
 import org.drombler.acp.core.action.impl.MenuAnnotationProcessor;
 import org.drombler.acp.core.action.impl.ToolBarAnnotationProcessor;
+
+import javax.annotation.processing.Processor;
 module org.drombler.acp.core.action {
     exports org.drombler.acp.core.action;
     exports org.drombler.acp.core.action.jaxb;
@@ -30,4 +31,5 @@ module org.drombler.acp.core.action {
     requires org.apache.commons.lang3;
     requires org.drombler.commons.client.core;
     requires java.annotation;
+    requires osgi.cmpn;
 }

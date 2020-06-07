@@ -19,4 +19,5 @@ module org.drombler.acp.core.commons {
 
     requires org.drombler.commons.client.core;
     requires osgi.core;
+    requires org.apache.commons.lang3;
 }

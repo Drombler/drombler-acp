@@ -15,23 +15,13 @@
 package org.drombler.acp.core.action.spi.impl;
 
 import org.drombler.acp.core.action.jaxb.MenusType;
-import org.drombler.acp.core.action.spi.ActionDescriptor;
-import org.drombler.acp.core.action.spi.ActionRegistry;
-import org.drombler.acp.core.action.spi.ActionResolutionManager;
-import org.drombler.acp.core.action.spi.ToggleActionFactory;
-import org.drombler.acp.core.action.spi.ToggleMenuEntryDescriptor;
-import org.drombler.acp.core.action.spi.ToggleMenuItemFactory;
+import org.drombler.acp.core.action.spi.*;
 import org.drombler.acp.core.commons.util.UnresolvedEntry;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.component.ComponentContext;
-import org.osgi.service.component.annotations.Activate;
-import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.Deactivate;
-import org.osgi.service.component.annotations.Reference;
-import org.osgi.service.component.annotations.ReferenceCardinality;
-import org.osgi.service.component.annotations.ReferencePolicy;
+import org.osgi.service.component.annotations.*;
 import org.osgi.util.tracker.ServiceTracker;
 import org.osgi.util.tracker.ServiceTrackerCustomizer;
 
@@ -76,7 +66,7 @@ public class ToggleMenuItemHandler<MenuItem, Menu extends MenuItem, ToggleMenuIt
 
     private ServiceTracker<ToggleAction, ServiceReference<ToggleAction>> createActionTracker(ComponentContext context) {
         return new ServiceTracker<>(context.getBundleContext(), toggleActionFactory.getToggleActionClass(),
-                new ServiceTrackerCustomizer<ToggleAction, ServiceReference<ToggleAction>>() {
+                new ServiceTrackerCustomizer<>() {
                     @Override
                     public ServiceReference<ToggleAction> addingService(ServiceReference<ToggleAction> reference) {
                         String actionId = actionRegistry.getActionId(reference);

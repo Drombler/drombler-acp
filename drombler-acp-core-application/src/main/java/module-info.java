@@ -12,8 +12,10 @@
  *
  * Contributor(s): .
  */
-import javax.annotation.processing.Processor;
+
 import org.drombler.acp.core.application.impl.ExtensionAnnotationProcessor;
+
+import javax.annotation.processing.Processor;
 
 /**
  *
@@ -30,6 +32,6 @@ module org.drombler.acp.core.application {
     requires osgi.core;
     requires osgi.cmpn;
     requires transitive java.xml.bind;
-    requires java.annotation;
+    requires transitive java.annotation;
     requires jakarta.activation;
 }

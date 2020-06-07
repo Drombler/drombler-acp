@@ -27,5 +27,7 @@ module org.drombler.acp.core.docking.spi {
     requires org.drombler.commons.action.core;
     requires osgi.core;
     requires osgi.cmpn;
+    requires org.slf4j;
+    requires org.apache.commons.lang3;
 
 }

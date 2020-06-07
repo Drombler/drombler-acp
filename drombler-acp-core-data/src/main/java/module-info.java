@@ -12,9 +12,11 @@
  *
  * Contributor(s): .
  */
-import javax.annotation.processing.Processor;
+
 import org.drombler.acp.core.data.impl.DataHandlerAnnotationProcessor;
 import org.drombler.acp.core.data.impl.FileExtensionAnnotationProcessor;
+
+import javax.annotation.processing.Processor;
 module org.drombler.acp.core.data {
     exports org.drombler.acp.core.data;
     exports org.drombler.acp.core.data.jaxb;
@@ -28,4 +30,6 @@ module org.drombler.acp.core.data {
     requires transitive org.drombler.commons.data.core;
     requires transitive org.softsmithy.lib.core;
     requires osgi.cmpn;
+    requires org.apache.commons.lang3;
+    requires osgi.core;
 }
