@@ -13,9 +13,13 @@
  * Contributor(s): .
  */
 
+import org.osgi.framework.launch.FrameworkFactory;
+
 module org.drombler.acp.startup.main {
     exports org.drombler.acp.startup.main;
 
+    uses FrameworkFactory;
+
     requires transitive org.drombler.commons.client.startup.main;
-    requires org.apache.felix.framework;
+    requires org.apache.felix.framework.connect;
 }
