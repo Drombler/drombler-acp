@@ -40,7 +40,7 @@ import org.drombler.acp.core.application.processing.AbstractApplicationAnnotatio
  */
 @SupportedAnnotationTypes({"org.drombler.acp.core.action.ToolBars", "org.drombler.acp.core.action.ToolBar",
     "org.drombler.acp.core.action.ToolBarEntry", "org.drombler.acp.core.action.ToolBarToggleEntry"})
-@SupportedSourceVersion(SourceVersion.RELEASE_8)
+@SupportedSourceVersion(SourceVersion.RELEASE_11)
 public class ToolBarAnnotationProcessor extends AbstractApplicationAnnotationProcessor {
 
     private ToolBarsType toolBars;

@@ -14,24 +14,14 @@
  */
 package org.drombler.acp.core.action.spi.impl;
 
-import org.apache.felix.scr.annotations.Activate;
-import org.apache.felix.scr.annotations.Component;
-import org.apache.felix.scr.annotations.Deactivate;
-import org.apache.felix.scr.annotations.Reference;
-import org.apache.felix.scr.annotations.ReferenceCardinality;
-import org.apache.felix.scr.annotations.ReferencePolicy;
 import org.drombler.acp.core.action.jaxb.MenusType;
-import org.drombler.acp.core.action.spi.ActionDescriptor;
-import org.drombler.acp.core.action.spi.ActionRegistry;
-import org.drombler.acp.core.action.spi.ActionResolutionManager;
-import org.drombler.acp.core.action.spi.ToggleActionFactory;
-import org.drombler.acp.core.action.spi.ToggleMenuEntryDescriptor;
-import org.drombler.acp.core.action.spi.ToggleMenuItemFactory;
+import org.drombler.acp.core.action.spi.*;
 import org.drombler.acp.core.commons.util.UnresolvedEntry;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.component.ComponentContext;
+import org.osgi.service.component.annotations.*;
 import org.osgi.util.tracker.ServiceTracker;
 import org.osgi.util.tracker.ServiceTrackerCustomizer;
 
@@ -40,8 +30,6 @@ import org.osgi.util.tracker.ServiceTrackerCustomizer;
  * @author puce
  */
 @Component(immediate = true)
-@Reference(name = "toggleMenuEntryDescriptor", referenceInterface = ToggleMenuEntryDescriptor.class,
-cardinality = ReferenceCardinality.OPTIONAL_MULTIPLE, policy = ReferencePolicy.DYNAMIC)
 public class ToggleMenuItemHandler<MenuItem, Menu extends MenuItem, ToggleMenuItem extends MenuItem, ToggleAction>
         extends AbstractMenuItemHandler<MenuItem, Menu, ToggleMenuItem, ToggleMenuEntryDescriptor<MenuItem, ToggleMenuItem, ?>, MenuItemConfig<ToggleAction>> {
 
@@ -53,6 +41,7 @@ public class ToggleMenuItemHandler<MenuItem, Menu extends MenuItem, ToggleMenuIt
     private final ActionResolutionManager<ToggleMenuEntryDescriptor<MenuItem, ToggleMenuItem, ?>> actionResolutionManager = new ActionResolutionManager<>();
     private ServiceTracker<ToggleAction, ServiceReference<ToggleAction>> tracker;
 
+    @Reference(cardinality = ReferenceCardinality.MULTIPLE, policy = ReferencePolicy.DYNAMIC)
     protected void bindToggleMenuEntryDescriptor(ServiceReference<ToggleMenuEntryDescriptor<MenuItem, ToggleMenuItem, ?>> serviceReference) {
         BundleContext context = serviceReference.getBundle().getBundleContext();
         ToggleMenuEntryDescriptor<MenuItem, ToggleMenuItem, ?> menuEntryDescriptor = context.getService(serviceReference);
@@ -61,22 +50,6 @@ public class ToggleMenuItemHandler<MenuItem, Menu extends MenuItem, ToggleMenuIt
 
     protected void unbindToggleMenuEntryDescriptor(ServiceReference<ToggleMenuEntryDescriptor<MenuItem, ToggleMenuItem, ?>> serviceReference) {
         // TODO
-    }
-
-    protected void bindToggleMenuItemFactory(ToggleMenuItemFactory<MenuItem, ToggleMenuItem, ToggleAction> toggleMenuItemFactory) {
-        this.toggleMenuItemFactory = toggleMenuItemFactory;
-    }
-
-    protected void unbindToggleMenuItemFactory(ToggleMenuItemFactory<MenuItem, ToggleMenuItem, ToggleAction> toggleMenuItemFactory) {
-        this.toggleMenuItemFactory = null;
-    }
-
-    protected void bindToggleActionFactory(ToggleActionFactory<ToggleAction> toggleActionFactory) {
-        this.toggleActionFactory = toggleActionFactory;
-    }
-
-    protected void unbindToggleActionFactory(ToggleActionFactory<ToggleAction> toggleActionFactory) {
-        this.toggleActionFactory = null;
     }
 
     @Activate
@@ -93,7 +66,7 @@ public class ToggleMenuItemHandler<MenuItem, Menu extends MenuItem, ToggleMenuIt
 
     private ServiceTracker<ToggleAction, ServiceReference<ToggleAction>> createActionTracker(ComponentContext context) {
         return new ServiceTracker<>(context.getBundleContext(), toggleActionFactory.getToggleActionClass(),
-                new ServiceTrackerCustomizer<ToggleAction, ServiceReference<ToggleAction>>() {
+                new ServiceTrackerCustomizer<>() {
                     @Override
                     public ServiceReference<ToggleAction> addingService(ServiceReference<ToggleAction> reference) {
                         String actionId = actionRegistry.getActionId(reference);

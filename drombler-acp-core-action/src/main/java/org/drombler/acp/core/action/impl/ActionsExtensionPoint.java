@@ -14,17 +14,15 @@
  */
 package org.drombler.acp.core.action.impl;
 
-import org.apache.felix.scr.annotations.Component;
-import org.apache.felix.scr.annotations.Service;
 import org.drombler.acp.core.action.jaxb.ActionsType;
 import org.drombler.acp.core.application.ExtensionPoint;
+import org.osgi.service.component.annotations.Component;
 
 /**
  *
  * @author puce
  */
 @Component
-@Service
 public class ActionsExtensionPoint implements ExtensionPoint<ActionsType> {
 
 //    private final List<ActionsType> actionsList = new ArrayList<>();

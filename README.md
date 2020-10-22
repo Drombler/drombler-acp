@@ -9,9 +9,32 @@
 
 See the [documentation](https://www.drombler.org/drombler-acp) for the Javadoc and information about the provided Maven modules (available from Maven Central).
 
+| Major Version | Comments |
+| ------------- | ------- |
+| v2 | <ul><li>Java SE 11</li></ul> |
+| v1 | <ul><li>Java SE 8</li></ul> |
+
 ## Implementations
 
  * [Drombler FX](https://github.com/Drombler/drombler-fx) (*JavaFX*-based)
+
+## Maven Dependency Management
+
+```xml
+    <dependencyManagement>
+        <dependencies>
+            [...] 
+            <dependency>
+                <groupId>org.drombler.acp</groupId>
+                <artifactId>drombler-acp</artifactId>
+                <version>2.0</version> <!-- replace with the current version -->
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            [...]
+        </dependencies>
+    </dependencyManagement>
+```
 
 ## Issues
 Please file issues to [Drombler FX](https://github.com/Drombler/drombler-fx/issues) for the time being.

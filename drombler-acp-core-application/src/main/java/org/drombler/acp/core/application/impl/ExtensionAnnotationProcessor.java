@@ -43,7 +43,7 @@ import static org.softsmithy.lib.lang.model.type.ModelTypeUtils.getTypeMirror;
     "org.drombler.acp.core.application.Extensions",
     "org.drombler.acp.core.application.Extension"
 })
-@SupportedSourceVersion(SourceVersion.RELEASE_8)
+@SupportedSourceVersion(SourceVersion.RELEASE_11)
 public class ExtensionAnnotationProcessor extends AbstractApplicationAnnotationProcessor {
 
     @Override

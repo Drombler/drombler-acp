@@ -17,13 +17,6 @@ package org.drombler.acp.core.docking.spi.impl;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executor;
-import org.apache.felix.scr.annotations.Activate;
-import org.apache.felix.scr.annotations.Component;
-import org.apache.felix.scr.annotations.Deactivate;
-import org.apache.felix.scr.annotations.Reference;
-import org.apache.felix.scr.annotations.ReferenceCardinality;
-import org.apache.felix.scr.annotations.ReferencePolicy;
-import org.apache.felix.scr.annotations.References;
 import org.drombler.acp.core.commons.util.concurrent.ApplicationThreadExecutorProvider;
 import org.drombler.acp.core.docking.jaxb.DockingAreaType;
 import org.drombler.acp.core.docking.jaxb.DockingAreasType;
@@ -32,6 +25,12 @@ import org.drombler.commons.docking.DockableData;
 import org.drombler.commons.docking.DockableEntry;
 import org.drombler.commons.docking.DockingAreaDescriptor;
 import org.osgi.service.component.ComponentContext;
+import org.osgi.service.component.annotations.Activate;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Deactivate;
+import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ReferenceCardinality;
+import org.osgi.service.component.annotations.ReferencePolicy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,13 +39,6 @@ import org.slf4j.LoggerFactory;
  * @author puce
  */
 @Component(immediate = true)
-@References({
-    @Reference(name = "dockingAreasType", referenceInterface = DockingAreasType.class,
-            cardinality = ReferenceCardinality.OPTIONAL_MULTIPLE, policy = ReferencePolicy.DYNAMIC),
-    @Reference(name = "dockingAreaDescriptor", referenceInterface = DockingAreaDescriptor.class,
-            cardinality = ReferenceCardinality.OPTIONAL_MULTIPLE, policy = ReferencePolicy.DYNAMIC),
-    @Reference(name = "applicationThreadExecutorProvider", referenceInterface = ApplicationThreadExecutorProvider.class)
-})
 public class DockingAreaHandler<D, DATA extends DockableData, E extends DockableEntry<D, DATA>> extends AbstractDockingHandler<D, DATA, E> {
 
     private static final Logger LOG = LoggerFactory.getLogger(DockingAreaHandler.class);
@@ -54,6 +46,7 @@ public class DockingAreaHandler<D, DATA extends DockableData, E extends Dockable
     private Executor applicationExecutor;
     private final List<DockingAreaDescriptor> unresolvedDockingAreaDescriptors = new ArrayList<>();
 
+    @Reference
     protected void bindApplicationThreadExecutorProvider(ApplicationThreadExecutorProvider applicationThreadExecutorProvider) {
         applicationExecutor = applicationThreadExecutorProvider.getApplicationThreadExecutor();
     }
@@ -62,6 +55,7 @@ public class DockingAreaHandler<D, DATA extends DockableData, E extends Dockable
         applicationExecutor = null;
     }
 
+    @Reference(cardinality = ReferenceCardinality.MULTIPLE, policy = ReferencePolicy.DYNAMIC)
     protected void bindDockingAreasType(DockingAreasType dockingAreasType) {
         for (DockingAreaType dockingArea : dockingAreasType.getDockingArea()) {
             DockingAreaDescriptor dockingAreaDescriptor = DockingAreaDescriptorUtils.createDockingAreaDescriptor(
@@ -75,6 +69,7 @@ public class DockingAreaHandler<D, DATA extends DockableData, E extends Dockable
         // TODO
     }
 
+    @Reference(cardinality = ReferenceCardinality.MULTIPLE, policy = ReferencePolicy.DYNAMIC)
     protected void bindDockingAreaDescriptor(DockingAreaDescriptor dockingAreaDescriptor) {
         resolveDockingArea(dockingAreaDescriptor);
     }

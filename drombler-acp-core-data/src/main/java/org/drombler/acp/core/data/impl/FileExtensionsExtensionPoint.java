@@ -14,17 +14,15 @@
  */
 package org.drombler.acp.core.data.impl;
 
-import org.apache.felix.scr.annotations.Component;
-import org.apache.felix.scr.annotations.Service;
 import org.drombler.acp.core.application.ExtensionPoint;
 import org.drombler.acp.core.data.jaxb.FileExtensionsType;
+import org.osgi.service.component.annotations.Component;
 
 /**
  *
  * @author puce
  */
 @Component
-@Service
 public class FileExtensionsExtensionPoint implements ExtensionPoint<FileExtensionsType> {
 
     @Override

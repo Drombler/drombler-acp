@@ -37,7 +37,7 @@ import org.drombler.acp.core.data.jaxb.FileExtensionsType;
     "org.drombler.acp.core.data.FileExtensions",
     "org.drombler.acp.core.data.FileExtension"
 })
-@SupportedSourceVersion(SourceVersion.RELEASE_8)
+@SupportedSourceVersion(SourceVersion.RELEASE_11)
 public class FileExtensionAnnotationProcessor extends AbstractApplicationAnnotationProcessor {
 
     private FileExtensionsType fileExtensions;
