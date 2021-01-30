@@ -31,15 +31,7 @@ import org.osgi.service.component.annotations.Reference;
 public abstract class AbstractDockingHandler<D, DATA extends DockableData, E extends DockableEntry<D, DATA>> {
 
     @Reference
-    private DockingAreaContainerProvider<D, DATA, E> dockingAreaContainerProvider;
-
-    protected void bindDockingAreaContainerProvider(DockingAreaContainerProvider<D, DATA, E> dockingAreaContainerProvider) {
-        this.dockingAreaContainerProvider = dockingAreaContainerProvider;
-    }
-
-    protected void unbindDockingAreaContainerProvider(DockingAreaContainerProvider<D, DATA, E> dockingAreaContainerProvider) {
-        this.dockingAreaContainerProvider = null;
-    }
+    protected DockingAreaContainerProvider<D, DATA, E> dockingAreaContainerProvider;
 
     protected void registerDefaultDockablePreferences(Class<?> dockableClass, DockablePreferences dockablePreferences) {
         getDockingAreaContainer().registerDefaultDockablePreferences(dockableClass, dockablePreferences);
