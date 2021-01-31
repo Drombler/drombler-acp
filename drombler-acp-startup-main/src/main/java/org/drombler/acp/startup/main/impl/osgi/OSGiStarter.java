@@ -14,10 +14,6 @@
  */
 package org.drombler.acp.startup.main.impl.osgi;
 
-import java.io.IOException;
-import java.text.MessageFormat;
-import java.util.Map;
-import java.util.ServiceLoader;
 import org.drombler.acp.startup.main.DromblerACPConfiguration;
 import org.drombler.acp.startup.main.ServiceLoaderException;
 import org.drombler.acp.startup.main.impl.PropertiesUtils;
@@ -27,6 +23,11 @@ import org.osgi.framework.BundleException;
 import org.osgi.framework.FrameworkEvent;
 import org.osgi.framework.launch.Framework;
 import org.osgi.framework.launch.FrameworkFactory;
+
+import java.io.IOException;
+import java.text.MessageFormat;
+import java.util.Map;
+import java.util.ServiceLoader;
 
 /**
  *
@@ -112,7 +113,7 @@ public class OSGiStarter implements BootServiceStarter {
     }
 
     private void logInfo(String messageFormat, Object... arguments) {
-        // TODO: replace with SLF4J Logger once available on classpath
+        // TODO: replace with SLF4J Logger once available on classpath/ module-path
         // Note: the message format is different!
         System.out.println(MessageFormat.format(messageFormat, arguments));
     }
