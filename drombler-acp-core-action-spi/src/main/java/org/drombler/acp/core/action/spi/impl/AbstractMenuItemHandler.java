@@ -14,16 +14,9 @@
  */
 package org.drombler.acp.core.action.spi.impl;
 
-import java.util.List;
-import java.util.concurrent.Executor;
 import org.drombler.acp.core.action.MenuItemSupplierFactory;
 import org.drombler.acp.core.action.jaxb.MenusType;
-import org.drombler.acp.core.action.spi.AbstractMenuEntryDescriptor;
-import org.drombler.acp.core.action.spi.MenuBarMenuContainerProvider;
-import org.drombler.acp.core.action.spi.MenuItemContainer;
-import org.drombler.acp.core.action.spi.MenuItemContainerListenerAdapter;
-import org.drombler.acp.core.action.spi.MenuItemContainerMenuEvent;
-import org.drombler.acp.core.action.spi.MenuItemRootContainer;
+import org.drombler.acp.core.action.spi.*;
 import org.drombler.acp.core.commons.util.UnresolvedEntry;
 import org.drombler.acp.core.commons.util.concurrent.ApplicationThreadExecutorProvider;
 import org.osgi.framework.Bundle;
@@ -32,12 +25,19 @@ import org.osgi.framework.ServiceReference;
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ReferenceCardinality;
 import org.osgi.service.component.annotations.ReferencePolicy;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.List;
+import java.util.concurrent.Executor;
 
 /**
  *
  * @author puce
  */
 public abstract class AbstractMenuItemHandler<MenuItem, Menu extends MenuItem, M extends MenuItem, D extends AbstractMenuEntryDescriptor<MenuItem, ?>, Config> {
+
+    private static final Logger LOG = LoggerFactory.getLogger(AbstractMenuItemHandler.class);
 
     private static final String ROOT_PATH_ID = "";
     private Executor applicationExecutor;
@@ -111,12 +111,14 @@ public abstract class AbstractMenuItemHandler<MenuItem, Menu extends MenuItem, M
     }
 
     protected void resolveMenuItem(D menuEntryDescriptor, final BundleContext context) {
+        LOG.debug("Resolving {}...", menuEntryDescriptor);
         if (isInitialized()) {
             MenuItemContainer<MenuItem, Menu, ?> parentContainer = getParent(menuEntryDescriptor.getPath());
             if (parentContainer != null) {
                 Config config = createConfig(menuEntryDescriptor, context);
                 if (config != null) {
                     resolveMenuItem(config, menuEntryDescriptor, parentContainer);
+                    LOG.debug("Resolved {}!", menuEntryDescriptor);
                 } else {
                     registerUnresolvedMenuItem(menuEntryDescriptor, context);
                 }

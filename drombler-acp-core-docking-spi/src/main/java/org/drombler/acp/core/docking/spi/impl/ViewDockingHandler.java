@@ -14,11 +14,6 @@
  */
 package org.drombler.acp.core.docking.spi.impl;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.Executor;
 import org.drombler.acp.core.action.spi.ActionDescriptor;
 import org.drombler.acp.core.action.spi.MenuEntryDescriptor;
 import org.drombler.acp.core.commons.util.BundleUtils;
@@ -36,16 +31,17 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.component.ComponentContext;
-import org.osgi.service.component.annotations.Activate;
-import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.Deactivate;
-import org.osgi.service.component.annotations.Reference;
-import org.osgi.service.component.annotations.ReferenceCardinality;
-import org.osgi.service.component.annotations.ReferencePolicy;
+import org.osgi.service.component.annotations.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.softsmithy.lib.util.SetChangeEvent;
 import org.softsmithy.lib.util.SetChangeListener;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.Executor;
 
 /**
  * TODO: thread-safe???
@@ -122,6 +118,7 @@ public class ViewDockingHandler<D, DATA extends DockableData, E extends Dockable
     }
 
     private void resolveDockable(final ViewDockingDescriptor<D, DATA, E> dockingDescriptor, final BundleContext context) {
+        LOG.debug("Resolving {}...", dockingDescriptor);
         if (isInitialized()) {
             registerDefaultDockablePreferences(dockingDescriptor);
             applicationExecutor.execute(() -> addDockable(dockingDescriptor, context));
@@ -138,6 +135,7 @@ public class ViewDockingHandler<D, DATA extends DockableData, E extends Dockable
             ServiceRegistration<MenuEntryDescriptor> menuEntryServiceRegistration = context.registerService(MenuEntryDescriptor.class,
                     dockingDescriptor.getActivateDockableMenuEntryDescriptor(), null);
             menuEntryServiceRegistrations.put(dockingDescriptor.getId(), menuEntryServiceRegistration);
+            LOG.debug("Resolved {}...", dockingDescriptor);
         } else {
             // TODO: Does this still work?
             final String areaId = dockingDescriptor.getAreaId();

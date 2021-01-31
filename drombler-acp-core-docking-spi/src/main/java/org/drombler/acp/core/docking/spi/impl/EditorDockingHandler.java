@@ -14,9 +14,6 @@
  */
 package org.drombler.acp.core.docking.spi.impl;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.Executor;
 import org.drombler.acp.core.commons.util.BundleUtils;
 import org.drombler.acp.core.commons.util.concurrent.ApplicationThreadExecutorProvider;
 import org.drombler.acp.core.docking.jaxb.DockingsType;
@@ -31,16 +28,15 @@ import org.drombler.commons.docking.context.DockingAreaContainer;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.service.component.ComponentContext;
-import org.osgi.service.component.annotations.Activate;
-import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.Deactivate;
-import org.osgi.service.component.annotations.Reference;
-import org.osgi.service.component.annotations.ReferenceCardinality;
-import org.osgi.service.component.annotations.ReferencePolicy;
+import org.osgi.service.component.annotations.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.softsmithy.lib.util.SetChangeEvent;
 import org.softsmithy.lib.util.SetChangeListener;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.Executor;
 
 /**
  *
@@ -122,11 +118,13 @@ public class EditorDockingHandler<D, DATA extends DockableData, E extends Dockab
     }
 
     private void resolveEditorDockingDescriptor(EditorDockingDescriptor<? extends D> dockingDescriptor) {
+        LOG.debug("Resolving {}...", dockingDescriptor);
         if (isInitialized()) {
             editorRegistry.registerEditorDockingDescriptor(dockingDescriptor.getContentType(), dockingDescriptor);
             String defaultEditorAreaId = getDockingAreaContainer().getDefaultEditorAreaId();
             DockablePreferences dockablePreferences = new DockablePreferences(defaultEditorAreaId, 0);
             registerDefaultDockablePreferences(dockingDescriptor.getDockableClass(), dockablePreferences);
+            LOG.debug("Resolved {}!", dockingDescriptor);
         } else {
             unresolvedDockingDescriptors.add(dockingDescriptor);
         }

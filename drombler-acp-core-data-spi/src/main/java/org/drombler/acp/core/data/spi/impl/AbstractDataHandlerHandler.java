@@ -14,8 +14,6 @@
  */
 package org.drombler.acp.core.data.spi.impl;
 
-import java.util.ArrayList;
-import java.util.List;
 import org.drombler.acp.core.data.jaxb.DataHandlersType;
 import org.drombler.acp.core.data.spi.DataHandlerDescriptorRegistryProvider;
 import org.drombler.commons.data.AbstractDataHandlerDescriptor;
@@ -26,12 +24,19 @@ import org.osgi.service.component.ComponentContext;
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ReferenceCardinality;
 import org.osgi.service.component.annotations.ReferencePolicy;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
  * @author puce
  */
 public abstract class AbstractDataHandlerHandler<D extends AbstractDataHandlerDescriptor<?>> {
+
+    private static final Logger LOG = LoggerFactory.getLogger(AbstractDataHandlerHandler.class);
 
     private final List<D> unresolvedDataHandlerDescriptors = new ArrayList<>();
 
@@ -67,8 +72,10 @@ public abstract class AbstractDataHandlerHandler<D extends AbstractDataHandlerDe
     }
 
     protected void resolveDataHandlerDescriptor(D handlerDescriptor) {
+        LOG.debug("Resolving {}...", handlerDescriptor);
         if (isInitialized()) {
             resolveDataHandlerDescriptorInitialized(handlerDescriptor);
+            LOG.debug("Resolved {}...", handlerDescriptor);
         } else {
             unresolvedDataHandlerDescriptors.add(handlerDescriptor);
         }

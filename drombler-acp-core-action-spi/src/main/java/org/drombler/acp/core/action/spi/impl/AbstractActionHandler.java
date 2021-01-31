@@ -14,8 +14,6 @@
  */
 package org.drombler.acp.core.action.spi.impl;
 
-import java.util.ArrayList;
-import java.util.List;
 import org.drombler.acp.core.action.jaxb.ActionsType;
 import org.drombler.acp.core.action.spi.ActionDescriptor;
 import org.drombler.acp.core.action.spi.ActionRegistry;
@@ -32,6 +30,9 @@ import org.osgi.service.component.annotations.ReferenceCardinality;
 import org.osgi.service.component.annotations.ReferencePolicy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -92,6 +93,7 @@ public abstract class AbstractActionHandler<A, D extends ActionDescriptor<?>> {
     }
 
     protected void registerActionType(final A actionType, final BundleContext context) {
+        LOG.debug("Registering {}...", actionType);
         if (isInitialized()) {
             registerActionTypeInitialized(actionType, context);
         } else {
@@ -104,6 +106,7 @@ public abstract class AbstractActionHandler<A, D extends ActionDescriptor<?>> {
             try {
                 D actionDescriptor = createActionDescriptor(actionType, context, getContextManager(), contextInjector);
                 getActionRegistry().registerActionDescriptor(actionDescriptor, context);
+                LOG.debug("Registered {}!", actionType);
             } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | RuntimeException ex) {
                 LOG.error(ex.getMessage(), ex);
             }

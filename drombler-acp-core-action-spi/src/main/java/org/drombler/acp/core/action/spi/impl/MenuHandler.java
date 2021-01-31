@@ -22,12 +22,7 @@ import org.drombler.acp.core.action.spi.MenuItemContainer;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.service.component.ComponentContext;
-import org.osgi.service.component.annotations.Activate;
-import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.Deactivate;
-import org.osgi.service.component.annotations.Reference;
-import org.osgi.service.component.annotations.ReferenceCardinality;
-import org.osgi.service.component.annotations.ReferencePolicy;
+import org.osgi.service.component.annotations.*;
 
 /**
  *
@@ -65,7 +60,7 @@ public class MenuHandler<MenuItem, Menu extends MenuItem> extends AbstractMenuIt
     protected void resolveMenuItem(MenusType menusType, Bundle bundle, BundleContext context) {
         menusType.getMenu().stream().
                 map(menu -> MenuDescriptor.<MenuItem>createMenuDescriptor(menu, bundle)).
-                forEach(menuDescriptor -> resolveMenu(menuDescriptor));
+                forEach(this::resolveMenu);
     }
 
 //    private void resolveMenu(MenuDescriptor menuDescriptor) {

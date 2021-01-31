@@ -1,7 +1,5 @@
 package org.drombler.acp.core.status.spi.impl;
 
-import java.util.ArrayList;
-import java.util.List;
 import org.drombler.acp.core.commons.util.concurrent.ApplicationThreadExecutorProvider;
 import org.drombler.acp.core.context.ContextManagerProvider;
 import org.drombler.acp.core.status.jaxb.StatusBarElementType;
@@ -15,15 +13,13 @@ import org.drombler.commons.context.Contexts;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.component.ComponentContext;
-import org.osgi.service.component.annotations.Activate;
-import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.Deactivate;
-import org.osgi.service.component.annotations.Reference;
-import org.osgi.service.component.annotations.ReferenceCardinality;
-import org.osgi.service.component.annotations.ReferencePolicy;
+import org.osgi.service.component.annotations.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.softsmithy.lib.util.PositionableAdapter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -87,6 +83,7 @@ public class StatusBarElementHandler<T> {
 
     private void registerStatusBarElement(StatusBarElementType statusBarElementType, BundleContext context) {
         try {
+            LOG.debug("Registering {}...", statusBarElementType);
             StatusBarElementDescriptor<?> statusBarElementDescriptor = StatusBarElementDescriptor.createStatusBarElementDescriptor(statusBarElementType, context.getBundle());
             context.registerService(StatusBarElementDescriptor.class, statusBarElementDescriptor, null);
         } catch (ClassNotFoundException ex) {
@@ -96,6 +93,7 @@ public class StatusBarElementHandler<T> {
     }
 
     private void registerStatusBarElement(StatusBarElementDescriptor<? extends T> statusBarElementDescriptor) {
+        LOG.debug("Registering {}...", statusBarElementDescriptor);
         if (isInitialized()) {
             registerStatusBarElementInitialized(statusBarElementDescriptor);
         } else {
@@ -112,6 +110,7 @@ public class StatusBarElementHandler<T> {
                 HorizontalAlignment horizontalAlignment = statusBarElementDescriptor.getHorizontalAlignment().orient(statusBarElementContainer.isLeftToRight(),
                         statusBarElementContainer.isMirroringEnabled());
                 addStatusBarElement(statusBarElementContainer, positionableStatusBarElement, horizontalAlignment);
+                LOG.debug("Registered {}!", statusBarElementDescriptor);
             } catch (InstantiationException | IllegalAccessException ex) {
                 LOG.error(ex.getMessage(), ex);
             }
