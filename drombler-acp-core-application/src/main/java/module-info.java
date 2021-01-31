@@ -25,8 +25,11 @@ module org.drombler.acp.core.application {
     exports org.drombler.acp.core.application.jaxb;
     exports org.drombler.acp.core.application.processing;
 
+    opens org.drombler.acp.core.application.jaxb to java.xml.bind;
+
     provides Processor with ExtensionAnnotationProcessor;
 
+    requires org.drombler.acp.core.commons;
     requires org.softsmithy.lib.compiler;
     requires org.slf4j;
     requires osgi.core;

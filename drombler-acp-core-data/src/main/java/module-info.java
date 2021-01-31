@@ -21,6 +21,8 @@ module org.drombler.acp.core.data {
     exports org.drombler.acp.core.data;
     exports org.drombler.acp.core.data.jaxb;
 
+    opens org.drombler.acp.core.data.jaxb to java.xml.bind;
+
     provides Processor with DataHandlerAnnotationProcessor, FileExtensionAnnotationProcessor;
 
     requires transitive java.desktop;

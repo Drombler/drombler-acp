@@ -21,6 +21,8 @@ module org.drombler.acp.core.status {
     exports org.drombler.acp.core.status;
     exports org.drombler.acp.core.status.jaxb;
 
+    opens org.drombler.acp.core.status.jaxb to java.xml.bind;
+
     provides Processor with StatusBarElementAnnotationProcessor;
 
     requires java.compiler;

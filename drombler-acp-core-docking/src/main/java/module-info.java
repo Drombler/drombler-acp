@@ -22,6 +22,8 @@ module org.drombler.acp.core.docking {
     exports org.drombler.acp.core.docking;
     exports org.drombler.acp.core.docking.jaxb;
 
+    opens org.drombler.acp.core.docking.jaxb to java.xml.bind;
+
     provides Processor with DockingAreaAnnotationProcessor, DockingAnnotationProcessor;
 
     requires java.compiler;

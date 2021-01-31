@@ -22,6 +22,8 @@ module org.drombler.acp.core.action {
     exports org.drombler.acp.core.action;
     exports org.drombler.acp.core.action.jaxb;
 
+    opens org.drombler.acp.core.action.jaxb to java.xml.bind;
+
     provides Processor with ActionAnnotationProcessor, MenuAnnotationProcessor, ToolBarAnnotationProcessor;
 
     requires java.compiler;
