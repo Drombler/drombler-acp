@@ -63,11 +63,11 @@ Contributor(s): .
                 <groupId>org.apache.felix</groupId>
                 <artifactId>maven-bundle-plugin</artifactId>
                 <extensions>true</extensions>
-                <configuration>
-                    <instructions>
-                        <Import-Package>com.sun.xml.bind.v2, *</Import-Package>
-                    </instructions>
-                </configuration>
+<!--                <configuration>-->
+<!--                    <instructions>-->
+<!--                        <Import-Package>com.sun.xml.bind.v2, *</Import-Package>-->
+<!--                    </instructions>-->
+<!--                </configuration>-->
             </plugin>
             <plugin>
                 <groupId>org.jvnet.jaxb2.maven2</groupId>
@@ -126,6 +126,18 @@ Contributor(s): .
             <groupId>org.apache.felix</groupId>
             <artifactId>org.apache.felix.scr</artifactId>
             <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.aries.spifly</groupId>
+            <artifactId>org.apache.aries.spifly.dynamic.bundle</artifactId>
+            <version>1.3.2</version>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.osgi</groupId>
+            <artifactId>osgi.annotation</artifactId>
+            <version>7.0.0</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>

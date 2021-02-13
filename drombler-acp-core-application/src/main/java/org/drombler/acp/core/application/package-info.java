@@ -15,4 +15,12 @@
 /**
  * Core Drombler ACP Application classes.
  */
+@Requirement(namespace = ExtenderNamespace.EXTENDER_NAMESPACE,
+        filter = "(osgi.extender=osgi.serviceloader.processor)")
+@Requirement(namespace = "osgi.serviceloader",
+        filter = "(osgi.serviceloader=javax.xml.bind.JAXBContextFactory)",
+        cardinality = Requirement.Cardinality.MULTIPLE)
 package org.drombler.acp.core.application;
+
+import org.osgi.annotation.bundle.Requirement;
+import org.osgi.namespace.extender.ExtenderNamespace;

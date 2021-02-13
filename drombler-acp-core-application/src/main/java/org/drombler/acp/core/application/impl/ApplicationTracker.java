@@ -14,19 +14,6 @@
  */
 package org.drombler.acp.core.application.impl;
 
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Unmarshaller;
 import org.drombler.acp.core.application.ExtensionPoint;
 import org.drombler.acp.core.application.jaxb.ApplicationType;
 import org.drombler.acp.core.application.jaxb.ExtensionsType;
@@ -34,19 +21,26 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleEvent;
 import org.osgi.framework.ServiceRegistration;
-import org.osgi.service.component.annotations.Activate;
-import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.Deactivate;
+import org.osgi.service.component.annotations.*;
 import org.osgi.util.tracker.BundleTracker;
 import org.osgi.util.tracker.BundleTrackerCustomizer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Unmarshaller;
+import java.net.URL;
+import java.util.*;
+import java.util.stream.Collectors;
+
+import static org.drombler.acp.core.application.impl.JAXBUtils.createJAXBContext;
+
 /**
  *
  * @author puce
  */
-@Component
+@Component(immediate = true)
 public class ApplicationTracker {
 
     public static final String APPLICATION_XML_RELATIVE_NAME = "META-INF/drombler/application.xml";
@@ -55,7 +49,6 @@ public class ApplicationTracker {
 
     private BundleTracker<ApplicationType> bundleTracker;
     private final Set<Class<?>> jaxbRootClassesSet = new HashSet<>(Arrays.asList(ApplicationType.class));
-    private Class[] jaxbRootClasses = new Class[]{ApplicationType.class};
     private final Map<Long, List<ServiceRegistration<?>>> serviceRegistrations = new HashMap<>();
     // TODO: thread-safe? memory leak?
     private final Set<Bundle> unresolvedExtensions = new LinkedHashSet<>();
@@ -70,11 +63,13 @@ public class ApplicationTracker {
 //    private List<ExtensionPoint<?>> extensionPoints;
     @Activate
     public void activate(BundleContext context) {
+        LOG.debug("Activating ApplicationTracker...");
         bundleTracker = new BundleTracker<>(context, Bundle.ACTIVE,
-                new BundleTrackerCustomizer<ApplicationType>() {
+                new BundleTrackerCustomizer<>() {
 
                     @Override
                     public ApplicationType addingBundle(Bundle bundle, BundleEvent event) {
+                        LOG.debug("adding bundle {}...", bundle.getSymbolicName());
                         return registerExtensions(bundle);
                     }
 
@@ -97,12 +92,13 @@ public class ApplicationTracker {
     }
 
     private ApplicationType registerExtensions(Bundle bundle) {
-        URL actionsURL = bundle.getEntry(APPLICATION_XML_RELATIVE_NAME);
-        if (actionsURL != null) {
+        URL applicationXmlURL = bundle.getEntry(APPLICATION_XML_RELATIVE_NAME);
+        if (applicationXmlURL != null) {
             try {
-                JAXBContext jaxbContext = JAXBContext.newInstance(jaxbRootClasses);
+                LOG.debug("application.xml found for bundle {}.", bundle.getSymbolicName());
+                JAXBContext jaxbContext = createJAXBContext(getJAXBRootPackageNames(), bundle);
                 Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
-                ApplicationType application = (ApplicationType) unmarshaller.unmarshal(actionsURL);
+                ApplicationType application = (ApplicationType) unmarshaller.unmarshal(applicationXmlURL);
                 if (loadedExtensionsSuccessfully(application.getExtensions())) {
                     if (unresolvedExtensions.contains(bundle)) {
                         unresolvedExtensions.remove(bundle);
@@ -121,12 +117,16 @@ public class ApplicationTracker {
 //                    actionDescriptors.add(actionDescriptor);
 //                }
 //                actionTrackerListener.addingExtension(bundle, event, actionDescriptors);
-            } catch (JAXBException ex) {
+            } catch (JAXBException | RuntimeException ex) {
                 // TODO: ???
                 LOG.error(ex.getMessage(), ex);
             }
         }
         return null;
+    }
+
+    private Set<String> getJAXBRootPackageNames() {
+        return jaxbRootClassesSet.stream().map(Class::getPackageName).collect(Collectors.toSet());
     }
 
     private boolean loadedExtensionsSuccessfully(ExtensionsType extensions) {
@@ -150,8 +150,7 @@ public class ApplicationTracker {
 
     private void unregisterExtensions(Bundle bundle) {
         if (serviceRegistrations.containsKey(bundle.getBundleId())) {
-            serviceRegistrations.remove(bundle.getBundleId()).forEach(serviceRegistration
-                    -> serviceRegistration.unregister());
+            serviceRegistrations.remove(bundle.getBundleId()).forEach(ServiceRegistration::unregister);
         }
         if (unresolvedExtensions.contains(bundle)) {
             unresolvedExtensions.remove(bundle);
@@ -193,19 +192,19 @@ public class ApplicationTracker {
 ////        bundleTracker.close();
 ////        serviceTracker.close();
 //    }
+
+    @Reference(cardinality = ReferenceCardinality.MULTIPLE, policy = ReferencePolicy.DYNAMIC)
     public void bindExtensionPoint(ExtensionPoint<?> extensionPoint) {
         jaxbRootClassesSet.add(extensionPoint.getJAXBRootClass());
-        jaxbRootClasses = new ArrayList<>(jaxbRootClassesSet).toArray(new Class[jaxbRootClassesSet.size()]);
         if (!unresolvedExtensions.isEmpty()) {
             // avoid concurrent modification // TODO: needed here?
             List<Bundle> extensionBundles = new ArrayList<>(unresolvedExtensions);
-            extensionBundles.forEach(extensionBundle -> registerExtensions(extensionBundle));
+            extensionBundles.forEach(this::registerExtensions);
         }
     }
 
     public void unbindExtensionPoint(ExtensionPoint<?> extensionPoint) {
         jaxbRootClassesSet.remove(extensionPoint.getJAXBRootClass());
-        jaxbRootClasses = new ArrayList<>(jaxbRootClassesSet).toArray(new Class[jaxbRootClassesSet.size()]);
 //        unregisterExtensions
     }
 //    private void hanldeAddingExtensions(Bundle bundle, BundleEvent event, ExtensionsType extensions) {

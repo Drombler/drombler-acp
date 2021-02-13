@@ -37,4 +37,5 @@ module org.drombler.acp.core.application {
     requires transitive java.xml.bind;
     requires transitive java.annotation;
     requires jakarta.activation;
+    requires static osgi.annotation;
 }
